@@ -78,7 +78,7 @@ func (h *ServicesHandler) Update(project, service string, req UpdateServiceReque
 }
 
 func (h *ServicesHandler) Delete(project, service string) error {
-	bts, err := h.client.doGetRequest(fmt.Sprintf("/project/%s/service/%s", project, service), nil)
+	bts, err := h.client.doDeleteRequest(fmt.Sprintf("/project/%s/service/%s", project, service), nil)
 	if err != nil {
 		return err
 	}

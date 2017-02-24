@@ -86,7 +86,7 @@ func (h *ServicesHandler) Delete(project, service string) error {
 	return handleDeleteResponse(bts)
 }
 
-func (h *ServicesHandler) List(project, service string) ([]*Service, error) {
+func (h *ServicesHandler) List(project string) ([]*Service, error) {
 	rsp, err := h.client.doGetRequest(fmt.Sprintf("/project/%s/service", project), nil)
 	if err != nil {
 		return nil, err

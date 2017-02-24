@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net/url"
+	"strings"
 )
 
 type (
@@ -51,6 +53,32 @@ type (
 		Services []*Service `json:"services"`
 	}
 )
+
+// Hostname parses the hostname out of the Service URI.
+func (s *Service) Hostname() (string, error) {
+	hn, _, err := getHostPort(s.Uri)
+	return hn, err
+}
+
+// Port parses the port out of the service URI.
+func (s *Service) Port() (string, error) {
+	_, port, err := getHostPort(s.Uri)
+	return port, err
+}
+
+func getHostPort(uri string) (string, string, error) {
+	url, err := url.Parse(uri)
+	if err != nil {
+		return "", "", err
+	}
+
+	sp := strings.Split(url.Host, ":")
+	if len(sp) != 2 {
+		return "", "", errors.New("Host doesn't exist out of hostname:port")
+	}
+
+	return sp[0], sp[1], nil
+}
 
 func (h *ServicesHandler) Create(project string, req CreateServiceRequest) (*Service, error) {
 	rsp, err := h.client.doPostRequest(fmt.Sprintf("/project/%s/service", project), req)

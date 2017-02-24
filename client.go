@@ -14,9 +14,10 @@ type Client struct {
 	ApiKey string
 	Client *http.Client
 
-	Projects  *ProjectsHandler
-	Services  *ServicesHandler
-	Databases *DatabasesHandler
+	Projects     *ProjectsHandler
+	Services     *ServicesHandler
+	Databases    *DatabasesHandler
+	ServiceUsers *ServiceUsersHandler
 }
 
 // NewUserClient creates a new client based on username and password.
@@ -45,6 +46,7 @@ func (c *Client) Init() {
 	c.Projects = &ProjectsHandler{c}
 	c.Services = &ServicesHandler{c}
 	c.Databases = &DatabasesHandler{c}
+	c.ServiceUsers = &ServiceUsersHandler{c}
 }
 
 func (c *Client) doGetRequest(endpoint string, req interface{}) ([]byte, error) {

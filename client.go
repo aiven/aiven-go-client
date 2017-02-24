@@ -46,17 +46,29 @@ func (c *Client) Init() {
 }
 
 func (c *Client) doGetRequest(endpoint string, req interface{}) ([]byte, error) {
-	return c.doRequest(endpoint, "GET", req)
+	return c.doRequest("GET", endpoint, req)
+}
+
+func (c *Client) doPutRequest(endpoint string, req interface{}) ([]byte, error) {
+	return c.doRequest("PUT", endpoint, req)
 }
 
 func (c *Client) doPostRequest(endpoint string, req interface{}) ([]byte, error) {
-	return c.doRequest(endpoint, "POST", req)
+	return c.doRequest("POST", endpoint, req)
 }
 
-func (c *Client) doRequest(uri, method string, body interface{}) ([]byte, error) {
-	bts, err := json.Marshal(body)
-	if err != nil {
-		return nil, err
+func (c *Client) doDeleteRequest(endpoint string, req interface{}) ([]byte, error) {
+	return c.doRequest("DELETE", endpoint, req)
+}
+
+func (c *Client) doRequest(method, uri string, body interface{}) ([]byte, error) {
+	var bts []byte
+	if body != nil {
+		var err error
+		bts, err = json.Marshal(body)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	req, err := http.NewRequest(method, endpoint(uri), bytes.NewBuffer(bts))

@@ -24,31 +24,84 @@ type (
 		client *Client
 	}
 
+	CreateServiceRequest struct {
+		Cloud       string `json:"cloud,omitempty"`
+		GroupName   string `json:"group_name,omitempty"`
+		Plan        string `json:"plan,omitempty"`
+		ServiceName string `json:"service_name"`
+		ServiceType string `json:"service_type"`
+	}
+
+	UpdateServiceRequest struct {
+		Cloud     string `json:"cloud,omitempty"`
+		GroupName string `json:"group_name,omitempty"`
+		Plan      string `json:"plan,omitempty"`
+		Powered   bool   `json:"powered"` // TODO: figure out if we can overwrite the default?
+	}
+
 	ServiceResponse struct {
-		Errors  []Error  `json:"errors"`
-		Message string   `json:"message"`
+		APIResponse
 		Service *Service `json:"service"`
+	}
+
+	ServiceListResponse struct {
+		APIResponse
+		Services []*Service `json:"services"`
 	}
 )
 
-type CreateServiceRequest struct {
-	Cloud       string `json:"cloud,omitempty"`
-	GroupName   string `json:"group_name,omitempty"`
-	Plan        string `json:"plan,omitempty"`
-	ServiceName string `json:"service_name"`
-	ServiceType string `json:"service_type"`
-}
-
-func (h *ServicesHandler) Create(project, cloud, groupName, plan, serviceName, serviceType string) (*Service, error) {
-	rsp, err := h.client.doPostRequest(
-		fmt.Sprintf("/project/%s/service", project),
-		CreateServiceRequest{cloud, groupName, plan, serviceName, serviceType},
-	)
+func (h *ServicesHandler) Create(project string, req CreateServiceRequest) (*Service, error) {
+	rsp, err := h.client.doPostRequest(fmt.Sprintf("/project/%s/service", project), req)
 	if err != nil {
 		return nil, err
 	}
 
 	return parseServiceResponse(rsp)
+}
+
+func (h *ServicesHandler) Get(project, service string) (*Service, error) {
+	rsp, err := h.client.doGetRequest(fmt.Sprintf("/project/%s/service/%s", project, service), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return parseServiceResponse(rsp)
+}
+
+func (h *ServicesHandler) Update(project, service string, req UpdateServiceRequest) (*Service, error) {
+	rsp, err := h.client.doPutRequest(fmt.Sprintf("/project/%s/service/%s", project, service), req)
+	if err != nil {
+		return nil, err
+	}
+
+	return parseServiceResponse(rsp)
+}
+
+func (h *ServicesHandler) Delete(project, service string) error {
+	bts, err := h.client.doGetRequest(fmt.Sprintf("/project/%s/service/%s", project, service), nil)
+	if err != nil {
+		return err
+	}
+
+	return handleDeleteResponse(bts)
+}
+
+func (h *ServicesHandler) List(project, service string) ([]*Service, error) {
+	rsp, err := h.client.doGetRequest(fmt.Sprintf("/project/%s/service", project), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	var response *ServiceListResponse
+	if err := json.Unmarshal(rsp, &response); err != nil {
+		return nil, err
+	}
+
+	if len(response.Errors) != 0 {
+		return nil, errors.New(response.Message)
+	}
+
+	return response.Services, nil
 }
 
 func parseServiceResponse(rsp []byte) (*Service, error) {

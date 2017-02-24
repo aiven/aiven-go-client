@@ -3,6 +3,7 @@ package aiven
 import (
 	"encoding/json"
 	"errors"
+	"log"
 )
 
 type (
@@ -22,16 +23,32 @@ type (
 	ProjectsHandler struct {
 		client *Client
 	}
+
+	CreateProjectRequest struct {
+		CardId  string `json:"card_id,omitempty"`
+		Cloud   string `json:"cloud,omitempty"`
+		Project string `json:"project"`
+	}
+
+	UpdateProjectRequest struct {
+		CardId         string `json:"card_id,omitempty"`
+		Cloud          string `json:"cloud,omitempty"`
+		BillingAddress string `json:"billing_address"`
+	}
+
+	ProjectResponse struct {
+		APIResponse
+		Project *Project `json:"project"`
+	}
+
+	ProjectListResponse struct {
+		APIResponse
+		Projects []*Project `json:"projects"`
+	}
 )
 
-type createProjectRequest struct {
-	CardId  string `json:"card_id,omitempty"`
-	Cloud   string `json:"cloud,omitempty"`
-	Project string `json:"project"`
-}
-
-func (h *ProjectsHandler) Create(card_id, cloud, name string) (*Project, error) {
-	rsp, err := h.client.doPostRequest("project", createProjectRequest{card_id, cloud, name})
+func (h *ProjectsHandler) Create(req CreateProjectRequest) (*Project, error) {
+	rsp, err := h.client.doPostRequest("project", req)
 	if err != nil {
 		return nil, err
 	}
@@ -39,12 +56,10 @@ func (h *ProjectsHandler) Create(card_id, cloud, name string) (*Project, error) 
 	return parseProjectResponse(rsp)
 }
 
-type getProjectRequest struct {
-	Project string `json:"project"`
-}
+func (h *ProjectsHandler) Get(project string) (*Project, error) {
+	log.Printf("Getting information for `%s`", project)
 
-func (h *ProjectsHandler) Get(name string) (*Project, error) {
-	rsp, err := h.client.doGetRequest("project/"+name, getProjectRequest{name})
+	rsp, err := h.client.doGetRequest("project/"+project, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -52,13 +67,8 @@ func (h *ProjectsHandler) Get(name string) (*Project, error) {
 	return parseProjectResponse(rsp)
 }
 
-type updateProjectRequest struct {
-	CardId string `json:"card_id,omitempty"`
-	Cloud  string `json:"cloud,omitempty"`
-}
-
-func (h *ProjectsHandler) Update(card_id, cloud, name string) (*Project, error) {
-	rsp, err := h.client.doPostRequest("/project/"+name, updateProjectRequest{card_id, cloud})
+func (h *ProjectsHandler) Update(project string, req UpdateProjectRequest) (*Project, error) {
+	rsp, err := h.client.doPutRequest("/project/"+project, req)
 	if err != nil {
 		return nil, err
 	}
@@ -66,10 +76,13 @@ func (h *ProjectsHandler) Update(card_id, cloud, name string) (*Project, error) 
 	return parseProjectResponse(rsp)
 }
 
-type projectListResponse struct {
-	Errors   []Error    `json:"errors"`
-	Message  string     `json:"message"`
-	Projects []*Project `json:"projects"`
+func (h *ProjectsHandler) Delete(project string) error {
+	bts, err := h.client.doDeleteRequest("/project/"+project, nil)
+	if err != nil {
+		return err
+	}
+
+	return handleDeleteResponse(bts)
 }
 
 func (h *ProjectsHandler) List() ([]*Project, error) {
@@ -78,7 +91,7 @@ func (h *ProjectsHandler) List() ([]*Project, error) {
 		return nil, err
 	}
 
-	var response *projectListResponse
+	var response *ProjectListResponse
 	if err := json.Unmarshal(rsp, &response); err != nil {
 		return nil, err
 	}
@@ -90,21 +103,23 @@ func (h *ProjectsHandler) List() ([]*Project, error) {
 	return response.Projects, nil
 }
 
-type projectResponse struct {
-	Errors  []Error  `json:"errors"`
-	Message string   `json:"message"`
-	Project *Project `json:"project"`
-}
+func parseProjectResponse(bts []byte) (*Project, error) {
+	if bts == nil {
+		return nil, errors.New("No response data available")
+	}
 
-func parseProjectResponse(rsp []byte) (*Project, error) {
-	var response *projectResponse
-	if err := json.Unmarshal(rsp, &response); err != nil {
+	var rsp *ProjectResponse
+	if err := json.Unmarshal(bts, &rsp); err != nil {
 		return nil, err
 	}
 
-	if len(response.Errors) != 0 {
-		return nil, errors.New(response.Message)
+	if rsp == nil {
+		return nil, errors.New("No response data available")
 	}
 
-	return response.Project, nil
+	if rsp.Errors != nil && len(rsp.Errors) != 0 {
+		return nil, errors.New(rsp.Message)
+	}
+
+	return rsp.Project, nil
 }

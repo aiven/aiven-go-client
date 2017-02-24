@@ -8,16 +8,18 @@ import (
 
 type (
 	Service struct {
-		CloudName  string   `json:"cloud_name"`
-		CreateTime string   `json:"create_time"`
-		UpdateTime string   `json:"update_time"`
-		GroupList  []string `json:"group_list"`
-		NodeCount  int      `json:"node_count"`
-		Plan       string   `json:"plan"`
-		Name       string   `json:"service_name"`
-		Type       string   `json:"service_type"`
-		Uri        string   `json:"service_uri"`
-		State      string   `json:"state"`
+		CloudName  string         `json:"cloud_name"`
+		CreateTime string         `json:"create_time"`
+		UpdateTime string         `json:"update_time"`
+		GroupList  []string       `json:"group_list"`
+		NodeCount  int            `json:"node_count"`
+		Plan       string         `json:"plan"`
+		Name       string         `json:"service_name"`
+		Type       string         `json:"service_type"`
+		Uri        string         `json:"service_uri"`
+		State      string         `json:"state"`
+		Metadata   interface{}    `json:"metadata"`
+		Users      []*ServiceUser `json:"users"`
 	}
 
 	ServicesHandler struct {

@@ -27,7 +27,7 @@ type (
 	}
 )
 
-// UserToken retrieves a User Auth Token for a given user/password pair.
+// UserToken retrieves a User Auth Token for a given email/password pair.
 func UserToken(email, password string, client *http.Client) (*Token, error) {
 	if client == nil {
 		client = &http.Client{}

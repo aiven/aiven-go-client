@@ -20,9 +20,9 @@ type Client struct {
 	ServiceUsers *ServiceUsersHandler
 }
 
-// NewUserClient creates a new client based on username and password.
-func NewUserClient(user, password string) (*Client, error) {
-	tk, err := UserToken(user, password, nil)
+// NewUserClient creates a new client based on email and password.
+func NewUserClient(email, password string) (*Client, error) {
+	tk, err := UserToken(email, password, nil)
 	if err != nil {
 		return nil, err
 	}

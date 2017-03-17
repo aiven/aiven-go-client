@@ -105,7 +105,7 @@ func (h *ProjectsHandler) List() ([]*Project, error) {
 
 func parseProjectResponse(bts []byte) (*Project, error) {
 	if bts == nil {
-		return nil, errors.New("No response data available")
+		return nil, ErrNoResponseData
 	}
 
 	var rsp *ProjectResponse
@@ -114,7 +114,7 @@ func parseProjectResponse(bts []byte) (*Project, error) {
 	}
 
 	if rsp == nil {
-		return nil, errors.New("No response data available")
+		return nil, ErrNoResponseData
 	}
 
 	if rsp.Errors != nil && len(rsp.Errors) != 0 {

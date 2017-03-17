@@ -67,14 +67,14 @@ func (s *Service) Port() (string, error) {
 }
 
 func getHostPort(uri string) (string, string, error) {
-	url, err := url.Parse(uri)
+	hostUrl, err := url.Parse(uri)
 	if err != nil {
 		return "", "", err
 	}
 
-	sp := strings.Split(url.Host, ":")
+	sp := strings.Split(hostUrl.Host, ":")
 	if len(sp) != 2 {
-		return "", "", errors.New("Host doesn't exist out of hostname:port")
+		return "", "", ErrInvalidHost
 	}
 
 	return sp[0], sp[1], nil

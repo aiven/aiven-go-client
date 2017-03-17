@@ -39,7 +39,7 @@ func (h *ServiceUsersHandler) Create(project, service string, req CreateServiceU
 	}
 
 	if rsp == nil {
-		return nil, errors.New("No response data available")
+		return nil, ErrNoResponseData
 	}
 
 	if rsp.Errors != nil && len(rsp.Errors) != 0 {

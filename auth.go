@@ -3,6 +3,7 @@ package aiven
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"net/http"
 )
@@ -58,6 +59,10 @@ func UserToken(email, password string, client *http.Client) (*Token, error) {
 	var response *authResponse
 	if err := json.Unmarshal(bts, &response); err != nil {
 		return nil, err
+	}
+
+	if len(response.Errors) != 0 {
+		return nil, errors.New(response.Message)
 	}
 
 	return &Token{response.Token, response.State}, nil

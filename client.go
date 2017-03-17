@@ -18,6 +18,7 @@ type Client struct {
 	Services     *ServicesHandler
 	Databases    *DatabasesHandler
 	ServiceUsers *ServiceUsersHandler
+	Billing      *BillingHandler
 }
 
 // NewUserClient creates a new client based on email and password.
@@ -47,6 +48,7 @@ func (c *Client) Init() {
 	c.Services = &ServicesHandler{c}
 	c.Databases = &DatabasesHandler{c}
 	c.ServiceUsers = &ServiceUsersHandler{c}
+	c.Billing = &BillingHandler{c, &CardsHandler{c}}
 }
 
 func (c *Client) doGetRequest(endpoint string, req interface{}) ([]byte, error) {

@@ -1,3 +1,3 @@
 # Aiven
 
-Aiven Go Client
+Aiven Go SDK

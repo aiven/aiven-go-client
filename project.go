@@ -8,16 +8,16 @@ import (
 
 type (
 	Project struct {
-		AvailableCredits string   `json:"available_credits"`
-		BillingAddress   string   `json:"billing_address"`
-		CardInfo         CardInfo `json:"card_info"`
-		Country          string   `json:"country"`
-		CountryCode      string   `json:"country_code"`
-		DefaultCloud     string   `json:"default_cloud"`
-		EstimatedBalance string   `json:"estimated_balance"`
-		PaymentMethod    string   `json:"payment_method"`
-		Name             string   `json:"project_name"`
-		VatId            string   `json:"vat_id"`
+		AvailableCredits string `json:"available_credits"`
+		BillingAddress   string `json:"billing_address"`
+		Card             Card   `json:"card_info"`
+		Country          string `json:"country"`
+		CountryCode      string `json:"country_code"`
+		DefaultCloud     string `json:"default_cloud"`
+		EstimatedBalance string `json:"estimated_balance"`
+		PaymentMethod    string `json:"payment_method"`
+		Name             string `json:"project_name"`
+		VatId            string `json:"vat_id"`
 	}
 
 	ProjectsHandler struct {

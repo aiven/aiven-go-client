@@ -72,6 +72,10 @@ func getHostPort(uri string) (string, string, error) {
 		return "", "", err
 	}
 
+	if hostUrl.Host == "" {
+		return hostUrl.Scheme, hostUrl.Opaque, nil
+	}
+
 	sp := strings.Split(hostUrl.Host, ":")
 	if len(sp) != 2 {
 		return "", "", ErrInvalidHost

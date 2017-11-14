@@ -17,6 +17,7 @@ type (
 
 	authRequest struct {
 		Email    string `json:"email"`
+		OTP      string `json:"otp"`
 		Password string `json:"password"`
 	}
 
@@ -28,13 +29,17 @@ type (
 	}
 )
 
-// UserToken retrieves a User Auth Token for a given email/password pair.
 func UserToken(email, password string, client *http.Client) (*Token, error) {
+	return MFAUserToken(email, "", password, client)
+}
+
+// UserToken retrieves a User Auth Token for a given email/password pair.
+func MFAUserToken(email, otp, password string, client *http.Client) (*Token, error) {
 	if client == nil {
 		client = &http.Client{}
 	}
 
-	bts, err := json.Marshal(authRequest{email, password})
+	bts, err := json.Marshal(authRequest{email, otp, password})
 	if err != nil {
 		return nil, err
 	}

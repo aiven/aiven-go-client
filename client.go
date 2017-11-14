@@ -21,14 +21,19 @@ type Client struct {
 	Billing      *BillingHandler
 }
 
-// NewUserClient creates a new client based on email and password.
-func NewUserClient(email, password string) (*Client, error) {
-	tk, err := UserToken(email, password, nil)
+// NewMFAUserClient creates a new client based on email, one-time password and password.
+func NewMFAUserClient(email, otp, password string) (*Client, error) {
+	tk, err := MFAUserToken(email, otp, password, nil)
 	if err != nil {
 		return nil, err
 	}
 
 	return NewTokenClient(tk.Token)
+}
+
+// NewUserClient creates a new client based on email and password.
+func NewUserClient(email, password string) (*Client, error) {
+	return NewMFAUserClient(email, "", password)
 }
 
 // NewTokenClient creates a new client based on a given token.

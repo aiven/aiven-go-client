@@ -48,7 +48,7 @@ type (
 )
 
 func (h *ProjectsHandler) Create(req CreateProjectRequest) (*Project, error) {
-	rsp, err := h.client.doPostRequest("project", req)
+	rsp, err := h.client.doPostRequest("/project", req)
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +59,7 @@ func (h *ProjectsHandler) Create(req CreateProjectRequest) (*Project, error) {
 func (h *ProjectsHandler) Get(project string) (*Project, error) {
 	log.Printf("Getting information for `%s`", project)
 
-	rsp, err := h.client.doGetRequest("project/"+project, nil)
+	rsp, err := h.client.doGetRequest("/project/"+project, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -86,7 +86,7 @@ func (h *ProjectsHandler) Delete(project string) error {
 }
 
 func (h *ProjectsHandler) List() ([]*Project, error) {
-	rsp, err := h.client.doGetRequest("project", nil)
+	rsp, err := h.client.doGetRequest("/project", nil)
 	if err != nil {
 		return nil, err
 	}

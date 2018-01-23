@@ -7,18 +7,19 @@ import (
 	"net/http"
 )
 
-const APIUrl = "https://api.aiven.io/v1beta/"
+const APIUrl = "https://api.aiven.io/v1beta"
 
 // Client represents the instance that does all the calls to the Aiven API.
 type Client struct {
 	ApiKey string
 	Client *http.Client
 
-	Projects     *ProjectsHandler
-	Services     *ServicesHandler
-	Databases    *DatabasesHandler
-	ServiceUsers *ServiceUsersHandler
-	Billing      *BillingHandler
+	Projects      *ProjectsHandler
+	Services      *ServicesHandler
+	Databases     *DatabasesHandler
+	ServiceUsers  *ServiceUsersHandler
+	KafkaTopics   *KafkaTopicsHandler
+	Billing       *BillingHandler
 }
 
 // NewMFAUserClient creates a new client based on email, one-time password and password.
@@ -53,6 +54,7 @@ func (c *Client) Init() {
 	c.Services = &ServicesHandler{c}
 	c.Databases = &DatabasesHandler{c}
 	c.ServiceUsers = &ServiceUsersHandler{c}
+	c.KafkaTopics = &KafkaTopicsHandler{c}
 	c.Billing = &BillingHandler{c, &CardsHandler{c}}
 }
 

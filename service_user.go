@@ -8,11 +8,9 @@ import (
 
 type (
 	ServiceUser struct {
-		Username   string `json:"username"`
-		Password   string `json:"password"`
-		Type       string `json:"type"`
-		AccessCert string `json:"access_cert"`
-		AccessKey  string `json:"access_key"`
+		Username string `json:"username"`
+		Password string `json:"password"`
+		Type     string `json:"type"`
 	}
 
 	ServiceUsersHandler struct {

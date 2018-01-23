@@ -44,7 +44,7 @@ func MFAUserToken(email, otp, password string, client *http.Client) (*Token, err
 		return nil, err
 	}
 
-	req, err := http.NewRequest("POST", endpoint("userauth"), bytes.NewBuffer(bts))
+	req, err := http.NewRequest("POST", endpoint("/userauth"), bytes.NewBuffer(bts))
 	if err != nil {
 		return nil, err
 	}

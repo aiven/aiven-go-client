@@ -57,6 +57,11 @@ type (
 		APIResponse
 		Topic *KafkaTopic `json:"topic"`
 	}
+
+	KafkaTopicsResponse struct {
+		APIResponse
+		Topics []*KafkaTopic `json:"topics"`
+	}
 )
 
 func (h *KafkaTopicsHandler) Create(project, service string, req CreateKafkaTopicRequest) error {
@@ -97,6 +102,24 @@ func (h *KafkaTopicsHandler) Get(project, service, topic string) (*KafkaTopic, e
 	}
 
 	return response.Topic, nil
+}
+
+func (h *KafkaTopicsHandler) List(project, service string) ([]*KafkaTopic, error) {
+	rsp, err := h.client.doGetRequest(fmt.Sprintf("/project/%s/service/%s/topic", project, service), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	var response *KafkaTopicsResponse
+	if err := json.Unmarshal(rsp, &response); err != nil {
+		return nil, err
+	}
+
+	if len(response.Errors) != 0 {
+		return nil, errors.New(response.Message)
+	}
+
+	return response.Topics, nil
 }
 
 func (h *KafkaTopicsHandler) Update(project, service, topic string, req UpdateKafkaTopicRequest) error {

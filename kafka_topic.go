@@ -120,7 +120,7 @@ func (h *KafkaTopicsHandler) List(project, service string) ([]*KafkaListTopic, e
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("resp: %+v \n", string(rsp))
+
 	var response *KafkaTopicsResponse
 	if err := json.Unmarshal(rsp, &response); err != nil {
 		return nil, err

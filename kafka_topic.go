@@ -18,6 +18,17 @@ type (
 		TopicName             string       `json:"topic_name"`
 	}
 
+	KafkaListTopic struct {
+		CleanupPolicy         string `json:"cleanup_policy"`
+		MinimumInSyncReplicas int    `json:"min_insync_replicas"`
+		Partitions            int    `json:"partitions"`
+		Replication           int    `json:"replication"`
+		RetentionBytes        int    `json:"retention_bytes"`
+		RetentionHours        int    `json:"retention_hours"`
+		State                 string `json:"state"`
+		TopicName             string `json:"topic_name"`
+	}
+
 	Partition struct {
 		ConsumerGroups []*ConsumerGroup `json:"consumer_groups"`
 		EarliestOffset int              `json:"earliest_offset"`
@@ -60,7 +71,7 @@ type (
 
 	KafkaTopicsResponse struct {
 		APIResponse
-		Topics []*KafkaTopic `json:"topics"`
+		Topics []*KafkaListTopic `json:"topics"`
 	}
 )
 
@@ -104,12 +115,12 @@ func (h *KafkaTopicsHandler) Get(project, service, topic string) (*KafkaTopic, e
 	return response.Topic, nil
 }
 
-func (h *KafkaTopicsHandler) List(project, service string) ([]*KafkaTopic, error) {
+func (h *KafkaTopicsHandler) List(project, service string) ([]*KafkaListTopic, error) {
 	rsp, err := h.client.doGetRequest(fmt.Sprintf("/project/%s/service/%s/topic", project, service), nil)
 	if err != nil {
 		return nil, err
 	}
-
+	fmt.Printf("resp: %+v \n", string(rsp))
 	var response *KafkaTopicsResponse
 	if err := json.Unmarshal(rsp, &response); err != nil {
 		return nil, err

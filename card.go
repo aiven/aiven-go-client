@@ -6,9 +6,10 @@ import (
 )
 
 type (
+	// Card represents the card model on Aiven.
 	Card struct {
 		Brand        string   `json:"brand"`
-		CardId       string   `json:"card_id"`
+		CardID       string   `json:"card_id"`
 		Country      string   `json:"country"`
 		CountryCode  string   `json:"country_code"`
 		ExpMonth     int      `json:"exp_month"`
@@ -18,16 +19,20 @@ type (
 		ProjectNames []string `json:"projects"`
 	}
 
+	// CardsHandler is the client that interacts with the cards endpoints on
+	// Aiven.
 	CardsHandler struct {
 		client *Client
 	}
 
+	// CardListResponse is the response for listing cards.
 	CardListResponse struct {
 		APIResponse
 		Cards []*Card `json:"cards"`
 	}
 )
 
+// List lists all the cards linked to the authenticated account/
 func (h *CardsHandler) List() ([]*Card, error) {
 	rsp, err := h.client.doGetRequest("/card", nil)
 	if err != nil {

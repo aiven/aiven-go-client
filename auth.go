@@ -29,11 +29,12 @@ type (
 	}
 )
 
+// UserToken creates an authentication token without Multi Factor auth.
 func UserToken(email, password string, client *http.Client) (*Token, error) {
 	return MFAUserToken(email, "", password, client)
 }
 
-// UserToken retrieves a User Auth Token for a given email/password pair.
+// MFAUserToken retrieves a User Auth Token for a given email/password pair.
 func MFAUserToken(email, otp, password string, client *http.Client) (*Token, error) {
 	if client == nil {
 		client = &http.Client{}

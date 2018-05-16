@@ -3,11 +3,11 @@ package aiven_test
 import (
 	"testing"
 
-	"github.com/jelmersnoeck/aiven/internal/test_helpers"
+	"github.com/jelmersnoeck/aiven/internal/testhelpers"
 )
 
 func TestBilling(t *testing.T) {
-	cl := test_helpers.Client()
+	cl := testhelpers.Client()
 
 	t.Run("can fetch all cards", func(t *testing.T) {
 		cards, err := cl.Billing.Cards.List()

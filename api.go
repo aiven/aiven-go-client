@@ -2,6 +2,7 @@ package aiven
 
 import "encoding/json"
 
+// APIResponse represents a response returned by the Aiven API.
 type APIResponse struct {
 	Errors  []Error `json:"errors,omitempty"`
 	Message string  `json:"message,omitempty"`

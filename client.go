@@ -7,19 +7,20 @@ import (
 	"net/http"
 )
 
-const APIUrl = "https://api.aiven.io/v1beta"
+// APIURL is the URL we'll use to speak to Aiven. This can be overwritten.
+const APIURL = "https://api.aiven.io/v1beta"
 
 // Client represents the instance that does all the calls to the Aiven API.
 type Client struct {
-	ApiKey string
+	APIKey string
 	Client *http.Client
 
-	Projects      *ProjectsHandler
-	Services      *ServicesHandler
-	Databases     *DatabasesHandler
-	ServiceUsers  *ServiceUsersHandler
-	KafkaTopics   *KafkaTopicsHandler
-	Billing       *BillingHandler
+	Projects     *ProjectsHandler
+	Services     *ServicesHandler
+	Databases    *DatabasesHandler
+	ServiceUsers *ServiceUsersHandler
+	KafkaTopics  *KafkaTopicsHandler
+	Billing      *BillingHandler
 }
 
 // NewMFAUserClient creates a new client based on email, one-time password and password.
@@ -40,7 +41,7 @@ func NewUserClient(email, password string) (*Client, error) {
 // NewTokenClient creates a new client based on a given token.
 func NewTokenClient(key string) (*Client, error) {
 	c := &Client{
-		ApiKey: key,
+		APIKey: key,
 		Client: &http.Client{},
 	}
 	c.Init()
@@ -90,7 +91,7 @@ func (c *Client) doRequest(method, uri string, body interface{}) ([]byte, error)
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "aivenv1 "+c.ApiKey)
+	req.Header.Set("Authorization", "aivenv1 "+c.APIKey)
 
 	rsp, err := c.Client.Do(req)
 	if err != nil {
@@ -102,5 +103,5 @@ func (c *Client) doRequest(method, uri string, body interface{}) ([]byte, error)
 }
 
 func endpoint(uri string) string {
-	return APIUrl + uri
+	return APIURL + uri
 }

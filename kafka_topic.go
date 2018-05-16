@@ -7,6 +7,7 @@ import (
 )
 
 type (
+	// KafkaTopic represents a Kafka Topic on Aiven.
 	KafkaTopic struct {
 		CleanupPolicy         string       `json:"cleanup_policy"`
 		MinimumInSyncReplicas int          `json:"min_insync_replicas"`
@@ -18,6 +19,7 @@ type (
 		TopicName             string       `json:"topic_name"`
 	}
 
+	// KafkaListTopic represents kafka list topic model on Aiven.
 	KafkaListTopic struct {
 		CleanupPolicy         string `json:"cleanup_policy"`
 		MinimumInSyncReplicas int    `json:"min_insync_replicas"`
@@ -29,6 +31,7 @@ type (
 		TopicName             string `json:"topic_name"`
 	}
 
+	// Partition represents a Kafka partition.
 	Partition struct {
 		ConsumerGroups []*ConsumerGroup `json:"consumer_groups"`
 		EarliestOffset int              `json:"earliest_offset"`
@@ -38,15 +41,19 @@ type (
 		Size           int              `json:"size"`
 	}
 
+	// ConsumerGroup is the group used in partitions.
 	ConsumerGroup struct {
 		GroupName string `json:"group_name"`
 		Offset    int    `json:"offset"`
 	}
 
+	// KafkaTopicsHandler is the client which interacts with the kafka endpoints
+	// on Aiven.
 	KafkaTopicsHandler struct {
 		client *Client
 	}
 
+	// CreateKafkaTopicRequest are the parameters used to create a kafka topic.
 	CreateKafkaTopicRequest struct {
 		CleanupPolicy         *string `json:"cleanup_policy,omitempty"`
 		MinimumInSyncReplicas *int    `json:"min_insync_replicas,omitempty"`
@@ -57,6 +64,7 @@ type (
 		TopicName             string  `json:"topic_name"`
 	}
 
+	// UpdateKafkaTopicRequest are the parameters used to update a kafka topic.
 	UpdateKafkaTopicRequest struct {
 		MinimumInSyncReplicas string `json:"min_insync_replicas"`
 		Partitions            *int   `json:"partitions,omitempty"`
@@ -64,17 +72,20 @@ type (
 		RetentionHours        *int   `json:"retention_hours,omitempty"`
 	}
 
+	// KafkaTopicResponse is the response for Kafka Topic requests.
 	KafkaTopicResponse struct {
 		APIResponse
 		Topic *KafkaTopic `json:"topic"`
 	}
 
+	// KafkaTopicsResponse is the response for listing kafka topics.
 	KafkaTopicsResponse struct {
 		APIResponse
 		Topics []*KafkaListTopic `json:"topics"`
 	}
 )
 
+// Create creats a specific kafka topic.
 func (h *KafkaTopicsHandler) Create(project, service string, req CreateKafkaTopicRequest) error {
 	bts, err := h.client.doPostRequest(fmt.Sprintf("/project/%s/service/%s/topic", project, service), req)
 	if err != nil {
@@ -97,6 +108,7 @@ func (h *KafkaTopicsHandler) Create(project, service string, req CreateKafkaTopi
 	return nil
 }
 
+// Get gets a specific kafka topic.
 func (h *KafkaTopicsHandler) Get(project, service, topic string) (*KafkaTopic, error) {
 	rsp, err := h.client.doGetRequest(fmt.Sprintf("/project/%s/service/%s/topic/%s", project, service, topic), nil)
 	if err != nil {
@@ -115,6 +127,7 @@ func (h *KafkaTopicsHandler) Get(project, service, topic string) (*KafkaTopic, e
 	return response.Topic, nil
 }
 
+// List lists all the kafka topics.
 func (h *KafkaTopicsHandler) List(project, service string) ([]*KafkaListTopic, error) {
 	rsp, err := h.client.doGetRequest(fmt.Sprintf("/project/%s/service/%s/topic", project, service), nil)
 	if err != nil {
@@ -133,6 +146,7 @@ func (h *KafkaTopicsHandler) List(project, service string) ([]*KafkaListTopic, e
 	return response.Topics, nil
 }
 
+// Update updates a specific topic with the given parameters.
 func (h *KafkaTopicsHandler) Update(project, service, topic string, req UpdateKafkaTopicRequest) error {
 	bts, err := h.client.doPutRequest(fmt.Sprintf("/project/%s/service/%s/topic/%s", project, service, topic), req)
 	if err != nil {
@@ -155,6 +169,7 @@ func (h *KafkaTopicsHandler) Update(project, service, topic string, req UpdateKa
 	return nil
 }
 
+// Delete deletes a specific kafka topic.
 func (h *KafkaTopicsHandler) Delete(project, service, topic string) error {
 	bts, err := h.client.doDeleteRequest(fmt.Sprintf("/project/%s/service/%s/topic/%s", project, service, topic), nil)
 	if err != nil {

@@ -7,6 +7,7 @@ import (
 )
 
 type (
+	// Project represents the Project model on Aiven.
 	Project struct {
 		AvailableCredits string `json:"available_credits"`
 		BillingAddress   string `json:"billing_address"`
@@ -17,36 +18,43 @@ type (
 		EstimatedBalance string `json:"estimated_balance"`
 		PaymentMethod    string `json:"payment_method"`
 		Name             string `json:"project_name"`
-		VatId            string `json:"vat_id"`
+		VatID            string `json:"vat_id"`
 	}
 
+	// ProjectsHandler is the client which interacts with the Projects endpoints
+	// on Aiven.
 	ProjectsHandler struct {
 		client *Client
 	}
 
+	// CreateProjectRequest are the parameters for creating a project.
 	CreateProjectRequest struct {
-		CardId  string `json:"card_id,omitempty"`
+		CardID  string `json:"card_id,omitempty"`
 		Cloud   string `json:"cloud,omitempty"`
 		Project string `json:"project"`
 	}
 
+	// UpdateProjectRequest are the parameters for updating a project.
 	UpdateProjectRequest struct {
-		CardId         string `json:"card_id,omitempty"`
+		CardID         string `json:"card_id,omitempty"`
 		Cloud          string `json:"cloud,omitempty"`
 		BillingAddress string `json:"billing_address"`
 	}
 
+	// ProjectResponse is the response from Aiven for the project endpoints.
 	ProjectResponse struct {
 		APIResponse
 		Project *Project `json:"project"`
 	}
 
+	// ProjectListResponse is the response from Aiven for listing projects.
 	ProjectListResponse struct {
 		APIResponse
 		Projects []*Project `json:"projects"`
 	}
 )
 
+// Create creates a new project.
 func (h *ProjectsHandler) Create(req CreateProjectRequest) (*Project, error) {
 	rsp, err := h.client.doPostRequest("/project", req)
 	if err != nil {
@@ -56,6 +64,7 @@ func (h *ProjectsHandler) Create(req CreateProjectRequest) (*Project, error) {
 	return parseProjectResponse(rsp)
 }
 
+// Get gets the specified project.
 func (h *ProjectsHandler) Get(project string) (*Project, error) {
 	log.Printf("Getting information for `%s`", project)
 
@@ -67,6 +76,7 @@ func (h *ProjectsHandler) Get(project string) (*Project, error) {
 	return parseProjectResponse(rsp)
 }
 
+// Update updates the specified project with the given parameters.
 func (h *ProjectsHandler) Update(project string, req UpdateProjectRequest) (*Project, error) {
 	rsp, err := h.client.doPutRequest("/project/"+project, req)
 	if err != nil {
@@ -76,6 +86,7 @@ func (h *ProjectsHandler) Update(project string, req UpdateProjectRequest) (*Pro
 	return parseProjectResponse(rsp)
 }
 
+// Delete deletes the given project.
 func (h *ProjectsHandler) Delete(project string) error {
 	bts, err := h.client.doDeleteRequest("/project/"+project, nil)
 	if err != nil {
@@ -85,6 +96,7 @@ func (h *ProjectsHandler) Delete(project string) error {
 	return handleDeleteResponse(bts)
 }
 
+// List lists all the available projects linked to the account.
 func (h *ProjectsHandler) List() ([]*Project, error) {
 	rsp, err := h.client.doGetRequest("/project", nil)
 	if err != nil {

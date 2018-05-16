@@ -1,4 +1,4 @@
-package test_helpers
+package testhelpers
 
 import (
 	"errors"
@@ -15,10 +15,12 @@ func init() {
 }
 
 var (
+	// ServicePlan is the plan we'll use to test services on
 	ServicePlan = "hobbyist"
 	letterRunes = []rune("abcdefghijklmnopqrstuvwxyz")
 )
 
+// RandStringRunes returns a random string of length n.
 func RandStringRunes(n int) string {
 	b := make([]rune, n)
 	for i := range b {
@@ -27,6 +29,8 @@ func RandStringRunes(n int) string {
 	return string(b)
 }
 
+// Client returns a new Aiven client which pulls the credentials from the
+// environment.
 func Client() *aiven.Client {
 	cl, err := aiven.NewUserClient(os.Getenv("AIVEN_USERNAME"), os.Getenv("AIVEN_PASSWORD"))
 	if err != nil {
@@ -53,7 +57,7 @@ func NewProject(cl *aiven.Client, name string) (*aiven.Project, error) {
 	}
 
 	return cl.Projects.Create(aiven.CreateProjectRequest{
-		CardId:  cards[0].CardId,
+		CardID:  cards[0].CardID,
 		Project: name,
 	})
 }

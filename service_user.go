@@ -9,9 +9,11 @@ import (
 type (
 	// ServiceUser is the representation of a Service User in the Aiven API.
 	ServiceUser struct {
-		Username string `json:"username"`
-		Password string `json:"password"`
-		Type     string `json:"type"`
+		Username   string `json:"username"`
+		Password   string `json:"password"`
+		Type       string `json:"type"`
+		AccessCert string `json:"access_cert"`
+		AccessKey  string `json:"access_key"`
 	}
 
 	// ServiceUsersHandler is the client that interacts with the ServiceUsers

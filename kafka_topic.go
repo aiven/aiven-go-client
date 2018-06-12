@@ -66,10 +66,10 @@ type (
 
 	// UpdateKafkaTopicRequest are the parameters used to update a kafka topic.
 	UpdateKafkaTopicRequest struct {
-		MinimumInSyncReplicas string `json:"min_insync_replicas"`
-		Partitions            *int   `json:"partitions,omitempty"`
-		RetentionBytes        *int   `json:"retention_bytes,omitempty"`
-		RetentionHours        *int   `json:"retention_hours,omitempty"`
+		MinimumInSyncReplicas *int `json:"min_insync_replicas,omitempty"`
+		Partitions            *int `json:"partitions,omitempty"`
+		RetentionBytes        *int `json:"retention_bytes,omitempty"`
+		RetentionHours        *int `json:"retention_hours,omitempty"`
 	}
 
 	// KafkaTopicResponse is the response for Kafka Topic requests.

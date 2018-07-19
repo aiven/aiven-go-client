@@ -23,6 +23,7 @@ type (
 		State      string         `json:"state"`
 		Metadata   interface{}    `json:"metadata"`
 		Users      []*ServiceUser `json:"users"`
+		UserConfig interface{}    `json:"user_config"`
 	}
 
 	// ServicesHandler is the client that interacts with the Service API
@@ -33,11 +34,12 @@ type (
 
 	// CreateServiceRequest are the parameters to create a Service.
 	CreateServiceRequest struct {
-		Cloud       string `json:"cloud,omitempty"`
-		GroupName   string `json:"group_name,omitempty"`
-		Plan        string `json:"plan,omitempty"`
-		ServiceName string `json:"service_name"`
-		ServiceType string `json:"service_type"`
+		Cloud       string                 `json:"cloud,omitempty"`
+		GroupName   string                 `json:"group_name,omitempty"`
+		Plan        string                 `json:"plan,omitempty"`
+		ServiceName string                 `json:"service_name"`
+		ServiceType string                 `json:"service_type"`
+		UserConfig  map[string]interface{} `json:"user_config,omitempty"`
 	}
 
 	// UpdateServiceRequest are the parameters to update a Service.

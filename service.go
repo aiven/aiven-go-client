@@ -44,10 +44,11 @@ type (
 
 	// UpdateServiceRequest are the parameters to update a Service.
 	UpdateServiceRequest struct {
-		Cloud     string `json:"cloud,omitempty"`
-		GroupName string `json:"group_name,omitempty"`
-		Plan      string `json:"plan,omitempty"`
-		Powered   bool   `json:"powered"` // TODO: figure out if we can overwrite the default?
+		Cloud      string                 `json:"cloud,omitempty"`
+		GroupName  string                 `json:"group_name,omitempty"`
+		Plan       string                 `json:"plan,omitempty"`
+		Powered    bool                   `json:"powered"` // TODO: figure out if we can overwrite the default?
+		UserConfig map[string]interface{} `json:"user_config,omitempty"`
 	}
 
 	// ServiceResponse represents the response from Aiven after interacting with

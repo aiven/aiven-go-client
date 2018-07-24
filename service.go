@@ -11,19 +11,30 @@ import (
 type (
 	// Service represents the Service model on Aiven.
 	Service struct {
-		CloudName  string         `json:"cloud_name"`
-		CreateTime string         `json:"create_time"`
-		UpdateTime string         `json:"update_time"`
-		GroupList  []string       `json:"group_list"`
-		NodeCount  int            `json:"node_count"`
-		Plan       string         `json:"plan"`
-		Name       string         `json:"service_name"`
-		Type       string         `json:"service_type"`
-		URI        string         `json:"service_uri"`
-		State      string         `json:"state"`
-		Metadata   interface{}    `json:"metadata"`
-		Users      []*ServiceUser `json:"users"`
-		UserConfig interface{}    `json:"user_config"`
+		CloudName      string         `json:"cloud_name"`
+		CreateTime     string         `json:"create_time"`
+		UpdateTime     string         `json:"update_time"`
+		GroupList      []string       `json:"group_list"`
+		NodeCount      int            `json:"node_count"`
+		Plan           string         `json:"plan"`
+		Name           string         `json:"service_name"`
+		Type           string         `json:"service_type"`
+		URI            string         `json:"service_uri"`
+		State          string         `json:"state"`
+		Metadata       interface{}    `json:"metadata"`
+		Users          []*ServiceUser `json:"users"`
+		UserConfig     interface{}    `json:"user_config"`
+		ConnectionInfo ConnectionInfo `json:"connection_info"`
+	}
+
+	// ConnectionInfo represents the Service Connection information on Aiven.
+	ConnectionInfo struct {
+		KafkaHosts        []string `json:"kafka"`
+		KafkaAccessCert   string   `json:"kafka_access_cert"`
+		KafkaAccessKey    string   `json:"kafka_access_key"`
+		KafkaConnectURI   string   `json:"kafka_connect_uri"`
+		KafkaRestURI      string   `json:"kafka_rest_uri"`
+		SchemaRegistryURI string   `json:"schema_registry_uri"`
 	}
 
 	// ServicesHandler is the client that interacts with the Service API

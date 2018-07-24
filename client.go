@@ -3,6 +3,7 @@ package aiven
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 )
@@ -15,12 +16,14 @@ type Client struct {
 	APIKey string
 	Client *http.Client
 
-	Projects     *ProjectsHandler
-	Services     *ServicesHandler
-	Databases    *DatabasesHandler
-	ServiceUsers *ServiceUsersHandler
-	KafkaTopics  *KafkaTopicsHandler
-	Billing      *BillingHandler
+	Projects              *ProjectsHandler
+	Vpcs                  *VpcHandler
+	VpcPeeringConnections *VpcPeeringHandler
+	Services              *ServicesHandler
+	Databases             *DatabasesHandler
+	ServiceUsers          *ServiceUsersHandler
+	KafkaTopics           *KafkaTopicsHandler
+	Billing               *BillingHandler
 }
 
 // NewMFAUserClient creates a new client based on email, one-time password and password.
@@ -52,6 +55,8 @@ func NewTokenClient(key string) (*Client, error) {
 // Init initializes the client and sets up all the handlers.
 func (c *Client) Init() {
 	c.Projects = &ProjectsHandler{c}
+	c.Vpcs = &VpcHandler{c}
+	c.VpcPeeringConnections = &VpcPeeringHandler{c}
 	c.Services = &ServicesHandler{c}
 	c.Databases = &DatabasesHandler{c}
 	c.ServiceUsers = &ServiceUsersHandler{c}
@@ -99,7 +104,14 @@ func (c *Client) doRequest(method, uri string, body interface{}) ([]byte, error)
 	}
 	defer rsp.Body.Close()
 
-	return ioutil.ReadAll(rsp.Body)
+	rspBts, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, err
+	}
+	if rsp.StatusCode < http.StatusOK || rsp.StatusCode >= http.StatusMultipleChoices {
+		return nil, fmt.Errorf("Unexpected API Response - %d: %s", rsp.StatusCode, string(rspBts))
+	}
+	return rspBts, nil
 }
 
 func endpoint(uri string) string {

@@ -101,7 +101,15 @@ func (c *Client) doRequest(method, uri string, body interface{}) ([]byte, error)
 	}
 	defer rsp.Body.Close()
 
-	return ioutil.ReadAll(rsp.Body)
+	responseBody, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, err
+	}
+	if rsp.StatusCode < 200 || rsp.StatusCode >= 300 {
+		return nil, Error{Message: string(responseBody), Status: rsp.StatusCode}
+	}
+
+	return responseBody, err
 }
 
 func endpoint(uri string) string {

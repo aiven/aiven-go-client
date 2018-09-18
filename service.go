@@ -34,6 +34,21 @@ type (
 		KafkaConnectURI   string   `json:"kafka_connect_uri"`
 		KafkaRestURI      string   `json:"kafka_rest_uri"`
 		SchemaRegistryURI string   `json:"schema_registry_uri"`
+
+		PostgresParams      []PostgresParams `json:"pg_params"`
+		PostgresReplicaURI  string           `json:"pg_replica_uri"`
+		PostgresStandbyURIs []string         `json:"pg_standby"`
+		PostgresURIs        []string         `json:"pg"`
+	}
+
+	// PostgresParams represents individual parameters for a PostgreSQL ConnectionInfo
+	PostgresParams struct {
+		DatabaseName string `json:"dbname"`
+		Host         string `string:"host"`
+		Password     string `string:"password"`
+		Port         string `string:"port"`
+		SSLMode      string `string:"sslmode"`
+		User         string `string:"user"`
 	}
 
 	// ServicesHandler is the client that interacts with the Service API

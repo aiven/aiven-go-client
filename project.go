@@ -56,7 +56,7 @@ type (
 
 // Create creates a new project.
 func (h *ProjectsHandler) Create(req CreateProjectRequest) (*Project, error) {
-	rsp, err := h.client.doPostRequest("/project", req)
+	rsp, err := h.client.doPostRequest(buildPath("project"), req)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +68,7 @@ func (h *ProjectsHandler) Create(req CreateProjectRequest) (*Project, error) {
 func (h *ProjectsHandler) Get(project string) (*Project, error) {
 	log.Printf("Getting information for `%s`", project)
 
-	rsp, err := h.client.doGetRequest("/project/"+project, nil)
+	rsp, err := h.client.doGetRequest(buildPath("project", project), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +78,7 @@ func (h *ProjectsHandler) Get(project string) (*Project, error) {
 
 // Update updates the specified project with the given parameters.
 func (h *ProjectsHandler) Update(project string, req UpdateProjectRequest) (*Project, error) {
-	rsp, err := h.client.doPutRequest("/project/"+project, req)
+	rsp, err := h.client.doPutRequest(buildPath("project", project), req)
 	if err != nil {
 		return nil, err
 	}
@@ -88,7 +88,7 @@ func (h *ProjectsHandler) Update(project string, req UpdateProjectRequest) (*Pro
 
 // Delete deletes the given project.
 func (h *ProjectsHandler) Delete(project string) error {
-	bts, err := h.client.doDeleteRequest("/project/"+project, nil)
+	bts, err := h.client.doDeleteRequest(buildPath("project", project), nil)
 	if err != nil {
 		return err
 	}
@@ -98,7 +98,7 @@ func (h *ProjectsHandler) Delete(project string) error {
 
 // List lists all the available projects linked to the account.
 func (h *ProjectsHandler) List() ([]*Project, error) {
-	rsp, err := h.client.doGetRequest("/project", nil)
+	rsp, err := h.client.doGetRequest(buildPath("project"), nil)
 	if err != nil {
 		return nil, err
 	}

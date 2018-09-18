@@ -1,7 +1,5 @@
 package aiven
 
-import "fmt"
-
 type (
 	// Database represents a database type on Aiven.
 	Database struct {
@@ -26,7 +24,8 @@ type (
 
 // Create creates a database with the given parameters.
 func (h *DatabasesHandler) Create(project, service string, req CreateDatabaseRequest) (*Database, error) {
-	bts, err := h.client.doPostRequest(fmt.Sprintf("/project/%s/service/%s/db", project, service), req)
+	path := buildPath("project", project, "service", service, "db")
+	bts, err := h.client.doPostRequest(path, req)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +45,8 @@ func (h *DatabasesHandler) Create(project, service string, req CreateDatabaseReq
 
 // Delete deletes the specified database.
 func (h *DatabasesHandler) Delete(project, service, database string) error {
-	bts, err := h.client.doDeleteRequest(fmt.Sprintf("/project/%s/service/%s/db/%s", project, service, database), nil)
+	path := buildPath("project", project, "service", service, "db", database)
+	bts, err := h.client.doDeleteRequest(path, nil)
 	if err != nil {
 		return err
 	}

@@ -3,7 +3,6 @@ package aiven
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 )
 
 type (
@@ -37,7 +36,8 @@ type (
 
 // Create creates the given User on Aiven.
 func (h *ServiceUsersHandler) Create(project, service string, req CreateServiceUserRequest) (*ServiceUser, error) {
-	bts, err := h.client.doPostRequest(fmt.Sprintf("/project/%s/service/%s/user", project, service), req)
+	path := buildPath("project", project, "service", service, "user")
+	bts, err := h.client.doPostRequest(path, req)
 	if err != nil {
 		return nil, err
 	}
@@ -60,7 +60,8 @@ func (h *ServiceUsersHandler) Create(project, service string, req CreateServiceU
 
 // Delete deletes the given Service User in Aiven.
 func (h *ServiceUsersHandler) Delete(project, service, user string) error {
-	bts, err := h.client.doDeleteRequest(fmt.Sprintf("/project/%s/service/%s/user/%s", project, service, user), nil)
+	path := buildPath("project", project, "service", service, "user", user)
+	bts, err := h.client.doDeleteRequest(path, nil)
 	if err != nil {
 		return err
 	}

@@ -3,7 +3,6 @@ package aiven
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 )
 
 type (
@@ -87,7 +86,8 @@ type (
 
 // Create creats a specific kafka topic.
 func (h *KafkaTopicsHandler) Create(project, service string, req CreateKafkaTopicRequest) error {
-	bts, err := h.client.doPostRequest(fmt.Sprintf("/project/%s/service/%s/topic", project, service), req)
+	path := buildPath("project", project, "service", service, "topic")
+	bts, err := h.client.doPostRequest(path, req)
 	if err != nil {
 		return err
 	}
@@ -110,7 +110,8 @@ func (h *KafkaTopicsHandler) Create(project, service string, req CreateKafkaTopi
 
 // Get gets a specific kafka topic.
 func (h *KafkaTopicsHandler) Get(project, service, topic string) (*KafkaTopic, error) {
-	rsp, err := h.client.doGetRequest(fmt.Sprintf("/project/%s/service/%s/topic/%s", project, service, topic), nil)
+	path := buildPath("project", project, "service", service, "topic", topic)
+	rsp, err := h.client.doGetRequest(path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -129,7 +130,8 @@ func (h *KafkaTopicsHandler) Get(project, service, topic string) (*KafkaTopic, e
 
 // List lists all the kafka topics.
 func (h *KafkaTopicsHandler) List(project, service string) ([]*KafkaListTopic, error) {
-	rsp, err := h.client.doGetRequest(fmt.Sprintf("/project/%s/service/%s/topic", project, service), nil)
+	path := buildPath("project", project, "service", service, "topic")
+	rsp, err := h.client.doGetRequest(path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -148,7 +150,8 @@ func (h *KafkaTopicsHandler) List(project, service string) ([]*KafkaListTopic, e
 
 // Update updates a specific topic with the given parameters.
 func (h *KafkaTopicsHandler) Update(project, service, topic string, req UpdateKafkaTopicRequest) error {
-	bts, err := h.client.doPutRequest(fmt.Sprintf("/project/%s/service/%s/topic/%s", project, service, topic), req)
+	path := buildPath("project", project, "service", service, "topic", topic)
+	bts, err := h.client.doPutRequest(path, req)
 	if err != nil {
 		return err
 	}
@@ -171,7 +174,8 @@ func (h *KafkaTopicsHandler) Update(project, service, topic string, req UpdateKa
 
 // Delete deletes a specific kafka topic.
 func (h *KafkaTopicsHandler) Delete(project, service, topic string) error {
-	bts, err := h.client.doDeleteRequest(fmt.Sprintf("/project/%s/service/%s/topic/%s", project, service, topic), nil)
+	path := buildPath("project", project, "service", service, "topic", topic)
+	bts, err := h.client.doDeleteRequest(path, nil)
 	if err != nil {
 		return err
 	}

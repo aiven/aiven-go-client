@@ -3,7 +3,6 @@ package aiven
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"net/url"
 	"strings"
 )
@@ -109,7 +108,8 @@ func getHostPort(uri string) (string, string, error) {
 
 // Create creates the given Service on Aiven.
 func (h *ServicesHandler) Create(project string, req CreateServiceRequest) (*Service, error) {
-	rsp, err := h.client.doPostRequest(fmt.Sprintf("/project/%s/service", project), req)
+	path := buildPath("project", project, "service")
+	rsp, err := h.client.doPostRequest(path, req)
 	if err != nil {
 		return nil, err
 	}
@@ -119,7 +119,8 @@ func (h *ServicesHandler) Create(project string, req CreateServiceRequest) (*Ser
 
 // Get gets a specific service from Aiven.
 func (h *ServicesHandler) Get(project, service string) (*Service, error) {
-	rsp, err := h.client.doGetRequest(fmt.Sprintf("/project/%s/service/%s", project, service), nil)
+	path := buildPath("project", project, "service", service)
+	rsp, err := h.client.doGetRequest(path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -129,7 +130,8 @@ func (h *ServicesHandler) Get(project, service string) (*Service, error) {
 
 // Update will update the given service with the given parameters.
 func (h *ServicesHandler) Update(project, service string, req UpdateServiceRequest) (*Service, error) {
-	rsp, err := h.client.doPutRequest(fmt.Sprintf("/project/%s/service/%s", project, service), req)
+	path := buildPath("project", project, "service", service)
+	rsp, err := h.client.doPutRequest(path, req)
 	if err != nil {
 		return nil, err
 	}
@@ -139,7 +141,8 @@ func (h *ServicesHandler) Update(project, service string, req UpdateServiceReque
 
 // Delete will delete the given service from Aiven.
 func (h *ServicesHandler) Delete(project, service string) error {
-	bts, err := h.client.doDeleteRequest(fmt.Sprintf("/project/%s/service/%s", project, service), nil)
+	path := buildPath("project", project, "service", service)
+	bts, err := h.client.doDeleteRequest(path, nil)
 	if err != nil {
 		return err
 	}
@@ -149,7 +152,8 @@ func (h *ServicesHandler) Delete(project, service string) error {
 
 // List will fetch all services for a given project.
 func (h *ServicesHandler) List(project string) ([]*Service, error) {
-	rsp, err := h.client.doGetRequest(fmt.Sprintf("/project/%s/service", project), nil)
+	path := buildPath("project", project, "service")
+	rsp, err := h.client.doGetRequest(path, nil)
 	if err != nil {
 		return nil, err
 	}

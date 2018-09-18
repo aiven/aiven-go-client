@@ -21,7 +21,7 @@ type (
 
 // Get gets the specified Project CA Certificate
 func (h *CAHandler) Get(project string) (string, error) {
-	bts, err := h.client.doGetRequest("/project/"+project+"/kms/ca", nil)
+	bts, err := h.client.doGetRequest(buildPath("project", project, "kms", "ca"), nil)
 	if err != nil {
 		return "", err
 	}

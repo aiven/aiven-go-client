@@ -1,6 +1,10 @@
 package aiven
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"net/url"
+	"strings"
+)
 
 // APIResponse represents a response returned by the Aiven API.
 type APIResponse struct {
@@ -28,4 +32,12 @@ func handleDeleteResponse(bts []byte) error {
 	}
 
 	return nil
+}
+
+func buildPath(parts ...string) string {
+	finalParts := make([]string, len(parts))
+	for idx, part := range parts {
+		finalParts[idx] = url.PathEscape(part)
+	}
+	return "/" + strings.Join(finalParts, "/")
 }

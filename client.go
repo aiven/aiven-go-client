@@ -18,6 +18,7 @@ type Client struct {
 	Projects                    *ProjectsHandler
 	CA                          *CAHandler
 	ServiceIntegrationEndpoints *ServiceIntegrationEndpointsHandler
+	ServiceIntegrations         *ServiceIntegrationsHandler
 	Services                    *ServicesHandler
 	Databases                   *DatabasesHandler
 	ServiceUsers                *ServiceUsersHandler
@@ -56,6 +57,7 @@ func (c *Client) Init() {
 	c.Projects = &ProjectsHandler{c}
 	c.CA = &CAHandler{c}
 	c.ServiceIntegrationEndpoints = &ServiceIntegrationEndpointsHandler{c}
+	c.ServiceIntegrations = &ServiceIntegrationsHandler{c}
 	c.Services = &ServicesHandler{c}
 	c.Databases = &DatabasesHandler{c}
 	c.ServiceUsers = &ServiceUsersHandler{c}

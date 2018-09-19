@@ -67,6 +67,7 @@ type (
 	UpdateKafkaTopicRequest struct {
 		MinimumInSyncReplicas *int `json:"min_insync_replicas,omitempty"`
 		Partitions            *int `json:"partitions,omitempty"`
+		Replication           *int `json:"replication,omitempty"`
 		RetentionBytes        *int `json:"retention_bytes,omitempty"`
 		RetentionHours        *int `json:"retention_hours,omitempty"`
 	}

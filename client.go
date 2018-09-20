@@ -26,6 +26,7 @@ type Client struct {
 	ServiceUsers                *ServiceUsersHandler
 	KafkaTopics                 *KafkaTopicsHandler
 	Billing                     *BillingHandler
+	VPCs                        *VPCsHandler
 }
 
 // NewMFAUserClient creates a new client based on email, one-time password and password.
@@ -67,6 +68,7 @@ func (c *Client) Init() {
 	c.ServiceUsers = &ServiceUsersHandler{c}
 	c.KafkaTopics = &KafkaTopicsHandler{c}
 	c.Billing = &BillingHandler{c, &CardsHandler{c}}
+	c.VPCs = &VPCsHandler{c}
 }
 
 func (c *Client) doGetRequest(endpoint string, req interface{}) ([]byte, error) {

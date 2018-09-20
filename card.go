@@ -3,6 +3,7 @@ package aiven
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 )
 
 type (
@@ -49,4 +50,25 @@ func (h *CardsHandler) List() ([]*Card, error) {
 	}
 
 	return response.Cards, nil
+}
+
+// Get card by card id. The id may be either last 4 digits of the card or the actual id
+func (h *CardsHandler) Get(cardID string) (*Card, error) {
+	if len(cardID) == 0 {
+		return nil, nil
+	}
+
+	cards, err := h.List()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, card := range cards {
+		if card.CardID == cardID || card.Last4 == cardID {
+			return card, nil
+		}
+	}
+
+	err = Error{Message: fmt.Sprintf("Card with ID %v not found", cardID), Status: 404}
+	return nil, err
 }

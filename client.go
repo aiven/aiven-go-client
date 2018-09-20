@@ -17,6 +17,7 @@ type Client struct {
 
 	Projects                    *ProjectsHandler
 	CA                          *CAHandler
+	CardsHandler                *CardsHandler
 	ServiceIntegrationEndpoints *ServiceIntegrationEndpointsHandler
 	ServiceIntegrations         *ServiceIntegrationsHandler
 	Services                    *ServicesHandler
@@ -56,6 +57,7 @@ func NewTokenClient(key string) (*Client, error) {
 func (c *Client) Init() {
 	c.Projects = &ProjectsHandler{c}
 	c.CA = &CAHandler{c}
+	c.CardsHandler = &CardsHandler{c}
 	c.ServiceIntegrationEndpoints = &ServiceIntegrationEndpointsHandler{c}
 	c.ServiceIntegrations = &ServiceIntegrationsHandler{c}
 	c.Services = &ServicesHandler{c}

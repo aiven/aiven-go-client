@@ -16,6 +16,7 @@ type Client struct {
 	Client *http.Client
 
 	Projects                    *ProjectsHandler
+	ProjectUsers                *ProjectUsersHandler
 	CA                          *CAHandler
 	CardsHandler                *CardsHandler
 	ServiceIntegrationEndpoints *ServiceIntegrationEndpointsHandler
@@ -56,6 +57,7 @@ func NewTokenClient(key string) (*Client, error) {
 // Init initializes the client and sets up all the handlers.
 func (c *Client) Init() {
 	c.Projects = &ProjectsHandler{c}
+	c.ProjectUsers = &ProjectUsersHandler{c}
 	c.CA = &CAHandler{c}
 	c.CardsHandler = &CardsHandler{c}
 	c.ServiceIntegrationEndpoints = &ServiceIntegrationEndpointsHandler{c}

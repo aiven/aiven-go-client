@@ -3,6 +3,7 @@ package aiven
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 )
 
 type (
@@ -56,6 +57,34 @@ func (h *ServiceUsersHandler) Create(project, service string, req CreateServiceU
 	}
 
 	return rsp.User, nil
+}
+
+// List Service Users for given service in Aiven.
+func (h *ServiceUsersHandler) List(project, serviceName string) ([]*ServiceUser, error) {
+	// Aiven API does not provide list operation for service users, need to get them via service info instead
+	service, err := h.client.Services.Get(project, serviceName)
+	if err != nil {
+		return nil, err
+	}
+
+	return service.Users, nil
+}
+
+// Get specific Service User in Aiven.
+func (h *ServiceUsersHandler) Get(project, serviceName, username string) (*ServiceUser, error) {
+	// Aiven API does not provide get operation for service users, need to get them via list instead
+	users, err := h.List(project, serviceName)
+	if err != nil {
+		return nil, err
+	}
+	for _, user := range users {
+		if user.Username == username {
+			return user, nil
+		}
+	}
+
+	err = Error{Message: fmt.Sprintf("Service user with username %v not found", username), Status: 404}
+	return nil, err
 }
 
 // Delete deletes the given Service User in Aiven.

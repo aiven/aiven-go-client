@@ -3,8 +3,6 @@ package aiven
 import (
 	"encoding/json"
 	"errors"
-	"net/url"
-	"strings"
 )
 
 type (
@@ -20,6 +18,7 @@ type (
 		Name           string                 `json:"service_name"`
 		Type           string                 `json:"service_type"`
 		URI            string                 `json:"service_uri"`
+		URIParams      map[string]string      `json:"service_uri_params"`
 		State          string                 `json:"state"`
 		Metadata       interface{}            `json:"metadata"`
 		Users          []*ServiceUser         `json:"users"`
@@ -35,6 +34,20 @@ type (
 
 	// ConnectionInfo represents the Service Connection information on Aiven.
 	ConnectionInfo struct {
+		CassandraHosts []string `json:"cassandra"`
+
+		ElasticsearchURIs     []string `json:"elasticsearch"`
+		ElasticsearchUsername string   `json:"elasticsearch_username"`
+		ElasticsearchPassword string   `json:"elasticsearch_password"`
+		KibanaURI             string   `json:"kibana_uri"`
+
+		GrafanaURIs []string `json:"grafana"`
+
+		InfluxDBURIs         []string `json:"influxdb"`
+		InfluxDBDatabaseName string   `json:"influxdb_dbname"`
+		InfluxDBUsername     string   `json:"influxdb_username"`
+		InfluxDBPassword     string   `json:"influxdb_password"`
+
 		KafkaHosts        []string `json:"kafka"`
 		KafkaAccessCert   string   `json:"kafka_access_cert"`
 		KafkaAccessKey    string   `json:"kafka_access_key"`
@@ -46,6 +59,10 @@ type (
 		PostgresReplicaURI  string           `json:"pg_replica_uri"`
 		PostgresStandbyURIs []string         `json:"pg_standby"`
 		PostgresURIs        []string         `json:"pg"`
+
+		RedisPassword  string   `json:"redis_password"`
+		RedisSlaveURIs []string `json:"redis_slave"`
+		RedisURIs      []string `json:"redis"`
 	}
 
 	// PostgresParams represents individual parameters for a PostgreSQL ConnectionInfo
@@ -98,34 +115,16 @@ type (
 	}
 )
 
-// Hostname parses the hostname out of the Service URI.
+// Hostname provides host name for the service. This method is provided for backwards
+// compatibility, typically it is easier to just get the value from URIParams directly.
 func (s *Service) Hostname() (string, error) {
-	hn, _, err := getHostPort(s.URI)
-	return hn, err
+	return s.URIParams["host"], nil
 }
 
-// Port parses the port out of the service URI.
+// Port provides port for the service. This method is provided for backwards
+// compatibility, typically it is easier to just get the value from URIParams directly.
 func (s *Service) Port() (string, error) {
-	_, port, err := getHostPort(s.URI)
-	return port, err
-}
-
-func getHostPort(uri string) (string, string, error) {
-	hostURL, err := url.Parse(uri)
-	if err != nil {
-		return "", "", err
-	}
-
-	if hostURL.Host == "" {
-		return hostURL.Scheme, hostURL.Opaque, nil
-	}
-
-	sp := strings.Split(hostURL.Host, ":")
-	if len(sp) != 2 {
-		return "", "", ErrInvalidHost
-	}
-
-	return sp[0], sp[1], nil
+	return s.URIParams["port"], nil
 }
 
 // Create creates the given Service on Aiven.

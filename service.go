@@ -10,6 +10,7 @@ import (
 type (
 	// Service represents the Service model on Aiven.
 	Service struct {
+		Backups        []*Backup              `json:"backups"`
 		CloudName      string                 `json:"cloud_name"`
 		CreateTime     string                 `json:"create_time"`
 		UpdateTime     string                 `json:"update_time"`
@@ -24,6 +25,12 @@ type (
 		Users          []*ServiceUser         `json:"users"`
 		UserConfig     map[string]interface{} `json:"user_config"`
 		ConnectionInfo ConnectionInfo         `json:"connection_info"`
+	}
+
+	// Backup represents an individual backup of service data on Aiven
+	Backup struct {
+		BackupTime string `json:"backup_time"`
+		DataSize   int    `json:"data_size"`
 	}
 
 	// ConnectionInfo represents the Service Connection information on Aiven.

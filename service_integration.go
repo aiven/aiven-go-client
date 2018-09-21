@@ -9,23 +9,23 @@ import (
 type (
 	// ServiceIntegration is the representation of a Service Integration in the Aiven API.
 	ServiceIntegration struct {
-		Active               bool        `json:"active"`
-		Description          string      `json:"description"`
-		DestEndpoint         string      `json:"dest_endpoint"`
-		DestEndpointID       string      `json:"dest_endpoint_id"`
-		DestProject          string      `json:"dest_project"`
-		DestService          string      `json:"dest_service"`
-		DestServiceType      string      `json:"dest_service_type"`
-		Enabled              bool        `json:"enabled"`
-		IntegrationStatus    interface{} `json:"integration_status"`
-		IntegrationType      string      `json:"integration_type"`
-		ServiceIntegrationID string      `json:"service_integration_id"`
-		SourceEndpoint       string      `json:"source_endpoint"`
-		SourceEndpointID     string      `json:"source_endpoint_id"`
-		SourceProject        string      `json:"source_project"`
-		SourceService        string      `json:"source_service"`
-		SourceServiceType    string      `json:"source_service_type"`
-		UserConfig           interface{} `json:"user_config"`
+		Active               bool                   `json:"active"`
+		Description          string                 `json:"description"`
+		DestEndpoint         string                 `json:"dest_endpoint"`
+		DestEndpointID       string                 `json:"dest_endpoint_id"`
+		DestProject          string                 `json:"dest_project"`
+		DestService          string                 `json:"dest_service"`
+		DestServiceType      string                 `json:"dest_service_type"`
+		Enabled              bool                   `json:"enabled"`
+		IntegrationStatus    interface{}            `json:"integration_status"`
+		IntegrationType      string                 `json:"integration_type"`
+		ServiceIntegrationID string                 `json:"service_integration_id"`
+		SourceEndpoint       string                 `json:"source_endpoint"`
+		SourceEndpointID     string                 `json:"source_endpoint_id"`
+		SourceProject        string                 `json:"source_project"`
+		SourceService        string                 `json:"source_service"`
+		SourceServiceType    string                 `json:"source_service_type"`
+		UserConfig           map[string]interface{} `json:"user_config"`
 	}
 
 	// ServiceIntegrationEndpoint is the representation of the Create Service Integration model on Aiven.
@@ -65,6 +65,7 @@ type (
 		DestService     string                 `json:"dest_service"`
 		UserConfig      map[string]interface{} `json:"user_config,omitempty"`
 	}
+
 	// CreateServiceIntegrationEndpointRequest are the parameters required to create a ServiceIntegration Endpoint.
 	CreateServiceIntegrationEndpointRequest struct {
 		EndpointName string `json:"endpoint_name"`

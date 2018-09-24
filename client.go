@@ -1,3 +1,6 @@
+// Copyright (c) 2017 jelmersnoeck
+// Copyright (c) 2018 Aiven, Helsinki, Finland. https://aiven.io/
+
 package aiven
 
 import (
@@ -25,7 +28,6 @@ type Client struct {
 	Databases                   *DatabasesHandler
 	ServiceUsers                *ServiceUsersHandler
 	KafkaTopics                 *KafkaTopicsHandler
-	Billing                     *BillingHandler
 	VPCs                        *VPCsHandler
 	VPCPeeringConnections       *VPCPeeringConnectionsHandler
 }
@@ -68,7 +70,6 @@ func (c *Client) Init() {
 	c.Databases = &DatabasesHandler{c}
 	c.ServiceUsers = &ServiceUsersHandler{c}
 	c.KafkaTopics = &KafkaTopicsHandler{c}
-	c.Billing = &BillingHandler{c, &CardsHandler{c}}
 	c.VPCs = &VPCsHandler{c}
 	c.VPCPeeringConnections = &VPCPeeringConnectionsHandler{c}
 }

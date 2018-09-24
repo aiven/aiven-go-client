@@ -1,10 +1,12 @@
+// Copyright (c) 2017 jelmersnoeck
+
 package aiven_test
 
 import (
 	"testing"
 
-	"github.com/jelmersnoeck/aiven"
-	"github.com/jelmersnoeck/aiven/internal/testhelpers"
+	"github.com/aiven/aiven-go-client"
+	"github.com/aiven/aiven-go-client/internal/testhelpers"
 )
 
 func TestService(t *testing.T) {

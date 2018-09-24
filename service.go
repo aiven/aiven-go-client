@@ -11,24 +11,25 @@ import (
 type (
 	// Service represents the Service model on Aiven.
 	Service struct {
-		ACL            []*KafkaACL            `json:"acl"`
-		Backups        []*Backup              `json:"backups"`
-		CloudName      string                 `json:"cloud_name"`
-		CreateTime     string                 `json:"create_time"`
-		UpdateTime     string                 `json:"update_time"`
-		GroupList      []string               `json:"group_list"`
-		NodeCount      int                    `json:"node_count"`
-		Plan           string                 `json:"plan"`
-		Name           string                 `json:"service_name"`
-		Type           string                 `json:"service_type"`
-		ProjectVPCID   *string                `json:"project_vpc_id"`
-		URI            string                 `json:"service_uri"`
-		URIParams      map[string]string      `json:"service_uri_params"`
-		State          string                 `json:"state"`
-		Metadata       interface{}            `json:"metadata"`
-		Users          []*ServiceUser         `json:"users"`
-		UserConfig     map[string]interface{} `json:"user_config"`
-		ConnectionInfo ConnectionInfo         `json:"connection_info"`
+		ACL             []*KafkaACL            `json:"acl"`
+		Backups         []*Backup              `json:"backups"`
+		CloudName       string                 `json:"cloud_name"`
+		ConnectionPools []*ConnectionPool      `json:"connection_pools"`
+		CreateTime      string                 `json:"create_time"`
+		UpdateTime      string                 `json:"update_time"`
+		GroupList       []string               `json:"group_list"`
+		NodeCount       int                    `json:"node_count"`
+		Plan            string                 `json:"plan"`
+		Name            string                 `json:"service_name"`
+		Type            string                 `json:"service_type"`
+		ProjectVPCID    *string                `json:"project_vpc_id"`
+		URI             string                 `json:"service_uri"`
+		URIParams       map[string]string      `json:"service_uri_params"`
+		State           string                 `json:"state"`
+		Metadata        interface{}            `json:"metadata"`
+		Users           []*ServiceUser         `json:"users"`
+		UserConfig      map[string]interface{} `json:"user_config"`
+		ConnectionInfo  ConnectionInfo         `json:"connection_info"`
 	}
 
 	// Backup represents an individual backup of service data on Aiven
@@ -86,6 +87,16 @@ type (
 		Permission string `json:"permission"`
 		Topic      string `json:"topic"`
 		Username   string `json:"username"`
+	}
+
+	// ConnectionPool represents a PostgreSQL PGBouncer connection pool on Aiven
+	ConnectionPool struct {
+		ConnectionURI string `json:"connection_uri"`
+		Database      string `json:"database"`
+		PoolMode      string `json:"pool_mode"`
+		PoolName      string `json:"pool_name"`
+		PoolSize      int    `json:"pool_size"`
+		Username      string `json:"username"`
 	}
 
 	// ServicesHandler is the client that interacts with the Service API

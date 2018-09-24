@@ -11,6 +11,7 @@ import (
 type (
 	// Service represents the Service model on Aiven.
 	Service struct {
+		ACL            []*KafkaACL            `json:"acl"`
 		Backups        []*Backup              `json:"backups"`
 		CloudName      string                 `json:"cloud_name"`
 		CreateTime     string                 `json:"create_time"`
@@ -77,6 +78,14 @@ type (
 		Port         string `string:"port"`
 		SSLMode      string `string:"sslmode"`
 		User         string `string:"user"`
+	}
+
+	// KafkaACL represents a Kafka ACL entry on Aiven.
+	KafkaACL struct {
+		ID         string `json:"id"`
+		Permission string `json:"permission"`
+		Topic      string `json:"topic"`
+		Username   string `json:"username"`
 	}
 
 	// ServicesHandler is the client that interacts with the Service API

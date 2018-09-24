@@ -17,6 +17,7 @@ type (
 		Plan           string                 `json:"plan"`
 		Name           string                 `json:"service_name"`
 		Type           string                 `json:"service_type"`
+		ProjectVPCID   *string                `json:"project_vpc_id"`
 		URI            string                 `json:"service_uri"`
 		URIParams      map[string]string      `json:"service_uri_params"`
 		State          string                 `json:"state"`
@@ -83,21 +84,23 @@ type (
 
 	// CreateServiceRequest are the parameters to create a Service.
 	CreateServiceRequest struct {
-		Cloud       string                 `json:"cloud,omitempty"`
-		GroupName   string                 `json:"group_name,omitempty"`
-		Plan        string                 `json:"plan,omitempty"`
-		ServiceName string                 `json:"service_name"`
-		ServiceType string                 `json:"service_type"`
-		UserConfig  map[string]interface{} `json:"user_config,omitempty"`
+		Cloud        string                 `json:"cloud,omitempty"`
+		GroupName    string                 `json:"group_name,omitempty"`
+		Plan         string                 `json:"plan,omitempty"`
+		ProjectVPCID *string                `json:"project_vpc_id"`
+		ServiceName  string                 `json:"service_name"`
+		ServiceType  string                 `json:"service_type"`
+		UserConfig   map[string]interface{} `json:"user_config,omitempty"`
 	}
 
 	// UpdateServiceRequest are the parameters to update a Service.
 	UpdateServiceRequest struct {
-		Cloud      string                 `json:"cloud,omitempty"`
-		GroupName  string                 `json:"group_name,omitempty"`
-		Plan       string                 `json:"plan,omitempty"`
-		Powered    bool                   `json:"powered"` // TODO: figure out if we can overwrite the default?
-		UserConfig map[string]interface{} `json:"user_config,omitempty"`
+		Cloud        string                 `json:"cloud,omitempty"`
+		GroupName    string                 `json:"group_name,omitempty"`
+		Plan         string                 `json:"plan,omitempty"`
+		ProjectVPCID *string                `json:"project_vpc_id"`
+		Powered      bool                   `json:"powered"` // TODO: figure out if we can overwrite the default?
+		UserConfig   map[string]interface{} `json:"user_config,omitempty"`
 	}
 
 	// ServiceResponse represents the response from Aiven after interacting with

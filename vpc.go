@@ -18,7 +18,7 @@ type (
 		StateInfo        interface{} `json:"state_info"`
 	}
 
-	// VPC holds paramters associated with a Virtual Private Cloud
+	// VPC holds parameters associated with a Virtual Private Cloud
 	VPC struct {
 		CloudName          string                  `json:"cloud_name"`
 		CreateTime         *string                 `json:"create_time"`

@@ -32,9 +32,10 @@ type (
 
 	// CreateProjectRequest are the parameters for creating a project.
 	CreateProjectRequest struct {
-		CardID  string `json:"card_id,omitempty"`
-		Cloud   string `json:"cloud,omitempty"`
-		Project string `json:"project"`
+		CardID          string `json:"card_id,omitempty"`
+		Cloud           string `json:"cloud,omitempty"`
+		CopyFromProject string `json:"copy_from_project,omitempty"`
+		Project         string `json:"project"`
 	}
 
 	// UpdateProjectRequest are the parameters for updating a project.

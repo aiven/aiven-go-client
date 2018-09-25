@@ -12,16 +12,19 @@ import (
 type (
 	// Project represents the Project model on Aiven.
 	Project struct {
-		AvailableCredits string `json:"available_credits"`
-		BillingAddress   string `json:"billing_address"`
-		Card             Card   `json:"card_info"`
-		Country          string `json:"country"`
-		CountryCode      string `json:"country_code"`
-		DefaultCloud     string `json:"default_cloud"`
-		EstimatedBalance string `json:"estimated_balance"`
-		PaymentMethod    string `json:"payment_method"`
-		Name             string `json:"project_name"`
-		VatID            string `json:"vat_id"`
+		AvailableCredits string          `json:"available_credits"`
+		BillingAddress   string          `json:"billing_address"`
+		BillingEmails    []*ContactEmail `json:"billing_emails"`
+		BillingExtraText string          `json:"billing_extra_text"`
+		Card             Card            `json:"card_info"`
+		Country          string          `json:"country"`
+		CountryCode      string          `json:"country_code"`
+		DefaultCloud     string          `json:"default_cloud"`
+		EstimatedBalance string          `json:"estimated_balance"`
+		PaymentMethod    string          `json:"payment_method"`
+		Name             string          `json:"project_name"`
+		TechnicalEmails  []*ContactEmail `json:"tech_emails"`
+		VatID            string          `json:"vat_id"`
 	}
 
 	// ProjectsHandler is the client which interacts with the Projects endpoints
@@ -32,17 +35,31 @@ type (
 
 	// CreateProjectRequest are the parameters for creating a project.
 	CreateProjectRequest struct {
-		CardID          string `json:"card_id,omitempty"`
-		Cloud           string `json:"cloud,omitempty"`
-		CopyFromProject string `json:"copy_from_project,omitempty"`
-		Project         string `json:"project"`
+		BillingAddress   *string          `json:"billing_address,omitempty"`
+		BillingEmails    *[]*ContactEmail `json:"billing_emails,omitempty"`
+		BillingExtraText *string          `json:"billing_extra_text,omitempty"`
+		CardID           string           `json:"card_id,omitempty"`
+		Cloud            string           `json:"cloud,omitempty"`
+		CopyFromProject  string           `json:"copy_from_project,omitempty"`
+		CountryCode      *string          `json:"country_code,omitempty"`
+		Project          string           `json:"project"`
+		TechnicalEmails  *[]*ContactEmail `json:"tech_emails,omitempty"`
 	}
 
 	// UpdateProjectRequest are the parameters for updating a project.
 	UpdateProjectRequest struct {
-		CardID         string `json:"card_id,omitempty"`
-		Cloud          string `json:"cloud,omitempty"`
-		BillingAddress string `json:"billing_address"`
+		BillingAddress   *string          `json:"billing_address,omitempty"`
+		BillingEmails    *[]*ContactEmail `json:"billing_emails,omitempty"`
+		BillingExtraText *string          `json:"billing_extra_text,omitempty"`
+		CardID           string           `json:"card_id,omitempty"`
+		Cloud            string           `json:"cloud,omitempty"`
+		CountryCode      *string          `json:"country_code,omitempty"`
+		TechnicalEmails  *[]*ContactEmail `json:"tech_emails,omitempty"`
+	}
+
+	// ContactEmail represents either a technical contact or billing contact
+	ContactEmail struct {
+		Email string `json:"email"`
 	}
 
 	// ProjectResponse is the response from Aiven for the project endpoints.

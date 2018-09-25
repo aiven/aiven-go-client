@@ -1,8 +1,8 @@
 # Aiven client
 
-Aiven is a next-generation managed cloud services platform. Its focus is in
-ease of adoption, high fault resilience, customer's peace of mind and advanced
-features at competetive price points. See https://aiven.io/ for more
+Aiven is a next-generation managed cloud services platform with a focus on
+ease of adoption, high fault resilience, customer peace of mind and advanced
+features at competitive price points. See https://aiven.io/ for more
 information about the backend service.
 
 This is the official Aiven SDK for Go. This SDK provides full implementation of

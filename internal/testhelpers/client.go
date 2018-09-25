@@ -7,7 +7,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/jelmersnoeck/aiven"
+	"github.com/aiven/aiven-go-client"
 )
 
 func init() {
@@ -48,7 +48,7 @@ func ProjectName(name string) string {
 
 // NewProject will create a new project based on the given name.
 func NewProject(cl *aiven.Client, name string) (*aiven.Project, error) {
-	cards, err := cl.Billing.Cards.List()
+	cards, err := cl.CardsHandler.List()
 	if err != nil {
 		return nil, err
 	}

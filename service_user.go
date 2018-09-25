@@ -1,3 +1,6 @@
+// Copyright (c) 2017 jelmersnoeck
+// Copyright (c) 2018 Aiven, Helsinki, Finland. https://aiven.io/
+
 package aiven
 
 import (
@@ -37,7 +40,8 @@ type (
 
 // Create creates the given User on Aiven.
 func (h *ServiceUsersHandler) Create(project, service string, req CreateServiceUserRequest) (*ServiceUser, error) {
-	bts, err := h.client.doPostRequest(fmt.Sprintf("/project/%s/service/%s/user", project, service), req)
+	path := buildPath("project", project, "service", service, "user")
+	bts, err := h.client.doPostRequest(path, req)
 	if err != nil {
 		return nil, err
 	}
@@ -58,9 +62,38 @@ func (h *ServiceUsersHandler) Create(project, service string, req CreateServiceU
 	return rsp.User, nil
 }
 
+// List Service Users for given service in Aiven.
+func (h *ServiceUsersHandler) List(project, serviceName string) ([]*ServiceUser, error) {
+	// Aiven API does not provide list operation for service users, need to get them via service info instead
+	service, err := h.client.Services.Get(project, serviceName)
+	if err != nil {
+		return nil, err
+	}
+
+	return service.Users, nil
+}
+
+// Get specific Service User in Aiven.
+func (h *ServiceUsersHandler) Get(project, serviceName, username string) (*ServiceUser, error) {
+	// Aiven API does not provide get operation for service users, need to get them via list instead
+	users, err := h.List(project, serviceName)
+	if err != nil {
+		return nil, err
+	}
+	for _, user := range users {
+		if user.Username == username {
+			return user, nil
+		}
+	}
+
+	err = Error{Message: fmt.Sprintf("Service user with username %v not found", username), Status: 404}
+	return nil, err
+}
+
 // Delete deletes the given Service User in Aiven.
 func (h *ServiceUsersHandler) Delete(project, service, user string) error {
-	bts, err := h.client.doDeleteRequest(fmt.Sprintf("/project/%s/service/%s/user/%s", project, service, user), nil)
+	path := buildPath("project", project, "service", service, "user", user)
+	bts, err := h.client.doDeleteRequest(path, nil)
 	if err != nil {
 		return err
 	}

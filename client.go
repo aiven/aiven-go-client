@@ -1,3 +1,6 @@
+// Copyright (c) 2017 jelmersnoeck
+// Copyright (c) 2018 Aiven, Helsinki, Finland. https://aiven.io/
+
 package aiven
 
 import (
@@ -15,13 +18,20 @@ type Client struct {
 	APIKey string
 	Client *http.Client
 
-	Projects     *ProjectsHandler
-	CA           *CAHandler
-	Services     *ServicesHandler
-	Databases    *DatabasesHandler
-	ServiceUsers *ServiceUsersHandler
-	KafkaTopics  *KafkaTopicsHandler
-	Billing      *BillingHandler
+	Projects                    *ProjectsHandler
+	ProjectUsers                *ProjectUsersHandler
+	CA                          *CAHandler
+	CardsHandler                *CardsHandler
+	ServiceIntegrationEndpoints *ServiceIntegrationEndpointsHandler
+	ServiceIntegrations         *ServiceIntegrationsHandler
+	Services                    *ServicesHandler
+	ConnectionPools             *ConnectionPoolsHandler
+	Databases                   *DatabasesHandler
+	ServiceUsers                *ServiceUsersHandler
+	KafkaACLs                   *KafkaACLHandler
+	KafkaTopics                 *KafkaTopicsHandler
+	VPCs                        *VPCsHandler
+	VPCPeeringConnections       *VPCPeeringConnectionsHandler
 }
 
 // NewMFAUserClient creates a new client based on email, one-time password and password.
@@ -53,12 +63,19 @@ func NewTokenClient(key string) (*Client, error) {
 // Init initializes the client and sets up all the handlers.
 func (c *Client) Init() {
 	c.Projects = &ProjectsHandler{c}
+	c.ProjectUsers = &ProjectUsersHandler{c}
 	c.CA = &CAHandler{c}
+	c.CardsHandler = &CardsHandler{c}
+	c.ServiceIntegrationEndpoints = &ServiceIntegrationEndpointsHandler{c}
+	c.ServiceIntegrations = &ServiceIntegrationsHandler{c}
 	c.Services = &ServicesHandler{c}
+	c.ConnectionPools = &ConnectionPoolsHandler{c}
 	c.Databases = &DatabasesHandler{c}
 	c.ServiceUsers = &ServiceUsersHandler{c}
+	c.KafkaACLs = &KafkaACLHandler{c}
 	c.KafkaTopics = &KafkaTopicsHandler{c}
-	c.Billing = &BillingHandler{c, &CardsHandler{c}}
+	c.VPCs = &VPCsHandler{c}
+	c.VPCPeeringConnections = &VPCPeeringConnectionsHandler{c}
 }
 
 func (c *Client) doGetRequest(endpoint string, req interface{}) ([]byte, error) {
@@ -101,7 +118,15 @@ func (c *Client) doRequest(method, uri string, body interface{}) ([]byte, error)
 	}
 	defer rsp.Body.Close()
 
-	return ioutil.ReadAll(rsp.Body)
+	responseBody, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, err
+	}
+	if rsp.StatusCode < 200 || rsp.StatusCode >= 300 {
+		return nil, Error{Message: string(responseBody), Status: rsp.StatusCode}
+	}
+
+	return responseBody, err
 }
 
 func endpoint(uri string) string {

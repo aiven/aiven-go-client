@@ -1,40 +1,102 @@
+// Copyright (c) 2017 jelmersnoeck
+// Copyright (c) 2018 Aiven, Helsinki, Finland. https://aiven.io/
+
 package aiven
 
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
-	"net/url"
-	"strings"
 )
 
 type (
 	// Service represents the Service model on Aiven.
 	Service struct {
-		CloudName      string         `json:"cloud_name"`
-		CreateTime     string         `json:"create_time"`
-		UpdateTime     string         `json:"update_time"`
-		GroupList      []string       `json:"group_list"`
-		NodeCount      int            `json:"node_count"`
-		Plan           string         `json:"plan"`
-		Name           string         `json:"service_name"`
-		Type           string         `json:"service_type"`
-		URI            string         `json:"service_uri"`
-		State          string         `json:"state"`
-		Metadata       interface{}    `json:"metadata"`
-		Users          []*ServiceUser `json:"users"`
-		UserConfig     interface{}    `json:"user_config"`
-		ConnectionInfo ConnectionInfo `json:"connection_info"`
+		ACL             []*KafkaACL            `json:"acl"`
+		Backups         []*Backup              `json:"backups"`
+		CloudName       string                 `json:"cloud_name"`
+		ConnectionPools []*ConnectionPool      `json:"connection_pools"`
+		CreateTime      string                 `json:"create_time"`
+		UpdateTime      string                 `json:"update_time"`
+		GroupList       []string               `json:"group_list"`
+		NodeCount       int                    `json:"node_count"`
+		Plan            string                 `json:"plan"`
+		Name            string                 `json:"service_name"`
+		Type            string                 `json:"service_type"`
+		ProjectVPCID    *string                `json:"project_vpc_id"`
+		URI             string                 `json:"service_uri"`
+		URIParams       map[string]string      `json:"service_uri_params"`
+		State           string                 `json:"state"`
+		Metadata        interface{}            `json:"metadata"`
+		Users           []*ServiceUser         `json:"users"`
+		UserConfig      map[string]interface{} `json:"user_config"`
+		ConnectionInfo  ConnectionInfo         `json:"connection_info"`
+	}
+
+	// Backup represents an individual backup of service data on Aiven
+	Backup struct {
+		BackupTime string `json:"backup_time"`
+		DataSize   int    `json:"data_size"`
 	}
 
 	// ConnectionInfo represents the Service Connection information on Aiven.
 	ConnectionInfo struct {
+		CassandraHosts []string `json:"cassandra"`
+
+		ElasticsearchURIs     []string `json:"elasticsearch"`
+		ElasticsearchUsername string   `json:"elasticsearch_username"`
+		ElasticsearchPassword string   `json:"elasticsearch_password"`
+		KibanaURI             string   `json:"kibana_uri"`
+
+		GrafanaURIs []string `json:"grafana"`
+
+		InfluxDBURIs         []string `json:"influxdb"`
+		InfluxDBDatabaseName string   `json:"influxdb_dbname"`
+		InfluxDBUsername     string   `json:"influxdb_username"`
+		InfluxDBPassword     string   `json:"influxdb_password"`
+
 		KafkaHosts        []string `json:"kafka"`
 		KafkaAccessCert   string   `json:"kafka_access_cert"`
 		KafkaAccessKey    string   `json:"kafka_access_key"`
 		KafkaConnectURI   string   `json:"kafka_connect_uri"`
 		KafkaRestURI      string   `json:"kafka_rest_uri"`
 		SchemaRegistryURI string   `json:"schema_registry_uri"`
+
+		PostgresParams      []PostgresParams `json:"pg_params"`
+		PostgresReplicaURI  string           `json:"pg_replica_uri"`
+		PostgresStandbyURIs []string         `json:"pg_standby"`
+		PostgresURIs        []string         `json:"pg"`
+
+		RedisPassword  string   `json:"redis_password"`
+		RedisSlaveURIs []string `json:"redis_slave"`
+		RedisURIs      []string `json:"redis"`
+	}
+
+	// PostgresParams represents individual parameters for a PostgreSQL ConnectionInfo
+	PostgresParams struct {
+		DatabaseName string `json:"dbname"`
+		Host         string `string:"host"`
+		Password     string `string:"password"`
+		Port         string `string:"port"`
+		SSLMode      string `string:"sslmode"`
+		User         string `string:"user"`
+	}
+
+	// KafkaACL represents a Kafka ACL entry on Aiven.
+	KafkaACL struct {
+		ID         string `json:"id"`
+		Permission string `json:"permission"`
+		Topic      string `json:"topic"`
+		Username   string `json:"username"`
+	}
+
+	// ConnectionPool represents a PostgreSQL PGBouncer connection pool on Aiven
+	ConnectionPool struct {
+		ConnectionURI string `json:"connection_uri"`
+		Database      string `json:"database"`
+		PoolMode      string `json:"pool_mode"`
+		PoolName      string `json:"pool_name"`
+		PoolSize      int    `json:"pool_size"`
+		Username      string `json:"username"`
 	}
 
 	// ServicesHandler is the client that interacts with the Service API
@@ -45,21 +107,23 @@ type (
 
 	// CreateServiceRequest are the parameters to create a Service.
 	CreateServiceRequest struct {
-		Cloud       string                 `json:"cloud,omitempty"`
-		GroupName   string                 `json:"group_name,omitempty"`
-		Plan        string                 `json:"plan,omitempty"`
-		ServiceName string                 `json:"service_name"`
-		ServiceType string                 `json:"service_type"`
-		UserConfig  map[string]interface{} `json:"user_config,omitempty"`
+		Cloud        string                 `json:"cloud,omitempty"`
+		GroupName    string                 `json:"group_name,omitempty"`
+		Plan         string                 `json:"plan,omitempty"`
+		ProjectVPCID *string                `json:"project_vpc_id"`
+		ServiceName  string                 `json:"service_name"`
+		ServiceType  string                 `json:"service_type"`
+		UserConfig   map[string]interface{} `json:"user_config,omitempty"`
 	}
 
 	// UpdateServiceRequest are the parameters to update a Service.
 	UpdateServiceRequest struct {
-		Cloud      string                 `json:"cloud,omitempty"`
-		GroupName  string                 `json:"group_name,omitempty"`
-		Plan       string                 `json:"plan,omitempty"`
-		Powered    bool                   `json:"powered"` // TODO: figure out if we can overwrite the default?
-		UserConfig map[string]interface{} `json:"user_config,omitempty"`
+		Cloud        string                 `json:"cloud,omitempty"`
+		GroupName    string                 `json:"group_name,omitempty"`
+		Plan         string                 `json:"plan,omitempty"`
+		ProjectVPCID *string                `json:"project_vpc_id"`
+		Powered      bool                   `json:"powered"` // TODO: figure out if we can overwrite the default?
+		UserConfig   map[string]interface{} `json:"user_config,omitempty"`
 	}
 
 	// ServiceResponse represents the response from Aiven after interacting with
@@ -77,39 +141,22 @@ type (
 	}
 )
 
-// Hostname parses the hostname out of the Service URI.
+// Hostname provides host name for the service. This method is provided for backwards
+// compatibility, typically it is easier to just get the value from URIParams directly.
 func (s *Service) Hostname() (string, error) {
-	hn, _, err := getHostPort(s.URI)
-	return hn, err
+	return s.URIParams["host"], nil
 }
 
-// Port parses the port out of the service URI.
+// Port provides port for the service. This method is provided for backwards
+// compatibility, typically it is easier to just get the value from URIParams directly.
 func (s *Service) Port() (string, error) {
-	_, port, err := getHostPort(s.URI)
-	return port, err
-}
-
-func getHostPort(uri string) (string, string, error) {
-	hostURL, err := url.Parse(uri)
-	if err != nil {
-		return "", "", err
-	}
-
-	if hostURL.Host == "" {
-		return hostURL.Scheme, hostURL.Opaque, nil
-	}
-
-	sp := strings.Split(hostURL.Host, ":")
-	if len(sp) != 2 {
-		return "", "", ErrInvalidHost
-	}
-
-	return sp[0], sp[1], nil
+	return s.URIParams["port"], nil
 }
 
 // Create creates the given Service on Aiven.
 func (h *ServicesHandler) Create(project string, req CreateServiceRequest) (*Service, error) {
-	rsp, err := h.client.doPostRequest(fmt.Sprintf("/project/%s/service", project), req)
+	path := buildPath("project", project, "service")
+	rsp, err := h.client.doPostRequest(path, req)
 	if err != nil {
 		return nil, err
 	}
@@ -119,7 +166,8 @@ func (h *ServicesHandler) Create(project string, req CreateServiceRequest) (*Ser
 
 // Get gets a specific service from Aiven.
 func (h *ServicesHandler) Get(project, service string) (*Service, error) {
-	rsp, err := h.client.doGetRequest(fmt.Sprintf("/project/%s/service/%s", project, service), nil)
+	path := buildPath("project", project, "service", service)
+	rsp, err := h.client.doGetRequest(path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -129,7 +177,8 @@ func (h *ServicesHandler) Get(project, service string) (*Service, error) {
 
 // Update will update the given service with the given parameters.
 func (h *ServicesHandler) Update(project, service string, req UpdateServiceRequest) (*Service, error) {
-	rsp, err := h.client.doPutRequest(fmt.Sprintf("/project/%s/service/%s", project, service), req)
+	path := buildPath("project", project, "service", service)
+	rsp, err := h.client.doPutRequest(path, req)
 	if err != nil {
 		return nil, err
 	}
@@ -139,7 +188,8 @@ func (h *ServicesHandler) Update(project, service string, req UpdateServiceReque
 
 // Delete will delete the given service from Aiven.
 func (h *ServicesHandler) Delete(project, service string) error {
-	bts, err := h.client.doDeleteRequest(fmt.Sprintf("/project/%s/service/%s", project, service), nil)
+	path := buildPath("project", project, "service", service)
+	bts, err := h.client.doDeleteRequest(path, nil)
 	if err != nil {
 		return err
 	}
@@ -149,7 +199,8 @@ func (h *ServicesHandler) Delete(project, service string) error {
 
 // List will fetch all services for a given project.
 func (h *ServicesHandler) List(project string) ([]*Service, error) {
-	rsp, err := h.client.doGetRequest(fmt.Sprintf("/project/%s/service", project), nil)
+	path := buildPath("project", project, "service")
+	rsp, err := h.client.doGetRequest(path, nil)
 	if err != nil {
 		return nil, err
 	}

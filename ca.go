@@ -1,3 +1,6 @@
+// Copyright (c) 2017 jelmersnoeck
+// Copyright (c) 2018 Aiven, Helsinki, Finland. https://aiven.io/
+
 package aiven
 
 import (
@@ -21,7 +24,7 @@ type (
 
 // Get gets the specified Project CA Certificate
 func (h *CAHandler) Get(project string) (string, error) {
-	bts, err := h.client.doGetRequest("/project/"+project+"/kms/ca", nil)
+	bts, err := h.client.doGetRequest(buildPath("project", project, "kms", "ca"), nil)
 	if err != nil {
 		return "", err
 	}

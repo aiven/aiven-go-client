@@ -11,25 +11,26 @@ import (
 type (
 	// Service represents the Service model on Aiven.
 	Service struct {
-		ACL             []*KafkaACL            `json:"acl"`
-		Backups         []*Backup              `json:"backups"`
-		CloudName       string                 `json:"cloud_name"`
-		ConnectionPools []*ConnectionPool      `json:"connection_pools"`
-		CreateTime      string                 `json:"create_time"`
-		UpdateTime      string                 `json:"update_time"`
-		GroupList       []string               `json:"group_list"`
-		NodeCount       int                    `json:"node_count"`
-		Plan            string                 `json:"plan"`
-		Name            string                 `json:"service_name"`
-		Type            string                 `json:"service_type"`
-		ProjectVPCID    *string                `json:"project_vpc_id"`
-		URI             string                 `json:"service_uri"`
-		URIParams       map[string]string      `json:"service_uri_params"`
-		State           string                 `json:"state"`
-		Metadata        interface{}            `json:"metadata"`
-		Users           []*ServiceUser         `json:"users"`
-		UserConfig      map[string]interface{} `json:"user_config"`
-		ConnectionInfo  ConnectionInfo         `json:"connection_info"`
+		ACL                   []*KafkaACL            `json:"acl"`
+		Backups               []*Backup              `json:"backups"`
+		CloudName             string                 `json:"cloud_name"`
+		ConnectionPools       []*ConnectionPool      `json:"connection_pools"`
+		CreateTime            string                 `json:"create_time"`
+		UpdateTime            string                 `json:"update_time"`
+		GroupList             []string               `json:"group_list"`
+		NodeCount             int                    `json:"node_count"`
+		Plan                  string                 `json:"plan"`
+		Name                  string                 `json:"service_name"`
+		Type                  string                 `json:"service_type"`
+		ProjectVPCID          *string                `json:"project_vpc_id"`
+		URI                   string                 `json:"service_uri"`
+		URIParams             map[string]string      `json:"service_uri_params"`
+		State                 string                 `json:"state"`
+		Metadata              interface{}            `json:"metadata"`
+		Users                 []*ServiceUser         `json:"users"`
+		UserConfig            map[string]interface{} `json:"user_config"`
+		ConnectionInfo        ConnectionInfo         `json:"connection_info"`
+		TerminationProtection bool                   `json:"termination_protection"`
 	}
 
 	// Backup represents an individual backup of service data on Aiven
@@ -107,23 +108,25 @@ type (
 
 	// CreateServiceRequest are the parameters to create a Service.
 	CreateServiceRequest struct {
-		Cloud        string                 `json:"cloud,omitempty"`
-		GroupName    string                 `json:"group_name,omitempty"`
-		Plan         string                 `json:"plan,omitempty"`
-		ProjectVPCID *string                `json:"project_vpc_id"`
-		ServiceName  string                 `json:"service_name"`
-		ServiceType  string                 `json:"service_type"`
-		UserConfig   map[string]interface{} `json:"user_config,omitempty"`
+		Cloud                 string                 `json:"cloud,omitempty"`
+		GroupName             string                 `json:"group_name,omitempty"`
+		Plan                  string                 `json:"plan,omitempty"`
+		ProjectVPCID          *string                `json:"project_vpc_id"`
+		ServiceName           string                 `json:"service_name"`
+		ServiceType           string                 `json:"service_type"`
+		TerminationProtection bool                   `json:"termination_protection"`
+		UserConfig            map[string]interface{} `json:"user_config,omitempty"`
 	}
 
 	// UpdateServiceRequest are the parameters to update a Service.
 	UpdateServiceRequest struct {
-		Cloud        string                 `json:"cloud,omitempty"`
-		GroupName    string                 `json:"group_name,omitempty"`
-		Plan         string                 `json:"plan,omitempty"`
-		ProjectVPCID *string                `json:"project_vpc_id"`
-		Powered      bool                   `json:"powered"` // TODO: figure out if we can overwrite the default?
-		UserConfig   map[string]interface{} `json:"user_config,omitempty"`
+		Cloud                 string                 `json:"cloud,omitempty"`
+		GroupName             string                 `json:"group_name,omitempty"`
+		Plan                  string                 `json:"plan,omitempty"`
+		ProjectVPCID          *string                `json:"project_vpc_id"`
+		Powered               bool                   `json:"powered"` // TODO: figure out if we can overwrite the default?
+		TerminationProtection bool                   `json:"termination_protection"`
+		UserConfig            map[string]interface{} `json:"user_config,omitempty"`
 	}
 
 	// ServiceResponse represents the response from Aiven after interacting with

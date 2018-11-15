@@ -12,10 +12,11 @@ type (
 	// ServiceIntegrationEndpoint represents a service integration endpoint,
 	// like parameters for integration to Datadog
 	ServiceIntegrationEndpoint struct {
-		EndpointID   string                 `json:"endpoint_id"`
-		EndpointName string                 `json:"endpoint_name"`
-		EndpointType string                 `json:"endpoint_type"`
-		UserConfig   map[string]interface{} `json:"user_config"`
+		EndpointID     string                 `json:"endpoint_id"`
+		EndpointName   string                 `json:"endpoint_name"`
+		EndpointType   string                 `json:"endpoint_type"`
+		UserConfig     map[string]interface{} `json:"user_config"`
+		EndpointConfig map[string]interface{} `json:"endpoint_config"`
 	}
 
 	// ServiceIntegrationEndpointsHandler is the client that interacts

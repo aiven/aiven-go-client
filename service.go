@@ -31,6 +31,7 @@ type (
 		UserConfig            map[string]interface{} `json:"user_config"`
 		ConnectionInfo        ConnectionInfo         `json:"connection_info"`
 		TerminationProtection bool                   `json:"termination_protection"`
+		MaintenanceWindow     MaintenanceWindow      `json:"maintenance"`
 	}
 
 	// Backup represents an individual backup of service data on Aiven
@@ -100,6 +101,12 @@ type (
 		Username      string `json:"username"`
 	}
 
+	// MaintenanceWindow during which maintenance operations should take place
+	MaintenanceWindow struct {
+		DayOfWeek string `json:"dow"`
+		TimeOfDay string `json:"time"`
+	}
+
 	// ServicesHandler is the client that interacts with the Service API
 	// endpoints on Aiven.
 	ServicesHandler struct {
@@ -110,6 +117,7 @@ type (
 	CreateServiceRequest struct {
 		Cloud                 string                 `json:"cloud,omitempty"`
 		GroupName             string                 `json:"group_name,omitempty"`
+		MaintenanceWindow     *MaintenanceWindow     `json:"maintenance,omitempty"`
 		Plan                  string                 `json:"plan,omitempty"`
 		ProjectVPCID          *string                `json:"project_vpc_id"`
 		ServiceName           string                 `json:"service_name"`
@@ -122,6 +130,7 @@ type (
 	UpdateServiceRequest struct {
 		Cloud                 string                 `json:"cloud,omitempty"`
 		GroupName             string                 `json:"group_name,omitempty"`
+		MaintenanceWindow     *MaintenanceWindow     `json:"maintenance,omitempty"`
 		Plan                  string                 `json:"plan,omitempty"`
 		ProjectVPCID          *string                `json:"project_vpc_id"`
 		Powered               bool                   `json:"powered"` // TODO: figure out if we can overwrite the default?

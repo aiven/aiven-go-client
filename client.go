@@ -11,7 +11,7 @@ import (
 )
 
 // APIURL is the URL we'll use to speak to Aiven. This can be overwritten.
-const APIURL = "https://api.aiven.io/v1beta"
+const APIURL = "https://api.aiven.io/v1"
 
 // Client represents the instance that does all the calls to the Aiven API.
 type Client struct {

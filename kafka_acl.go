@@ -62,7 +62,7 @@ func (h *KafkaACLHandler) Create(project, service string, req CreateKafkaACLRequ
 	}
 
 	if foundACL == nil {
-		return nil, fmt.Errorf("Created ACL not found from response ACL list")
+		return nil, fmt.Errorf("created ACL not found from response ACL list")
 	}
 
 	return foundACL, nil

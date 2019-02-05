@@ -104,29 +104,33 @@ func (c *Client) doRequest(method, uri string, body interface{}) ([]byte, error)
 		}
 	}
 
-	req, err := http.NewRequest(method, endpoint(uri), bytes.NewBuffer(bts))
-	if err != nil {
-		return nil, err
-	}
+	retryCount := 2
+	for {
+		req, err := http.NewRequest(method, endpoint(uri), bytes.NewBuffer(bts))
+		if err != nil {
+			return nil, err
+		}
 
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "aivenv1 "+c.APIKey)
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Authorization", "aivenv1 "+c.APIKey)
 
-	rsp, err := c.Client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer rsp.Body.Close()
+		rsp, err := c.Client.Do(req)
+		if err != nil {
+			return nil, err
+		}
+		defer rsp.Body.Close()
 
-	responseBody, err := ioutil.ReadAll(rsp.Body)
-	if err != nil {
-		return nil, err
-	}
-	if rsp.StatusCode < 200 || rsp.StatusCode >= 300 {
-		return nil, Error{Message: string(responseBody), Status: rsp.StatusCode}
-	}
+		responseBody, err := ioutil.ReadAll(rsp.Body)
+		// Retry a few times in case of request timeout or server error for GET requests
+		if (rsp.StatusCode == 408 || rsp.StatusCode >= 500) && retryCount > 0 && method == "GET" {
+			retryCount--
+			continue
+		} else if rsp.StatusCode < 200 || rsp.StatusCode >= 300 {
+			return nil, Error{Message: string(responseBody), Status: rsp.StatusCode}
+		}
 
-	return responseBody, err
+		return responseBody, err
+	}
 }
 
 func endpoint(uri string) string {

@@ -53,7 +53,7 @@ func NewProject(cl *aiven.Client, name string) (*aiven.Project, error) {
 		return nil, err
 	}
 	if len(cards) == 0 {
-		return nil, errors.New("No card available")
+		return nil, errors.New("no card available")
 	}
 
 	return cl.Projects.Create(aiven.CreateProjectRequest{

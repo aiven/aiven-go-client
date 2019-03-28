@@ -115,15 +115,16 @@ type (
 
 	// CreateServiceRequest are the parameters to create a Service.
 	CreateServiceRequest struct {
-		Cloud                 string                 `json:"cloud,omitempty"`
-		GroupName             string                 `json:"group_name,omitempty"`
-		MaintenanceWindow     *MaintenanceWindow     `json:"maintenance,omitempty"`
-		Plan                  string                 `json:"plan,omitempty"`
-		ProjectVPCID          *string                `json:"project_vpc_id"`
-		ServiceName           string                 `json:"service_name"`
-		ServiceType           string                 `json:"service_type"`
-		TerminationProtection bool                   `json:"termination_protection"`
-		UserConfig            map[string]interface{} `json:"user_config,omitempty"`
+		Cloud                 string                  `json:"cloud,omitempty"`
+		GroupName             string                  `json:"group_name,omitempty"`
+		MaintenanceWindow     *MaintenanceWindow      `json:"maintenance,omitempty"`
+		Plan                  string                  `json:"plan,omitempty"`
+		ProjectVPCID          *string                 `json:"project_vpc_id"`
+		ServiceName           string                  `json:"service_name"`
+		ServiceType           string                  `json:"service_type"`
+		TerminationProtection bool                    `json:"termination_protection"`
+		UserConfig            map[string]interface{}  `json:"user_config,omitempty"`
+		ServiceIntegrations   []NewServiceIntegration `json:"service_integrations"`
 	}
 
 	// UpdateServiceRequest are the parameters to update a Service.

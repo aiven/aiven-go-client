@@ -8,6 +8,17 @@ import (
 )
 
 type (
+	// NewServiceIntegration defines partial set of service integration fields used
+	// when passing integration as part of service creation call
+	NewServiceIntegration struct {
+		DestinationEndpointID *string                `json:"dest_endpoint_id"`
+		DestinationService    *string                `json:"dest_service"`
+		IntegrationType       string                 `json:"integration_type"`
+		SourceService         *string                `json:"source_service"`
+		SourceEndpointID      *string                `json:"source_endpoint_id"`
+		UserConfig            map[string]interface{} `json:"user_config"`
+	}
+
 	// ServiceIntegration represents a service integration endpoint,
 	// like parameters for integration to Datadog
 	ServiceIntegration struct {

@@ -13,6 +13,7 @@ type (
 		CreateTime       *string                 `json:"create_time"`
 		PeerCloudAccount string                  `json:"peer_cloud_account"`
 		PeerVPC          string                  `json:"peer_vpc"`
+		PeerRegion       *string                 `json:"peer_region"`
 		State            string                  `json:"state"`
 		UpdateTime       string                  `json:"update_time"`
 		StateInfo        *map[string]interface{} `json:"state_info"`

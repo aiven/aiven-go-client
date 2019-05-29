@@ -1,5 +1,5 @@
 // Copyright (c) 2017 jelmersnoeck
-// Copyright (c) 2018 Aiven, Helsinki, Finland. https://aiven.io/
+// Copyright (c) 2018,2019 Aiven, Helsinki, Finland. https://aiven.io/
 
 package aiven
 
@@ -8,10 +8,18 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"os"
 )
 
 // APIURL is the URL we'll use to speak to Aiven. This can be overwritten.
-const APIURL = "https://api.aiven.io/v1"
+var apiurl = "https://api.aiven.io/v1"
+
+func init() {
+	value, isSet := os.LookupEnv("AIVEN_WEB_URL")
+	if isSet {
+		apiurl = value + "/v1"
+	}
+}
 
 // Client represents the instance that does all the calls to the Aiven API.
 type Client struct {
@@ -134,5 +142,5 @@ func (c *Client) doRequest(method, uri string, body interface{}) ([]byte, error)
 }
 
 func endpoint(uri string) string {
-	return APIURL + uri
+	return apiurl + uri
 }

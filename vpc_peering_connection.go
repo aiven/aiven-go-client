@@ -16,12 +16,15 @@ type (
 	// CreateVPCPeeringConnectionRequest holds the parameters to create a new
 	// peering connection.
 	CreateVPCPeeringConnectionRequest struct {
-		PeerCloudAccount string `json:"peer_cloud_account"`
-		PeerVPC          string `json:"peer_vpc"`
+		PeerCloudAccount string  `json:"peer_cloud_account"`
+		PeerVPC          string  `json:"peer_vpc"`
+		PeerRegion       *string `json:"peer_region,omitempty"`
 	}
 )
 
 // Create the given VPC on Aiven.
+// when CreateVPCPeeringConnectionRequest.PeerRegion == nil the PeerVPC must be in the
+// same region as the project VPC (vpcID)
 func (h *VPCPeeringConnectionsHandler) Create(
 	project string,
 	vpcID string,
@@ -38,15 +41,22 @@ func (h *VPCPeeringConnectionsHandler) Create(
 		return nil, err
 	}
 
+	// if region was not set in the request omit it from the response
+	if req.PeerRegion == nil {
+		response.PeerRegion = nil
+	}
+
 	return response, nil
 }
 
-// Get a specific VPC Peering Connection from Aiven.
-func (h *VPCPeeringConnectionsHandler) Get(
+// GetVPCPeering Connection from Aiven.
+// if peerRegion == nil the peered VPC is assumed to be in the same region as the project VPC (vpcID)
+func (h *VPCPeeringConnectionsHandler) GetVPCPeering(
 	project string,
 	vpcID string,
 	peerCloudAccount string,
 	peerVPC string,
+	peerRegion *string,
 ) (*VPCPeeringConnection, error) {
 	// There's no API call for getting individual peering connection. Get the VPC
 	// info and filter from there
@@ -56,7 +66,7 @@ func (h *VPCPeeringConnectionsHandler) Get(
 	}
 
 	for _, pc := range vpc.PeeringConnections {
-		if pc.PeerCloudAccount == peerCloudAccount && pc.PeerVPC == peerVPC {
+		if (peerRegion == nil || pc.PeerRegion == nil || *pc.PeerRegion == *peerRegion) && pc.PeerCloudAccount == peerCloudAccount && pc.PeerVPC == peerVPC {
 			return pc, nil
 		}
 	}
@@ -65,25 +75,35 @@ func (h *VPCPeeringConnectionsHandler) Get(
 	return nil, err
 }
 
-// Delete the given VPC Peering Connection from Aiven.
-func (h *VPCPeeringConnectionsHandler) Delete(project, vpcID, peerCloudAccount, peerVPC string) error {
-	path := buildPath(
-		"project",
-		project,
-		"vpcs",
-		vpcID,
-		"peering-connections",
-		"peer-accounts",
-		peerCloudAccount,
-		"peer-vpcs",
-		peerVPC,
-	)
-	bts, err := h.client.doDeleteRequest(path, nil)
+// Get a VPC Peering Connection from Aiven.
+func (h *VPCPeeringConnectionsHandler) Get(
+	project string,
+	vpcID string,
+	peerCloudAccount string,
+	peerVPC string,
+) (*VPCPeeringConnection, error) {
+	return h.GetVPCPeering(project, vpcID, peerCloudAccount, peerVPC, nil)
+}
+
+// DeleteVPCPeering Connection from Aiven.
+// If peerRegion == nil the peering VPC must be in the same region as project VPC (vpcID)
+func (h *VPCPeeringConnectionsHandler) DeleteVPCPeering(project, vpcID, peerCloudAccount, peerVPC string, peerRegion *string) error {
+	pathElements := []string{"project", project, "vpcs", vpcID, "peering-connections", "peer-accounts", peerCloudAccount, "peer-vpcs", peerVPC}
+	if peerRegion != nil {
+		pathElements = append(pathElements, "peer-regions", *peerRegion)
+	}
+
+	bts, err := h.client.doDeleteRequest(buildPath(pathElements...), nil)
 	if err != nil {
 		return err
 	}
 
 	return handleDeleteResponse(bts)
+}
+
+// Delete the given VPC Peering Connection from Aiven.
+func (h *VPCPeeringConnectionsHandler) Delete(project, vpcID, peerCloudAccount, peerVPC string) error {
+	return h.DeleteVPCPeering(project, vpcID, peerCloudAccount, peerVPC, nil)
 }
 
 // List all VPC peering connections for a given VPC.

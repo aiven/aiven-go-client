@@ -52,6 +52,7 @@ func MFAUserToken(email, otp, password string, client *http.Client) (*Token, err
 		return nil, err
 	}
 	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("User-Agent", "aiven-go-client/"+version())
 
 	rsp, err := client.Do(req)
 	if err != nil {

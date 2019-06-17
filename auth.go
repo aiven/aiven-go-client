@@ -32,12 +32,12 @@ type (
 )
 
 // UserToken creates an authentication token without Multi Factor auth.
-func UserToken(email, password string, client *http.Client) (*Token, error) {
-	return MFAUserToken(email, "", password, client)
+func UserToken(email, password string, client *http.Client, userAgent string) (*Token, error) {
+	return MFAUserToken(email, "", password, client, userAgent)
 }
 
 // MFAUserToken retrieves a User Auth Token for a given email/password pair.
-func MFAUserToken(email, otp, password string, client *http.Client) (*Token, error) {
+func MFAUserToken(email, otp, password string, client *http.Client, userAgent string) (*Token, error) {
 	if client == nil {
 		client = &http.Client{}
 	}
@@ -52,7 +52,7 @@ func MFAUserToken(email, otp, password string, client *http.Client) (*Token, err
 		return nil, err
 	}
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("User-Agent", "aiven-go-client/"+version())
+	req.Header.Set("User-Agent", userAgent)
 
 	rsp, err := client.Do(req)
 	if err != nil {

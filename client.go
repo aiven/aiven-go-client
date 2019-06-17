@@ -23,8 +23,9 @@ func init() {
 
 // Client represents the instance that does all the calls to the Aiven API.
 type Client struct {
-	APIKey string
-	Client *http.Client
+	APIKey    string
+	Client    *http.Client
+	UserAgent string
 
 	Projects                    *ProjectsHandler
 	ProjectUsers                *ProjectUsersHandler
@@ -42,26 +43,36 @@ type Client struct {
 	VPCPeeringConnections       *VPCPeeringConnectionsHandler
 }
 
+// GetUserAgentOrDefault sets default userAgent in case it has not been provided
+func GetUserAgentOrDefault(userAgent string) string {
+	if userAgent != "" {
+		return userAgent
+	}
+	return "aiven-go-client/" + Version()
+}
+
 // NewMFAUserClient creates a new client based on email, one-time password and password.
-func NewMFAUserClient(email, otp, password string) (*Client, error) {
-	tk, err := MFAUserToken(email, otp, password, nil)
+func NewMFAUserClient(email, otp, password string, userAgent string) (*Client, error) {
+	userAgent = GetUserAgentOrDefault(userAgent)
+	tk, err := MFAUserToken(email, otp, password, nil, userAgent)
 	if err != nil {
 		return nil, err
 	}
 
-	return NewTokenClient(tk.Token)
+	return NewTokenClient(tk.Token, userAgent)
 }
 
 // NewUserClient creates a new client based on email and password.
-func NewUserClient(email, password string) (*Client, error) {
-	return NewMFAUserClient(email, "", password)
+func NewUserClient(email, password string, userAgent string) (*Client, error) {
+	return NewMFAUserClient(email, "", password, userAgent)
 }
 
 // NewTokenClient creates a new client based on a given token.
-func NewTokenClient(key string) (*Client, error) {
+func NewTokenClient(key string, userAgent string) (*Client, error) {
 	c := &Client{
-		APIKey: key,
-		Client: &http.Client{},
+		APIKey:    key,
+		Client:    &http.Client{},
+		UserAgent: GetUserAgentOrDefault(userAgent),
 	}
 	c.Init()
 
@@ -120,7 +131,7 @@ func (c *Client) doRequest(method, uri string, body interface{}) ([]byte, error)
 		}
 
 		req.Header.Set("Content-Type", "application/json")
-		req.Header.Set("User-Agent", "aiven-go-client/"+version())
+		req.Header.Set("User-Agent", c.UserAgent)
 		req.Header.Set("Authorization", "aivenv1 "+c.APIKey)
 
 		rsp, err := c.Client.Do(req)

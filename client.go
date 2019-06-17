@@ -120,6 +120,7 @@ func (c *Client) doRequest(method, uri string, body interface{}) ([]byte, error)
 		}
 
 		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("User-Agent", "aiven-go-client/"+version())
 		req.Header.Set("Authorization", "aivenv1 "+c.APIKey)
 
 		rsp, err := c.Client.Do(req)

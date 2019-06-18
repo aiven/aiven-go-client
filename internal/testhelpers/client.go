@@ -32,7 +32,7 @@ func RandStringRunes(n int) string {
 // Client returns a new Aiven client which pulls the credentials from the
 // environment.
 func Client() *aiven.Client {
-	cl, err := aiven.NewUserClient(os.Getenv("AIVEN_USERNAME"), os.Getenv("AIVEN_PASSWORD"))
+	cl, err := aiven.NewUserClient(os.Getenv("AIVEN_USERNAME"), os.Getenv("AIVEN_PASSWORD"), "aiven-go-client-test/"+aiven.Version())
 	if err != nil {
 		fmt.Println("Client creation")
 		panic(err)

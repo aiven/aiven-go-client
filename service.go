@@ -32,6 +32,7 @@ type (
 		ConnectionInfo        ConnectionInfo         `json:"connection_info"`
 		TerminationProtection bool                   `json:"termination_protection"`
 		MaintenanceWindow     MaintenanceWindow      `json:"maintenance"`
+		Integrations          []*ServiceIntegration  `json:"service_integrations"`
 	}
 
 	// Backup represents an individual backup of service data on Aiven

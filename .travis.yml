@@ -6,6 +6,11 @@ cache:
   - directories:
       - "$GOPATH/bin"
       - "$GOPATH/pkg"
+
+script:
+  - make lint
+  - make test
+
 branches:
   only:
     - master

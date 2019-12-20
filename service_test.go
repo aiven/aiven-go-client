@@ -1,70 +1,420 @@
 // Copyright (c) 2017 jelmersnoeck
 
-package aiven_test
+package aiven
 
 import (
+	"encoding/json"
+	"net/http"
+	"net/http/httptest"
+	"reflect"
 	"testing"
-
-	"github.com/aiven/aiven-go-client"
-	"github.com/aiven/aiven-go-client/internal/testhelpers"
 )
 
-func TestService(t *testing.T) {
-	pn := testhelpers.ProjectName("service")
-	cl := testhelpers.Client()
-	_, err := testhelpers.NewProject(cl, pn)
-	if err != nil {
-		t.Errorf("Error creating project: %s", err)
-		return
-	}
-	defer func() {
-		if err := cl.Projects.Delete(pn); err != nil {
-			t.Errorf("Error deleting project: %s", err)
+func setupServiceTestCase(t *testing.T) (*Client, func(t *testing.T)) {
+	t.Log("setup Service test case")
+
+	const (
+		UserName     = "test@aiven.io"
+		UserPassword = "testabcd"
+		AccessToken  = "some-random-token"
+	)
+
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/userauth" {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			err := json.NewEncoder(w).Encode(authResponse{
+				Token: AccessToken,
+				State: "active",
+			})
+
+			if err != nil {
+				t.Error(err)
+			}
+			return
 		}
-	}()
 
-	t.Run("integration test", func(t *testing.T) {
-		t.Run("with all required params", func(t *testing.T) {
-			var service *aiven.Service
-			var err error
-			serviceName := testhelpers.ProjectName("successful-pg")
+		service := ServiceResponse{
+			Service: &Service{
+				CloudName: "google-europe-west1",
+				NodeCount: 1,
+				Plan:      "hobbyist",
+				Name:      "test-service",
+				Type:      "kafka",
+			},
+		}
 
-			t.Run("it should create the service without errors", func(t *testing.T) {
-				service, err = cl.Services.Create(pn, aiven.CreateServiceRequest{
-					Plan:        testhelpers.ServicePlan,
-					ServiceName: serviceName,
-					ServiceType: "pg",
-				})
+		if r.URL.Path == "/project/test-pr/service" {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
 
-				if err != nil {
-					t.Errorf("Expected error to be nil, got %s", err)
-				}
+			err := json.NewEncoder(w).Encode(service)
 
-				if service == nil {
-					t.Errorf("Expected service to be created, got %s", err)
-				}
+			if err != nil {
+				t.Error(err)
+			}
+			return
+		}
+
+		if r.URL.Path == "/project/test-pr/service/test-sr" {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+
+			err := json.NewEncoder(w).Encode(service)
+
+			if err != nil {
+				t.Error(err)
+			}
+			return
+		}
+
+		if r.URL.Path == "/project/test-pr-list/service" {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			err := json.NewEncoder(w).Encode(ServiceListResponse{
+				APIResponse: APIResponse{},
+				Services:    nil,
 			})
 
-			t.Run("it should get the service without errors", func(t *testing.T) {
-				service, err = cl.Services.Get(pn, serviceName)
+			if err != nil {
+				t.Error(err)
+			}
+			return
+		}
+	}))
 
-				if err != nil {
-					t.Errorf("Expected error to be nil, got %s", err)
-				}
+	apiurl = ts.URL
 
-				if service == nil {
-					t.Errorf("Expected service to be fetched, got %s", err)
-				}
-			})
+	c, err := NewUserClient(UserName, UserPassword, "aiven-go-client-test/"+Version())
+	if err != nil {
+		t.Fatalf("user authentication error: %s", err)
+	}
 
-			t.Run("it should update the service without errors", func(t *testing.T) {
-			})
+	return c, func(t *testing.T) {
+		t.Log("teardown ElasticsearchACLs test case")
+	}
+}
 
-			t.Run("it should delete the service without errors", func(t *testing.T) {
-				if err = cl.Services.Delete(pn, serviceName); err != nil {
-					t.Errorf("Expected service to be nil, got %s", err)
-				}
-			})
+func TestServicesHandler_Create(t *testing.T) {
+	c, _ := setupServiceTestCase(t)
+
+	type fields struct {
+		client *Client
+	}
+	type args struct {
+		project string
+		req     CreateServiceRequest
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    *Service
+		wantErr bool
+	}{
+		{
+			"error-expected",
+			fields{client: c},
+			args{
+				project: "test-pr-wrong",
+				req: CreateServiceRequest{
+					Cloud:       "google-europe-west1",
+					GroupName:   "default",
+					Plan:        "hobbyist",
+					ServiceName: "test-service",
+					ServiceType: "kafka",
+				},
+			},
+			nil,
+			true,
+		},
+		{
+			"normal",
+			fields{client: c},
+			args{
+				project: "test-pr",
+				req: CreateServiceRequest{
+					Cloud:       "google-europe-west1",
+					GroupName:   "default",
+					Plan:        "hobbyist",
+					ServiceName: "test-service",
+					ServiceType: "kafka",
+				},
+			},
+			&Service{
+				CloudName: "google-europe-west1",
+				NodeCount: 1,
+				Plan:      "hobbyist",
+				Name:      "test-service",
+				Type:      "kafka",
+			},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			h := &ServicesHandler{
+				client: tt.fields.client,
+			}
+			got, err := h.Create(tt.args.project, tt.args.req)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Create() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Create() got = %v, want %v", got, tt.want)
+			}
 		})
-	})
+	}
+}
+
+func TestServicesHandler_Get(t *testing.T) {
+	c, _ := setupServiceTestCase(t)
+
+	type fields struct {
+		client *Client
+	}
+	type args struct {
+		project string
+		service string
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    *Service
+		wantErr bool
+	}{
+		{
+			name:   "normal",
+			fields: fields{client: c},
+			args:   args{project: "test-pr", service: "test-sr"},
+			want: &Service{
+				CloudName: "google-europe-west1",
+				NodeCount: 1,
+				Plan:      "hobbyist",
+				Name:      "test-service",
+				Type:      "kafka",
+			},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			h := &ServicesHandler{
+				client: tt.fields.client,
+			}
+			got, err := h.Get(tt.args.project, tt.args.service)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Get() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Get() got = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestServicesHandler_Update(t *testing.T) {
+	c, _ := setupServiceTestCase(t)
+
+	type fields struct {
+		client *Client
+	}
+	type args struct {
+		project string
+		service string
+		req     UpdateServiceRequest
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    *Service
+		wantErr bool
+	}{
+		{
+			name:   "normal",
+			fields: fields{client: c},
+			args: args{project: "test-pr", service: "test-sr", req: UpdateServiceRequest{
+				Cloud:     "google-europe-west1",
+				GroupName: "default",
+				Plan:      "hobbyist",
+			}},
+			want: &Service{
+				CloudName: "google-europe-west1",
+				NodeCount: 1,
+				Plan:      "hobbyist",
+				Name:      "test-service",
+				Type:      "kafka",
+			},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			h := &ServicesHandler{
+				client: tt.fields.client,
+			}
+			got, err := h.Update(tt.args.project, tt.args.service, tt.args.req)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Update() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Update() got = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestServicesHandler_Delete(t *testing.T) {
+	c, _ := setupServiceTestCase(t)
+
+	type fields struct {
+		client *Client
+	}
+	type args struct {
+		project string
+		service string
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		{
+			name:   "",
+			fields: fields{client: c},
+			args: args{
+				project: "test-pr",
+				service: "test-sr",
+			},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			h := &ServicesHandler{
+				client: tt.fields.client,
+			}
+			if err := h.Delete(tt.args.project, tt.args.service); (err != nil) != tt.wantErr {
+				t.Errorf("Delete() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestServicesHandler_List(t *testing.T) {
+	c, _ := setupServiceTestCase(t)
+
+	type fields struct {
+		client *Client
+	}
+	type args struct {
+		project string
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    []*Service
+		wantErr bool
+	}{
+		{
+			name:    "",
+			fields:  fields{client: c},
+			args:    args{project: "test-pr-list"},
+			want:    nil,
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			h := &ServicesHandler{
+				client: tt.fields.client,
+			}
+			got, err := h.List(tt.args.project)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("List() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("List() got = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_parseServiceResponse(t *testing.T) {
+	s := ServiceResponse{
+		Service: &Service{
+			CloudName: "google-europe-west1",
+			NodeCount: 1,
+			Plan:      "hobbyist",
+			Name:      "test-service",
+			Type:      "kafka",
+		},
+	}
+
+	sb, _ := json.Marshal(&s)
+
+	e := ServiceResponse{
+		APIResponse: APIResponse{
+			Errors: []Error{
+				{
+					Message:  "test-err",
+					MoreInfo: "info",
+					Status:   0,
+				},
+			},
+			Message: "test",
+		},
+		Service: nil,
+	}
+
+	se, _ := json.Marshal(&e)
+
+	type args struct {
+		rsp []byte
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *Service
+		wantErr bool
+	}{
+		{
+			name:    "nil-response",
+			args:    args{rsp: nil},
+			want:    nil,
+			wantErr: true,
+		},
+		{
+			name:    "normal-response",
+			args:    args{rsp: sb},
+			want:    s.Service,
+			wantErr: false,
+		},
+		{
+			name:    "error-response",
+			args:    args{rsp: se},
+			want:    nil,
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := parseServiceResponse(tt.args.rsp)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("parseServiceResponse() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("parseServiceResponse() got = %v, want %v", got, tt.want)
+			}
+		})
+	}
 }

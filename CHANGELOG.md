@@ -14,3 +14,7 @@ variable
 ## [1.1.0] - 2019-06-06
 
 Add support for cross region vpc peering.
+
+## [1.3.0] - 2019-12-23
+
+Add support for Elasticsearch ACLs.

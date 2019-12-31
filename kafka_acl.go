@@ -3,8 +3,6 @@
 package aiven
 
 import (
-	"encoding/json"
-	"errors"
 	"fmt"
 )
 
@@ -38,17 +36,9 @@ func (h *KafkaACLHandler) Create(project, service string, req CreateKafkaACLRequ
 		return nil, err
 	}
 
-	var rsp *KafkaACLResponse
-	if err := json.Unmarshal(bts, &rsp); err != nil {
+	var rsp KafkaACLResponse
+	if err := checkAPIResponse(bts, &rsp); err != nil {
 		return nil, err
-	}
-
-	if rsp == nil {
-		return nil, ErrNoResponseData
-	}
-
-	if rsp.Errors != nil && len(rsp.Errors) != 0 {
-		return nil, errors.New(rsp.Message)
 	}
 
 	// The server doesn't return the ACL we created but list of all ACLs currently
@@ -106,5 +96,5 @@ func (h *KafkaACLHandler) Delete(project, serviceName, aclID string) error {
 		return err
 	}
 
-	return handleDeleteResponse(bts)
+	return checkAPIResponse(bts, nil)
 }

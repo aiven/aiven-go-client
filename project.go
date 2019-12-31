@@ -4,8 +4,6 @@
 package aiven
 
 import (
-	"encoding/json"
-	"errors"
 	"log"
 )
 
@@ -77,34 +75,43 @@ type (
 
 // Create creates a new project.
 func (h *ProjectsHandler) Create(req CreateProjectRequest) (*Project, error) {
-	rsp, err := h.client.doPostRequest(buildPath("project"), req)
+	bts, err := h.client.doPostRequest(buildPath("project"), req)
 	if err != nil {
 		return nil, err
 	}
 
-	return parseProjectResponse(rsp)
+	var r ProjectResponse
+	errR := checkAPIResponse(bts, &r)
+
+	return r.Project, errR
 }
 
 // Get gets the specified project.
 func (h *ProjectsHandler) Get(project string) (*Project, error) {
 	log.Printf("Getting information for `%s`", project)
 
-	rsp, err := h.client.doGetRequest(buildPath("project", project), nil)
+	bts, err := h.client.doGetRequest(buildPath("project", project), nil)
 	if err != nil {
 		return nil, err
 	}
 
-	return parseProjectResponse(rsp)
+	var r ProjectResponse
+	errR := checkAPIResponse(bts, &r)
+
+	return r.Project, errR
 }
 
 // Update updates the specified project with the given parameters.
 func (h *ProjectsHandler) Update(project string, req UpdateProjectRequest) (*Project, error) {
-	rsp, err := h.client.doPutRequest(buildPath("project", project), req)
+	bts, err := h.client.doPutRequest(buildPath("project", project), req)
 	if err != nil {
 		return nil, err
 	}
 
-	return parseProjectResponse(rsp)
+	var r ProjectResponse
+	errR := checkAPIResponse(bts, &r)
+
+	return r.Project, errR
 }
 
 // Delete deletes the given project.
@@ -114,45 +121,18 @@ func (h *ProjectsHandler) Delete(project string) error {
 		return err
 	}
 
-	return handleDeleteResponse(bts)
+	return checkAPIResponse(bts, nil)
 }
 
 // List lists all the available projects linked to the account.
 func (h *ProjectsHandler) List() ([]*Project, error) {
-	rsp, err := h.client.doGetRequest(buildPath("project"), nil)
+	bts, err := h.client.doGetRequest(buildPath("project"), nil)
 	if err != nil {
 		return nil, err
 	}
 
-	var response *ProjectListResponse
-	if err := json.Unmarshal(rsp, &response); err != nil {
-		return nil, err
-	}
+	var r ProjectListResponse
+	errR := checkAPIResponse(bts, &r)
 
-	if len(response.Errors) != 0 {
-		return nil, errors.New(response.Message)
-	}
-
-	return response.Projects, nil
-}
-
-func parseProjectResponse(bts []byte) (*Project, error) {
-	if bts == nil {
-		return nil, ErrNoResponseData
-	}
-
-	var rsp *ProjectResponse
-	if err := json.Unmarshal(bts, &rsp); err != nil {
-		return nil, err
-	}
-
-	if rsp == nil {
-		return nil, ErrNoResponseData
-	}
-
-	if rsp.Errors != nil && len(rsp.Errors) != 0 {
-		return nil, errors.New(rsp.Message)
-	}
-
-	return rsp.Project, nil
+	return r.Projects, errR
 }

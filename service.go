@@ -3,11 +3,6 @@
 
 package aiven
 
-import (
-	"encoding/json"
-	"errors"
-)
-
 type (
 	// Service represents the Service model on Aiven.
 	Service struct {
@@ -170,34 +165,43 @@ func (s *Service) Port() (string, error) {
 // Create creates the given Service on Aiven.
 func (h *ServicesHandler) Create(project string, req CreateServiceRequest) (*Service, error) {
 	path := buildPath("project", project, "service")
-	rsp, err := h.client.doPostRequest(path, req)
+	bts, err := h.client.doPostRequest(path, req)
 	if err != nil {
 		return nil, err
 	}
 
-	return parseServiceResponse(rsp)
+	var r ServiceResponse
+	errR := checkAPIResponse(bts, &r)
+
+	return r.Service, errR
 }
 
 // Get gets a specific service from Aiven.
 func (h *ServicesHandler) Get(project, service string) (*Service, error) {
 	path := buildPath("project", project, "service", service)
-	rsp, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(path, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	return parseServiceResponse(rsp)
+	var r ServiceResponse
+	errR := checkAPIResponse(bts, &r)
+
+	return r.Service, errR
 }
 
 // Update will update the given service with the given parameters.
 func (h *ServicesHandler) Update(project, service string, req UpdateServiceRequest) (*Service, error) {
 	path := buildPath("project", project, "service", service)
-	rsp, err := h.client.doPutRequest(path, req)
+	bts, err := h.client.doPutRequest(path, req)
 	if err != nil {
 		return nil, err
 	}
 
-	return parseServiceResponse(rsp)
+	var r ServiceResponse
+	errR := checkAPIResponse(bts, &r)
+
+	return r.Service, errR
 }
 
 // Delete will delete the given service from Aiven.
@@ -208,38 +212,19 @@ func (h *ServicesHandler) Delete(project, service string) error {
 		return err
 	}
 
-	return handleDeleteResponse(bts)
+	return checkAPIResponse(bts, nil)
 }
 
 // List will fetch all services for a given project.
 func (h *ServicesHandler) List(project string) ([]*Service, error) {
 	path := buildPath("project", project, "service")
-	rsp, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(path, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	var response *ServiceListResponse
-	if err := json.Unmarshal(rsp, &response); err != nil {
-		return nil, err
-	}
+	var r ServiceListResponse
+	errR := checkAPIResponse(bts, &r)
 
-	if len(response.Errors) != 0 {
-		return nil, errors.New(response.Message)
-	}
-
-	return response.Services, nil
-}
-
-func parseServiceResponse(rsp []byte) (*Service, error) {
-	var response *ServiceResponse
-	if err := json.Unmarshal(rsp, &response); err != nil {
-		return nil, err
-	}
-
-	if len(response.Errors) != 0 {
-		return nil, errors.New(response.Message)
-	}
-
-	return response.Service, nil
+	return r.Services, errR
 }

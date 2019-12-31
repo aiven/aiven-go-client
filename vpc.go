@@ -82,7 +82,7 @@ func (h *VPCsHandler) Delete(project, vpcID string) error {
 		return err
 	}
 
-	return handleDeleteResponse(bts)
+	return checkAPIResponse(bts, nil)
 }
 
 // List all VPCs for a given project.

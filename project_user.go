@@ -3,8 +3,6 @@
 package aiven
 
 import (
-	"encoding/json"
-	"errors"
 	"fmt"
 )
 
@@ -137,7 +135,7 @@ func (h *ProjectUsersHandler) DeleteInvitation(project, email string) error {
 		return err
 	}
 
-	return handleDeleteResponse(bts)
+	return checkAPIResponse(bts, nil)
 }
 
 // DeleteUser deletes the given project user from Aiven.
@@ -148,7 +146,7 @@ func (h *ProjectUsersHandler) DeleteUser(project, email string) error {
 		return err
 	}
 
-	return handleDeleteResponse(bts)
+	return checkAPIResponse(bts, nil)
 }
 
 // DeleteUserOrInvitation deletes a user or a project invitation, whichever the email
@@ -173,14 +171,8 @@ func (h *ProjectUsersHandler) List(project string) ([]*ProjectUser, []*ProjectIn
 		return nil, nil, err
 	}
 
-	var response *ProjectInvitationsAndUsersListResponse
-	if err := json.Unmarshal(rsp, &response); err != nil {
-		return nil, nil, err
-	}
+	var r ProjectInvitationsAndUsersListResponse
+	errR := checkAPIResponse(rsp, &r)
 
-	if len(response.Errors) != 0 {
-		return nil, nil, errors.New(response.Message)
-	}
-
-	return response.ProjectUsers, response.ProjectInvitations, nil
+	return r.ProjectUsers, r.ProjectInvitations, errR
 }

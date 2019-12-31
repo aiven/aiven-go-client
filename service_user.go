@@ -4,8 +4,6 @@
 package aiven
 
 import (
-	"encoding/json"
-	"errors"
 	"fmt"
 )
 
@@ -46,20 +44,10 @@ func (h *ServiceUsersHandler) Create(project, service string, req CreateServiceU
 		return nil, err
 	}
 
-	var rsp *ServiceUserResponse
-	if err := json.Unmarshal(bts, &rsp); err != nil {
-		return nil, err
-	}
+	var r ServiceUserResponse
+	errR := checkAPIResponse(bts, &r)
 
-	if rsp == nil {
-		return nil, ErrNoResponseData
-	}
-
-	if rsp.Errors != nil && len(rsp.Errors) != 0 {
-		return nil, errors.New(rsp.Message)
-	}
-
-	return rsp.User, nil
+	return r.User, errR
 }
 
 // List Service Users for given service in Aiven.
@@ -98,5 +86,5 @@ func (h *ServiceUsersHandler) Delete(project, service, user string) error {
 		return err
 	}
 
-	return handleDeleteResponse(bts)
+	return checkAPIResponse(bts, nil)
 }

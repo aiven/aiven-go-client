@@ -98,7 +98,7 @@ func (h *VPCPeeringConnectionsHandler) DeleteVPCPeering(project, vpcID, peerClou
 		return err
 	}
 
-	return handleDeleteResponse(bts)
+	return checkAPIResponse(bts, nil)
 }
 
 // Delete the given VPC Peering Connection from Aiven.

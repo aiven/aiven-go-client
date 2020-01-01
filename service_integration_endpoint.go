@@ -3,8 +3,6 @@
 package aiven
 
 import (
-	"encoding/json"
-	"errors"
 	"fmt"
 )
 
@@ -60,12 +58,15 @@ func (h *ServiceIntegrationEndpointsHandler) Create(
 	req CreateServiceIntegrationEndpointRequest,
 ) (*ServiceIntegrationEndpoint, error) {
 	path := buildPath("project", project, "integration_endpoint")
-	rsp, err := h.client.doPostRequest(path, req)
+	bts, err := h.client.doPostRequest(path, req)
 	if err != nil {
 		return nil, err
 	}
 
-	return parseServiceIntegrationEndpointResponse(rsp)
+	var r ServiceIntegrationEndpointResponse
+	errR := checkAPIResponse(bts, &r)
+
+	return r.ServiceIntegrationEndpoint, errR
 }
 
 // Get a specific service integration endpoint from Aiven.
@@ -94,12 +95,15 @@ func (h *ServiceIntegrationEndpointsHandler) Update(
 	req UpdateServiceIntegrationEndpointRequest,
 ) (*ServiceIntegrationEndpoint, error) {
 	path := buildPath("project", project, "integration_endpoint", endpointID)
-	rsp, err := h.client.doPutRequest(path, req)
+	bts, err := h.client.doPutRequest(path, req)
 	if err != nil {
 		return nil, err
 	}
 
-	return parseServiceIntegrationEndpointResponse(rsp)
+	var r ServiceIntegrationEndpointResponse
+	errR := checkAPIResponse(bts, &r)
+
+	return r.ServiceIntegrationEndpoint, errR
 }
 
 // Delete the given service integration endpoint from Aiven.
@@ -110,38 +114,19 @@ func (h *ServiceIntegrationEndpointsHandler) Delete(project, endpointID string) 
 		return err
 	}
 
-	return handleDeleteResponse(bts)
+	return checkAPIResponse(bts, nil)
 }
 
 // List all service integration endpoints for a given project.
 func (h *ServiceIntegrationEndpointsHandler) List(project string) ([]*ServiceIntegrationEndpoint, error) {
 	path := buildPath("project", project, "integration_endpoint")
-	rsp, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(path, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	var response *ServiceIntegrationEndpointListResponse
-	if err := json.Unmarshal(rsp, &response); err != nil {
-		return nil, err
-	}
+	var r ServiceIntegrationEndpointListResponse
+	errR := checkAPIResponse(bts, &r)
 
-	if len(response.Errors) != 0 {
-		return nil, errors.New(response.Message)
-	}
-
-	return response.ServiceIntegrationEndpoints, nil
-}
-
-func parseServiceIntegrationEndpointResponse(rsp []byte) (*ServiceIntegrationEndpoint, error) {
-	var response *ServiceIntegrationEndpointResponse
-	if err := json.Unmarshal(rsp, &response); err != nil {
-		return nil, err
-	}
-
-	if len(response.Errors) != 0 {
-		return nil, errors.New(response.Message)
-	}
-
-	return response.ServiceIntegrationEndpoint, nil
+	return r.ServiceIntegrationEndpoints, errR
 }

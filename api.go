@@ -15,26 +15,34 @@ type APIResponse struct {
 	Message string  `json:"message,omitempty"`
 }
 
-func handleAPIResponse(bts []byte) (*APIResponse, error) {
-	var response *APIResponse
-	if err := json.Unmarshal(bts, &response); err != nil {
-		return nil, err
-	}
-
-	return response, nil
+type Response interface {
+	GetError() error
 }
 
-func handleDeleteResponse(bts []byte) error {
-	rsp, err := handleAPIResponse(bts)
-	if err != nil {
-		return err
-	}
-
-	if len(rsp.Errors) != 0 {
-		return rsp.Errors[0]
+func (r APIResponse) GetError() error {
+	if len(r.Errors) != 0 {
+		for _, err := range r.Errors {
+			return err
+		}
 	}
 
 	return nil
+}
+
+func checkAPIResponse(bts []byte, r Response) error {
+	if r == nil {
+		r = new(APIResponse)
+	}
+
+	if err := json.Unmarshal(bts, &r); err != nil {
+		return err
+	}
+
+	if r == nil {
+		return ErrNoResponseData
+	}
+
+	return r.GetError()
 }
 
 func buildPath(parts ...string) string {

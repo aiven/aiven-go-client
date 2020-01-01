@@ -2,11 +2,6 @@
 
 package aiven
 
-import (
-	"encoding/json"
-	"errors"
-)
-
 type (
 	// NewServiceIntegration defines partial set of service integration fields used
 	// when passing integration as part of service creation call
@@ -83,23 +78,29 @@ func (h *ServiceIntegrationsHandler) Create(
 	req CreateServiceIntegrationRequest,
 ) (*ServiceIntegration, error) {
 	path := buildPath("project", project, "integration")
-	rsp, err := h.client.doPostRequest(path, req)
+	bts, err := h.client.doPostRequest(path, req)
 	if err != nil {
 		return nil, err
 	}
 
-	return parseServiceIntegrationResponse(rsp)
+	var r ServiceIntegrationResponse
+	errR := checkAPIResponse(bts, &r)
+
+	return r.ServiceIntegration, errR
 }
 
 // Get a specific service integration endpoint from Aiven.
 func (h *ServiceIntegrationsHandler) Get(project, integrationID string) (*ServiceIntegration, error) {
 	path := buildPath("project", project, "integration", integrationID)
-	rsp, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(path, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	return parseServiceIntegrationResponse(rsp)
+	var r ServiceIntegrationResponse
+	errR := checkAPIResponse(bts, &r)
+
+	return r.ServiceIntegration, errR
 }
 
 // Update the given service integration with the given parameters.
@@ -109,12 +110,15 @@ func (h *ServiceIntegrationsHandler) Update(
 	req UpdateServiceIntegrationRequest,
 ) (*ServiceIntegration, error) {
 	path := buildPath("project", project, "integration", integrationID)
-	rsp, err := h.client.doPutRequest(path, req)
+	bts, err := h.client.doPutRequest(path, req)
 	if err != nil {
 		return nil, err
 	}
 
-	return parseServiceIntegrationResponse(rsp)
+	var r ServiceIntegrationResponse
+	errR := checkAPIResponse(bts, &r)
+
+	return r.ServiceIntegration, errR
 }
 
 // Delete the given service integration from Aiven.
@@ -125,38 +129,19 @@ func (h *ServiceIntegrationsHandler) Delete(project, integrationID string) error
 		return err
 	}
 
-	return handleDeleteResponse(bts)
+	return checkAPIResponse(bts, nil)
 }
 
 // List all service integration for a given project and service.
 func (h *ServiceIntegrationsHandler) List(project, service string) ([]*ServiceIntegration, error) {
 	path := buildPath("project", project, "service", service, "integration")
-	rsp, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(path, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	var response *ServiceIntegrationListResponse
-	if err := json.Unmarshal(rsp, &response); err != nil {
-		return nil, err
-	}
+	var r ServiceIntegrationListResponse
+	errR := checkAPIResponse(bts, &r)
 
-	if len(response.Errors) != 0 {
-		return nil, errors.New(response.Message)
-	}
-
-	return response.ServiceIntegrations, nil
-}
-
-func parseServiceIntegrationResponse(rsp []byte) (*ServiceIntegration, error) {
-	var response *ServiceIntegrationResponse
-	if err := json.Unmarshal(rsp, &response); err != nil {
-		return nil, err
-	}
-
-	if len(response.Errors) != 0 {
-		return nil, errors.New(response.Message)
-	}
-
-	return response.ServiceIntegration, nil
+	return r.ServiceIntegrations, errR
 }

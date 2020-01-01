@@ -4,8 +4,6 @@
 package aiven
 
 import (
-	"encoding/json"
-	"errors"
 	"fmt"
 )
 
@@ -38,21 +36,15 @@ type (
 
 // List lists all the cards linked to the authenticated account/
 func (h *CardsHandler) List() ([]*Card, error) {
-	rsp, err := h.client.doGetRequest("/card", nil)
+	bts, err := h.client.doGetRequest("/card", nil)
 	if err != nil {
 		return nil, err
 	}
 
-	var response *CardListResponse
-	if err := json.Unmarshal(rsp, &response); err != nil {
-		return nil, err
-	}
+	var r CardListResponse
+	errR := checkAPIResponse(bts, &r)
 
-	if len(response.Errors) != 0 {
-		return nil, errors.New(response.Message)
-	}
-
-	return response.Cards, nil
+	return r.Cards, errR
 }
 
 // Get card by card id. The id may be either last 4 digits of the card or the actual id

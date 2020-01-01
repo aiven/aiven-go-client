@@ -3,11 +3,6 @@
 
 package aiven
 
-import (
-	"encoding/json"
-	"errors"
-)
-
 type (
 	// KafkaTopic represents a Kafka Topic on Aiven.
 	KafkaTopic struct {
@@ -96,60 +91,35 @@ func (h *KafkaTopicsHandler) Create(project, service string, req CreateKafkaTopi
 		return err
 	}
 
-	var rsp *APIResponse
-	if err := json.Unmarshal(bts, &rsp); err != nil {
-		return err
-	}
-
-	if rsp == nil {
-		return ErrNoResponseData
-	}
-
-	if rsp.Errors != nil && len(rsp.Errors) != 0 {
-		return errors.New(rsp.Message)
-	}
-
-	return nil
+	return checkAPIResponse(bts, nil)
 }
 
 // Get gets a specific kafka topic.
 func (h *KafkaTopicsHandler) Get(project, service, topic string) (*KafkaTopic, error) {
 	path := buildPath("project", project, "service", service, "topic", topic)
-	rsp, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(path, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	var response *KafkaTopicResponse
-	if err := json.Unmarshal(rsp, &response); err != nil {
-		return nil, err
-	}
+	var r KafkaTopicResponse
+	errR := checkAPIResponse(bts, &r)
 
-	if len(response.Errors) != 0 {
-		return nil, errors.New(response.Message)
-	}
-
-	return response.Topic, nil
+	return r.Topic, errR
 }
 
 // List lists all the kafka topics.
 func (h *KafkaTopicsHandler) List(project, service string) ([]*KafkaListTopic, error) {
 	path := buildPath("project", project, "service", service, "topic")
-	rsp, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(path, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	var response *KafkaTopicsResponse
-	if err := json.Unmarshal(rsp, &response); err != nil {
-		return nil, err
-	}
+	var r KafkaTopicsResponse
+	errR := checkAPIResponse(bts, &r)
 
-	if len(response.Errors) != 0 {
-		return nil, errors.New(response.Message)
-	}
-
-	return response.Topics, nil
+	return r.Topics, errR
 }
 
 // Update updates a specific topic with the given parameters.
@@ -160,20 +130,7 @@ func (h *KafkaTopicsHandler) Update(project, service, topic string, req UpdateKa
 		return err
 	}
 
-	var rsp *APIResponse
-	if err := json.Unmarshal(bts, &rsp); err != nil {
-		return err
-	}
-
-	if rsp == nil {
-		return ErrNoResponseData
-	}
-
-	if rsp.Errors != nil && len(rsp.Errors) != 0 {
-		return errors.New(rsp.Message)
-	}
-
-	return nil
+	return checkAPIResponse(bts, nil)
 }
 
 // Delete deletes a specific kafka topic.
@@ -184,5 +141,5 @@ func (h *KafkaTopicsHandler) Delete(project, service, topic string) error {
 		return err
 	}
 
-	return handleDeleteResponse(bts)
+	return checkAPIResponse(bts, nil)
 }

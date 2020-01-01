@@ -3,11 +3,6 @@
 
 package aiven
 
-import (
-	"encoding/json"
-	"errors"
-)
-
 type (
 	// CAHandler is the client which interacts with the Projects CA endpoint
 	// on Aiven.
@@ -29,21 +24,8 @@ func (h *CAHandler) Get(project string) (string, error) {
 		return "", err
 	}
 
-	if bts == nil {
-		return "", ErrNoResponseData
-	}
+	var r ProjectCAResponse
+	errR := checkAPIResponse(bts, &r)
 
-	var rsp *ProjectCAResponse
-	if err := json.Unmarshal(bts, &rsp); err != nil {
-		return "", err
-	}
-
-	if rsp == nil {
-		return "", ErrNoResponseData
-	}
-
-	if rsp.Errors != nil && len(rsp.Errors) != 0 {
-		return "", errors.New(rsp.Message)
-	}
-	return rsp.CACertificate, nil
+	return r.CACertificate, errR
 }

@@ -4,8 +4,6 @@
 package aiven
 
 import (
-	"encoding/json"
-	"errors"
 	"fmt"
 )
 
@@ -46,13 +44,9 @@ func (h *DatabasesHandler) Create(project, service string, req CreateDatabaseReq
 		return nil, err
 	}
 
-	rsp, err := handleAPIResponse(bts)
-	if err != nil {
+	errR := checkAPIResponse(bts, nil)
+	if errR != nil {
 		return nil, err
-	}
-
-	if len(rsp.Errors) != 0 {
-		return nil, rsp.Errors[0]
 	}
 
 	db := Database{DatabaseName: req.Database, LcCollate: req.LcCollate, LcType: req.LcType}
@@ -86,7 +80,7 @@ func (h *DatabasesHandler) Delete(project, service, database string) error {
 		return err
 	}
 
-	return handleDeleteResponse(bts)
+	return checkAPIResponse(bts, nil)
 }
 
 // List will fetch all databases for a given service.
@@ -97,14 +91,8 @@ func (h *DatabasesHandler) List(project, service string) ([]*Database, error) {
 		return nil, err
 	}
 
-	var response *DatabaseListResponse
-	if err := json.Unmarshal(rsp, &response); err != nil {
-		return nil, err
-	}
+	var r DatabaseListResponse
+	errR := checkAPIResponse(rsp, &r)
 
-	if len(response.Errors) != 0 {
-		return nil, errors.New(response.Message)
-	}
-
-	return response.Databases, nil
+	return r.Databases, errR
 }

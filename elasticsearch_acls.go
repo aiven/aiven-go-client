@@ -1,10 +1,5 @@
 package aiven
 
-import (
-	"encoding/json"
-	"errors"
-)
-
 type (
 	// ElasticSearchACLsHandler Aiven go-client handler for Elastisearch ACLs
 	ElasticSearchACLsHandler struct {
@@ -52,7 +47,10 @@ func (h *ElasticSearchACLsHandler) Update(project, service string, req Elasticse
 		return nil, err
 	}
 
-	return h.response(bts)
+	var r ElasticSearchACLResponse
+	errR := checkAPIResponse(bts, &r)
+
+	return &r, errR
 }
 
 // Get gets all existing Elasticsearch ACLs config
@@ -63,27 +61,10 @@ func (h *ElasticSearchACLsHandler) Get(project, service string) (*ElasticSearchA
 		return nil, err
 	}
 
-	return h.response(bts)
-}
+	var r ElasticSearchACLResponse
+	errR := checkAPIResponse(bts, &r)
 
-// response checks if response fom Aiven API contains any errors
-func (h *ElasticSearchACLsHandler) response(r []byte) (*ElasticSearchACLResponse, error) {
-	var rsp *ElasticSearchACLResponse
-	if err := json.Unmarshal(r, &rsp); err != nil {
-		return nil, err
-	}
-
-	// response cannot be empty
-	if rsp == nil {
-		return nil, ErrNoResponseData
-	}
-
-	// check API response errors
-	if rsp.Errors != nil && len(rsp.Errors) != 0 {
-		return nil, errors.New(rsp.Message)
-	}
-
-	return rsp, nil
+	return &r, errR
 }
 
 // Delete subtracts ACL from already existing Elasticsearch ACLs config

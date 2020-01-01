@@ -102,5 +102,5 @@ func (h *ConnectionPoolsHandler) Delete(project, serviceName, poolName string) e
 		return err
 	}
 
-	return handleDeleteResponse(bts)
+	return checkAPIResponse(bts, nil)
 }

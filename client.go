@@ -54,13 +54,22 @@ func GetUserAgentOrDefault(userAgent string) string {
 
 // NewMFAUserClient creates a new client based on email, one-time password and password.
 func NewMFAUserClient(email, otp, password string, userAgent string) (*Client, error) {
-	userAgent = GetUserAgentOrDefault(userAgent)
-	tk, err := MFAUserToken(email, otp, password, nil, userAgent)
+	c := &Client{
+		Client:    &http.Client{},
+		UserAgent: GetUserAgentOrDefault(userAgent),
+	}
+
+	bts, err := c.doRequest("POST", "/userauth", authRequest{email, otp, password})
 	if err != nil {
 		return nil, err
 	}
 
-	return NewTokenClient(tk.Token, userAgent)
+	var r authResponse
+	if err := checkAPIResponse(bts, &r); err != nil {
+		return nil, err
+	}
+
+	return NewTokenClient(r.Token, userAgent)
 }
 
 // NewUserClient creates a new client based on email and password.

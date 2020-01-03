@@ -2,13 +2,17 @@ package aiven
 
 import (
 	"errors"
-	"regexp"
 	"strconv"
 )
 
 type (
-	// KafkaSchemaHandler is the client which interacts with the Kafka Schema endpoints on Aiven.
-	KafkaSchemaHandler struct {
+	// KafkaSubjectSchemasHandler is the client which interacts with the Kafka Schema endpoints on Aiven
+	KafkaSubjectSchemasHandler struct {
+		client *Client
+	}
+
+	// KafkaGlobalSchemaConfigHandler is the client which interacts with the Kafka Schema endpoints on Aiven
+	KafkaGlobalSchemaConfigHandler struct {
 		client *Client
 	}
 
@@ -63,16 +67,8 @@ type (
 	}
 )
 
-func NewKafkaSchema(s string) KafkaSchemaSubject {
-	space := regexp.MustCompile(`\s+`)
-
-	return KafkaSchemaSubject{
-		Schema: string(space.ReplaceAllString(s, "")),
-	}
-}
-
-// UpdateConfig updates new Kafka Schema config entry
-func (h *KafkaSchemaHandler) UpdateConfig(project, service string, c KafkaSchemaConfig) (*KafkaSchemaConfigResponse, error) {
+// Update updates new Kafka Schema config entry
+func (h *KafkaGlobalSchemaConfigHandler) Update(project, service string, c KafkaSchemaConfig) (*KafkaSchemaConfigResponse, error) {
 	path := buildPath("project", project, "service", service, "kafka", "schema", "config")
 	bts, err := h.client.doPutRequest(path, c)
 	if err != nil {
@@ -85,8 +81,8 @@ func (h *KafkaSchemaHandler) UpdateConfig(project, service string, c KafkaSchema
 	return &r, errR
 }
 
-// GetConfig gets a Kafka Schema configuration
-func (h *KafkaSchemaHandler) GetConfig(project, service string) (*KafkaSchemaConfigResponse, error) {
+// Get gets a Kafka Schema configuration
+func (h *KafkaGlobalSchemaConfigHandler) Get(project, service string) (*KafkaSchemaConfigResponse, error) {
 	path := buildPath("project", project, "service", service, "kafka", "schema", "config")
 	bts, err := h.client.doGetRequest(path, nil)
 	if err != nil {
@@ -99,8 +95,8 @@ func (h *KafkaSchemaHandler) GetConfig(project, service string) (*KafkaSchemaCon
 	return &r, errR
 }
 
-// GetSubjects gets a list of Kafka Schema Subjects configuration
-func (h *KafkaSchemaHandler) GetSubjects(project, service string) (*KafkaSchemaSubjectsResponse, error) {
+// List gets a list of Kafka Schema Subjects configuration
+func (h *KafkaSubjectSchemasHandler) List(project, service string) (*KafkaSchemaSubjectsResponse, error) {
 	path := buildPath("project", project, "service", service, "kafka", "schema", "subjects")
 	bts, err := h.client.doGetRequest(path, nil)
 	if err != nil {
@@ -113,8 +109,8 @@ func (h *KafkaSchemaHandler) GetSubjects(project, service string) (*KafkaSchemaS
 	return &r, errR
 }
 
-// GetSubjectVersions gets a Kafka Schema Subject versions
-func (h *KafkaSchemaHandler) GetSubjectVersions(project, service, name string) (*KafkaSchemaSubjectVersionResponse, error) {
+// GetVersions gets a Kafka Schema Subject versions
+func (h *KafkaSubjectSchemasHandler) GetVersions(project, service, name string) (*KafkaSchemaSubjectVersionResponse, error) {
 	path := buildPath("project", project, "service", service, "kafka", "schema", "subjects", name, "versions")
 	bts, err := h.client.doGetRequest(path, nil)
 	if err != nil {
@@ -127,19 +123,34 @@ func (h *KafkaSchemaHandler) GetSubjectVersions(project, service, name string) (
 	return &r, errR
 }
 
-// DeleteSubjectVersions deletes a Kafka Schema Subject versions
-func (h *KafkaSchemaHandler) DeleteSubjectVersions(project, service, name string, version int) error {
-	path := buildPath("project", project, "service", service, "kafka", "schema", "subjects", name, "versions", strconv.Itoa(version))
-	bts, err := h.client.doDeleteRequest(path, nil)
-	if err != nil {
-		return err
+// Delete delete a Kafka Schema Subject versions, of versions parameter is empty it delete all existing versions
+func (h *KafkaSubjectSchemasHandler) Delete(project, service, name string, versions ...int) error {
+	if len(versions) == 0 {
+		r, err := h.GetVersions(project, service, name)
+		if err != nil {
+			return err
+		}
+
+		versions = r.Versions
 	}
 
-	return checkAPIResponse(bts, nil)
+	for _, version := range versions {
+		path := buildPath("project", project, "service", service, "kafka", "schema", "subjects", name, "versions", strconv.Itoa(version))
+		bts, err := h.client.doDeleteRequest(path, nil)
+		if err != nil {
+			return err
+		}
+
+		if errR := checkAPIResponse(bts, nil); errR != nil {
+			return errR
+		}
+
+	}
+	return nil
 }
 
-// GetSubject gets a Kafka Schema Subject
-func (h *KafkaSchemaHandler) GetSubject(project, service, name string, version int) (*KafkaSchemaSubjectResponse, error) {
+// Get gets a Kafka Schema Subject
+func (h *KafkaSubjectSchemasHandler) Get(project, service, name string, version int) (*KafkaSchemaSubjectResponse, error) {
 	path := buildPath("project", project, "service", service, "kafka", "schema", "subjects", name, "versions", strconv.Itoa(version))
 	bts, err := h.client.doGetRequest(path, nil)
 	if err != nil {
@@ -152,8 +163,8 @@ func (h *KafkaSchemaHandler) GetSubject(project, service, name string, version i
 	return &r, errR
 }
 
-// ValidateSchema validates Kafka Schema
-func (h *KafkaSchemaHandler) ValidateSchema(
+// Validate validates Kafka Schema
+func (h *KafkaSubjectSchemasHandler) Validate(
 	project, service, name string,
 	version int,
 	subject KafkaSchemaSubject) (bool, error) {
@@ -170,14 +181,14 @@ func (h *KafkaSchemaHandler) ValidateSchema(
 	return r.IsCompatible, errR
 }
 
-// AddSubject adds a new kafka Schema
-func (h *KafkaSchemaHandler) AddSubject(project, service, name string, subject KafkaSchemaSubject) (*KafkaSchemaSubjectResponse, error) {
-	vR, err := h.GetSubjectVersions(project, service, name)
+// Add adds a new kafka Schema
+func (h *KafkaSubjectSchemasHandler) Add(project, service, name string, subject KafkaSchemaSubject) (*KafkaSchemaSubjectResponse, error) {
+	vR, err := h.GetVersions(project, service, name)
 	if err != nil && err.(Error).Status != 404 {
 		return nil, err
 	}
 
-	// Get latest version
+	// GetVersions latest version
 	if vR != nil {
 		if len(vR.Versions) != 0 {
 			hVersion := 0
@@ -188,7 +199,7 @@ func (h *KafkaSchemaHandler) AddSubject(project, service, name string, subject K
 			}
 
 			// Validate Kafka schema against the latest existing version
-			isValid, err := h.ValidateSchema(project, service, name, hVersion, subject)
+			isValid, err := h.Validate(project, service, name, hVersion, subject)
 			if err != nil {
 				return nil, err
 			}
@@ -199,10 +210,7 @@ func (h *KafkaSchemaHandler) AddSubject(project, service, name string, subject K
 		}
 	}
 
-	println("hi again")
-
 	path := buildPath("project", project, "service", service, "kafka", "schema", "subjects", name, "versions")
-	println(path)
 	bts, err := h.client.doPostRequest(path, subject)
 	if err != nil {
 		return nil, err

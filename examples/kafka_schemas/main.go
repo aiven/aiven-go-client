@@ -20,7 +20,7 @@ func main() {
 	project, err := c.Projects.Create(client.CreateProjectRequest{
 		CardID:  os.Getenv("AIVEN_CARD_ID"),
 		Cloud:   "google-europe-west1",
-		Project: "testproject2",
+		Project: "kafka-schema1",
 	})
 	if err != nil {
 		log.Fatalf("project creation error: %s", err)
@@ -48,8 +48,7 @@ func main() {
 	}
 
 	for {
-		schema, err := c.KafkaSchemas.AddSubject(project.Name, service.Name, "test1", client.NewKafkaSchema(
-			`
+		schema, err := c.KafkaSubjectSchemas.Add(project.Name, service.Name, "test1", client.KafkaSchemaSubject{Schema: `
 			{
 				"doc": "example",
 				"fields": [{
@@ -63,7 +62,8 @@ func main() {
 				"namespace": "example",
 				"type": "record"
 			}
-		`))
+		`,
+		})
 
 		if err != nil {
 			//service is not started yet, and creation of a new ACL is not available yet
@@ -81,7 +81,7 @@ func main() {
 		break
 	}
 
-	_, err = c.KafkaSchemas.UpdateConfig(project.Name, service.Name, client.KafkaSchemaConfig{CompatibilityLevel: "FULL"})
+	_, err = c.KafkaGlobalSchemaConfig.Update(project.Name, service.Name, client.KafkaSchemaConfig{CompatibilityLevel: "FULL"})
 	if err != nil {
 		log.Fatalf("cannot update Kafka Schema Configuration, error: %s", err)
 	}

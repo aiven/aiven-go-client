@@ -8,32 +8,6 @@ import (
 	"testing"
 )
 
-func TestNewKafkaSchema(t *testing.T) {
-	type args struct {
-		s string
-	}
-	tests := []struct {
-		name string
-		args args
-		want KafkaSchemaSubject
-	}{
-		{
-			"simple",
-			args{s: `
-				test
-			`},
-			KafkaSchemaSubject{Schema: "test"},
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := NewKafkaSchema(tt.args.s); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("NewKafkaSchema() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
 func setupKafkaSchemasTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 	t.Log("setup Kafka Schemas test case")
 
@@ -229,7 +203,7 @@ func setupKafkaSchemasTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 	}
 }
 
-func TestKafkaSchemaHandler_UpdateConfig(t *testing.T) {
+func TestKafkaGlobalSchemaConfigHandler_Update(t *testing.T) {
 	c, tearDown := setupKafkaSchemasTestCase(t)
 	defer tearDown(t)
 
@@ -269,10 +243,10 @@ func TestKafkaSchemaHandler_UpdateConfig(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			h := &KafkaSchemaHandler{
+			h := &KafkaGlobalSchemaConfigHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.UpdateConfig(tt.args.project, tt.args.service, tt.args.c)
+			got, err := h.Update(tt.args.project, tt.args.service, tt.args.c)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("UpdateConfig() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -284,7 +258,7 @@ func TestKafkaSchemaHandler_UpdateConfig(t *testing.T) {
 	}
 }
 
-func TestKafkaSchemaHandler_AddSubject(t *testing.T) {
+func TestKafkaSchemaHandler_Add(t *testing.T) {
 	c, tearDown := setupKafkaSchemasTestCase(t)
 	defer tearDown(t)
 
@@ -326,7 +300,7 @@ func TestKafkaSchemaHandler_AddSubject(t *testing.T) {
 				project: "test-pr",
 				service: "test-sr",
 				name:    "test-schema-no-versions",
-				subject: NewKafkaSchema(schema),
+				subject: KafkaSchemaSubject{Schema: schema},
 			},
 			&KafkaSchemaSubjectResponse{
 				Id: 1,
@@ -340,7 +314,7 @@ func TestKafkaSchemaHandler_AddSubject(t *testing.T) {
 				project: "test-pr",
 				service: "test-sr",
 				name:    "test-schema",
-				subject: NewKafkaSchema(schema),
+				subject: KafkaSchemaSubject{Schema: schema},
 			},
 			&KafkaSchemaSubjectResponse{
 				Id: 5,
@@ -350,22 +324,22 @@ func TestKafkaSchemaHandler_AddSubject(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			h := &KafkaSchemaHandler{
+			h := &KafkaSubjectSchemasHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.AddSubject(tt.args.project, tt.args.service, tt.args.name, tt.args.subject)
+			got, err := h.Add(tt.args.project, tt.args.service, tt.args.name, tt.args.subject)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("AddSubject() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Add() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("AddSubject() got = %v, want %v", got, tt.want)
+				t.Errorf("Add() got = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestKafkaSchemaHandler_DeleteSubjectVersions(t *testing.T) {
+func TestKafkaSchemaHandler_Delete(t *testing.T) {
 	c, tearDown := setupKafkaSchemasTestCase(t)
 	defer tearDown(t)
 
@@ -398,17 +372,17 @@ func TestKafkaSchemaHandler_DeleteSubjectVersions(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			h := &KafkaSchemaHandler{
+			h := &KafkaSubjectSchemasHandler{
 				client: tt.fields.client,
 			}
-			if err := h.DeleteSubjectVersions(tt.args.project, tt.args.service, tt.args.name, tt.args.version); (err != nil) != tt.wantErr {
-				t.Errorf("DeleteSubjectVersions() error = %v, wantErr %v", err, tt.wantErr)
+			if err := h.Delete(tt.args.project, tt.args.service, tt.args.name, tt.args.version); (err != nil) != tt.wantErr {
+				t.Errorf("Delete() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
 }
 
-func TestKafkaSchemaHandler_GetConfig(t *testing.T) {
+func TestKafkaGlobalSchemaConfigHandler_Get(t *testing.T) {
 	c, tearDown := setupKafkaSchemasTestCase(t)
 	defer tearDown(t)
 
@@ -444,10 +418,10 @@ func TestKafkaSchemaHandler_GetConfig(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			h := &KafkaSchemaHandler{
+			h := &KafkaGlobalSchemaConfigHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.GetConfig(tt.args.project, tt.args.service)
+			got, err := h.Get(tt.args.project, tt.args.service)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GetConfig() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -459,7 +433,7 @@ func TestKafkaSchemaHandler_GetConfig(t *testing.T) {
 	}
 }
 
-func TestKafkaSchemaHandler_GetSubject(t *testing.T) {
+func TestKafkaSchemaHandler_Get(t *testing.T) {
 	c, tearDown := setupKafkaSchemasTestCase(t)
 	defer tearDown(t)
 
@@ -497,22 +471,22 @@ func TestKafkaSchemaHandler_GetSubject(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			h := &KafkaSchemaHandler{
+			h := &KafkaSubjectSchemasHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.GetSubject(tt.args.project, tt.args.service, tt.args.name, tt.args.version)
+			got, err := h.Get(tt.args.project, tt.args.service, tt.args.name, tt.args.version)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("GetSubject() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Get() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("GetSubject() got = %v, want %v", got, tt.want)
+				t.Errorf("Get() got = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestKafkaSchemaHandler_GetSubjectVersions(t *testing.T) {
+func TestKafkaSchemaHandler_GetVersions(t *testing.T) {
 	c, tearDown := setupKafkaSchemasTestCase(t)
 	defer tearDown(t)
 
@@ -550,22 +524,22 @@ func TestKafkaSchemaHandler_GetSubjectVersions(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			h := &KafkaSchemaHandler{
+			h := &KafkaSubjectSchemasHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.GetSubjectVersions(tt.args.project, tt.args.service, tt.args.name)
+			got, err := h.GetVersions(tt.args.project, tt.args.service, tt.args.name)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("GetSubjectVersions() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("GetVersions() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("GetSubjectVersions() got = %v, want %v", got, tt.want)
+				t.Errorf("GetVersions() got = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestKafkaSchemaHandler_GetSubjects(t *testing.T) {
+func TestKafkaSchemaHandler_List(t *testing.T) {
 	c, tearDown := setupKafkaSchemasTestCase(t)
 	defer tearDown(t)
 
@@ -601,22 +575,22 @@ func TestKafkaSchemaHandler_GetSubjects(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			h := &KafkaSchemaHandler{
+			h := &KafkaSubjectSchemasHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.GetSubjects(tt.args.project, tt.args.service)
+			got, err := h.List(tt.args.project, tt.args.service)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("GetSubjects() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("List() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("GetSubjects() got = %v, want %v", got, tt.want)
+				t.Errorf("List() got = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestKafkaSchemaHandler_ValidateSchema(t *testing.T) {
+func TestKafkaSchemaHandler_Validate(t *testing.T) {
 	c, tearDown := setupKafkaSchemasTestCase(t)
 	defer tearDown(t)
 
@@ -645,7 +619,7 @@ func TestKafkaSchemaHandler_ValidateSchema(t *testing.T) {
 				service: "test-sr",
 				name:    "test-schema",
 				version: 4,
-				subject: NewKafkaSchema(`
+				subject: KafkaSchemaSubject{Schema: `
 				{
 					"doc": "example",
 					"fields": [{
@@ -658,7 +632,7 @@ func TestKafkaSchemaHandler_ValidateSchema(t *testing.T) {
 					"name": "example",
 					"namespace": "example",
 					"type": "record"
-				}`),
+				}`},
 			},
 			true,
 			false,
@@ -666,16 +640,16 @@ func TestKafkaSchemaHandler_ValidateSchema(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			h := &KafkaSchemaHandler{
+			h := &KafkaSubjectSchemasHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.ValidateSchema(tt.args.project, tt.args.service, tt.args.name, tt.args.version, tt.args.subject)
+			got, err := h.Validate(tt.args.project, tt.args.service, tt.args.name, tt.args.version, tt.args.subject)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("ValidateSchema() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Validate() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if got != tt.want {
-				t.Errorf("ValidateSchema() got = %v, want %v", got, tt.want)
+				t.Errorf("Validate() got = %v, want %v", got, tt.want)
 			}
 		})
 	}

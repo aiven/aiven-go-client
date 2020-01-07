@@ -18,3 +18,7 @@ Add support for cross region vpc peering.
 ## [1.3.0] - 2019-12-23
 
 Add support for Elasticsearch ACLs.
+
+## [1.4.0] - 2020-01-03
+
+Add support for Kafka Schemas and Kafka Connectors

@@ -38,6 +38,7 @@ type Client struct {
 	Databases                   *DatabasesHandler
 	ServiceUsers                *ServiceUsersHandler
 	KafkaACLs                   *KafkaACLHandler
+	KafkaConnectors             *KafkaConnectorsHandler
 	ElasticsearchACLs           *ElasticSearchACLsHandler
 	KafkaTopics                 *KafkaTopicsHandler
 	VPCs                        *VPCsHandler
@@ -102,6 +103,7 @@ func (c *Client) Init() {
 	c.Databases = &DatabasesHandler{c}
 	c.ServiceUsers = &ServiceUsersHandler{c}
 	c.KafkaACLs = &KafkaACLHandler{c}
+	c.KafkaConnectors = &KafkaConnectorsHandler{c}
 	c.ElasticsearchACLs = &ElasticSearchACLsHandler{c}
 	c.KafkaTopics = &KafkaTopicsHandler{c}
 	c.VPCs = &VPCsHandler{c}

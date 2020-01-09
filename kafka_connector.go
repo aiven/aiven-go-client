@@ -20,7 +20,7 @@ type (
 	// KafkaConnectorTask represents Kafka Connector Task
 	KafkaConnectorTask struct {
 		Connector string
-		Task      string
+		Task      int
 	}
 
 	// KafkaConnectorPlugin represents Kafka Connector Plugin

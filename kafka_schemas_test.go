@@ -113,9 +113,9 @@ func setupKafkaSchemasTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 				w.Header().Set("Content-Type", "application/json")
 				w.WriteHeader(http.StatusOK)
 
-				err := json.NewEncoder(w).Encode(KafkaSchemaSubjectVersionResponse{
+				err := json.NewEncoder(w).Encode(KafkaSchemaSubjectVersionsResponse{
 					APIResponse{},
-					KafkaSchemaSubjectVersion{Versions: []int{1, 2, 3, 4}},
+					KafkaSchemaSubjectVersions{Versions: []int{1, 2, 3, 4}},
 				})
 
 				if err != nil {
@@ -176,9 +176,14 @@ func setupKafkaSchemasTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 				w.Header().Set("Content-Type", "application/json")
 				w.WriteHeader(http.StatusOK)
 
-				err := json.NewEncoder(w).Encode(KafkaSchemaSubjectResponse{
+				err := json.NewEncoder(w).Encode(KafkaSchemaSubjectVersionResponse{
 					APIResponse: APIResponse{},
-					Id:          5,
+					Version: KafkaSchemaSubjectVersion{
+						Id:      5,
+						Schema:  "",
+						Subject: "est-schema",
+						Version: 5,
+					},
 				})
 
 				if err != nil {
@@ -450,7 +455,7 @@ func TestKafkaSchemaHandler_Get(t *testing.T) {
 		name    string
 		fields  fields
 		args    args
-		want    *KafkaSchemaSubjectResponse
+		want    *KafkaSchemaSubjectVersionResponse
 		wantErr bool
 	}{
 		{
@@ -462,9 +467,14 @@ func TestKafkaSchemaHandler_Get(t *testing.T) {
 				name:    "test-schema",
 				version: 5,
 			},
-			&KafkaSchemaSubjectResponse{
+			&KafkaSchemaSubjectVersionResponse{
 				APIResponse: APIResponse{},
-				Id:          5,
+				Version: KafkaSchemaSubjectVersion{
+					Id:      5,
+					Schema:  "",
+					Subject: "est-schema",
+					Version: 5,
+				},
 			},
 			false,
 		},
@@ -502,7 +512,7 @@ func TestKafkaSchemaHandler_GetVersions(t *testing.T) {
 		name    string
 		fields  fields
 		args    args
-		want    *KafkaSchemaSubjectVersionResponse
+		want    *KafkaSchemaSubjectVersionsResponse
 		wantErr bool
 	}{
 		{
@@ -513,9 +523,9 @@ func TestKafkaSchemaHandler_GetVersions(t *testing.T) {
 				service: "test-sr",
 				name:    "test-schema",
 			},
-			&KafkaSchemaSubjectVersionResponse{
+			&KafkaSchemaSubjectVersionsResponse{
 				APIResponse: APIResponse{},
-				KafkaSchemaSubjectVersion: KafkaSchemaSubjectVersion{
+				KafkaSchemaSubjectVersions: KafkaSchemaSubjectVersions{
 					Versions: []int{1, 2, 3, 4},
 				},
 			},

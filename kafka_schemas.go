@@ -18,13 +18,19 @@ type (
 
 	// KafkaSchemaConfig represents Aiven Kafka Schema Configuration options
 	KafkaSchemaConfig struct {
-		CompatibilityLevel string `json:"compatibilityLevel"`
+		CompatibilityLevel string `json:"compatibility"`
+	}
+
+	// KafkaSchemaConfigUpdateResponse represents the PUT method response from Aiven Kafka Schema Configuration endpoint
+	KafkaSchemaConfigUpdateResponse struct {
+		APIResponse
+		KafkaSchemaConfig
 	}
 
 	// KafkaSchemaConfigResponse represents the response from Aiven Kafka Schema Configuration endpoint
 	KafkaSchemaConfigResponse struct {
 		APIResponse
-		KafkaSchemaConfig
+		CompatibilityLevel string `json:"compatibilityLevel"`
 	}
 
 	// KafkaSchemaSubjects represents a list of Aiven Kafka Schema subjects
@@ -68,14 +74,14 @@ type (
 )
 
 // Update updates new Kafka Schema config entry
-func (h *KafkaGlobalSchemaConfigHandler) Update(project, service string, c KafkaSchemaConfig) (*KafkaSchemaConfigResponse, error) {
+func (h *KafkaGlobalSchemaConfigHandler) Update(project, service string, c KafkaSchemaConfig) (*KafkaSchemaConfigUpdateResponse, error) {
 	path := buildPath("project", project, "service", service, "kafka", "schema", "config")
 	bts, err := h.client.doPutRequest(path, c)
 	if err != nil {
 		return nil, err
 	}
 
-	var r KafkaSchemaConfigResponse
+	var r KafkaSchemaConfigUpdateResponse
 	errR := checkAPIResponse(bts, &r)
 
 	return &r, errR

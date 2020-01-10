@@ -38,15 +38,15 @@ type (
 		KafkaSchemaSubjects
 	}
 
-	// KafkaSchemaSubjectVersion represents clist of versions
-	KafkaSchemaSubjectVersion struct {
+	// KafkaSchemaSubjectVersions represents a list of versions
+	KafkaSchemaSubjectVersions struct {
 		Versions []int `json:"versions"`
 	}
 
-	// KafkaSchemaSubjectVersionResponse represents the response from Aiven Kafka Schema Subject versions endpoint
-	KafkaSchemaSubjectVersionResponse struct {
+	// KafkaSchemaSubjectVersionsResponse represents the response from Aiven Kafka Schema Subject versions endpoint
+	KafkaSchemaSubjectVersionsResponse struct {
 		APIResponse
-		KafkaSchemaSubjectVersion
+		KafkaSchemaSubjectVersions
 	}
 
 	// KafkaSchemaSubject Kafka SchemaS Subject representation
@@ -58,6 +58,20 @@ type (
 	KafkaSchemaSubjectResponse struct {
 		APIResponse
 		Id int `json:"id"`
+	}
+
+	// KafkaSchemaSubjectVersion Kafka Schema Subject Version representation
+	KafkaSchemaSubjectVersion struct {
+		Id      int    `json:"id"`
+		Schema  string `json:"schema"`
+		Subject string `json:"subject"`
+		Version int    `json:"version"`
+	}
+
+	// KafkaSchemaSubjectVersionResponse Kafka Schemas Subject Version API endpoint response representation
+	KafkaSchemaSubjectVersionResponse struct {
+		APIResponse
+		Version KafkaSchemaSubjectVersion `json:"version"`
 	}
 
 	// KafkaSchemaValidateResponse Kafka Schemas Subject validation API endpoint response representation
@@ -110,14 +124,14 @@ func (h *KafkaSubjectSchemasHandler) List(project, service string) (*KafkaSchema
 }
 
 // GetVersions gets a Kafka Schema Subject versions
-func (h *KafkaSubjectSchemasHandler) GetVersions(project, service, name string) (*KafkaSchemaSubjectVersionResponse, error) {
+func (h *KafkaSubjectSchemasHandler) GetVersions(project, service, name string) (*KafkaSchemaSubjectVersionsResponse, error) {
 	path := buildPath("project", project, "service", service, "kafka", "schema", "subjects", name, "versions")
 	bts, err := h.client.doGetRequest(path, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	var r KafkaSchemaSubjectVersionResponse
+	var r KafkaSchemaSubjectVersionsResponse
 	errR := checkAPIResponse(bts, &r)
 
 	return &r, errR
@@ -150,14 +164,14 @@ func (h *KafkaSubjectSchemasHandler) Delete(project, service, name string, versi
 }
 
 // Get gets a Kafka Schema Subject
-func (h *KafkaSubjectSchemasHandler) Get(project, service, name string, version int) (*KafkaSchemaSubjectResponse, error) {
+func (h *KafkaSubjectSchemasHandler) Get(project, service, name string, version int) (*KafkaSchemaSubjectVersionResponse, error) {
 	path := buildPath("project", project, "service", service, "kafka", "schema", "subjects", name, "versions", strconv.Itoa(version))
 	bts, err := h.client.doGetRequest(path, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	var r KafkaSchemaSubjectResponse
+	var r KafkaSchemaSubjectVersionResponse
 	errR := checkAPIResponse(bts, &r)
 
 	return &r, errR

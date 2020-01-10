@@ -35,15 +35,29 @@ func setupKafkaSchemasTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 
 		// config
 		if r.URL.Path == "/project/test-pr/service/test-sr/kafka/schema/config" {
-			w.Header().Set("Content-Type", "application/json")
-			w.WriteHeader(http.StatusOK)
-			err := json.NewEncoder(w).Encode(KafkaSchemaConfigResponse{
-				APIResponse{},
-				KafkaSchemaConfig{CompatibilityLevel: "FULL"},
-			})
+			if r.Method == "PUT" {
+				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(http.StatusOK)
+				err := json.NewEncoder(w).Encode(KafkaSchemaConfigUpdateResponse{
+					APIResponse{},
+					KafkaSchemaConfig{CompatibilityLevel: "FULL"},
+				})
 
-			if err != nil {
-				t.Error(err)
+				if err != nil {
+					t.Error(err)
+				}
+			}
+
+			if r.Method == "GET" {
+				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(http.StatusOK)
+				err := json.NewEncoder(w).Encode(KafkaSchemaConfigResponse{
+					CompatibilityLevel: "FULL",
+				})
+
+				if err != nil {
+					t.Error(err)
+				}
 			}
 
 			return
@@ -54,8 +68,7 @@ func setupKafkaSchemasTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
 			err := json.NewEncoder(w).Encode(KafkaSchemaConfigResponse{
-				APIResponse{},
-				KafkaSchemaConfig{CompatibilityLevel: "FULL"},
+				CompatibilityLevel: "FULL",
 			})
 
 			if err != nil {
@@ -224,7 +237,7 @@ func TestKafkaGlobalSchemaConfigHandler_Update(t *testing.T) {
 		name    string
 		fields  fields
 		args    args
-		want    *KafkaSchemaConfigResponse
+		want    *KafkaSchemaConfigUpdateResponse
 		wantErr bool
 	}{
 		{
@@ -237,7 +250,7 @@ func TestKafkaGlobalSchemaConfigHandler_Update(t *testing.T) {
 					CompatibilityLevel: "FULL",
 				},
 			},
-			&KafkaSchemaConfigResponse{
+			&KafkaSchemaConfigUpdateResponse{
 				APIResponse: APIResponse{},
 				KafkaSchemaConfig: KafkaSchemaConfig{
 					CompatibilityLevel: "FULL",
@@ -413,10 +426,8 @@ func TestKafkaGlobalSchemaConfigHandler_Get(t *testing.T) {
 				service: "test-sr",
 			},
 			&KafkaSchemaConfigResponse{
-				APIResponse: APIResponse{},
-				KafkaSchemaConfig: KafkaSchemaConfig{
-					CompatibilityLevel: "FULL",
-				},
+				APIResponse:        APIResponse{},
+				CompatibilityLevel: "FULL",
 			},
 			false,
 		},

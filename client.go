@@ -45,6 +45,7 @@ type Client struct {
 	KafkaTopics                 *KafkaTopicsHandler
 	VPCs                        *VPCsHandler
 	VPCPeeringConnections       *VPCPeeringConnectionsHandler
+	Accounts                    *AccountsHandler
 }
 
 // GetUserAgentOrDefault configures a default userAgent value, if one has not been provided.
@@ -112,6 +113,7 @@ func (c *Client) Init() {
 	c.KafkaTopics = &KafkaTopicsHandler{c}
 	c.VPCs = &VPCsHandler{c}
 	c.VPCPeeringConnections = &VPCPeeringConnectionsHandler{c}
+	c.Accounts = &AccountsHandler{c}
 }
 
 func (c *Client) doGetRequest(endpoint string, req interface{}) ([]byte, error) {

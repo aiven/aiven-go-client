@@ -1,3 +1,5 @@
+// Copyright (c) 2020 Aiven, Helsinki, Finland. https://aiven.io/
+
 package aiven
 
 import (
@@ -79,6 +81,27 @@ func setupAccountsTeamsTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 		}
 
 		if r.URL.Path == "/account/a28707e316df/team/at28707ea77e2" {
+			//update account team
+			if r.Method == "PUT" {
+				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(http.StatusOK)
+				err := json.NewEncoder(w).Encode(AccountsTeamResponse{
+					APIResponse: APIResponse{},
+					Team: AccountsTeam{
+						AccountId:  "a28707e316df",
+						Name:       "new team name",
+						Id:         "at28707ea77e2",
+						CreateTime: getTime(t),
+						UpdateTime: getTime(t),
+					},
+				})
+
+				if err != nil {
+					t.Error(err)
+				}
+				return
+			}
+
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
 			err := json.NewEncoder(w).Encode(AccountsTeamResponse{
@@ -368,6 +391,91 @@ func TestAccountsTeamsHandler_Delete(t *testing.T) {
 			}
 			if err := h.Delete(tt.args.accountId, tt.args.teamId); (err != nil) != tt.wantErr {
 				t.Errorf("Delete() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestAccountTeamsHandler_Update(t *testing.T) {
+	c, tearDown := setupAccountsTeamsTestCase(t)
+	defer tearDown(t)
+
+	type fields struct {
+		client *Client
+	}
+	type args struct {
+		accountId string
+		teamId    string
+		team      AccountsTeam
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    *AccountsTeamResponse
+		wantErr bool
+	}{
+		{
+			"normal",
+			fields{client: c},
+			args{
+				accountId: "a28707e316df",
+				teamId:    "at28707ea77e2",
+				team: AccountsTeam{
+					Name: "new team name",
+				},
+			},
+			&AccountsTeamResponse{
+				APIResponse: APIResponse{},
+				Team: AccountsTeam{
+					AccountId:  "a28707e316df",
+					Name:       "new team name",
+					Id:         "at28707ea77e2",
+					CreateTime: getTime(t),
+					UpdateTime: getTime(t),
+				},
+			},
+			false,
+		},
+		{
+			"empty-account-id",
+			fields{client: c},
+			args{
+				accountId: "",
+				teamId:    "at28707ea77e2",
+				team: AccountsTeam{
+					Name: "new team name",
+				},
+			},
+			nil,
+			true,
+		},
+		{
+			"empty-team-id",
+			fields{client: c},
+			args{
+				accountId: "a28707e316df",
+				teamId:    "",
+				team: AccountsTeam{
+					Name: "new team name",
+				},
+			},
+			nil,
+			true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			h := AccountTeamsHandler{
+				client: tt.fields.client,
+			}
+			got, err := h.Update(tt.args.accountId, tt.args.teamId, tt.args.team)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Update() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Update() got = %v, want %v", got, tt.want)
 			}
 		})
 	}

@@ -1,3 +1,5 @@
+// Copyright (c) 2020 Aiven, Helsinki, Finland. https://aiven.io/
+
 package aiven
 
 import (
@@ -33,7 +35,7 @@ type (
 	}
 )
 
-// List retrieves a list of all existing account teams
+// List returns a list of all existing account teams
 func (h AccountTeamsHandler) List(accountId string) (*AccountsTeamsResponse, error) {
 	if accountId == "" {
 		return nil, errors.New("cannot get a list of teams for an account when account id is empty")
@@ -81,6 +83,26 @@ func (h AccountTeamsHandler) Create(accountId string, team AccountsTeam) (*Accou
 
 	path := buildPath("account", accountId, "teams")
 	bts, err := h.client.doPostRequest(path, team)
+	if err != nil {
+		return nil, err
+	}
+
+	var rsp AccountsTeamResponse
+	if errR := checkAPIResponse(bts, &rsp); errR != nil {
+		return nil, errR
+	}
+
+	return &rsp, nil
+}
+
+// Update updates an account team
+func (h AccountTeamsHandler) Update(accountId, teamId string, team AccountsTeam) (*AccountsTeamResponse, error) {
+	if accountId == "" {
+		return nil, errors.New("cannot get create a team where account id is empty")
+	}
+
+	path := buildPath("account", accountId, "team", teamId)
+	bts, err := h.client.doPutRequest(path, team)
 	if err != nil {
 		return nil, err
 	}

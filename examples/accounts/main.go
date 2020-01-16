@@ -36,9 +36,25 @@ func main() {
 		Name: "test-acc1+update@aiven.io",
 	})
 	if err != nil {
-		log.Fatalf("cannot create account err: %s", err)
+		log.Fatalf("cannot update account err: %s", err)
 	}
 	log.Printf("account update %v", accU)
+
+	// create a team
+	team, err := c.AccountsTeams.Create(accU.Account.Id, client.AccountsTeam{
+		Name: "test-team1",
+	})
+	if err != nil {
+		log.Fatalf("cannot create account team err: %s", err)
+	}
+
+	teamU, err := c.AccountsTeams.Update(accU.Account.Id, team.Team.Id, client.AccountsTeam{
+		Name: "test-team2",
+	})
+	if err != nil {
+		log.Fatalf("cannot update account team err: %s", err)
+	}
+	log.Printf("account team %v", teamU)
 
 	// delete account
 	err = c.Accounts.Delete(accG.Account.Id)

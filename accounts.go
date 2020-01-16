@@ -1,3 +1,5 @@
+// Copyright (c) 2020 Aiven, Helsinki, Finland. https://aiven.io/
+
 package aiven
 
 import (
@@ -35,7 +37,7 @@ type (
 	}
 )
 
-// List retrieves a list of all existing accounts
+// List returns a list of all existing accounts
 func (h AccountsHandler) List() (*AccountsResponse, error) {
 	path := buildPath("account")
 	bts, err := h.client.doGetRequest(path, nil)

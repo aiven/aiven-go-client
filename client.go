@@ -46,6 +46,7 @@ type Client struct {
 	VPCs                        *VPCsHandler
 	VPCPeeringConnections       *VPCPeeringConnectionsHandler
 	Accounts                    *AccountsHandler
+	AccountsTeams               *AccountTeamsHandler
 }
 
 // GetUserAgentOrDefault configures a default userAgent value, if one has not been provided.
@@ -114,6 +115,7 @@ func (c *Client) Init() {
 	c.VPCs = &VPCsHandler{c}
 	c.VPCPeeringConnections = &VPCPeeringConnectionsHandler{c}
 	c.Accounts = &AccountsHandler{c}
+	c.AccountsTeams = &AccountTeamsHandler{c}
 }
 
 func (c *Client) doGetRequest(endpoint string, req interface{}) ([]byte, error) {

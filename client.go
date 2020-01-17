@@ -47,7 +47,7 @@ type Client struct {
 	VPCPeeringConnections       *VPCPeeringConnectionsHandler
 }
 
-// GetUserAgentOrDefault sets default userAgent in case it has not been provided
+// GetUserAgentOrDefault configures a default userAgent value, if one has not been provided.
 func GetUserAgentOrDefault(userAgent string) string {
 	if userAgent != "" {
 		return userAgent

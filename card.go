@@ -34,7 +34,7 @@ type (
 	}
 )
 
-// List lists all the cards linked to the authenticated account/
+// List returns all the cards linked to the authenticated account.
 func (h *CardsHandler) List() ([]*Card, error) {
 	bts, err := h.client.doGetRequest("/card", nil)
 	if err != nil {
@@ -47,7 +47,7 @@ func (h *CardsHandler) List() ([]*Card, error) {
 	return r.Cards, errR
 }
 
-// Get card by card id. The id may be either last 4 digits of the card or the actual id
+// Get card by card ID. The ID may be either last 4 digits of the card or the actual ID
 func (h *CardsHandler) Get(cardID string) (*Card, error) {
 	if len(cardID) == 0 {
 		return nil, nil

@@ -55,7 +55,7 @@ type (
 		TechnicalEmails  *[]*ContactEmail `json:"tech_emails,omitempty"`
 	}
 
-	// ContactEmail represents either a technical contact or billing contact
+	// ContactEmail represents either a technical contact or billing contact.
 	ContactEmail struct {
 		Email string `json:"email"`
 	}
@@ -86,7 +86,7 @@ func (h *ProjectsHandler) Create(req CreateProjectRequest) (*Project, error) {
 	return r.Project, errR
 }
 
-// Get gets the specified project.
+// Get returns gets the specified project.
 func (h *ProjectsHandler) Get(project string) (*Project, error) {
 	log.Printf("Getting information for `%s`", project)
 
@@ -101,7 +101,7 @@ func (h *ProjectsHandler) Get(project string) (*Project, error) {
 	return r.Project, errR
 }
 
-// Update updates the specified project with the given parameters.
+// Update modifies the specified project with the given parameters.
 func (h *ProjectsHandler) Update(project string, req UpdateProjectRequest) (*Project, error) {
 	bts, err := h.client.doPutRequest(buildPath("project", project), req)
 	if err != nil {
@@ -114,7 +114,7 @@ func (h *ProjectsHandler) Update(project string, req UpdateProjectRequest) (*Pro
 	return r.Project, errR
 }
 
-// Delete deletes the given project.
+// Delete removes the given project.
 func (h *ProjectsHandler) Delete(project string) error {
 	bts, err := h.client.doDeleteRequest(buildPath("project", project), nil)
 	if err != nil {
@@ -124,7 +124,7 @@ func (h *ProjectsHandler) Delete(project string) error {
 	return checkAPIResponse(bts, nil)
 }
 
-// List lists all the available projects linked to the account.
+// List returns all the available projects linked to the account.
 func (h *ProjectsHandler) List() ([]*Project, error) {
 	bts, err := h.client.doGetRequest(buildPath("project"), nil)
 	if err != nil {

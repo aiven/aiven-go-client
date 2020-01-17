@@ -65,7 +65,7 @@ func (h *ConnectionPoolsHandler) Get(project, serviceName, poolName string) (*Co
 	return nil, err
 }
 
-// List all the connection pool entries for given service.
+// List returns all the connection pool entries for a given service.
 func (h *ConnectionPoolsHandler) List(project, serviceName string) ([]*ConnectionPool, error) {
 	// There's no API for listing connection pool entries. Need to get them from
 	// service info instead
@@ -94,7 +94,7 @@ func (h *ConnectionPoolsHandler) Update(
 	return h.Get(project, serviceName, poolName)
 }
 
-// Delete a specific connection pool entry.
+// Delete removes the specifed connection pool entry.
 func (h *ConnectionPoolsHandler) Delete(project, serviceName, poolName string) error {
 	path := buildPath("project", project, "service", serviceName, "connection_pool", poolName)
 	bts, err := h.client.doDeleteRequest(path, nil)

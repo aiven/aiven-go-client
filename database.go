@@ -21,7 +21,7 @@ type (
 		client *Client
 	}
 
-	// CreateDatabaseRequest are the parameters used to create a database.
+	// CreateDatabaseRequest contains the parameters used to create a database.
 	CreateDatabaseRequest struct {
 		Database  string `json:"database"`
 		LcCollate string `json:"lc_collate,omitempty"`
@@ -53,7 +53,7 @@ func (h *DatabasesHandler) Create(project, service string, req CreateDatabaseReq
 	return &db, nil
 }
 
-// Get a specific database from Aiven.
+// Get returns a specific database from Aiven.
 func (h *DatabasesHandler) Get(projectName, serviceName, databaseName string) (*Database, error) {
 	// There's no API for getting database by name. List all databases and pick the correct one
 	// instead. (There typically aren't that many databases, 100 is already very large number)
@@ -72,7 +72,7 @@ func (h *DatabasesHandler) Get(projectName, serviceName, databaseName string) (*
 	return nil, err
 }
 
-// Delete deletes the specified database.
+// Delete removes the specified database.
 func (h *DatabasesHandler) Delete(project, service, database string) error {
 	path := buildPath("project", project, "service", service, "db", database)
 	bts, err := h.client.doDeleteRequest(path, nil)
@@ -83,7 +83,7 @@ func (h *DatabasesHandler) Delete(project, service, database string) error {
 	return checkAPIResponse(bts, nil)
 }
 
-// List will fetch all databases for a given service.
+// List will return all the databases for a given service.
 func (h *DatabasesHandler) List(project, service string) ([]*Database, error) {
 	path := buildPath("project", project, "service", service, "db")
 	rsp, err := h.client.doGetRequest(path, nil)

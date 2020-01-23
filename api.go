@@ -15,10 +15,12 @@ type APIResponse struct {
 	Message string  `json:"message,omitempty"`
 }
 
+// Response represents Aiven API response interface
 type Response interface {
 	GetError() error
 }
 
+// GetError returns the first error from API Response, if any
 func (r APIResponse) GetError() error {
 	if len(r.Errors) != 0 {
 		for _, err := range r.Errors {

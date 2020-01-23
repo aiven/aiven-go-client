@@ -94,7 +94,7 @@ func (h *ConnectionPoolsHandler) Update(
 	return h.Get(project, serviceName, poolName)
 }
 
-// Delete removes the specifed connection pool entry.
+// Delete removes the specified connection pool entry.
 func (h *ConnectionPoolsHandler) Delete(project, serviceName, poolName string) error {
 	path := buildPath("project", project, "service", serviceName, "connection_pool", poolName)
 	bts, err := h.client.doDeleteRequest(path, nil)

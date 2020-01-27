@@ -41,14 +41,14 @@ func main() {
 	log.Printf("account update %v", accU)
 
 	// create a team
-	team, err := c.AccountsTeams.Create(accU.Account.Id, client.AccountsTeam{
+	team, err := c.AccountTeams.Create(accU.Account.Id, client.AccountsTeam{
 		Name: "test-team1",
 	})
 	if err != nil {
 		log.Fatalf("cannot create account team err: %s", err)
 	}
 
-	teamU, err := c.AccountsTeams.Update(accU.Account.Id, team.Team.Id, client.AccountsTeam{
+	teamU, err := c.AccountTeams.Update(accU.Account.Id, team.Team.Id, client.AccountsTeam{
 		Name: "test-team2",
 	})
 	if err != nil {

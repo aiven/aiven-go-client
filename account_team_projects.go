@@ -52,7 +52,7 @@ func (h AccountTeamProjectsHandler) Create(accountId, teamId string, p AccountTe
 	}
 
 	path := buildPath("account", accountId, "team", teamId, "project", p.ProjectName)
-	bts, err := h.client.doPostRequest(path, nil)
+	bts, err := h.client.doPostRequest(path, p)
 	if err != nil {
 		return err
 	}
@@ -71,7 +71,7 @@ func (h AccountTeamProjectsHandler) Update(accountId, teamId string, p AccountTe
 	}
 
 	path := buildPath("account", accountId, "team", teamId, "project", p.ProjectName)
-	bts, err := h.client.doPutRequest(path, nil)
+	bts, err := h.client.doPutRequest(path, p)
 	if err != nil {
 		return err
 	}

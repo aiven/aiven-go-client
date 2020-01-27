@@ -23,6 +23,7 @@ type (
 		Name             string          `json:"project_name"`
 		TechnicalEmails  []*ContactEmail `json:"tech_emails"`
 		VatID            string          `json:"vat_id"`
+		AccountId        string          `json:"account_id"`
 	}
 
 	// ProjectsHandler is the client which interacts with the Projects endpoints
@@ -41,6 +42,7 @@ type (
 		CopyFromProject  string           `json:"copy_from_project,omitempty"`
 		CountryCode      *string          `json:"country_code,omitempty"`
 		Project          string           `json:"project"`
+		AccountId        string           `json:"account_id"`
 		TechnicalEmails  *[]*ContactEmail `json:"tech_emails,omitempty"`
 	}
 
@@ -52,6 +54,7 @@ type (
 		CardID           string           `json:"card_id,omitempty"`
 		Cloud            string           `json:"cloud,omitempty"`
 		CountryCode      *string          `json:"country_code,omitempty"`
+		AccountId        string           `json:"account_id,omitempty"`
 		TechnicalEmails  *[]*ContactEmail `json:"tech_emails,omitempty"`
 	}
 

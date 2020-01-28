@@ -52,7 +52,7 @@ func (h AccountTeamProjectsHandler) Create(accountId, teamId string, p AccountTe
 	}
 
 	path := buildPath("account", accountId, "team", teamId, "project", p.ProjectName)
-	bts, err := h.client.doPostRequest(path, p)
+	bts, err := h.client.doPostRequest(path, AccountTeamProject{TeamType: p.TeamType})
 	if err != nil {
 		return err
 	}

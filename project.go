@@ -3,10 +3,6 @@
 
 package aiven
 
-import (
-	"log"
-)
-
 type (
 	// Project represents the Project model on Aiven.
 	Project struct {
@@ -91,8 +87,6 @@ func (h *ProjectsHandler) Create(req CreateProjectRequest) (*Project, error) {
 
 // Get returns gets the specified project.
 func (h *ProjectsHandler) Get(project string) (*Project, error) {
-	log.Printf("Getting information for `%s`", project)
-
 	bts, err := h.client.doGetRequest(buildPath("project", project), nil)
 	if err != nil {
 		return nil, err

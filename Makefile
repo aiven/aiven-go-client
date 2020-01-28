@@ -12,6 +12,9 @@ bootstrap:
 #################################################
 # Testing and linting
 #################################################
+testacc:
+	AIVEN_ACC=1 go test -v --cover -timeout 30m .
+
 test:
 	go test -v --cover ./... -timeout 15m
 

@@ -66,6 +66,7 @@ func setupAccountTeamInvitesTestCase(t *testing.T) (*Client, func(t *testing.T))
 
 	return c, func(t *testing.T) {
 		t.Log("teardown Accounts Team Invites test case")
+		ts.Close()
 	}
 }
 

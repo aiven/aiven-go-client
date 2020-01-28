@@ -218,6 +218,7 @@ func setupKafkaSchemasTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 
 	return c, func(t *testing.T) {
 		t.Log("teardown ElasticsearchACLs test case")
+		ts.Close()
 	}
 }
 

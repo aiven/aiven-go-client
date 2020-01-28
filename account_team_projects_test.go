@@ -77,6 +77,7 @@ func setupAccountTeamProjectsTestCase(t *testing.T) (*Client, func(t *testing.T)
 
 	return c, func(t *testing.T) {
 		t.Log("teardown Accounts Team Projects test case")
+		ts.Close()
 	}
 }
 

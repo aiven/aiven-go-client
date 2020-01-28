@@ -97,6 +97,7 @@ func setupAccountsTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 
 	return c, func(t *testing.T) {
 		t.Log("teardown Accounts test case")
+		ts.Close()
 	}
 }
 

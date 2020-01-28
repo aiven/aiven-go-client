@@ -6,7 +6,7 @@ import (
 )
 
 type (
-	// AccountAuthenticationsHandler Aiven go-client handler for Account Team Authentications
+	// AccountAuthenticationsHandler Aiven go-client handler for Account Authentications
 	AccountAuthenticationsHandler struct {
 		client *Client
 	}

@@ -67,7 +67,9 @@ func (h AccountTeamMembersHandler) Invite(accountId, teamId, email string) error
 	}
 
 	path := buildPath("account", accountId, "team", teamId, "members")
-	bts, err := h.client.doPostRequest(path, struct{ Email string }{Email: email})
+	bts, err := h.client.doPostRequest(path, struct {
+		Email string `json:"email"`
+	}{Email: email})
 	if err != nil {
 		return err
 	}

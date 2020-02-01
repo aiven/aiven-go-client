@@ -39,9 +39,9 @@ func setupAccountsTeamsTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 			if r.Method == "GET" {
 				w.Header().Set("Content-Type", "application/json")
 				w.WriteHeader(http.StatusOK)
-				err := json.NewEncoder(w).Encode(AccountsTeamsResponse{
+				err := json.NewEncoder(w).Encode(AccountTeamsResponse{
 					APIResponse: APIResponse{},
-					Teams: []AccountsTeam{
+					Teams: []AccountTeam{
 						{
 							AccountId:  "a28707e316df",
 							Name:       "Account Owners",
@@ -62,9 +62,9 @@ func setupAccountsTeamsTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 			if r.Method == "POST" {
 				w.Header().Set("Content-Type", "application/json")
 				w.WriteHeader(http.StatusOK)
-				err := json.NewEncoder(w).Encode(AccountsTeamResponse{
+				err := json.NewEncoder(w).Encode(AccountTeamResponse{
 					APIResponse: APIResponse{},
-					Team: AccountsTeam{
+					Team: AccountTeam{
 						AccountId:  "a28707e316df",
 						Name:       "test-team-1",
 						Id:         "at28761bc6348",
@@ -85,9 +85,9 @@ func setupAccountsTeamsTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 			if r.Method == "PUT" {
 				w.Header().Set("Content-Type", "application/json")
 				w.WriteHeader(http.StatusOK)
-				err := json.NewEncoder(w).Encode(AccountsTeamResponse{
+				err := json.NewEncoder(w).Encode(AccountTeamResponse{
 					APIResponse: APIResponse{},
-					Team: AccountsTeam{
+					Team: AccountTeam{
 						AccountId:  "a28707e316df",
 						Name:       "new team name",
 						Id:         "at28707ea77e2",
@@ -104,9 +104,9 @@ func setupAccountsTeamsTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
-			err := json.NewEncoder(w).Encode(AccountsTeamResponse{
+			err := json.NewEncoder(w).Encode(AccountTeamResponse{
 				APIResponse: APIResponse{},
-				Team: AccountsTeam{
+				Team: AccountTeam{
 					AccountId:  "a28707e316df",
 					Name:       "Account Owners",
 					Id:         "at28707ea77e2",
@@ -132,6 +132,7 @@ func setupAccountsTeamsTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 
 	return c, func(t *testing.T) {
 		t.Log("teardown Account Teams test case")
+		ts.Close()
 	}
 }
 
@@ -149,16 +150,16 @@ func TestAccountsTeamsHandler_List(t *testing.T) {
 		name    string
 		fields  fields
 		args    args
-		want    *AccountsTeamsResponse
+		want    *AccountTeamsResponse
 		wantErr bool
 	}{
 		{
 			"normal",
 			fields{client: c},
 			args{accountId: "a28707e316df"},
-			&AccountsTeamsResponse{
+			&AccountTeamsResponse{
 				APIResponse: APIResponse{},
-				Teams: []AccountsTeam{
+				Teams: []AccountTeam{
 					{
 						AccountId:  "a28707e316df",
 						Name:       "Account Owners",
@@ -210,7 +211,7 @@ func TestAccountsTeamsHandler_Get(t *testing.T) {
 		name    string
 		fields  fields
 		args    args
-		want    *AccountsTeamResponse
+		want    *AccountTeamResponse
 		wantErr bool
 	}{
 		{
@@ -220,9 +221,9 @@ func TestAccountsTeamsHandler_Get(t *testing.T) {
 				accountId: "a28707e316df",
 				teamId:    "at28707ea77e2",
 			},
-			&AccountsTeamResponse{
+			&AccountTeamResponse{
 				APIResponse: APIResponse{},
-				Team: AccountsTeam{
+				Team: AccountTeam{
 					AccountId:  "a28707e316df",
 					Name:       "Account Owners",
 					Id:         "at28707ea77e2",
@@ -279,13 +280,13 @@ func TestAccountsTeamsHandler_Create(t *testing.T) {
 	}
 	type args struct {
 		accountId string
-		team      AccountsTeam
+		team      AccountTeam
 	}
 	tests := []struct {
 		name    string
 		fields  fields
 		args    args
-		want    *AccountsTeamResponse
+		want    *AccountTeamResponse
 		wantErr bool
 	}{
 		{
@@ -293,13 +294,13 @@ func TestAccountsTeamsHandler_Create(t *testing.T) {
 			fields{client: c},
 			args{
 				accountId: "a28707e316df",
-				team: AccountsTeam{
+				team: AccountTeam{
 					Name: "test-team-1",
 				},
 			},
-			&AccountsTeamResponse{
+			&AccountTeamResponse{
 				APIResponse: APIResponse{},
-				Team: AccountsTeam{
+				Team: AccountTeam{
 					AccountId:  "a28707e316df",
 					Name:       "test-team-1",
 					Id:         "at28761bc6348",
@@ -314,7 +315,7 @@ func TestAccountsTeamsHandler_Create(t *testing.T) {
 			fields{client: c},
 			args{
 				accountId: "",
-				team: AccountsTeam{
+				team: AccountTeam{
 					Name: "test-team-1",
 				},
 			},
@@ -406,13 +407,13 @@ func TestAccountTeamsHandler_Update(t *testing.T) {
 	type args struct {
 		accountId string
 		teamId    string
-		team      AccountsTeam
+		team      AccountTeam
 	}
 	tests := []struct {
 		name    string
 		fields  fields
 		args    args
-		want    *AccountsTeamResponse
+		want    *AccountTeamResponse
 		wantErr bool
 	}{
 		{
@@ -421,13 +422,13 @@ func TestAccountTeamsHandler_Update(t *testing.T) {
 			args{
 				accountId: "a28707e316df",
 				teamId:    "at28707ea77e2",
-				team: AccountsTeam{
+				team: AccountTeam{
 					Name: "new team name",
 				},
 			},
-			&AccountsTeamResponse{
+			&AccountTeamResponse{
 				APIResponse: APIResponse{},
-				Team: AccountsTeam{
+				Team: AccountTeam{
 					AccountId:  "a28707e316df",
 					Name:       "new team name",
 					Id:         "at28707ea77e2",
@@ -443,7 +444,7 @@ func TestAccountTeamsHandler_Update(t *testing.T) {
 			args{
 				accountId: "",
 				teamId:    "at28707ea77e2",
-				team: AccountsTeam{
+				team: AccountTeam{
 					Name: "new team name",
 				},
 			},
@@ -456,7 +457,7 @@ func TestAccountTeamsHandler_Update(t *testing.T) {
 			args{
 				accountId: "a28707e316df",
 				teamId:    "",
-				team: AccountsTeam{
+				team: AccountTeam{
 					Name: "new team name",
 				},
 			},

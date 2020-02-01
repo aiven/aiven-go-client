@@ -13,8 +13,8 @@ type (
 		client *Client
 	}
 
-	// AccountsTeam represents account team
-	AccountsTeam struct {
+	// AccountTeam represents account team
+	AccountTeam struct {
 		AccountId  string     `json:"account_id,omitempty"`
 		Id         string     `json:"team_id,omitempty"`
 		Name       string     `json:"team_name"`
@@ -22,21 +22,21 @@ type (
 		UpdateTime *time.Time `json:"update_time,omitempty"`
 	}
 
-	// AccountsTeamsResponse represents account list of teams API response
-	AccountsTeamsResponse struct {
+	// AccountTeamsResponse represents account list of teams API response
+	AccountTeamsResponse struct {
 		APIResponse
-		Teams []AccountsTeam `json:"teams"`
+		Teams []AccountTeam `json:"teams"`
 	}
 
-	// AccountsTeamResponse represents account team API response
-	AccountsTeamResponse struct {
+	// AccountTeamResponse represents account team API response
+	AccountTeamResponse struct {
 		APIResponse
-		Team AccountsTeam `json:"team"`
+		Team AccountTeam `json:"team"`
 	}
 )
 
 // List returns a list of all existing account teams
-func (h AccountTeamsHandler) List(accountId string) (*AccountsTeamsResponse, error) {
+func (h AccountTeamsHandler) List(accountId string) (*AccountTeamsResponse, error) {
 	if accountId == "" {
 		return nil, errors.New("cannot get a list of teams for an account when account id is empty")
 	}
@@ -47,7 +47,7 @@ func (h AccountTeamsHandler) List(accountId string) (*AccountsTeamsResponse, err
 		return nil, err
 	}
 
-	var rsp AccountsTeamsResponse
+	var rsp AccountTeamsResponse
 	if errR := checkAPIResponse(bts, &rsp); errR != nil {
 		return nil, errR
 	}
@@ -56,7 +56,7 @@ func (h AccountTeamsHandler) List(accountId string) (*AccountsTeamsResponse, err
 }
 
 // Get retrieves an existing account team by account and team id`s
-func (h AccountTeamsHandler) Get(accountId, teamId string) (*AccountsTeamResponse, error) {
+func (h AccountTeamsHandler) Get(accountId, teamId string) (*AccountTeamResponse, error) {
 	if accountId == "" || teamId == "" {
 		return nil, errors.New("cannot get account team where account id or team id is empty")
 	}
@@ -67,7 +67,7 @@ func (h AccountTeamsHandler) Get(accountId, teamId string) (*AccountsTeamRespons
 		return nil, err
 	}
 
-	var rsp AccountsTeamResponse
+	var rsp AccountTeamResponse
 	if errR := checkAPIResponse(bts, &rsp); errR != nil {
 		return nil, errR
 	}
@@ -76,7 +76,7 @@ func (h AccountTeamsHandler) Get(accountId, teamId string) (*AccountsTeamRespons
 }
 
 // Create creates an account team
-func (h AccountTeamsHandler) Create(accountId string, team AccountsTeam) (*AccountsTeamResponse, error) {
+func (h AccountTeamsHandler) Create(accountId string, team AccountTeam) (*AccountTeamResponse, error) {
 	if accountId == "" {
 		return nil, errors.New("cannot get create a team where account id is empty")
 	}
@@ -87,7 +87,7 @@ func (h AccountTeamsHandler) Create(accountId string, team AccountsTeam) (*Accou
 		return nil, err
 	}
 
-	var rsp AccountsTeamResponse
+	var rsp AccountTeamResponse
 	if errR := checkAPIResponse(bts, &rsp); errR != nil {
 		return nil, errR
 	}
@@ -96,7 +96,7 @@ func (h AccountTeamsHandler) Create(accountId string, team AccountsTeam) (*Accou
 }
 
 // Update updates an account team
-func (h AccountTeamsHandler) Update(accountId, teamId string, team AccountsTeam) (*AccountsTeamResponse, error) {
+func (h AccountTeamsHandler) Update(accountId, teamId string, team AccountTeam) (*AccountTeamResponse, error) {
 	if accountId == "" {
 		return nil, errors.New("cannot get create a team where account id is empty")
 	}
@@ -107,7 +107,7 @@ func (h AccountTeamsHandler) Update(accountId, teamId string, team AccountsTeam)
 		return nil, err
 	}
 
-	var rsp AccountsTeamResponse
+	var rsp AccountTeamResponse
 	if errR := checkAPIResponse(bts, &rsp); errR != nil {
 		return nil, errR
 	}

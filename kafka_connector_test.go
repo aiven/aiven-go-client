@@ -99,6 +99,7 @@ func setupKafkaConnectorsTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 
 	return c, func(t *testing.T) {
 		t.Log("teardown Kafka Connectors test case")
+		ts.Close()
 	}
 }
 

@@ -22,3 +22,16 @@ Add support for Elasticsearch ACLs.
 ## [1.4.0] - 2020-01-03
 
 Add support for Kafka Schemas and Kafka Connectors
+
+## [1.5.0] - 2020-02-04
+
+Add support for Accounts:
+ - accounts
+ - account teams
+ - account team members 
+ - account team projects
+ - account authentications 
+ - account team invites  
+ - projects add account id
+
+Minor fixes for Kafka Schemas  

@@ -15,7 +15,7 @@ var _ = Describe("Accounts", func() {
 	)
 
 	BeforeEach(func() {
-		accountName = "test-acc-account#" + strconv.Itoa(rand.Int())
+		accountName = "test-acc-account" + strconv.Itoa(rand.Int())
 		account, err = client.Accounts.Create(Account{Name: accountName})
 	})
 
@@ -45,7 +45,7 @@ var _ = Describe("Accounts", func() {
 			if account == nil {
 				Fail("account is nil")
 			}
-			teamName = "test-acc-team#" + strconv.Itoa(rand.Int())
+			teamName = "test-acc-team" + strconv.Itoa(rand.Int())
 			team, errT = client.AccountTeams.Create(account.Account.Id, AccountTeam{
 				Name: teamName,
 			})

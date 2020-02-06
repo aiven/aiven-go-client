@@ -38,7 +38,7 @@ type (
 		CopyFromProject  string           `json:"copy_from_project,omitempty"`
 		CountryCode      *string          `json:"country_code,omitempty"`
 		Project          string           `json:"project"`
-		AccountId        string           `json:"account_id"`
+		AccountId        string           `json:"account_id,omitempty"`
 		TechnicalEmails  *[]*ContactEmail `json:"tech_emails,omitempty"`
 	}
 

@@ -35,3 +35,7 @@ Add support for Accounts:
  - projects add account id
 
 Minor fixes for Kafka Schemas  
+
+## [1.5.1] - 2020-02-07
+
+Fix project creation and update which was depended on account_id property

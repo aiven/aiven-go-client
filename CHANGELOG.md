@@ -39,3 +39,7 @@ Minor fixes for Kafka Schemas
 ## [1.5.1] - 2020-02-07
 
 Fix project creation and update which was depended on account_id property
+
+## [1.5.2] - 2020-02-12
+
+Add delete method for Account Team Invitations

@@ -48,3 +48,18 @@ func (h AccountTeamInvitesHandler) List(accountId, teamId string) (*AccountTeamI
 
 	return &rsp, nil
 }
+
+// Delete deletes a list of all available account invitations
+func (h AccountTeamInvitesHandler) Delete(accountId, teamId, userEmail string) error {
+	if accountId == "" || teamId == "" || userEmail == "" {
+		return errors.New("cannot delete an account team invite when account id or team id or user email is empty")
+	}
+
+	path := buildPath("account", accountId, "team", teamId, "invites", userEmail)
+	bts, err := h.client.doDeleteRequest(path, nil)
+	if err != nil {
+		return err
+	}
+
+	return checkAPIResponse(bts, nil)
+}

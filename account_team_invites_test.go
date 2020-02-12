@@ -32,6 +32,7 @@ func setupAccountTeamInvitesTestCase(t *testing.T) (*Client, func(t *testing.T))
 			return
 		}
 
+		// list of invitations
 		if r.URL.Path == "/account/a28707e316df/team/b28707e316df/invites" {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
@@ -49,6 +50,18 @@ func setupAccountTeamInvitesTestCase(t *testing.T) (*Client, func(t *testing.T))
 					},
 				},
 			})
+
+			if err != nil {
+				t.Error(err)
+			}
+			return
+		}
+
+		//	delete an invitation
+		if r.URL.Path == "/account/a28707e316df/team/b28707e316df/invites/test+1@example.com" {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			err := json.NewEncoder(w).Encode(APIResponse{})
 
 			if err != nil {
 				t.Error(err)
@@ -144,6 +157,77 @@ func TestAccountTeamInvitesHandler_List(t *testing.T) {
 			}
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("List() got = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestAccountTeamInvitesHandler_Delete(t *testing.T) {
+	c, tearDown := setupAccountTeamInvitesTestCase(t)
+	defer tearDown(t)
+
+	type fields struct {
+		client *Client
+	}
+	type args struct {
+		accountId string
+		teamId    string
+		userEmail string
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		{
+			"normal",
+			fields{client: c},
+			args{
+				accountId: "a28707e316df",
+				teamId:    "b28707e316df",
+				userEmail: "test+1@example.com",
+			},
+			false,
+		},
+		{
+			"empty-account-id",
+			fields{client: c},
+			args{
+				accountId: "",
+				teamId:    "b28707e316df",
+				userEmail: "test+1@example.com",
+			},
+			true,
+		},
+		{
+			"empty-team-id",
+			fields{client: c},
+			args{
+				accountId: "a28707e316df",
+				teamId:    "",
+				userEmail: "test+1@example.com",
+			},
+			true,
+		},
+		{
+			"empty-user-email",
+			fields{client: c},
+			args{
+				accountId: "a28707e316df",
+				teamId:    "b28707e316df",
+				userEmail: "",
+			},
+			true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			h := AccountTeamInvitesHandler{
+				client: tt.fields.client,
+			}
+			if err := h.Delete(tt.args.accountId, tt.args.teamId, tt.args.userEmail); (err != nil) != tt.wantErr {
+				t.Errorf("Delete() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}

@@ -74,7 +74,7 @@ var _ = Describe("Accounts", func() {
 
 			})
 			JustBeforeEach(func() {
-				memberEmail = "test-acc-email" + strconv.Itoa(rand.Int()) + "@test-aiven.io"
+				memberEmail = "savciuci+" + strconv.Itoa(rand.Int()) + "@aiven.io"
 				errM = client.AccountTeamMembers.Invite(account.Account.Id, team.Team.Id, memberEmail)
 			})
 			Context("Invite account team member", func() {
@@ -100,6 +100,9 @@ var _ = Describe("Accounts", func() {
 
 					Expect(found).To(Equal(true), "cannot find invitation for newly created member")
 
+					if errD := client.AccountTeamInvites.Delete(account.Account.Id, team.Team.Id, memberEmail); errD != nil {
+						Fail("cannot delete an invitation :" + errD.Error())
+					}
 				})
 			})
 

@@ -13,7 +13,7 @@ bootstrap:
 # Testing and linting
 #################################################
 testacc:
-	AIVEN_ACC=1 go test -v --cover -timeout 30m .
+	AIVEN_ACC=1 go test -v -count 1 -parallel 20 --cover -timeout 30m . $(TESTARGS)
 
 test:
 	go test -v --cover ./... -timeout 15m

@@ -198,6 +198,8 @@ var _ = Describe("Accounts", func() {
 			})
 			Expect(errL).NotTo(HaveOccurred())
 			Expect(resp.AuthenticationMethod.Id).NotTo(BeEmpty())
+			Expect(resp.AuthenticationMethod.SAMLMetadataUrl).NotTo(BeEmpty())
+			Expect(resp.AuthenticationMethod.SAMLAcsUrl).NotTo(BeEmpty())
 			Expect(resp.AuthenticationMethod.AccountId).To(Equal(account.Account.Id))
 			Expect(resp.APIResponse.Message).To(BeEmpty())
 			Expect(resp.APIResponse.Errors).To(BeEmpty())

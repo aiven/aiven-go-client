@@ -23,6 +23,8 @@ type (
 		SAMLCertificate               string     `json:"saml_certificate,omitempty"`
 		SAMLIdpUrl                    string     `json:"saml_idp_url,omitempty"`
 		SAMLEntity                    string     `json:"saml_entity_id,omitempty"`
+		SAMLAcsUrl                    string     `json:"saml_acs_url,omitempty"`
+		SAMLMetadataUrl               string     `json:"saml_metadata_url,omitempty"`
 		SAMLCertificateIssuer         string     `json:"saml_certificate_issuer,omitempty"`
 		SAMLCertificateSubject        string     `json:"saml_certificate_subject,omitempty"`
 		SAMLCertificateNotValidAfter  *time.Time `json:"saml_certificate_not_valid_after,omitempty"`

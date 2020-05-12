@@ -51,3 +51,7 @@ Add new SAML specific properties for Account Authentications
 ## [1.5.4] - 2020-05-07
 
 Add support for Kafka Mirror Maker 2 Replication Flows
+
+## [1.5.5] - 2020-05-12
+
+Fix Kafka Mirror Maker 2 Replication Flows update functionality

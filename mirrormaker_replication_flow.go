@@ -51,14 +51,14 @@ func (h *MirrorMakerReplicationFlowHandler) Create(project, service string, req 
 }
 
 // Update updates new Kafka MirrorMaker 2 Replication Flows entry.
-func (h *MirrorMakerReplicationFlowHandler) Update(project, service string, req MirrorMakerReplicationFlowRequest) (*MirrorMakerReplicationFlowsResponse, error) {
-	path := buildPath("project", project, "service", service, "mirrormaker", "replication-flows")
+func (h *MirrorMakerReplicationFlowHandler) Update(project, service, sourceCluster, targetCluster string, req MirrorMakerReplicationFlowRequest) (*MirrorMakerReplicationFlowResponse, error) {
+	path := buildPath("project", project, "service", service, "mirrormaker", "replication-flows", sourceCluster, targetCluster)
 	bts, err := h.client.doPutRequest(path, req)
 	if err != nil {
 		return nil, err
 	}
 
-	var rsp MirrorMakerReplicationFlowsResponse
+	var rsp MirrorMakerReplicationFlowResponse
 	if errR := checkAPIResponse(bts, &rsp); errR != nil {
 		return nil, errR
 	}

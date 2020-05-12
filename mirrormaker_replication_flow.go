@@ -12,8 +12,8 @@ type (
 	// ReplicationFlow a replication flow entity
 	ReplicationFlow struct {
 		Enabled         bool     `json:"enabled"`
-		SourceCluster   string   `json:"source_cluster"`
-		TargetCluster   string   `json:"target_cluster"`
+		SourceCluster   string   `json:"source_cluster,omitempty"`
+		TargetCluster   string   `json:"target_cluster,omitempty"`
 		Topics          []string `json:"topics"`
 		TopicsBlacklist []string `json:"topics.blacklist"`
 	}
@@ -53,6 +53,11 @@ func (h *MirrorMakerReplicationFlowHandler) Create(project, service string, req 
 // Update updates new Kafka MirrorMaker 2 Replication Flows entry.
 func (h *MirrorMakerReplicationFlowHandler) Update(project, service, sourceCluster, targetCluster string, req MirrorMakerReplicationFlowRequest) (*MirrorMakerReplicationFlowResponse, error) {
 	path := buildPath("project", project, "service", service, "mirrormaker", "replication-flows", sourceCluster, targetCluster)
+
+	// unset source and destination clusters fields
+	req.SourceCluster = ""
+	req.TargetCluster = ""
+
 	bts, err := h.client.doPutRequest(path, req)
 	if err != nil {
 		return nil, err

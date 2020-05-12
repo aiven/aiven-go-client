@@ -27,30 +27,31 @@ type Client struct {
 	Client    *http.Client
 	UserAgent string
 
-	Projects                    *ProjectsHandler
-	ProjectUsers                *ProjectUsersHandler
-	CA                          *CAHandler
-	CardsHandler                *CardsHandler
-	ServiceIntegrationEndpoints *ServiceIntegrationEndpointsHandler
-	ServiceIntegrations         *ServiceIntegrationsHandler
-	Services                    *ServicesHandler
-	ConnectionPools             *ConnectionPoolsHandler
-	Databases                   *DatabasesHandler
-	ServiceUsers                *ServiceUsersHandler
-	KafkaACLs                   *KafkaACLHandler
-	KafkaSubjectSchemas         *KafkaSubjectSchemasHandler
-	KafkaGlobalSchemaConfig     *KafkaGlobalSchemaConfigHandler
-	KafkaConnectors             *KafkaConnectorsHandler
-	ElasticsearchACLs           *ElasticSearchACLsHandler
-	KafkaTopics                 *KafkaTopicsHandler
-	VPCs                        *VPCsHandler
-	VPCPeeringConnections       *VPCPeeringConnectionsHandler
-	Accounts                    *AccountsHandler
-	AccountTeams                *AccountTeamsHandler
-	AccountTeamMembers          *AccountTeamMembersHandler
-	AccountTeamProjects         *AccountTeamProjectsHandler
-	AccountAuthentications      *AccountAuthenticationsHandler
-	AccountTeamInvites          *AccountTeamInvitesHandler
+	Projects                        *ProjectsHandler
+	ProjectUsers                    *ProjectUsersHandler
+	CA                              *CAHandler
+	CardsHandler                    *CardsHandler
+	ServiceIntegrationEndpoints     *ServiceIntegrationEndpointsHandler
+	ServiceIntegrations             *ServiceIntegrationsHandler
+	Services                        *ServicesHandler
+	ConnectionPools                 *ConnectionPoolsHandler
+	Databases                       *DatabasesHandler
+	ServiceUsers                    *ServiceUsersHandler
+	KafkaACLs                       *KafkaACLHandler
+	KafkaSubjectSchemas             *KafkaSubjectSchemasHandler
+	KafkaGlobalSchemaConfig         *KafkaGlobalSchemaConfigHandler
+	KafkaConnectors                 *KafkaConnectorsHandler
+	KafkaMirrorMakerReplicationFlow *MirrorMakerReplicationFlowHandler
+	ElasticsearchACLs               *ElasticSearchACLsHandler
+	KafkaTopics                     *KafkaTopicsHandler
+	VPCs                            *VPCsHandler
+	VPCPeeringConnections           *VPCPeeringConnectionsHandler
+	Accounts                        *AccountsHandler
+	AccountTeams                    *AccountTeamsHandler
+	AccountTeamMembers              *AccountTeamMembersHandler
+	AccountTeamProjects             *AccountTeamProjectsHandler
+	AccountAuthentications          *AccountAuthenticationsHandler
+	AccountTeamInvites              *AccountTeamInvitesHandler
 }
 
 // GetUserAgentOrDefault configures a default userAgent value, if one has not been provided.
@@ -114,6 +115,7 @@ func (c *Client) Init() {
 	c.KafkaSubjectSchemas = &KafkaSubjectSchemasHandler{c}
 	c.KafkaGlobalSchemaConfig = &KafkaGlobalSchemaConfigHandler{c}
 	c.KafkaConnectors = &KafkaConnectorsHandler{c}
+	c.KafkaMirrorMakerReplicationFlow = &MirrorMakerReplicationFlowHandler{c}
 	c.ElasticsearchACLs = &ElasticSearchACLsHandler{c}
 	c.KafkaTopics = &KafkaTopicsHandler{c}
 	c.VPCs = &VPCsHandler{c}

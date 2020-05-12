@@ -166,15 +166,17 @@ func TestMirrorMakerReplicationFlowHandler_Update(t *testing.T) {
 		client *Client
 	}
 	type args struct {
-		project string
-		service string
-		req     MirrorMakerReplicationFlowRequest
+		project       string
+		service       string
+		sourceCluster string
+		targetCluster string
+		req           MirrorMakerReplicationFlowRequest
 	}
 	tests := []struct {
 		name    string
 		fields  fields
 		args    args
-		want    *MirrorMakerReplicationFlowsResponse
+		want    *MirrorMakerReplicationFlowResponse
 		wantErr bool
 	}{
 		{
@@ -183,8 +185,10 @@ func TestMirrorMakerReplicationFlowHandler_Update(t *testing.T) {
 				client: c,
 			},
 			args{
-				project: "test-pr",
-				service: "test-sr",
+				project:       "test-pr",
+				service:       "test-sr",
+				sourceCluster: "kafka-sc",
+				targetCluster: "kafka-tc",
 				req: MirrorMakerReplicationFlowRequest{
 					ReplicationFlow{
 						Enabled:       true,
@@ -201,24 +205,18 @@ func TestMirrorMakerReplicationFlowHandler_Update(t *testing.T) {
 					},
 				},
 			},
-			&MirrorMakerReplicationFlowsResponse{
-				APIResponse: APIResponse{
-					Message: "Completed",
-					Errors:  []Error{},
-				},
-				ReplicationFlows: []ReplicationFlow{
-					{
-						Enabled:       true,
-						SourceCluster: "kafka-sc",
-						TargetCluster: "kafka-tc",
-						Topics: []string{
-							".*",
-						},
-						TopicsBlacklist: []string{
-							".*[\\-\\.]internal",
-							".*\\.replica",
-							"__.*",
-						},
+			&MirrorMakerReplicationFlowResponse{
+				ReplicationFlow: ReplicationFlow{
+					Enabled:       true,
+					SourceCluster: "kafka-sc",
+					TargetCluster: "kafka-tc",
+					Topics: []string{
+						".*",
+					},
+					TopicsBlacklist: []string{
+						".*[\\-\\.]internal",
+						".*\\.replica",
+						"__.*",
 					},
 				},
 			},
@@ -230,7 +228,7 @@ func TestMirrorMakerReplicationFlowHandler_Update(t *testing.T) {
 			h := &MirrorMakerReplicationFlowHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.Update(tt.args.project, tt.args.service, tt.args.req)
+			got, err := h.Update(tt.args.project, tt.args.service, tt.args.sourceCluster, tt.args.targetCluster, tt.args.req)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Update() error = %v, wantErr %v", err, tt.wantErr)
 				return

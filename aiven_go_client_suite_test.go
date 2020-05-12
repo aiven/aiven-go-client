@@ -35,6 +35,11 @@ var _ = BeforeSuite(func() {
 		Fail("cannot create Aiven API client, `AIVEN_TOKEN` is required")
 	}
 
+	cardId := os.Getenv("AIVEN_CARD_ID")
+	if cardId == "" {
+		Fail("cannot create Aiven API client, `AIVEN_CARD_ID` is required")
+	}
+
 	client, err = NewTokenClient(
 		token,
 		"aiven-go-client-test/")

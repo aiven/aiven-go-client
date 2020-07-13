@@ -16,9 +16,13 @@ type (
 	// CreateVPCPeeringConnectionRequest holds the parameters to create a new
 	// peering connection.
 	CreateVPCPeeringConnectionRequest struct {
-		PeerCloudAccount string  `json:"peer_cloud_account"`
-		PeerVPC          string  `json:"peer_vpc"`
-		PeerRegion       *string `json:"peer_region,omitempty"`
+		PeerCloudAccount     string   `json:"peer_cloud_account"`
+		PeerVPC              string   `json:"peer_vpc"`
+		PeerRegion           *string  `json:"peer_region,omitempty"`
+		PeerAzureAppId       string   `json:"peer_azure_app_id,omitempty"`
+		PeerAzureTenantId    string   `json:"peer_azure_tenant_id,omitempty"`
+		PeerResourceGroup    string   `json:"peer_resource_group,omitempty"`
+		UserPeerNetworkCIDRs []string `json:"user_peer_network_cidrs,omitempty"`
 	}
 )
 

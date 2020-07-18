@@ -10,13 +10,18 @@ import (
 type (
 	// VPCPeeringConnection holds parameters associated with a VPC peering connection
 	VPCPeeringConnection struct {
-		CreateTime       *string                 `json:"create_time"`
-		PeerCloudAccount string                  `json:"peer_cloud_account"`
-		PeerVPC          string                  `json:"peer_vpc"`
-		PeerRegion       *string                 `json:"peer_region"`
-		State            string                  `json:"state"`
-		UpdateTime       string                  `json:"update_time"`
-		StateInfo        *map[string]interface{} `json:"state_info"`
+		CreateTime               *string                 `json:"create_time"`
+		PeerCloudAccount         string                  `json:"peer_cloud_account"`
+		PeerVPC                  string                  `json:"peer_vpc"`
+		PeerRegion               *string                 `json:"peer_region"`
+		State                    string                  `json:"state"`
+		UpdateTime               string                  `json:"update_time"`
+		StateInfo                *map[string]interface{} `json:"state_info"`
+		PeerAzureAppId           string                  `json:"peer_azure_app_id,omitempty"`
+		PeerAzureTenantId        string                  `json:"peer_azure_tenant_id,omitempty"`
+		UserPeerNetworkCIDRs     []string                `json:"user_peer_network_cidrs,omitempty"`
+		VPCPeeringConnectionType string                  `json:"vpc_peering_connection_type,omitempty"`
+		PeerResourceGroup        string                  `json:"peer_resource_group,omitempty"`
 	}
 
 	// VPC holds parameters associated with a Virtual Private Cloud

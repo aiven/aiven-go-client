@@ -55,3 +55,7 @@ Add support for Kafka Mirror Maker 2 Replication Flows
 ## [1.5.5] - 2020-05-12
 
 Fix Kafka Mirror Maker 2 Replication Flows update functionality
+
+## [1.5.6] - 2020-07-20
+
+Add support for AWS Transit Gateway and expose Azure config parameters

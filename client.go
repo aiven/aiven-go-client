@@ -52,6 +52,7 @@ type Client struct {
 	AccountTeamProjects             *AccountTeamProjectsHandler
 	AccountAuthentications          *AccountAuthenticationsHandler
 	AccountTeamInvites              *AccountTeamInvitesHandler
+	TransitGatewayVPCAttachment     *TransitGatewayVPCAttachmentHandler
 }
 
 // GetUserAgentOrDefault configures a default userAgent value, if one has not been provided.

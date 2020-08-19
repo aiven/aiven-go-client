@@ -5,8 +5,11 @@ package aiven
 
 import (
 	"bytes"
+	"crypto/tls"
+	"crypto/x509"
 	"encoding/json"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 )
@@ -66,7 +69,7 @@ func GetUserAgentOrDefault(userAgent string) string {
 // NewMFAUserClient creates a new client based on email, one-time password and password.
 func NewMFAUserClient(email, otp, password string, userAgent string) (*Client, error) {
 	c := &Client{
-		Client:    &http.Client{},
+		Client:    buildHttpClient(),
 		UserAgent: GetUserAgentOrDefault(userAgent),
 	}
 
@@ -92,12 +95,46 @@ func NewUserClient(email, password string, userAgent string) (*Client, error) {
 func NewTokenClient(key string, userAgent string) (*Client, error) {
 	c := &Client{
 		APIKey:    key,
-		Client:    &http.Client{},
+		Client:    buildHttpClient(),
 		UserAgent: GetUserAgentOrDefault(userAgent),
 	}
 	c.Init()
 
 	return c, nil
+}
+
+// buildHttpClient it builds http.Client, if environment variable AIVEN_CA_CERT
+// contains a path to a valid CA certificate HTTPS client will be configured to use it
+func buildHttpClient() *http.Client {
+	caFilename := os.Getenv("AIVEN_CA_CERT")
+	if caFilename == "" {
+		return &http.Client{}
+	}
+
+	// Load CA cert
+	caCert, err := ioutil.ReadFile(caFilename)
+	if err != nil {
+		log.Fatal("cannot load ca cert: %w", err)
+	}
+
+	// Append CA cert to the system pool
+	caCertPool, _ := x509.SystemCertPool()
+	if caCertPool == nil {
+		caCertPool = x509.NewCertPool()
+	}
+
+	if ok := caCertPool.AppendCertsFromPEM(caCert); !ok {
+		log.Println("[WARNING] No certs appended, using system certs only")
+	}
+
+	// Setup HTTPS client
+	tlsConfig := &tls.Config{
+		RootCAs: caCertPool,
+	}
+	transport := &http.Transport{TLSClientConfig: tlsConfig}
+	client := &http.Client{Transport: transport}
+
+	return client
 }
 
 // Init initializes the client and sets up all the handlers.

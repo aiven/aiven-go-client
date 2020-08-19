@@ -78,6 +78,19 @@ func (h *ServiceUsersHandler) Get(project, serviceName, username string) (*Servi
 	return nil, err
 }
 
+// Put modifies the given Service User in Aiven.
+func (h *ServiceUsersHandler) Put(project, service, user string, u ServiceUser) ([]*ServiceUser, error) {
+	path := buildPath("project", project, "service", service, "user", user)
+	svc, err := h.client.doPutRequest(path, u)
+	if err != nil {
+		return nil, err
+	}
+	var r ServiceResponse
+	errR := checkAPIResponse(svc, &r)
+
+	return r.Service.Users, errR
+}
+
 // Delete deletes the given Service User in Aiven.
 func (h *ServiceUsersHandler) Delete(project, service, user string) error {
 	path := buildPath("project", project, "service", service, "user", user)

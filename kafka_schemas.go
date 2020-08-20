@@ -241,3 +241,21 @@ func (h *KafkaSubjectSchemasHandler) Add(project, service, name string, subject 
 
 	return &r, errR
 }
+
+// Update updates configuration for Schema Registry subject
+func (h *KafkaSubjectSchemasHandler) Update(project, service, subjectName, compatibility string) (
+	*KafkaSchemaConfigUpdateResponse, error) {
+	path := buildPath("project", project, "service", service, "kafka", "schema", "config", subjectName)
+
+	bts, err := h.client.doPutRequest(path, KafkaSchemaConfig{
+		CompatibilityLevel: compatibility,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	var r KafkaSchemaConfigUpdateResponse
+	errR := checkAPIResponse(bts, &r)
+
+	return &r, errR
+}

@@ -34,11 +34,13 @@ type (
 	// ServiceComponents represents Service Components which may contain
 	// information regarding service components Dynamic/Public DNS records
 	ServiceComponents struct {
-		Component string `json:"component"`
-		Host      string `json:"host"`
-		Port      int    `json:"port"`
-		Route     string `json:"route"`
-		Usage     string `json:"usage"`
+		Component                 string `json:"component"`
+		Host                      string `json:"host"`
+		Port                      int    `json:"port"`
+		Route                     string `json:"route"`
+		Usage                     string `json:"usage"`
+		Ssl                       string `json:"ssl"`
+		KafkaAuthenticationMethod string `json:"kafka_authentication_method"`
 	}
 
 	// Backup represents an individual backup of service data on Aiven

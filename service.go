@@ -29,6 +29,7 @@ type (
 		MaintenanceWindow     MaintenanceWindow      `json:"maintenance"`
 		Integrations          []*ServiceIntegration  `json:"service_integrations"`
 		Components            []*ServiceComponents   `json:"components"`
+		Powered               bool                   `json:"powered"`
 	}
 
 	// ServiceComponents represents Service Components which may contain
@@ -143,7 +144,7 @@ type (
 		MaintenanceWindow     *MaintenanceWindow     `json:"maintenance,omitempty"`
 		Plan                  string                 `json:"plan,omitempty"`
 		ProjectVPCID          *string                `json:"project_vpc_id"`
-		Powered               bool                   `json:"powered"` // TODO: figure out if we can overwrite the default?
+		Powered               bool                   `json:"powered"`
 		TerminationProtection bool                   `json:"termination_protection"`
 		UserConfig            map[string]interface{} `json:"user_config,omitempty"`
 	}

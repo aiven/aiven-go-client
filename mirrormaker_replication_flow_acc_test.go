@@ -16,14 +16,11 @@ var _ = Describe("MirrorMaker 2 Replication flow", func() {
 	)
 
 	BeforeEach(func() {
-		projectName = "test-acc-pr-mm-" + strconv.Itoa(rand.Int())
-		project, err = client.Projects.Create(CreateProjectRequest{
-			Project: projectName,
-			CardID:  os.Getenv("AIVEN_CARD_ID"),
-		})
+		projectName = os.Getenv("AIVEN_PROJECT_NAME")
+		project, err = client.Projects.Get(projectName)
 	})
 
-	Context("Create new project", func() {
+	Context("Get a project", func() {
 		It("should not error", func() {
 			Expect(err).NotTo(HaveOccurred())
 		})
@@ -139,12 +136,5 @@ var _ = Describe("MirrorMaker 2 Replication flow", func() {
 				Fail("cannot delete service:" + errD.Error())
 			}
 		})
-	})
-
-	AfterEach(func() {
-		err = client.Projects.Delete(projectName)
-		if err != nil {
-			Fail("cannot delete project : " + err.Error())
-		}
 	})
 })

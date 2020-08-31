@@ -207,7 +207,7 @@ func (h *KafkaSubjectSchemasHandler) Validate(
 // Add adds a new kafka Schema
 func (h *KafkaSubjectSchemasHandler) Add(project, service, name string, subject KafkaSchemaSubject) (*KafkaSchemaSubjectResponse, error) {
 	vR, err := h.GetVersions(project, service, name)
-	if err != nil && err.(Error).Status != 404 {
+	if err != nil && !IsNotFound(err) {
 		return nil, err
 	}
 

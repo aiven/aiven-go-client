@@ -20,6 +20,8 @@ type (
 		TechnicalEmails  []*ContactEmail `json:"tech_emails"`
 		VatID            string          `json:"vat_id"`
 		AccountId        string          `json:"account_id"`
+		BillingCurrency  string          `json:"billing_currency"`
+		CopyFromProject  string          `json:"copy_from_project"`
 	}
 
 	// ProjectsHandler is the client which interacts with the Projects endpoints
@@ -40,6 +42,7 @@ type (
 		Project          string           `json:"project"`
 		AccountId        string           `json:"account_id,omitempty"`
 		TechnicalEmails  *[]*ContactEmail `json:"tech_emails,omitempty"`
+		BillingCurrency  string           `json:"billing_currency,omitempty"`
 	}
 
 	// UpdateProjectRequest are the parameters for updating a project.
@@ -52,6 +55,7 @@ type (
 		CountryCode      *string          `json:"country_code,omitempty"`
 		AccountId        string           `json:"account_id,omitempty"`
 		TechnicalEmails  *[]*ContactEmail `json:"tech_emails,omitempty"`
+		BillingCurrency  string           `json:"billing_currency,omitempty"`
 	}
 
 	// ContactEmail represents either a technical contact or billing contact.
@@ -71,6 +75,38 @@ type (
 		Projects []*Project `json:"projects"`
 	}
 )
+
+// ContactEmailFromStringSlice creates []*ContactEmail from string slice
+func ContactEmailFromStringSlice(emails []string) *[]*ContactEmail {
+	var result []*ContactEmail
+	for _, e := range emails {
+		result = append(result, &ContactEmail{
+			Email: e,
+		})
+	}
+
+	return &result
+}
+
+// emailsToStringSlice converts contact emails to string slice
+func emailsToStringSlice(c []*ContactEmail) []string {
+	var result []string
+	for _, e := range c {
+		result = append(result, e.Email)
+	}
+
+	return result
+}
+
+// GetBillingEmailsAsStringSlice retrieves BillingEmails converted to string slice
+func (p Project) GetBillingEmailsAsStringSlice() []string {
+	return emailsToStringSlice(p.BillingEmails)
+}
+
+// GetTechnicalEmailsAsStringSlice retrieves TechnicalEmails converted to string slice
+func (p Project) GetTechnicalEmailsAsStringSlice() []string {
+	return emailsToStringSlice(p.TechnicalEmails)
+}
 
 // Create creates a new project.
 func (h *ProjectsHandler) Create(req CreateProjectRequest) (*Project, error) {

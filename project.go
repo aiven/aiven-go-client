@@ -20,6 +20,8 @@ type (
 		TechnicalEmails  []*ContactEmail `json:"tech_emails"`
 		VatID            string          `json:"vat_id"`
 		AccountId        string          `json:"account_id"`
+		BillingCurrency  string          `json:"billing_currency"`
+		CopyFromProject  string          `json:"copy_from_project"`
 	}
 
 	// ProjectsHandler is the client which interacts with the Projects endpoints
@@ -40,6 +42,7 @@ type (
 		Project          string           `json:"project"`
 		AccountId        string           `json:"account_id,omitempty"`
 		TechnicalEmails  *[]*ContactEmail `json:"tech_emails,omitempty"`
+		BillingCurrency  string           `json:"billing_currency,omitempty"`
 	}
 
 	// UpdateProjectRequest are the parameters for updating a project.
@@ -52,6 +55,7 @@ type (
 		CountryCode      *string          `json:"country_code,omitempty"`
 		AccountId        string           `json:"account_id,omitempty"`
 		TechnicalEmails  *[]*ContactEmail `json:"tech_emails,omitempty"`
+		BillingCurrency  string           `json:"billing_currency,omitempty"`
 	}
 
 	// ContactEmail represents either a technical contact or billing contact.

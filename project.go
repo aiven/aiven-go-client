@@ -76,6 +76,38 @@ type (
 	}
 )
 
+// ContactEmailFromStringSlice creates []*ContactEmail from string slice
+func ContactEmailFromStringSlice(emails []string) *[]*ContactEmail {
+	var result []*ContactEmail
+	for _, e := range emails {
+		result = append(result, &ContactEmail{
+			Email: e,
+		})
+	}
+
+	return &result
+}
+
+// emailsToStringSlice converts contact emails to string slice
+func emailsToStringSlice(c []*ContactEmail) []string {
+	var result []string
+	for _, e := range c {
+		result = append(result, e.Email)
+	}
+
+	return result
+}
+
+// GetBillingEmailsAsStringSlice retrieves BillingEmails converted to string slice
+func (p Project) GetBillingEmailsAsStringSlice() []string {
+	return emailsToStringSlice(p.BillingEmails)
+}
+
+// GetTechnicalEmailsAsStringSlice retrieves TechnicalEmails converted to string slice
+func (p Project) GetTechnicalEmailsAsStringSlice() []string {
+	return emailsToStringSlice(p.TechnicalEmails)
+}
+
 // Create creates a new project.
 func (h *ProjectsHandler) Create(req CreateProjectRequest) (*Project, error) {
 	bts, err := h.client.doPostRequest(buildPath("project"), req)

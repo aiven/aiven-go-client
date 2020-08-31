@@ -91,7 +91,7 @@ func main() {
 				continue
 			}
 
-			if err.(client.Error).Status == 404 {
+			if client.IsNotFound(err) {
 				log.Println("Kafka service is not found by some reason, try again in 10 seconds ...")
 				time.Sleep(10 * time.Second)
 				continue

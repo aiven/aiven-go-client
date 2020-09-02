@@ -125,6 +125,10 @@ var _ = Describe("Kafka ", func() {
 		})
 
 		It("should update configuration", func() {
+			_, err := client.KafkaSubjectSchemas.GetConfiguration(projectName, serviceName, subjectName)
+			Expect(err).To(HaveOccurred())
+			Expect(IsNotFound(err)).To(Equal(true))
+
 			s, errU := client.KafkaSubjectSchemas.UpdateConfiguration(projectName, serviceName, subjectName, "FORWARD")
 			Expect(errU).NotTo(HaveOccurred())
 			Expect(s).NotTo(BeNil())

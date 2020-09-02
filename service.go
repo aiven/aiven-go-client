@@ -40,7 +40,7 @@ type (
 		Port                      int    `json:"port"`
 		Route                     string `json:"route"`
 		Usage                     string `json:"usage"`
-		Ssl                       string `json:"ssl"`
+		Ssl                       *bool  `json:"ssl"`
 		KafkaAuthenticationMethod string `json:"kafka_authentication_method"`
 	}
 

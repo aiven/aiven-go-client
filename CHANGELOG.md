@@ -67,3 +67,10 @@ Add support for AWS Transit Gateway and expose Azure config parameters
 - Add root CA support
 - Use golang 1.14 Travis CI
 
+## [1.5.8] - 2020-09-03
+- Change service component ssl field to boolean
+- Change accounts acceptance tests email
+- Add Kafka schema subject configuration management
+- Project related improvements: add new fields, helper functions and extend acceptance test
+- Add Aiven error IsNotFound validation
+

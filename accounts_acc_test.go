@@ -74,7 +74,7 @@ var _ = Describe("Accounts", func() {
 
 			})
 			JustBeforeEach(func() {
-				memberEmail = "savciuci+" + strconv.Itoa(rand.Int()) + "@aiven.io"
+				memberEmail = "ivan.savciuc+" + strconv.Itoa(rand.Int()) + "@aiven.io"
 				errM = client.AccountTeamMembers.Invite(account.Account.Id, team.Team.Id, memberEmail)
 			})
 			Context("Invite account team member", func() {

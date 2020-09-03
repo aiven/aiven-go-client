@@ -267,7 +267,7 @@ func (h *KafkaSubjectSchemasHandler) GetConfiguration(project, service, subjectN
 	*KafkaSchemaConfigResponse, error) {
 	path := buildPath("project", project, "service", service, "kafka", "schema", "config", subjectName)
 
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(path+"?global_default_fallback=false", nil)
 	if err != nil {
 		return nil, err
 	}

@@ -79,6 +79,35 @@ func (h *VPCPeeringConnectionsHandler) GetVPCPeering(
 	return nil, err
 }
 
+// GetVPCPeeringWithResourceGroup retrieves a VPC peering connection
+func (h *VPCPeeringConnectionsHandler) GetVPCPeeringWithResourceGroup(
+	project string,
+	vpcID string,
+	peerCloudAccount string,
+	peerVPC string,
+	peerRegion *string,
+	peerResourceGroup string,
+) (*VPCPeeringConnection, error) {
+	// There's no API call for getting individual peering connection. Get the VPC
+	// info and filter from there
+	vpc, err := h.client.VPCs.Get(project, vpcID)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, pc := range vpc.PeeringConnections {
+		if (peerRegion == nil || pc.PeerRegion == nil || *pc.PeerRegion == *peerRegion) &&
+			pc.PeerCloudAccount == peerCloudAccount &&
+			pc.PeerVPC == peerVPC &&
+			pc.PeerResourceGroup == peerResourceGroup {
+			return pc, nil
+		}
+	}
+
+	err = Error{Message: "Peering connection not found", Status: 404}
+	return nil, err
+}
+
 // Get a VPC Peering Connection from Aiven.
 func (h *VPCPeeringConnectionsHandler) Get(
 	project string,
@@ -103,6 +132,27 @@ func (h *VPCPeeringConnectionsHandler) DeleteVPCPeering(project, vpcID, peerClou
 	}
 
 	return checkAPIResponse(bts, nil)
+}
+
+// DeleteVPCPeeringWithResourceGroup deletes a VPC peering connection
+func (h *VPCPeeringConnectionsHandler) DeleteVPCPeeringWithResourceGroup(project, vpcID, peerCloudAccount, peerVPC, peerResourceGroup string, peerRegion *string) error {
+	pathElements := []string{"project", project,
+		"vpcs", vpcID,
+		"peering-connections", "peer-accounts", peerCloudAccount,
+		"peer-resource-groups", peerResourceGroup,
+		"peer-vpcs", peerVPC,
+	}
+	if peerRegion != nil {
+		pathElements = append(pathElements, "peer-regions", *peerRegion)
+	}
+
+	bts, err := h.client.doDeleteRequest(buildPath(pathElements...), nil)
+	if err != nil {
+		return err
+	}
+
+	return checkAPIResponse(bts, nil)
+
 }
 
 // Delete the given VPC Peering Connection from Aiven.

@@ -120,10 +120,11 @@ func (h *ProjectUsersHandler) UpdateUserOrInvitation(
 	if err == nil {
 		return nil
 	}
-	aivenErr, ok := err.(Error)
-	if ok && aivenErr.Status == 404 {
+
+	if IsNotFound(err) {
 		return h.UpdateInvitation(project, email, req)
 	}
+
 	return err
 }
 
@@ -156,10 +157,11 @@ func (h *ProjectUsersHandler) DeleteUserOrInvitation(project, email string) erro
 	if err == nil {
 		return nil
 	}
-	aivenErr, ok := err.(Error)
-	if ok && aivenErr.Status == 404 {
+
+	if IsNotFound(err) {
 		return h.DeleteInvitation(project, email)
 	}
+
 	return err
 }
 

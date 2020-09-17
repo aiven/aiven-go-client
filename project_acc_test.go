@@ -17,7 +17,10 @@ var _ = Describe("Projects", func() {
 	BeforeEach(func() {
 		projectName = "test-acc-pr" + strconv.Itoa(rand.Int())
 		project, err = client.Projects.Create(CreateProjectRequest{
-			Project: projectName,
+			Project:         projectName,
+			BillingCurrency: "EUR",
+			TechnicalEmails: ContactEmailFromStringSlice([]string{"test@example.com"}),
+			BillingEmails:   ContactEmailFromStringSlice([]string{"test123@example.com"}),
 		})
 	})
 
@@ -32,6 +35,9 @@ var _ = Describe("Projects", func() {
 			if project != nil {
 				Expect(project.Name).NotTo(BeEmpty())
 				Expect(project.AccountId).To(BeEmpty())
+				Expect(project.BillingCurrency).NotTo(BeEmpty())
+				Expect(project.GetBillingEmailsAsStringSlice()).NotTo(BeEmpty())
+				Expect(project.GetTechnicalEmailsAsStringSlice()).NotTo(BeEmpty())
 			}
 		})
 	})

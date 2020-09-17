@@ -146,12 +146,15 @@ func (h *KafkaSubjectSchemasHandler) GetVersions(project, service, name string) 
 // Delete delete a Kafka Schema Subject versions, of versions parameter is empty it delete all existing versions
 func (h *KafkaSubjectSchemasHandler) Delete(project, service, name string, versions ...int) error {
 	if len(versions) == 0 {
-		r, err := h.GetVersions(project, service, name)
+		path := buildPath("project", project, "service", service, "kafka", "schema", "subjects", name)
+		bts, err := h.client.doDeleteRequest(path, nil)
 		if err != nil {
 			return err
 		}
 
-		versions = r.Versions
+		if errR := checkAPIResponse(bts, nil); errR != nil {
+			return errR
+		}
 	}
 
 	for _, version := range versions {
@@ -164,8 +167,8 @@ func (h *KafkaSubjectSchemasHandler) Delete(project, service, name string, versi
 		if errR := checkAPIResponse(bts, nil); errR != nil {
 			return errR
 		}
-
 	}
+
 	return nil
 }
 
@@ -204,7 +207,7 @@ func (h *KafkaSubjectSchemasHandler) Validate(
 // Add adds a new kafka Schema
 func (h *KafkaSubjectSchemasHandler) Add(project, service, name string, subject KafkaSchemaSubject) (*KafkaSchemaSubjectResponse, error) {
 	vR, err := h.GetVersions(project, service, name)
-	if err != nil && err.(Error).Status != 404 {
+	if err != nil && !IsNotFound(err) {
 		return nil, err
 	}
 
@@ -237,6 +240,39 @@ func (h *KafkaSubjectSchemasHandler) Add(project, service, name string, subject 
 	}
 
 	var r KafkaSchemaSubjectResponse
+	errR := checkAPIResponse(bts, &r)
+
+	return &r, errR
+}
+
+// UpdateConfiguration updates configuration for Schema Registry subject
+func (h *KafkaSubjectSchemasHandler) UpdateConfiguration(project, service, subjectName, compatibility string) (
+	*KafkaSchemaConfigUpdateResponse, error) {
+	path := buildPath("project", project, "service", service, "kafka", "schema", "config", subjectName)
+
+	bts, err := h.client.doPutRequest(path, KafkaSchemaConfig{
+		CompatibilityLevel: compatibility,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	var r KafkaSchemaConfigUpdateResponse
+	errR := checkAPIResponse(bts, &r)
+
+	return &r, errR
+}
+
+func (h *KafkaSubjectSchemasHandler) GetConfiguration(project, service, subjectName string) (
+	*KafkaSchemaConfigResponse, error) {
+	path := buildPath("project", project, "service", service, "kafka", "schema", "config", subjectName)
+
+	bts, err := h.client.doGetRequest(path+"?global_default_fallback=false", nil)
+	if err != nil {
+		return nil, err
+	}
+
+	var r KafkaSchemaConfigResponse
 	errR := checkAPIResponse(bts, &r)
 
 	return &r, errR

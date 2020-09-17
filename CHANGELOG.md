@@ -59,3 +59,18 @@ Fix Kafka Mirror Maker 2 Replication Flows update functionality
 ## [1.5.6] - 2020-07-20
 
 Add support for AWS Transit Gateway and expose Azure config parameters
+
+## [1.5.7] - 2020-07-20
+- Add service `powered` field to API requests and response
+- Add editing possibility for Kafka Schema Registry subject
+- Extend service components supported fields
+- Add root CA support
+- Use golang 1.14 Travis CI
+
+## [1.5.8] - 2020-09-03
+- Change service component ssl field to boolean
+- Change accounts acceptance tests email
+- Add Kafka schema subject configuration management
+- Project related improvements: add new fields, helper functions and extend acceptance test
+- Add Aiven error IsNotFound validation
+

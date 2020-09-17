@@ -4,6 +4,7 @@
 package aiven
 
 import (
+	"errors"
 	"fmt"
 )
 
@@ -27,6 +28,13 @@ type (
 	// ServiceUser.
 	CreateServiceUserRequest struct {
 		Username string `json:"username"`
+	}
+
+	// ModifyServiceUserRequest params required to modify a ServiceUser
+	ModifyServiceUserRequest struct {
+		Operation      *string `json:"operation"`
+		Authentication *string `json:"authentication,omitempty"`
+		NewPassword    string  `json:"new_password"`
 	}
 
 	// ServiceUserResponse represents the response after creating a ServiceUser.
@@ -76,6 +84,32 @@ func (h *ServiceUsersHandler) Get(project, serviceName, username string) (*Servi
 
 	err = Error{Message: fmt.Sprintf("Service user with username %v not found", username), Status: 404}
 	return nil, err
+}
+
+// Update modifies the given Service User in Aiven.
+func (h *ServiceUsersHandler) Update(project, service, username string, update ModifyServiceUserRequest) (*ServiceUser, error) {
+	var DefaultOperation = "reset-credentials"
+	if update.Operation == nil {
+		update.Operation = &DefaultOperation
+	}
+	path := buildPath("project", project, "service", service, "user", username)
+	svc, err := h.client.doPutRequest(path, update)
+	if err != nil {
+		return nil, err
+	}
+
+	var r ServiceResponse
+	errR := checkAPIResponse(svc, &r)
+	if errR == nil {
+		for _, user := range r.Service.Users {
+			if user.Username == username {
+				return user, nil
+			}
+		}
+		return nil, errors.New("user not found")
+	}
+
+	return nil, errR
 }
 
 // Delete deletes the given Service User in Aiven.

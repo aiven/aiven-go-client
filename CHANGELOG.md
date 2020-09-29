@@ -74,3 +74,9 @@ Add support for AWS Transit Gateway and expose Azure config parameters
 - Project related improvements: add new fields, helper functions and extend acceptance test
 - Add Aiven error IsNotFound validation
 
+## [1.8.9] - 2020-09-29
+- Use golang 1.15
+- Add PUT endpoint to modify service users
+- Add/Get and Delete methods specific for Azure VPC peering connection
+- Make Kafka Topic retention hours an optional field
+

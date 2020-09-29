@@ -11,7 +11,7 @@ type (
 		Partitions            []*Partition `json:"partitions"`
 		Replication           int          `json:"replication"`
 		RetentionBytes        int          `json:"retention_bytes"`
-		RetentionHours        int          `json:"retention_hours"`
+		RetentionHours        *int         `json:"retention_hours,omitempty"`
 		State                 string       `json:"state"`
 		TopicName             string       `json:"topic_name"`
 	}
@@ -23,7 +23,7 @@ type (
 		Partitions            int    `json:"partitions"`
 		Replication           int    `json:"replication"`
 		RetentionBytes        int    `json:"retention_bytes"`
-		RetentionHours        int    `json:"retention_hours"`
+		RetentionHours        *int   `json:"retention_hours,omitempty"`
 		State                 string `json:"state"`
 		TopicName             string `json:"topic_name"`
 	}

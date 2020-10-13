@@ -4,16 +4,113 @@
 package aiven
 
 type (
+	// KafkaTopicConfig represents a Kafka Topic Config on Aiven.
+	KafkaTopicConfig struct {
+		CleanupPolicy                   string   `json:"cleanup_policy,omitempty"`
+		CompressionType                 string   `json:"compression_type,omitempty"`
+		DeleteRetentionMs               *int     `json:"delete_retention_ms,omitempty"`
+		FileDeleteDelayMs               *int     `json:"file_delete_delay_ms,omitempty"`
+		FlushMessages                   *int     `json:"flush_messages,omitempty"`
+		FlushMs                         *int     `json:"flush_ms,omitempty"`
+		IndexIntervalBytes              *int     `json:"index_interval_bytes,omitempty"`
+		MaxCompactionLagMs              *int     `json:"max_compaction_lag_ms,omitempty"`
+		MaxMessageBytes                 *int     `json:"max_message_bytes,omitempty"`
+		MessageDownconversionEnable     *bool    `json:"message_downconversion_enable,omitempty"`
+		MessageFormatVersion            string   `json:"message_format_version,omitempty"`
+		MessageTimestampDifferenceMaxMs *int     `json:"message_timestamp_difference_max_ms,omitempty"`
+		MessageTimestampType            string   `json:"message_timestamp_type,omitempty"`
+		MinCleanableDirtyRatio          *float32 `json:"min_cleanable_dirty_ratio,omitempty"`
+		MinCompactionLagMs              *int     `json:"min_compaction_lag_ms,omitempty"`
+		MinInsyncReplicas               *int     `json:"min_insync_replicas,omitempty"`
+		Preallocate                     *bool    `json:"preallocate,omitempty"`
+		RetentionBytes                  *int     `json:"retention_bytes,omitempty"`
+		RetentionMs                     *int     `json:"retention_ms,omitempty"`
+		SegmentBytes                    *int     `json:"segment_bytes,omitempty"`
+		SegmentIndexBytes               *int     `json:"segment_index_bytes,omitempty"`
+		SegmentJitterMs                 *int     `json:"segment_jitter_ms,omitempty"`
+		SegmentMs                       *int     `json:"segment_ms,omitempty"`
+		UncleanLeaderElectionEnable     *bool    `json:"unclean_leader_election_enable,omitempty"`
+	}
+
+	// KafkaTopicConfigResponse represents a Kafka Topic Config on Aiven.
+	KafkaTopicConfigResponse struct {
+		CleanupPolicy                   KafkaTopicConfigResponseString `json:"cleanup_policy,omitempty"`
+		CompressionType                 KafkaTopicConfigResponseString `json:"compression_type,omitempty"`
+		DeleteRetentionMs               KafkaTopicConfigResponseInt    `json:"delete_retention_ms,omitempty"`
+		FileDeleteDelayMs               KafkaTopicConfigResponseInt    `json:"file_delete_delay_ms,omitempty"`
+		FlushMessages                   KafkaTopicConfigResponseInt    `json:"flush_messages,omitempty"`
+		FlushMs                         KafkaTopicConfigResponseInt    `json:"flush_ms,omitempty"`
+		IndexIntervalBytes              KafkaTopicConfigResponseInt    `json:"index_interval_bytes,omitempty"`
+		MaxCompactionLagMs              KafkaTopicConfigResponseInt    `json:"max_compaction_lag_ms,omitempty"`
+		MaxMessageBytes                 KafkaTopicConfigResponseInt    `json:"max_message_bytes,omitempty"`
+		MessageDownconversionEnable     KafkaTopicConfigResponseBool   `json:"message_downconversion_enable,omitempty"`
+		MessageFormatVersion            KafkaTopicConfigResponseString `json:"message_format_version,omitempty"`
+		MessageTimestampDifferenceMaxMs KafkaTopicConfigResponseInt    `json:"message_timestamp_difference_max_ms,omitempty"`
+		MessageTimestampType            KafkaTopicConfigResponseString `json:"message_timestamp_type,omitempty"`
+		MinCleanableDirtyRatio          KafkaTopicConfigResponseFloat  `json:"min_cleanable_dirty_ratio,omitempty"`
+		MinCompactionLagMs              KafkaTopicConfigResponseInt    `json:"min_compaction_lag_ms,omitempty"`
+		MinInsyncReplicas               KafkaTopicConfigResponseInt    `json:"min_insync_replicas,omitempty"`
+		Preallocate                     KafkaTopicConfigResponseBool   `json:"preallocate,omitempty"`
+		RetentionBytes                  KafkaTopicConfigResponseInt    `json:"retention_bytes,omitempty"`
+		RetentionMs                     KafkaTopicConfigResponseInt    `json:"retention_ms,omitempty"`
+		SegmentBytes                    KafkaTopicConfigResponseInt    `json:"segment_bytes,omitempty"`
+		SegmentIndexBytes               KafkaTopicConfigResponseInt    `json:"segment_index_bytes,omitempty"`
+		SegmentJitterMs                 KafkaTopicConfigResponseInt    `json:"segment_jitter_ms,omitempty"`
+		SegmentMs                       KafkaTopicConfigResponseInt    `json:"segment_ms,omitempty"`
+		UncleanLeaderElectionEnable     KafkaTopicConfigResponseBool   `json:"unclean_leader_election_enable,omitempty"`
+	}
+
+	KafkaTopicConfigResponseString struct {
+		Source   string `json:"source"`
+		Value    string `json:"value"`
+		Synonyms []struct {
+			Source string `json:"source"`
+			Value  string `json:"value"`
+			Name   string `json:"name"`
+		} `json:"synonyms"`
+	}
+
+	KafkaTopicConfigResponseInt struct {
+		Source   string `json:"source"`
+		Value    int    `json:"value"`
+		Synonyms []struct {
+			Source string `json:"source"`
+			Value  int    `json:"value"`
+			Name   string `json:"name"`
+		} `json:"synonyms"`
+	}
+
+	KafkaTopicConfigResponseBool struct {
+		Source   string `json:"source"`
+		Value    bool   `json:"value"`
+		Synonyms []struct {
+			Source string `json:"source"`
+			Value  bool   `json:"value"`
+			Name   string `json:"name"`
+		} `json:"synonyms"`
+	}
+
+	KafkaTopicConfigResponseFloat struct {
+		Source   string  `json:"source"`
+		Value    float32 `json:"value"`
+		Synonyms []struct {
+			Source string  `json:"source"`
+			Value  float32 `json:"value"`
+			Name   string  `json:"name"`
+		} `json:"synonyms"`
+	}
+
 	// KafkaTopic represents a Kafka Topic on Aiven.
 	KafkaTopic struct {
-		CleanupPolicy         string       `json:"cleanup_policy"`
-		MinimumInSyncReplicas int          `json:"min_insync_replicas"`
-		Partitions            []*Partition `json:"partitions"`
-		Replication           int          `json:"replication"`
-		RetentionBytes        int          `json:"retention_bytes"`
-		RetentionHours        *int         `json:"retention_hours,omitempty"`
-		State                 string       `json:"state"`
-		TopicName             string       `json:"topic_name"`
+		CleanupPolicy         string                   `json:"cleanup_policy"`
+		MinimumInSyncReplicas int                      `json:"min_insync_replicas"`
+		Partitions            []*Partition             `json:"partitions"`
+		Replication           int                      `json:"replication"`
+		RetentionBytes        int                      `json:"retention_bytes"`
+		RetentionHours        *int                     `json:"retention_hours,omitempty"`
+		State                 string                   `json:"state"`
+		TopicName             string                   `json:"topic_name"`
+		Config                KafkaTopicConfigResponse `json:"config"`
 	}
 
 	// KafkaListTopic represents kafka list topic model on Aiven.
@@ -52,22 +149,24 @@ type (
 
 	// CreateKafkaTopicRequest are the parameters used to create a kafka topic.
 	CreateKafkaTopicRequest struct {
-		CleanupPolicy         *string `json:"cleanup_policy,omitempty"`
-		MinimumInSyncReplicas *int    `json:"min_insync_replicas,omitempty"`
-		Partitions            *int    `json:"partitions,omitempty"`
-		Replication           *int    `json:"replication,omitempty"`
-		RetentionBytes        *int    `json:"retention_bytes,omitempty"`
-		RetentionHours        *int    `json:"retention_hours,omitempty"`
-		TopicName             string  `json:"topic_name"`
+		CleanupPolicy         *string          `json:"cleanup_policy,omitempty"`
+		MinimumInSyncReplicas *int             `json:"min_insync_replicas,omitempty"`
+		Partitions            *int             `json:"partitions,omitempty"`
+		Replication           *int             `json:"replication,omitempty"`
+		RetentionBytes        *int             `json:"retention_bytes,omitempty"`
+		RetentionHours        *int             `json:"retention_hours,omitempty"`
+		TopicName             string           `json:"topic_name"`
+		Config                KafkaTopicConfig `json:"config"`
 	}
 
 	// UpdateKafkaTopicRequest are the parameters used to update a kafka topic.
 	UpdateKafkaTopicRequest struct {
-		MinimumInSyncReplicas *int `json:"min_insync_replicas,omitempty"`
-		Partitions            *int `json:"partitions,omitempty"`
-		Replication           *int `json:"replication,omitempty"`
-		RetentionBytes        *int `json:"retention_bytes,omitempty"`
-		RetentionHours        *int `json:"retention_hours,omitempty"`
+		MinimumInSyncReplicas *int             `json:"min_insync_replicas,omitempty"`
+		Partitions            *int             `json:"partitions,omitempty"`
+		Replication           *int             `json:"replication,omitempty"`
+		RetentionBytes        *int             `json:"retention_bytes,omitempty"`
+		RetentionHours        *int             `json:"retention_hours,omitempty"`
+		Config                KafkaTopicConfig `json:"config"`
 	}
 
 	// KafkaTopicResponse is the response for Kafka Topic requests.

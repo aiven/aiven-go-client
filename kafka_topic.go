@@ -19,7 +19,7 @@ type (
 		MessageFormatVersion            string   `json:"message_format_version,omitempty"`
 		MessageTimestampDifferenceMaxMs *int     `json:"message_timestamp_difference_max_ms,omitempty"`
 		MessageTimestampType            string   `json:"message_timestamp_type,omitempty"`
-		MinCleanableDirtyRatio          *float32 `json:"min_cleanable_dirty_ratio,omitempty"`
+		MinCleanableDirtyRatio          *float64 `json:"min_cleanable_dirty_ratio,omitempty"`
 		MinCompactionLagMs              *int     `json:"min_compaction_lag_ms,omitempty"`
 		MinInsyncReplicas               *int     `json:"min_insync_replicas,omitempty"`
 		Preallocate                     *bool    `json:"preallocate,omitempty"`
@@ -92,10 +92,10 @@ type (
 
 	KafkaTopicConfigResponseFloat struct {
 		Source   string  `json:"source"`
-		Value    float32 `json:"value"`
+		Value    float64 `json:"value"`
 		Synonyms []struct {
 			Source string  `json:"source"`
-			Value  float32 `json:"value"`
+			Value  float64 `json:"value"`
 			Name   string  `json:"name"`
 		} `json:"synonyms"`
 	}

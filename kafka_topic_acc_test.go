@@ -74,7 +74,7 @@ var _ = Describe("Kafka Topic", func() {
 		var (
 			errC            error
 			topicName       string
-			segmentJitterMs int
+			segmentJitterMs int64
 		)
 		segmentJitterMs = 10
 		topicName = "test1"

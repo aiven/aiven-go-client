@@ -8,27 +8,27 @@ type (
 	KafkaTopicConfig struct {
 		CleanupPolicy                   string   `json:"cleanup_policy,omitempty"`
 		CompressionType                 string   `json:"compression_type,omitempty"`
-		DeleteRetentionMs               *int     `json:"delete_retention_ms,omitempty"`
-		FileDeleteDelayMs               *int     `json:"file_delete_delay_ms,omitempty"`
-		FlushMessages                   *int     `json:"flush_messages,omitempty"`
-		FlushMs                         *int     `json:"flush_ms,omitempty"`
-		IndexIntervalBytes              *int     `json:"index_interval_bytes,omitempty"`
-		MaxCompactionLagMs              *int     `json:"max_compaction_lag_ms,omitempty"`
-		MaxMessageBytes                 *int     `json:"max_message_bytes,omitempty"`
+		DeleteRetentionMs               *int64   `json:"delete_retention_ms,omitempty"`
+		FileDeleteDelayMs               *int64   `json:"file_delete_delay_ms,omitempty"`
+		FlushMessages                   *int64   `json:"flush_messages,omitempty"`
+		FlushMs                         *int64   `json:"flush_ms,omitempty"`
+		IndexIntervalBytes              *int64   `json:"index_interval_bytes,omitempty"`
+		MaxCompactionLagMs              *int64   `json:"max_compaction_lag_ms,omitempty"`
+		MaxMessageBytes                 *int64   `json:"max_message_bytes,omitempty"`
 		MessageDownconversionEnable     *bool    `json:"message_downconversion_enable,omitempty"`
 		MessageFormatVersion            string   `json:"message_format_version,omitempty"`
-		MessageTimestampDifferenceMaxMs *int     `json:"message_timestamp_difference_max_ms,omitempty"`
+		MessageTimestampDifferenceMaxMs *int64   `json:"message_timestamp_difference_max_ms,omitempty"`
 		MessageTimestampType            string   `json:"message_timestamp_type,omitempty"`
 		MinCleanableDirtyRatio          *float64 `json:"min_cleanable_dirty_ratio,omitempty"`
-		MinCompactionLagMs              *int     `json:"min_compaction_lag_ms,omitempty"`
-		MinInsyncReplicas               *int     `json:"min_insync_replicas,omitempty"`
+		MinCompactionLagMs              *int64   `json:"min_compaction_lag_ms,omitempty"`
+		MinInsyncReplicas               *int64   `json:"min_insync_replicas,omitempty"`
 		Preallocate                     *bool    `json:"preallocate,omitempty"`
-		RetentionBytes                  *int     `json:"retention_bytes,omitempty"`
-		RetentionMs                     *int     `json:"retention_ms,omitempty"`
-		SegmentBytes                    *int     `json:"segment_bytes,omitempty"`
-		SegmentIndexBytes               *int     `json:"segment_index_bytes,omitempty"`
-		SegmentJitterMs                 *int     `json:"segment_jitter_ms,omitempty"`
-		SegmentMs                       *int     `json:"segment_ms,omitempty"`
+		RetentionBytes                  *int64   `json:"retention_bytes,omitempty"`
+		RetentionMs                     *int64   `json:"retention_ms,omitempty"`
+		SegmentBytes                    *int64   `json:"segment_bytes,omitempty"`
+		SegmentIndexBytes               *int64   `json:"segment_index_bytes,omitempty"`
+		SegmentJitterMs                 *int64   `json:"segment_jitter_ms,omitempty"`
+		SegmentMs                       *int64   `json:"segment_ms,omitempty"`
 		UncleanLeaderElectionEnable     *bool    `json:"unclean_leader_election_enable,omitempty"`
 	}
 
@@ -72,10 +72,10 @@ type (
 
 	KafkaTopicConfigResponseInt struct {
 		Source   string `json:"source"`
-		Value    int    `json:"value"`
+		Value    int64  `json:"value"`
 		Synonyms []struct {
 			Source string `json:"source"`
-			Value  int    `json:"value"`
+			Value  int64  `json:"value"`
 			Name   string `json:"name"`
 		} `json:"synonyms"`
 	}

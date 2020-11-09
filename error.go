@@ -2,7 +2,10 @@
 
 package aiven
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 // Error represents an Aiven API Error.
 type Error struct {
@@ -20,6 +23,17 @@ func (e Error) Error() string {
 func IsNotFound(err error) bool {
 	if e, ok := err.(Error); ok && e.Status == 404 {
 		return true
+	}
+
+	return false
+}
+
+// IsAlreadyExists returns true if the error message and error code that indicates that entity already exists
+func IsAlreadyExists(err error) bool {
+	if e, ok := err.(Error); ok {
+		if strings.Contains(e.Message, "already exists") && e.Status == 409 {
+			return true
+		}
 	}
 
 	return false

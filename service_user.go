@@ -11,11 +11,19 @@ import (
 type (
 	// ServiceUser is the representation of a Service User in the Aiven API.
 	ServiceUser struct {
-		Username   string `json:"username"`
-		Password   string `json:"password"`
-		Type       string `json:"type"`
-		AccessCert string `json:"access_cert"`
-		AccessKey  string `json:"access_key"`
+		Username                    string        `json:"username"`
+		Password                    string        `json:"password"`
+		Type                        string        `json:"type"`
+		AccessCert                  string        `json:"access_cert"`
+		AccessKey                   string        `json:"access_key"`
+		AccessCertNotValidAfterTime string        `json:"access_cert_not_valid_after_time"`
+		AccessControl               AccessControl `json:"access_control,omitempty"`
+	}
+
+	AccessControl struct {
+		RedisACLCategories []string `json:"redis_acl_categories"`
+		RedisACLCommands   []string `json:"redis_acl_commands"`
+		RedisACLKeys       []string `json:"redis_acl_keys"`
 	}
 
 	// ServiceUsersHandler is the client that interacts with the ServiceUsers
@@ -27,7 +35,8 @@ type (
 	// CreateServiceUserRequest are the parameters required to create a
 	// ServiceUser.
 	CreateServiceUserRequest struct {
-		Username string `json:"username"`
+		Username      string        `json:"username"`
+		AccessControl AccessControl `json:"access_control,omitempty"`
 	}
 
 	// ModifyServiceUserRequest params required to modify a ServiceUser

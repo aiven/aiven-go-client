@@ -35,15 +35,15 @@ type (
 		BillingAddress   *string          `json:"billing_address,omitempty"`
 		BillingEmails    *[]*ContactEmail `json:"billing_emails,omitempty"`
 		BillingExtraText *string          `json:"billing_extra_text,omitempty"`
-		CardID           string           `json:"card_id,omitempty"`
-		Cloud            string           `json:"cloud,omitempty"`
+		CardID           *string          `json:"card_id,omitempty"`
+		Cloud            *string          `json:"cloud,omitempty"`
 		CopyFromProject  string           `json:"copy_from_project,omitempty"`
 		CountryCode      *string          `json:"country_code,omitempty"`
 		Project          string           `json:"project"`
-		AccountId        string           `json:"account_id,omitempty"`
+		AccountId        *string          `json:"account_id,omitempty"`
 		TechnicalEmails  *[]*ContactEmail `json:"tech_emails,omitempty"`
 		BillingCurrency  string           `json:"billing_currency,omitempty"`
-		VatID            string           `json:"vat_id"`
+		VatID            *string          `json:"vat_id"`
 	}
 
 	// UpdateProjectRequest are the parameters for updating a project.
@@ -51,13 +51,13 @@ type (
 		BillingAddress   *string          `json:"billing_address,omitempty"`
 		BillingEmails    *[]*ContactEmail `json:"billing_emails,omitempty"`
 		BillingExtraText *string          `json:"billing_extra_text,omitempty"`
-		CardID           string           `json:"card_id,omitempty"`
-		Cloud            string           `json:"cloud,omitempty"`
+		CardID           *string          `json:"card_id,omitempty"`
+		Cloud            *string          `json:"cloud,omitempty"`
 		CountryCode      *string          `json:"country_code,omitempty"`
-		AccountId        string           `json:"account_id,omitempty"`
+		AccountId        *string          `json:"account_id,omitempty"`
 		TechnicalEmails  *[]*ContactEmail `json:"tech_emails,omitempty"`
 		BillingCurrency  string           `json:"billing_currency,omitempty"`
-		VatID            string           `json:"vat_id"`
+		VatID            *string          `json:"vat_id"`
 	}
 
 	// ContactEmail represents either a technical contact or billing contact.

@@ -83,3 +83,9 @@ Add support for AWS Transit Gateway and expose Azure config parameters
 ## [1.5.10] - 2020-10-15
 - Add support for Kafka Topic Config
 
+## [1.5.11] - 2020-11-02
+- Update project field types according API specification
+- Add service user Redis ACL fields
+- Add vat_id field to a project create/update actions
+- Add is already exists error validation
+- Rework accounts acceptance test

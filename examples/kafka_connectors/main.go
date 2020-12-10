@@ -18,8 +18,8 @@ func main() {
 
 	// Create new project
 	project, err := c.Projects.Create(client.CreateProjectRequest{
-		CardID:  os.Getenv("AIVEN_CARD_ID"),
-		Cloud:   "google-europe-west1",
+		CardID:  client.ToStringPointer(os.Getenv("AIVEN_CARD_ID")),
+		Cloud:   client.ToStringPointer("google-europe-west1"),
 		Project: "test-kafka-con1",
 	})
 	if err != nil {

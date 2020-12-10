@@ -142,7 +142,7 @@ func TestProjectsHandler_Create(t *testing.T) {
 			fields{client: c},
 			args{req: CreateProjectRequest{
 				Project:   "test-pr",
-				AccountId: "account-id",
+				AccountId: ToStringPointer("account-id"),
 			}},
 			testGetProject(),
 			false,
@@ -250,7 +250,7 @@ func TestProjectsHandler_Update(t *testing.T) {
 			args{
 				project: "test-pr",
 				req: UpdateProjectRequest{
-					Cloud: "google-europe-east1",
+					Cloud: ToStringPointer("google-europe-east1"),
 				},
 			},
 			&Project{

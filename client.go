@@ -227,3 +227,8 @@ func (c *Client) doRequest(method, uri string, body interface{}) ([]byte, error)
 func endpoint(uri string) string {
 	return apiurl + uri
 }
+
+// ToStringPointer converts string to a string pointer
+func ToStringPointer(s string) *string {
+	return &s
+}

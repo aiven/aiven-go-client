@@ -56,6 +56,7 @@ type Client struct {
 	AccountAuthentications          *AccountAuthenticationsHandler
 	AccountTeamInvites              *AccountTeamInvitesHandler
 	TransitGatewayVPCAttachment     *TransitGatewayVPCAttachmentHandler
+	BillingGroup                    *BillingGroupHandler
 }
 
 // GetUserAgentOrDefault configures a default userAgent value, if one has not been provided.
@@ -164,6 +165,7 @@ func (c *Client) Init() {
 	c.AccountTeamProjects = &AccountTeamProjectsHandler{c}
 	c.AccountAuthentications = &AccountAuthenticationsHandler{c}
 	c.AccountTeamInvites = &AccountTeamInvitesHandler{c}
+	c.BillingGroup = &BillingGroupHandler{c}
 }
 
 func (c *Client) doGetRequest(endpoint string, req interface{}) ([]byte, error) {

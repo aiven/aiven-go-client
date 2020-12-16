@@ -101,7 +101,7 @@ var _ = Describe("Accounts", func() {
 			By("Create project")
 			if _, errP := client.Projects.Create(CreateProjectRequest{
 				Project:   projectName,
-				AccountId: account.Account.Id,
+				AccountId: ToStringPointer(account.Account.Id),
 			}); errP != nil {
 				Fail("cannot create project :" + errP.Error())
 			}

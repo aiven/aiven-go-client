@@ -5,6 +5,7 @@ package aiven
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/url"
 	"strings"
 )
@@ -37,7 +38,7 @@ func checkAPIResponse(bts []byte, r Response) error {
 	}
 
 	if err := json.Unmarshal(bts, &r); err != nil {
-		return err
+		return fmt.Errorf("cannot unmarshal JSON `%s`, error: %w", bts, err)
 	}
 
 	if r == nil {

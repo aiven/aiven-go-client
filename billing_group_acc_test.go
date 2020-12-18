@@ -67,6 +67,12 @@ var _ = Describe("BillingGroup", func() {
 			}
 		})
 
+		It("check empty assigned projects list", func() {
+			projects, err := client.BillingGroup.GetProjects(billingG.Id)
+			Expect(err).NotTo(HaveOccurred())
+			Expect(projects).To(BeEmpty())
+		})
+
 		It("assign a project", func() {
 			projectName := "test-acc-pr-" + strconv.Itoa(rand.Int())
 			_, err = client.Projects.Create(CreateProjectRequest{
@@ -78,7 +84,8 @@ var _ = Describe("BillingGroup", func() {
 			err = client.BillingGroup.AssignProjects(billingG.Id, []string{projectName})
 			Expect(err).NotTo(HaveOccurred())
 
-			projects, err := client.BillingGroup.GetProjects(billingG.Id)
+			projects, errG := client.BillingGroup.GetProjects(billingG.Id)
+			Expect(errG).NotTo(HaveOccurred())
 			Expect(projects).NotTo(BeEmpty())
 
 			err = client.Projects.Delete(projectName)

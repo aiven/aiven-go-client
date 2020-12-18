@@ -34,6 +34,19 @@ type (
 		APIResponse
 		BillingGroup *BillingGroup `json:"billing_group"`
 	}
+
+	// BillingGroupProjectsResponse is the response from Aiven for the billing group projects
+	BillingGroupProjectsResponse struct {
+		APIResponse
+		Projects []BillingGroupProject `json:"projects,omitempty"`
+	}
+
+	// BillingGroupProject is assigned billing group project response
+	BillingGroupProject struct {
+		AvailableCredits string `json:"available_credits"`
+		EstimatedBalance string `json:"estimated_balance"`
+		ProjectName      string `json:"project_name"`
+	}
 )
 
 // Create creates a new project.
@@ -103,16 +116,22 @@ func (h *BillingGroupHandler) AssignProjects(id string, projects []string) error
 
 // GetProjects retrieves a list of assigned projects
 func (h *BillingGroupHandler) GetProjects(id string) ([]string, error) {
-	var r struct {
-		Response
-		Projects []string `json:"projects"`
-	}
+	r := new(BillingGroupProjectsResponse)
 
 	bts, err := h.client.doGetRequest(buildPath("billing-group", id, "projects"), nil)
 	if err != nil {
 		return nil, err
 	}
 
-	errR := checkAPIResponse(bts, &r)
-	return r.Projects, errR
+	errR := checkAPIResponse(bts, r)
+	if errR != nil {
+		return nil, errR
+	}
+
+	var projects []string
+	for _, p := range r.Projects {
+		projects = append(projects, p.ProjectName)
+	}
+
+	return projects, nil
 }

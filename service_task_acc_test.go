@@ -77,10 +77,14 @@ var _ = Describe("Service Task", func() {
 			Expect(t.Task.TargetPgVersion).NotTo(BeEmpty())
 			Expect(t.Task.TaskType).NotTo(BeEmpty())
 
-			Eventually(func() bool {
+			Eventually(func() *bool {
 				t, errT = client.ServiceTask.Get(projectName, serviceName, t.Task.Id)
 				return t.Task.Success
-			}, 5*time.Minute, 15*time.Second).Should(BeTrue())
+			}, 5*time.Minute, 15*time.Second).Should(Not(BeNil()))
+
+			t, errT = client.ServiceTask.Get(projectName, serviceName, t.Task.Id)
+			Expect(errT).NotTo(HaveOccurred())
+			Expect(*t.Task.Success).To(BeTrue())
 		})
 
 		It("delete PG service", func() {

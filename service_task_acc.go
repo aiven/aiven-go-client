@@ -17,7 +17,7 @@ type (
 		CreateTime      string `json:"create_time"`
 		Result          string `json:"result"`
 		TaskType        string `json:"task_type"`
-		Success         bool   `json:"success"`
+		Success         *bool  `json:"success"`
 		SourcePgVersion string `json:"source_pg_version,omitempty"`
 		TargetPgVersion string `json:"target_pg_version,omitempty"`
 		Id              string `json:"task_id,omitempty"`

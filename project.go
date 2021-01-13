@@ -43,7 +43,7 @@ type (
 		AccountId        *string          `json:"account_id,omitempty"`
 		TechnicalEmails  *[]*ContactEmail `json:"tech_emails,omitempty"`
 		BillingCurrency  string           `json:"billing_currency,omitempty"`
-		VatID            *string          `json:"vat_id"`
+		VatID            *string          `json:"vat_id,omitempty"`
 	}
 
 	// UpdateProjectRequest are the parameters for updating a project.
@@ -57,7 +57,7 @@ type (
 		AccountId        *string          `json:"account_id,omitempty"`
 		TechnicalEmails  *[]*ContactEmail `json:"tech_emails,omitempty"`
 		BillingCurrency  string           `json:"billing_currency,omitempty"`
-		VatID            *string          `json:"vat_id"`
+		VatID            *string          `json:"vat_id,omitempty"`
 	}
 
 	// ContactEmail represents either a technical contact or billing contact.

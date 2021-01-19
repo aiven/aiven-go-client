@@ -120,7 +120,7 @@ type (
 		Partitions            int    `json:"partitions"`
 		Replication           int    `json:"replication"`
 		RetentionBytes        int    `json:"retention_bytes"`
-		RetentionHours        *int   `json:"retention_hours,omitempty"`
+		RetentionHours        *int64 `json:"retention_hours,omitempty"`
 		State                 string `json:"state"`
 		TopicName             string `json:"topic_name"`
 	}
@@ -128,17 +128,17 @@ type (
 	// Partition represents a Kafka partition.
 	Partition struct {
 		ConsumerGroups []*ConsumerGroup `json:"consumer_groups"`
-		EarliestOffset int              `json:"earliest_offset"`
+		EarliestOffset int64            `json:"earliest_offset"`
 		ISR            int              `json:"isr"`
-		LatestOffset   int              `json:"latest_offset"`
+		LatestOffset   int64            `json:"latest_offset"`
 		Partition      int              `json:"partition"`
-		Size           int              `json:"size"`
+		Size           int64            `json:"size"`
 	}
 
 	// ConsumerGroup is the group used in partitions.
 	ConsumerGroup struct {
 		GroupName string `json:"group_name"`
-		Offset    int    `json:"offset"`
+		Offset    int64  `json:"offset"`
 	}
 
 	// KafkaTopicsHandler is the client which interacts with the kafka endpoints

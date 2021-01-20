@@ -40,10 +40,19 @@ var _ = Describe("Projects", func() {
 				Expect(project.GetTechnicalEmailsAsStringSlice()).NotTo(BeEmpty())
 			}
 		})
+
+		It("update project name", func() {
+			project, err = client.Projects.Update(projectName, UpdateProjectRequest{
+				Name: projectName + "-new",
+			})
+
+			Expect(err).NotTo(HaveOccurred())
+			Expect(project).NotTo(BeNil())
+		})
 	})
 
 	AfterEach(func() {
-		err = client.Projects.Delete(projectName)
+		err = client.Projects.Delete(project.Name)
 		if err != nil {
 			Fail("cannot delete project : " + err.Error())
 		}

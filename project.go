@@ -48,6 +48,7 @@ type (
 
 	// UpdateProjectRequest are the parameters for updating a project.
 	UpdateProjectRequest struct {
+		Name             string           `json:"project_name,omitempty"`
 		BillingAddress   *string          `json:"billing_address,omitempty"`
 		BillingEmails    *[]*ContactEmail `json:"billing_emails,omitempty"`
 		BillingExtraText *string          `json:"billing_extra_text,omitempty"`

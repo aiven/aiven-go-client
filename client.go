@@ -8,6 +8,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -16,11 +17,13 @@ import (
 
 // APIURL is the URL we'll use to speak to Aiven. This can be overwritten.
 var apiurl = "https://api.aiven.io/v1"
+var apiurlV2 = "https://api.aiven.io/v2"
 
 func init() {
 	value, isSet := os.LookupEnv("AIVEN_WEB_URL")
 	if isSet {
 		apiurl = value + "/v1"
+		apiurlV2 = value + "/v2"
 	}
 }
 
@@ -75,7 +78,7 @@ func NewMFAUserClient(email, otp, password string, userAgent string) (*Client, e
 		UserAgent: GetUserAgentOrDefault(userAgent),
 	}
 
-	bts, err := c.doRequest("POST", "/userauth", authRequest{email, otp, password})
+	bts, err := c.doPostRequest("/userauth", authRequest{email, otp, password})
 	if err != nil {
 		return nil, err
 	}
@@ -171,22 +174,38 @@ func (c *Client) Init() {
 }
 
 func (c *Client) doGetRequest(endpoint string, req interface{}) ([]byte, error) {
-	return c.doRequest("GET", endpoint, req)
+	return c.doRequest("GET", endpoint, req, 1)
 }
 
 func (c *Client) doPutRequest(endpoint string, req interface{}) ([]byte, error) {
-	return c.doRequest("PUT", endpoint, req)
+	return c.doRequest("PUT", endpoint, req, 1)
 }
 
 func (c *Client) doPostRequest(endpoint string, req interface{}) ([]byte, error) {
-	return c.doRequest("POST", endpoint, req)
+	return c.doRequest("POST", endpoint, req, 1)
 }
 
 func (c *Client) doDeleteRequest(endpoint string, req interface{}) ([]byte, error) {
-	return c.doRequest("DELETE", endpoint, req)
+	return c.doRequest("DELETE", endpoint, req, 1)
 }
 
-func (c *Client) doRequest(method, uri string, body interface{}) ([]byte, error) {
+func (c *Client) doV2GetRequest(endpoint string, req interface{}) ([]byte, error) {
+	return c.doRequest("GET", endpoint, req, 2)
+}
+
+func (c *Client) doV2PutRequest(endpoint string, req interface{}) ([]byte, error) {
+	return c.doRequest("PUT", endpoint, req, 2)
+}
+
+func (c *Client) doV2PostRequest(endpoint string, req interface{}) ([]byte, error) {
+	return c.doRequest("POST", endpoint, req, 2)
+}
+
+func (c *Client) doV2DeleteRequest(endpoint string, req interface{}) ([]byte, error) {
+	return c.doRequest("DELETE", endpoint, req, 2)
+}
+
+func (c *Client) doRequest(method, uri string, body interface{}, apiVersion int) ([]byte, error) {
 	var bts []byte
 	if body != nil {
 		var err error
@@ -196,9 +215,19 @@ func (c *Client) doRequest(method, uri string, body interface{}) ([]byte, error)
 		}
 	}
 
+	var url string
+	switch apiVersion {
+	case 1:
+		url = endpoint(uri)
+	case 2:
+		url = endpointV2(uri)
+	default:
+		return nil, fmt.Errorf("aiven API apiVersion `%d` is not supported", apiVersion)
+	}
+
 	retryCount := 2
 	for {
-		req, err := http.NewRequest(method, endpoint(uri), bytes.NewBuffer(bts))
+		req, err := http.NewRequest(method, url, bytes.NewBuffer(bts))
 		if err != nil {
 			return nil, err
 		}
@@ -211,7 +240,12 @@ func (c *Client) doRequest(method, uri string, body interface{}) ([]byte, error)
 		if err != nil {
 			return nil, err
 		}
-		defer rsp.Body.Close()
+		defer func() {
+			err := rsp.Body.Close()
+			if err != nil {
+				log.Printf("[WARNING] cannot close response body: %s \n", err)
+			}
+		}()
 
 		responseBody, err := ioutil.ReadAll(rsp.Body)
 		// Retry a few times in case of request timeout or server error for GET requests
@@ -228,6 +262,10 @@ func (c *Client) doRequest(method, uri string, body interface{}) ([]byte, error)
 
 func endpoint(uri string) string {
 	return apiurl + uri
+}
+
+func endpointV2(uri string) string {
+	return apiurlV2 + uri
 }
 
 // ToStringPointer converts string to a string pointer

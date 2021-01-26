@@ -29,7 +29,6 @@ var _ = Describe("Kafka Topic", func() {
 
 			if project != nil {
 				Expect(project.Name).NotTo(BeEmpty())
-				Expect(project.AccountId).To(BeEmpty())
 			}
 		})
 
@@ -82,38 +81,10 @@ var _ = Describe("Kafka Topic", func() {
 		It("create kafka topic", func() {
 			time.Sleep(10 * time.Second)
 			errC = client.KafkaTopics.Create(projectName, serviceName, CreateKafkaTopicRequest{
-				CleanupPolicy:         nil,
-				MinimumInSyncReplicas: nil,
-				Partitions:            nil,
-				Replication:           nil,
-				RetentionBytes:        nil,
-				RetentionHours:        nil,
-				TopicName:             topicName,
+				TopicName: topicName,
 				Config: KafkaTopicConfig{
-					CleanupPolicy:                   "compact",
-					CompressionType:                 "",
-					DeleteRetentionMs:               nil,
-					FileDeleteDelayMs:               nil,
-					FlushMessages:                   nil,
-					FlushMs:                         nil,
-					IndexIntervalBytes:              nil,
-					MaxCompactionLagMs:              nil,
-					MaxMessageBytes:                 nil,
-					MessageDownconversionEnable:     nil,
-					MessageFormatVersion:            "",
-					MessageTimestampDifferenceMaxMs: nil,
-					MessageTimestampType:            "",
-					MinCleanableDirtyRatio:          nil,
-					MinCompactionLagMs:              nil,
-					MinInsyncReplicas:               nil,
-					Preallocate:                     nil,
-					RetentionBytes:                  nil,
-					RetentionMs:                     nil,
-					SegmentBytes:                    nil,
-					SegmentIndexBytes:               nil,
-					SegmentJitterMs:                 &segmentJitterMs,
-					SegmentMs:                       nil,
-					UncleanLeaderElectionEnable:     nil,
+					CleanupPolicy:   "compact",
+					SegmentJitterMs: &segmentJitterMs,
 				},
 			})
 
@@ -157,6 +128,15 @@ var _ = Describe("Kafka Topic", func() {
 			if t2 != nil {
 				Expect(t2.Config.UncleanLeaderElectionEnable.Value).Should(Equal(true))
 			}
+		})
+
+		It("list v2", func() {
+			list, errV2 := client.KafkaTopics.V2List(projectName, serviceName, []string{topicName})
+			Expect(errV2).NotTo(HaveOccurred())
+
+			Expect(len(list)).Should(Equal(1))
+			Expect(list[0].Config.CleanupPolicy.Value).NotTo(BeEmpty())
+			Expect(list[0].Config.SegmentJitterMs.Value).To(Equal(segmentJitterMs))
 		})
 
 		It("delete Kafka Topic and Kafka service", func() {

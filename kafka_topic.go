@@ -180,6 +180,12 @@ type (
 		APIResponse
 		Topics []*KafkaListTopic `json:"topics"`
 	}
+
+	// KafkaV2TopicsResponse is the response for listing kafka topics specific for API V2 endpoint.
+	KafkaV2TopicsResponse struct {
+		APIResponse
+		Topics []*KafkaTopic `json:"topics"`
+	}
 )
 
 // Create creats a specific kafka topic.
@@ -241,4 +247,24 @@ func (h *KafkaTopicsHandler) Delete(project, service, topic string) error {
 	}
 
 	return checkAPIResponse(bts, nil)
+}
+
+// V2List lists selected kafka topics using v2 API endpoint.
+func (h *KafkaTopicsHandler) V2List(project, service string, topics []string) ([]*KafkaTopic, error) {
+	type v2ListRequest struct {
+		TopicNames []string `json:"topic_names"`
+	}
+
+	req := v2ListRequest{TopicNames: topics}
+
+	path := buildPath("project", project, "service", service, "topic")
+	bts, err := h.client.doV2PostRequest(path, req)
+	if err != nil {
+		return nil, err
+	}
+
+	var r KafkaV2TopicsResponse
+	errR := checkAPIResponse(bts, &r)
+
+	return r.Topics, errR
 }

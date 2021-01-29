@@ -89,3 +89,12 @@ Add support for AWS Transit Gateway and expose Azure config parameters
 - Add vat_id field to a project create/update actions
 - Add is already exists error validation
 - Rework accounts acceptance test
+
+## [1.5.12] - 2021-01-29
+- Add security policy
+- Add support for new v2 Kafka Topics endpoint
+- Add support for renaming projects (only allowed for projects with no powered on services)
+- Fix project VAT_ID JSON specification
+- Add support for service tasks
+- Add support for billing groups
+- Use GitHub actions instead of TravisCI

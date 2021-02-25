@@ -8,7 +8,7 @@ import (
 )
 
 var _ = Describe("Accounts", func() {
-	Context("Check all posible accounts interactions", func() {
+	Context("Check all possible accounts interactions", func() {
 		// Account
 		var (
 			accountName string
@@ -17,7 +17,7 @@ var _ = Describe("Accounts", func() {
 		)
 
 		It("Account creation should not error", func() {
-			accountName = "test-acc-account" + strconv.Itoa(rand.Int())
+			accountName = "test-acc-account-" + strconv.Itoa(rand.Int())
 			account, err = client.Accounts.Create(Account{Name: accountName})
 			Expect(err).NotTo(HaveOccurred())
 		})
@@ -110,8 +110,16 @@ var _ = Describe("Accounts", func() {
 			if errTP := client.AccountTeamProjects.Create(
 				account.Account.Id,
 				team.Team.Id,
-				AccountTeamProject{ProjectName: projectName, TeamType: projectType}); errTP != nil {
+				AccountTeamProject{ProjectName: projectName, TeamType: "developer"}); errTP != nil {
 				Fail("cannot create account team project association:" + errTP.Error())
+			}
+
+			By("Update account team project")
+			if errTPu := client.AccountTeamProjects.Update(
+				account.Account.Id,
+				team.Team.Id,
+				AccountTeamProject{ProjectName: projectName, TeamType: projectType}); errTPu != nil {
+				Fail("cannot update account team project:" + errTPu.Error())
 			}
 		})
 

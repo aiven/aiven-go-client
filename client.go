@@ -61,6 +61,7 @@ type Client struct {
 	TransitGatewayVPCAttachment     *TransitGatewayVPCAttachmentHandler
 	BillingGroup                    *BillingGroupHandler
 	ServiceTask                     *ServiceTaskHandler
+	AWSPrivatelink                  *AWSPrivatelinkHandler
 }
 
 // GetUserAgentOrDefault configures a default userAgent value, if one has not been provided.
@@ -171,6 +172,7 @@ func (c *Client) Init() {
 	c.AccountTeamInvites = &AccountTeamInvitesHandler{c}
 	c.BillingGroup = &BillingGroupHandler{c}
 	c.ServiceTask = &ServiceTaskHandler{c}
+	c.AWSPrivatelink = &AWSPrivatelinkHandler{c}
 }
 
 func (c *Client) doGetRequest(endpoint string, req interface{}) ([]byte, error) {

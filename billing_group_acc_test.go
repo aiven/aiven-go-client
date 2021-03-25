@@ -91,6 +91,12 @@ var _ = Describe("BillingGroup", func() {
 			err = client.Projects.Delete(projectName)
 			Expect(err).NotTo(HaveOccurred())
 		})
+
+		It("list all billing groups", func() {
+			list, err := client.BillingGroup.ListAll()
+			Expect(err).NotTo(HaveOccurred())
+			Expect(list).NotTo(BeEmpty())
+		})
 	})
 
 	AfterEach(func() {

@@ -35,6 +35,12 @@ type (
 		BillingGroup *BillingGroup `json:"billing_group"`
 	}
 
+	// BillingGroupListResponse is the response from Aiven from a list of billing groups.
+	BillingGroupListResponse struct {
+		APIResponse
+		BillingGroupList []BillingGroup `json:"billing_groups"`
+	}
+
 	// BillingGroupProjectsResponse is the response from Aiven for the billing group projects
 	BillingGroupProjectsResponse struct {
 		APIResponse
@@ -48,6 +54,19 @@ type (
 		ProjectName      string `json:"project_name"`
 	}
 )
+
+// ListAll retrieves a list of all billing groups
+func (h *BillingGroupHandler) ListAll() ([]BillingGroup, error) {
+	bts, err := h.client.doGetRequest(buildPath("billing-group"), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	var r BillingGroupListResponse
+	errR := checkAPIResponse(bts, &r)
+
+	return r.BillingGroupList, errR
+}
 
 // Create creates a new project.
 func (h *BillingGroupHandler) Create(req BillingGroupRequest) (*BillingGroup, error) {

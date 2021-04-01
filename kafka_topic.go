@@ -58,6 +58,12 @@ type (
 		SegmentJitterMs                 KafkaTopicConfigResponseInt    `json:"segment_jitter_ms,omitempty"`
 		SegmentMs                       KafkaTopicConfigResponseInt    `json:"segment_ms,omitempty"`
 		UncleanLeaderElectionEnable     KafkaTopicConfigResponseBool   `json:"unclean_leader_election_enable,omitempty"`
+		Tags                            []KafkaTopicTag                `json:"tags,omitempty"`
+	}
+
+	KafkaTopicTag struct {
+		Key   string `json:"key"`
+		Value string `json:"value"`
 	}
 
 	KafkaTopicConfigResponseString struct {
@@ -111,6 +117,7 @@ type (
 		State                 string                   `json:"state"`
 		TopicName             string                   `json:"topic_name"`
 		Config                KafkaTopicConfigResponse `json:"config"`
+		Tags                  []KafkaTopicTag          `json:"tags,omitempty"`
 	}
 
 	// KafkaListTopic represents kafka list topic model on Aiven.
@@ -157,6 +164,7 @@ type (
 		RetentionHours        *int             `json:"retention_hours,omitempty"`
 		TopicName             string           `json:"topic_name"`
 		Config                KafkaTopicConfig `json:"config"`
+		Tags                  []KafkaTopicTag  `json:"tags,omitempty"`
 	}
 
 	// UpdateKafkaTopicRequest are the parameters used to update a kafka topic.
@@ -167,6 +175,7 @@ type (
 		RetentionBytes        *int             `json:"retention_bytes,omitempty"`
 		RetentionHours        *int             `json:"retention_hours,omitempty"`
 		Config                KafkaTopicConfig `json:"config"`
+		Tags                  []KafkaTopicTag  `json:"tags,omitempty"`
 	}
 
 	// KafkaTopicResponse is the response for Kafka Topic requests.

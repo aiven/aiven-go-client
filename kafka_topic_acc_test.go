@@ -86,6 +86,12 @@ var _ = Describe("Kafka Topic", func() {
 					CleanupPolicy:   "compact",
 					SegmentJitterMs: &segmentJitterMs,
 				},
+				Tags: []KafkaTopicTag{
+					{
+						Key:   "tag1-key",
+						Value: "tag1-value",
+					},
+				},
 			})
 
 			Eventually(func() string {
@@ -110,15 +116,30 @@ var _ = Describe("Kafka Topic", func() {
 			if t != nil {
 				Expect(t.Config.CleanupPolicy.Value).NotTo(BeEmpty())
 				Expect(t.Config.SegmentJitterMs.Value).To(Equal(segmentJitterMs))
+				Expect(t.Tags).NotTo(BeEmpty())
+				Expect(t.Tags[0].Key).To(Equal("tag1-key"))
+				Expect(t.Tags[0].Value).To(Equal("tag1-value"))
 			}
 		})
 
 		It("should update topic config", func() {
 			var uncleanLeaderElectionEnable = true
 
-			errU := client.KafkaTopics.Update(projectName, serviceName, topicName, UpdateKafkaTopicRequest{Config: KafkaTopicConfig{
-				UncleanLeaderElectionEnable: &uncleanLeaderElectionEnable,
-			}})
+			errU := client.KafkaTopics.Update(projectName, serviceName, topicName, UpdateKafkaTopicRequest{
+				Config: KafkaTopicConfig{
+					UncleanLeaderElectionEnable: &uncleanLeaderElectionEnable,
+				},
+				Tags: []KafkaTopicTag{
+					{
+						Key:   "tag1-key",
+						Value: "tag1-value",
+					},
+					{
+						Key:   "tag2-key",
+						Value: "tag2-value",
+					},
+				},
+			})
 			Expect(errU).NotTo(HaveOccurred())
 
 			t2, errG := client.KafkaTopics.Get(projectName, serviceName, topicName)
@@ -127,6 +148,8 @@ var _ = Describe("Kafka Topic", func() {
 
 			if t2 != nil {
 				Expect(t2.Config.UncleanLeaderElectionEnable.Value).Should(Equal(true))
+				Expect(t2.Tags).ShouldNot(BeEmpty())
+				Expect(len(t2.Tags)).To(Equal(2))
 			}
 		})
 
@@ -137,6 +160,8 @@ var _ = Describe("Kafka Topic", func() {
 			Expect(len(list)).Should(Equal(1))
 			Expect(list[0].Config.CleanupPolicy.Value).NotTo(BeEmpty())
 			Expect(list[0].Config.SegmentJitterMs.Value).To(Equal(segmentJitterMs))
+			Expect(list[0].Tags).NotTo(BeEmpty())
+			Expect(len(list[0].Tags)).To(Equal(2))
 		})
 
 		It("delete Kafka Topic and Kafka service", func() {

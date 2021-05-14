@@ -12,6 +12,8 @@ type (
 		Email          string   `json:"user_email"`
 		RealName       string   `json:"real_name"`
 		MemberType     string   `json:"member_type"`
+		TeamId         string   `json:"team_id"`
+		TeamName       string   `json:"team_name"`
 		BillingContact bool     `json:"billing_contact"`
 		AuthMethods    []string `json:"auth"`
 		CreateTime     string   `json:"create_time"`
@@ -69,7 +71,7 @@ func (h *ProjectUsersHandler) Get(project, email string) (*ProjectUser, *Project
 	}
 
 	for _, user := range users {
-		if user.Email == email {
+		if user.Email == email && user.TeamId == "" {
 			return user, nil, nil
 		}
 	}

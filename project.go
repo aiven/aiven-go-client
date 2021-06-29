@@ -32,18 +32,19 @@ type (
 
 	// CreateProjectRequest are the parameters for creating a project.
 	CreateProjectRequest struct {
-		BillingAddress   *string          `json:"billing_address,omitempty"`
-		BillingEmails    *[]*ContactEmail `json:"billing_emails,omitempty"`
-		BillingExtraText *string          `json:"billing_extra_text,omitempty"`
-		CardID           *string          `json:"card_id,omitempty"`
-		Cloud            *string          `json:"cloud,omitempty"`
-		CopyFromProject  string           `json:"copy_from_project,omitempty"`
-		CountryCode      *string          `json:"country_code,omitempty"`
-		Project          string           `json:"project"`
-		AccountId        *string          `json:"account_id,omitempty"`
-		TechnicalEmails  *[]*ContactEmail `json:"tech_emails,omitempty"`
-		BillingCurrency  string           `json:"billing_currency,omitempty"`
-		VatID            *string          `json:"vat_id,omitempty"`
+		BillingAddress               *string          `json:"billing_address,omitempty"`
+		BillingEmails                *[]*ContactEmail `json:"billing_emails,omitempty"`
+		BillingExtraText             *string          `json:"billing_extra_text,omitempty"`
+		CardID                       *string          `json:"card_id,omitempty"`
+		Cloud                        *string          `json:"cloud,omitempty"`
+		CopyFromProject              string           `json:"copy_from_project,omitempty"`
+		CountryCode                  *string          `json:"country_code,omitempty"`
+		Project                      string           `json:"project"`
+		AccountId                    *string          `json:"account_id,omitempty"`
+		TechnicalEmails              *[]*ContactEmail `json:"tech_emails,omitempty"`
+		BillingCurrency              string           `json:"billing_currency,omitempty"`
+		VatID                        *string          `json:"vat_id,omitempty"`
+		UseSourceProjectBillingGroup bool             `json:"use_source_project_billing_group,omitempty"`
 	}
 
 	// UpdateProjectRequest are the parameters for updating a project.

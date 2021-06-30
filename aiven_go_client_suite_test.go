@@ -1,8 +1,11 @@
 package aiven
 
 import (
+	"math/rand"
 	"os"
+	"strconv"
 	"testing"
+	"time"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -61,3 +64,9 @@ var _ = Describe("Check client", func() {
 		})
 	})
 })
+
+// generateRandomString generate a random id
+func generateRandomID() string {
+	var src = rand.NewSource(time.Now().UnixNano())
+	return strconv.FormatInt(src.Int63(), 10)
+}

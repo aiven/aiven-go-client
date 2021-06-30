@@ -3,42 +3,58 @@ package aiven
 import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
-	"math/rand"
-	"strconv"
 )
 
 var _ = Describe("Projects", func() {
 	var (
-		projectName string
-		project     *Project
-		err         error
+		projectName  string
+		billingGName string
+		project      *Project
+		billingG     *BillingGroup
+		err          error
 	)
 
 	BeforeEach(func() {
-		projectName = "test-acc-pr" + strconv.Itoa(rand.Int())
+		billingGName = "test-acc-bg-" + generateRandomID()
+		billingG, err = client.BillingGroup.Create(BillingGroupRequest{
+			BillingGroupName: billingGName,
+			Company:          ToStringPointer("testC1"),
+			AddressLines:     []string{"NYC Some Street 123 A"},
+			CountryCode:      ToStringPointer("US"),
+			City:             ToStringPointer("NY"),
+			ZipCode:          ToStringPointer("101778"),
+			BillingCurrency:  ToStringPointer("EUR"),
+		})
+
+		projectName = "test-acc-pr" + generateRandomID()
 		project, err = client.Projects.Create(CreateProjectRequest{
 			Project:                      projectName,
 			BillingCurrency:              "EUR",
 			TechnicalEmails:              ContactEmailFromStringSlice([]string{"test@example.com"}),
-			BillingEmails:                ContactEmailFromStringSlice([]string{"test123@example.com"}),
 			UseSourceProjectBillingGroup: false,
+			BillingGroupId:               billingG.Id,
 		})
 	})
 
 	Context("Create new project", func() {
 		It("should not error", func() {
-			Expect(err).NotTo(HaveOccurred())
+			if !IsAlreadyExists(err) {
+				Expect(err).NotTo(HaveOccurred())
+			}
 		})
 
 		It("should populate fields properly", func() {
+			project, err = client.Projects.Get(projectName)
+			Expect(err).NotTo(HaveOccurred())
 			Expect(project).NotTo(BeNil())
 
 			if project != nil {
 				Expect(project.Name).NotTo(BeEmpty())
 				Expect(project.AccountId).To(BeEmpty())
 				Expect(project.BillingCurrency).NotTo(BeEmpty())
-				Expect(project.GetBillingEmailsAsStringSlice()).NotTo(BeEmpty())
 				Expect(project.GetTechnicalEmailsAsStringSlice()).NotTo(BeEmpty())
+				Expect(project.BillingGroupId).NotTo(BeEmpty())
+				Expect(project.BillingGroupName).Should(Equal(billingGName))
 			}
 		})
 
@@ -47,15 +63,24 @@ var _ = Describe("Projects", func() {
 				Name: projectName + "-new",
 			})
 
+			if err == nil {
+				projectName = projectName + "-new"
+			}
+
 			Expect(err).NotTo(HaveOccurred())
 			Expect(project).NotTo(BeNil())
 		})
 	})
 
 	AfterEach(func() {
-		err = client.Projects.Delete(project.Name)
+		err = client.Projects.Delete(projectName)
 		if err != nil {
 			Fail("cannot delete project : " + err.Error())
+		}
+
+		err = client.BillingGroup.Delete(billingG.Id)
+		if err != nil {
+			Fail("cannot delete billing group : " + err.Error())
 		}
 	})
 })

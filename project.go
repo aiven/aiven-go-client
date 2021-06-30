@@ -22,6 +22,8 @@ type (
 		AccountId        string          `json:"account_id"`
 		BillingCurrency  string          `json:"billing_currency"`
 		CopyFromProject  string          `json:"copy_from_project"`
+		BillingGroupId   string          `json:"billing_group_id"`
+		BillingGroupName string          `json:"billing_group_name"`
 	}
 
 	// ProjectsHandler is the client which interacts with the Projects endpoints
@@ -45,6 +47,7 @@ type (
 		BillingCurrency              string           `json:"billing_currency,omitempty"`
 		VatID                        *string          `json:"vat_id,omitempty"`
 		UseSourceProjectBillingGroup bool             `json:"use_source_project_billing_group,omitempty"`
+		BillingGroupId               string           `json:"billing_group_id,omitempty"`
 	}
 
 	// UpdateProjectRequest are the parameters for updating a project.

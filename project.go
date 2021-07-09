@@ -81,6 +81,21 @@ type (
 		APIResponse
 		Projects []*Project `json:"projects"`
 	}
+
+	// ProjectEventLogEntriesResponse is the response from Aiven for project event log entries
+	ProjectEventLogEntriesResponse struct {
+		APIResponse
+		Events []*ProjectEvent `json:"events"`
+	}
+
+	// ProjectEvent represents a project event log entry
+	ProjectEvent struct {
+		Actor       string `json:"actor"`
+		EventDesc   string `json:"event_desc"`
+		EventType   string `json:"event_type"`
+		ServiceName string `json:"service_name"`
+		Time        string `json:"time"`
+	}
 )
 
 // ContactEmailFromStringSlice creates []*ContactEmail from string slice
@@ -175,4 +190,17 @@ func (h *ProjectsHandler) List() ([]*Project, error) {
 	errR := checkAPIResponse(bts, &r)
 
 	return r.Projects, errR
+}
+
+// EventLog Get project event log entries
+func (h *ProjectsHandler) GetEventLog(project string) ([]*ProjectEvent, error) {
+	bts, err := h.client.doGetRequest(buildPath("project", project, "events"), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	var r ProjectEventLogEntriesResponse
+	errR := checkAPIResponse(bts, &r)
+
+	return r.Events, errR
 }

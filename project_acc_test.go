@@ -72,6 +72,18 @@ var _ = Describe("Projects", func() {
 		})
 	})
 
+	Context("Get project event logs", func() {
+		It("should be event logs", func() {
+			events, logErr := client.Projects.GetEventLog(projectName)
+			Expect(logErr).To(BeNil())
+			Expect(events).ToNot(BeNil())
+			Expect(events).Should(Not(BeEmpty()))
+			for _, event := range events {
+				Expect(event).NotTo(BeNil())
+			}
+		})
+	})
+
 	AfterEach(func() {
 		err = client.Projects.Delete(projectName)
 		if err != nil {

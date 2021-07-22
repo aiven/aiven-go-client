@@ -41,6 +41,14 @@ func setupServiceTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 				Plan:      "hobbyist",
 				Name:      "test-service",
 				Type:      "kafka",
+				NodeStates: []*NodeState{
+					&NodeState{
+						Name:            "test-service-1",
+						Role:            "master",
+						State:           "running",
+						ProgressUpdates: []ProgressUpdate{},
+					},
+				},
 			},
 		}
 
@@ -147,6 +155,14 @@ func TestServicesHandler_Create(t *testing.T) {
 				Plan:      "hobbyist",
 				Name:      "test-service",
 				Type:      "kafka",
+				NodeStates: []*NodeState{
+					&NodeState{
+						Name:            "test-service-1",
+						Role:            "master",
+						State:           "running",
+						ProgressUpdates: []ProgressUpdate{},
+					},
+				},
 			},
 			false,
 		},
@@ -195,6 +211,14 @@ func TestServicesHandler_Get(t *testing.T) {
 				Plan:      "hobbyist",
 				Name:      "test-service",
 				Type:      "kafka",
+				NodeStates: []*NodeState{
+					&NodeState{
+						Name:            "test-service-1",
+						Role:            "master",
+						State:           "running",
+						ProgressUpdates: []ProgressUpdate{},
+					},
+				},
 			},
 			wantErr: false,
 		},
@@ -248,6 +272,14 @@ func TestServicesHandler_Update(t *testing.T) {
 				Plan:      "hobbyist",
 				Name:      "test-service",
 				Type:      "kafka",
+				NodeStates: []*NodeState{
+					&NodeState{
+						Name:            "test-service-1",
+						Role:            "master",
+						State:           "running",
+						ProgressUpdates: []ProgressUpdate{},
+					},
+				},
 			},
 			wantErr: false,
 		},

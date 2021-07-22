@@ -30,6 +30,25 @@ type (
 		Integrations          []*ServiceIntegration  `json:"service_integrations"`
 		Components            []*ServiceComponents   `json:"components"`
 		Powered               bool                   `json:"powered"`
+		NodeStates            []*NodeState           `json:"node_states"`
+	}
+
+	// NodeState represents the Node State model on Aiven
+	NodeState struct {
+		Name            string           `json:"name"`
+		ProgressUpdates []ProgressUpdate `json:"progress_updates"`
+		Role            string           `json:"role"`
+		State           string           `json:"state"`
+	}
+
+	// ProgressUpdate state represents the Progress Update model on Aiven
+	ProgressUpdate struct {
+		Completed bool   `json:"completed"`
+		Current   int    `json:"current"`
+		Max       int    `json:"max"`
+		Min       int    `json:"min"`
+		Phase     string `json:"phase"`
+		Unit      string `json:"unit"`
 	}
 
 	// ServiceComponents represents Service Components which may contain

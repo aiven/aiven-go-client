@@ -98,3 +98,21 @@ Add support for AWS Transit Gateway and expose Azure config parameters
 - Add support for service tasks
 - Add support for billing groups
 - Use GitHub actions instead of TravisCI
+
+## [1.5.13] - 2021-07-26
+- Add node_states to service
+- Remove TravisCI
+- Add project events logs
+- Add redis_acl_channels to service user
+- Add billing properties to project
+- Add use_source_project_billing_group to project
+- Add codeql analysis
+- Fix project user get method
+- Fix service user access control
+- Add support for kafka topic tags
+- Add billing group list all method
+- Add support for AWS privatelink
+- Fix account team project update method
+- Add missing TransitGatewayVPCAttachment handler initialization
+
+

@@ -170,6 +170,7 @@ func (c *Client) Init() {
 	c.AccountTeamProjects = &AccountTeamProjectsHandler{c}
 	c.AccountAuthentications = &AccountAuthenticationsHandler{c}
 	c.AccountTeamInvites = &AccountTeamInvitesHandler{c}
+	c.TransitGatewayVPCAttachment = &TransitGatewayVPCAttachmentHandler{c}
 	c.BillingGroup = &BillingGroupHandler{c}
 	c.ServiceTask = &ServiceTaskHandler{c}
 	c.AWSPrivatelink = &AWSPrivatelinkHandler{c}

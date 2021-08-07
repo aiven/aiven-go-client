@@ -14,17 +14,16 @@ import (
 	"net/http"
 	"os"
 	"time"
+
+	retryhttp "github.com/hashicorp/go-retryablehttp"
 )
 
 // Client represents the instance that does all the calls to the Aiven API.
 type Client struct {
-	APIKey    string
-	APIUrl    string
-	UserAgent string
-	Client    *http.Client
-
-	RetryCount   uint
-	RetryBackoff time.Duration
+	apiKey    string
+	apiUrl    string
+	userAgent string
+	client    *retryhttp.Client
 
 	Projects                        *ProjectsHandler
 	ProjectUsers                    *ProjectUsersHandler
@@ -164,19 +163,23 @@ func NewClientWithOptions(opts ...Option) (*Client, error) {
 		return nil, fmt.Errorf("must provide authorization method")
 	}
 
+	delegate := retryhttp.NewClient()
+	delegate.HTTPClient = clientParameters.httpClient
+	delegate.RetryMax = int(clientParameters.retryCount)
+	delegate.RetryWaitMin = clientParameters.retryBackoff
+	delegate.RetryWaitMax = clientParameters.retryBackoff
+
 	c := &Client{
-		Client:       clientParameters.httpClient,
-		APIUrl:       clientParameters.apiUrl,
-		RetryCount:   clientParameters.retryCount,
-		RetryBackoff: clientParameters.retryBackoff,
+		client: delegate,
+		apiUrl: clientParameters.apiUrl,
 	}
 
 	// the client still needs to be authorized
-	APIToken, err := clientParameters.authMethod.token(c)
+	token, err := clientParameters.authMethod.token(c)
 	if err != nil {
 		return nil, fmt.Errorf("unable to authorize client: %w", err)
 	}
-	c.APIKey = APIToken
+	c.apiKey = token
 
 	c.Projects = &ProjectsHandler{c}
 	c.ProjectUsers = &ProjectUsersHandler{c}
@@ -352,49 +355,37 @@ func (c *Client) doRequest(method, uri string, body interface{}, apiVersion int)
 		return nil, fmt.Errorf("aiven API apiVersion `%d` is not supported", apiVersion)
 	}
 
-	retryCount := c.RetryCount
-	for {
-		req, err := http.NewRequest(method, url, bytes.NewBuffer(bts))
-		if err != nil {
-			return nil, err
-		}
-
-		req.Header.Set("Content-Type", "application/json")
-		req.Header.Set("User-Agent", c.UserAgent)
-		req.Header.Set("Authorization", "aivenv1 "+c.APIKey)
-
-		rsp, err := c.Client.Do(req)
-		if err != nil {
-			return nil, err
-		}
-		defer func() {
-			err := rsp.Body.Close()
-			if err != nil {
-				log.Printf("[WARNING] cannot close response body: %s \n", err)
-			}
-		}()
-
-		// TODO: handle this error
-		responseBody, err := ioutil.ReadAll(rsp.Body)
-		// Retry a few times in case of request timeout or server error for GET requests
-		if (rsp.StatusCode == 408 || rsp.StatusCode >= 500) && retryCount > 0 && method == "GET" {
-			retryCount--
-			time.Sleep(c.RetryBackoff)
-			continue
-		} else if rsp.StatusCode < 200 || rsp.StatusCode >= 300 {
-			return nil, Error{Message: string(responseBody), Status: rsp.StatusCode}
-		}
-
-		return responseBody, err
+	req, err := retryhttp.NewRequest(method, url, bytes.NewBuffer(bts))
+	if err != nil {
+		return nil, err
 	}
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("User-Agent", c.userAgent)
+	req.Header.Set("Authorization", "aivenv1 "+c.apiKey)
+
+	rsp, err := c.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer func() { _ = rsp.Body.Close() }()
+
+	responseBody, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("unable to read request body: %w", err)
+	}
+	if rsp.StatusCode < 200 || rsp.StatusCode >= 300 {
+		return nil, Error{Message: string(responseBody), Status: rsp.StatusCode}
+	}
+
+	return responseBody, nil
 }
 
 func (c Client) endpoint(uri string) string {
-	return c.APIUrl + "/v1" + uri
+	return c.apiUrl + "/v1" + uri
 }
 
 func (c Client) endpointV2(uri string) string {
-	return c.APIUrl + "/v2" + uri
+	return c.apiUrl + "/v2" + uri
 }
 
 // ToStringPointer converts string to a string pointer

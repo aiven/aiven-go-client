@@ -54,12 +54,12 @@ var _ = BeforeSuite(func() {
 var _ = Describe("Check client", func() {
 	Context("Create new client using username and password", func() {
 		It("should be valid client", func() {
-			Expect(client.Client).NotTo(BeNil())
+			Expect(client.client).NotTo(BeNil())
 		})
 
 		It("should have an API token", func() {
-			Expect(client.APIKey).NotTo(Equal("some-random-token"))
-			Expect(client.APIKey).NotTo(BeEmpty())
+			Expect(client.apiKey).NotTo(Equal("some-random-token"))
+			Expect(client.apiKey).NotTo(BeEmpty())
 		})
 	})
 })

@@ -374,10 +374,12 @@ func (c *Client) doRequest(method, uri string, body interface{}, apiVersion int)
 			}
 		}()
 
+		// TODO: handle this error
 		responseBody, err := ioutil.ReadAll(rsp.Body)
 		// Retry a few times in case of request timeout or server error for GET requests
 		if (rsp.StatusCode == 408 || rsp.StatusCode >= 500) && retryCount > 0 && method == "GET" {
 			retryCount--
+			time.Sleep(c.RetryBackoff)
 			continue
 		} else if rsp.StatusCode < 200 || rsp.StatusCode >= 300 {
 			return nil, Error{Message: string(responseBody), Status: rsp.StatusCode}

@@ -20,7 +20,7 @@ func setupAccountsTeamMembersTestCase(t *testing.T) (*Client, func(t *testing.T)
 	)
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path == "/userauth" {
+		if r.URL.Path == "/v1/userauth" {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
 			err := json.NewEncoder(w).Encode(authResponse{
@@ -34,7 +34,7 @@ func setupAccountsTeamMembersTestCase(t *testing.T) (*Client, func(t *testing.T)
 			return
 		}
 
-		if r.URL.Path == "/account/a28707e316df/team/at28707ea77e2/members" {
+		if r.URL.Path == "/v1/account/a28707e316df/team/at28707ea77e2/members" {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
 			err := json.NewEncoder(w).Encode(AccountTeamMembersResponse{
@@ -57,7 +57,7 @@ func setupAccountsTeamMembersTestCase(t *testing.T) (*Client, func(t *testing.T)
 			return
 		}
 
-		if r.URL.Path == "/account/a28707e316df/team/at28707ea77e2/member/u286c52034d3" {
+		if r.URL.Path == "/v1/account/a28707e316df/team/at28707ea77e2/member/u286c52034d3" {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
 			err := json.NewEncoder(w).Encode(AccountTeamMembersResponse{})
@@ -70,9 +70,12 @@ func setupAccountsTeamMembersTestCase(t *testing.T) (*Client, func(t *testing.T)
 
 	}))
 
-	apiurl = ts.URL
-
-	c, err := NewUserClient(UserName, UserPassword, "aiven-go-client-test/"+Version())
+	c, err := NewClientWithOptions(
+		WithHTTPClient(ts.Client()),
+		WithUserAgent("aiven-go-client-test/"+Version()),
+		WithUserAuth(UserName, UserPassword),
+		WithAPIUrl(ts.URL),
+	)
 	if err != nil {
 		t.Fatalf("user authentication error: %s", err)
 	}

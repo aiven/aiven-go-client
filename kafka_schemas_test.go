@@ -19,7 +19,7 @@ func setupKafkaSchemasTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// auth
-		if r.URL.Path == "/userauth" {
+		if r.URL.Path == "/v1/userauth" {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
 			err := json.NewEncoder(w).Encode(authResponse{
@@ -34,7 +34,7 @@ func setupKafkaSchemasTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 		}
 
 		// config
-		if r.URL.Path == "/project/test-pr/service/test-sr/kafka/schema/config" {
+		if r.URL.Path == "/v1/project/test-pr/service/test-sr/kafka/schema/config" {
 			if r.Method == "PUT" {
 				w.Header().Set("Content-Type", "application/json")
 				w.WriteHeader(http.StatusOK)
@@ -64,7 +64,7 @@ func setupKafkaSchemasTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 		}
 
 		// config
-		if r.URL.Path == "/project/test-pr/service/test-sr/kafka/schema/config" {
+		if r.URL.Path == "/v1/project/test-pr/service/test-sr/kafka/schema/config" {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
 			err := json.NewEncoder(w).Encode(KafkaSchemaConfigResponse{
@@ -79,7 +79,7 @@ func setupKafkaSchemasTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 		}
 
 		// subjects
-		if r.URL.Path == "/project/test-pr/service/test-sr/kafka/schema/subjects" {
+		if r.URL.Path == "/v1/project/test-pr/service/test-sr/kafka/schema/subjects" {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
 			err := json.NewEncoder(w).Encode(KafkaSchemaSubjectsResponse{
@@ -95,7 +95,7 @@ func setupKafkaSchemasTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 		}
 
 		// add subject no versions
-		if r.URL.Path == "/project/test-pr/service/test-sr/kafka/schema/subjects/test-schema-no-versions/versions" {
+		if r.URL.Path == "/v1/project/test-pr/service/test-sr/kafka/schema/subjects/test-schema-no-versions/versions" {
 			if r.Method == "GET" {
 				w.Header().Set("Content-Type", "application/json")
 				w.WriteHeader(http.StatusNotFound)
@@ -121,7 +121,7 @@ func setupKafkaSchemasTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 		}
 
 		// add subject has versions
-		if r.URL.Path == "/project/test-pr/service/test-sr/kafka/schema/subjects/test-schema/versions" {
+		if r.URL.Path == "/v1/project/test-pr/service/test-sr/kafka/schema/subjects/test-schema/versions" {
 			if r.Method == "GET" {
 				w.Header().Set("Content-Type", "application/json")
 				w.WriteHeader(http.StatusOK)
@@ -156,7 +156,7 @@ func setupKafkaSchemasTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 		}
 
 		// validate against version 4
-		if r.URL.Path == "/project/test-pr/service/test-sr/kafka/schema/compatibility/subjects/test-schema/versions/4" {
+		if r.URL.Path == "/v1/project/test-pr/service/test-sr/kafka/schema/compatibility/subjects/test-schema/versions/4" {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
 			err := json.NewEncoder(w).Encode(KafkaSchemaValidateResponse{
@@ -171,7 +171,7 @@ func setupKafkaSchemasTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 			return
 		}
 
-		if r.URL.Path == "/project/test-pr/service/test-sr/kafka/schema/subjects/test-schema/versions/5" {
+		if r.URL.Path == "/v1/project/test-pr/service/test-sr/kafka/schema/subjects/test-schema/versions/5" {
 			if r.Method == "DELETE" {
 				w.Header().Set("Content-Type", "application/json")
 				w.WriteHeader(http.StatusOK)
@@ -209,9 +209,12 @@ func setupKafkaSchemasTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 
 	}))
 
-	apiurl = ts.URL
-
-	c, err := NewUserClient(UserName, UserPassword, "aiven-go-client-test/"+Version())
+	c, err := NewClientWithOptions(
+		WithHTTPClient(ts.Client()),
+		WithUserAgent("aiven-go-client-test/"+Version()),
+		WithUserAuth(UserName, UserPassword),
+		WithAPIUrl(ts.URL),
+	)
 	if err != nil {
 		t.Fatalf("user authentication error: %s", err)
 	}

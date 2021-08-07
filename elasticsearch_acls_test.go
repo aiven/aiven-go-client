@@ -18,7 +18,7 @@ func setupElasticsearchACLsTestCase(t *testing.T) (*Client, func(t *testing.T)) 
 	)
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path == "/userauth" {
+		if r.URL.Path == "/v1/userauth" {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
 			err := json.NewEncoder(w).Encode(authResponse{
@@ -32,7 +32,7 @@ func setupElasticsearchACLsTestCase(t *testing.T) (*Client, func(t *testing.T)) 
 			return
 		}
 
-		if r.URL.Path == "/project/test-pr/service/test-sr/elasticsearch/acl" {
+		if r.URL.Path == "/v1/project/test-pr/service/test-sr/elasticsearch/acl" {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
 			err := json.NewEncoder(w).Encode(ElasticSearchACLResponse{
@@ -58,9 +58,12 @@ func setupElasticsearchACLsTestCase(t *testing.T) (*Client, func(t *testing.T)) 
 		}
 	}))
 
-	apiurl = ts.URL
-
-	c, err := NewUserClient(UserName, UserPassword, "aiven-go-client-test/"+Version())
+	c, err := NewClientWithOptions(
+		WithHTTPClient(ts.Client()),
+		WithUserAgent("aiven-go-client-test/"+Version()),
+		WithUserAuth(UserName, UserPassword),
+		WithAPIUrl(ts.URL),
+	)
 	if err != nil {
 		t.Fatalf("user authentication error: %s", err)
 	}

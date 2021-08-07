@@ -13,25 +13,18 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 )
-
-// APIURL is the URL we'll use to speak to Aiven. This can be overwritten.
-var apiurl = "https://api.aiven.io/v1"
-var apiurlV2 = "https://api.aiven.io/v2"
-
-func init() {
-	value, isSet := os.LookupEnv("AIVEN_WEB_URL")
-	if isSet {
-		apiurl = value + "/v1"
-		apiurlV2 = value + "/v2"
-	}
-}
 
 // Client represents the instance that does all the calls to the Aiven API.
 type Client struct {
 	APIKey    string
-	Client    *http.Client
+	APIUrl    string
 	UserAgent string
+	Client    *http.Client
+
+	RetryCount   uint
+	RetryBackoff time.Duration
 
 	Projects                        *ProjectsHandler
 	ProjectUsers                    *ProjectUsersHandler
@@ -64,7 +57,196 @@ type Client struct {
 	AWSPrivatelink                  *AWSPrivatelinkHandler
 }
 
+type Option func(*clientParameters)
+
+func WithHTTPClient(c *http.Client) Option {
+	return func(cp *clientParameters) {
+		cp.httpClient = c
+	}
+}
+
+func WithAPIUrl(url string) Option {
+	return func(cp *clientParameters) {
+		cp.apiUrl = url
+	}
+}
+
+func WithTokenAuth(token string) Option {
+	return func(cp *clientParameters) {
+		cp.authMethod = tokenAuth{token}
+	}
+}
+
+func WithMFAAuth(email, password, otp string) Option {
+	return func(cp *clientParameters) {
+		cp.authMethod = mfaAuth{email: email, otp: otp, password: password}
+	}
+}
+
+func WithUserAuth(email, password string) Option {
+	return func(cp *clientParameters) {
+		cp.authMethod = mfaAuth{email: email, password: password}
+	}
+}
+
+func WithUserAgent(userAgent string) Option {
+	return func(cp *clientParameters) {
+		cp.userAgent = userAgent
+	}
+}
+
+func WithRetries(retryCount uint, retryBackoff time.Duration) Option {
+	return func(cp *clientParameters) {
+		cp.retryCount = retryCount
+		cp.retryBackoff = retryBackoff
+	}
+}
+
+type clientParameters struct {
+	httpClient *http.Client
+	apiUrl     string
+	userAgent  string
+	authMethod authMethod
+
+	retryCount   uint
+	retryBackoff time.Duration
+}
+
+type authMethod interface {
+	// token provides the API token that authorizes the client.
+	// takes a *Client parameter because it may use the API.
+	token(*Client) (string, error)
+}
+
+type mfaAuth struct {
+	email, otp, password string
+}
+
+func (mfa mfaAuth) token(c *Client) (string, error) {
+	bts, err := c.doPostRequest("/userauth", authRequest{mfa.email, mfa.otp, mfa.password})
+	if err != nil {
+		return "", fmt.Errorf("unable to perform /userauth request: %w", err)
+	}
+
+	var r authResponse
+	if err := checkAPIResponse(bts, &r); err != nil {
+		return "", fmt.Errorf("bad API response: %w", err)
+	}
+	return r.Token, nil
+}
+
+type tokenAuth struct {
+	apiToken string
+}
+
+func (ta tokenAuth) token(*Client) (string, error) {
+	return ta.apiToken, nil
+}
+
+func defaultClientParameters() clientParameters {
+	return clientParameters{
+		httpClient:   http.DefaultClient,
+		apiUrl:       "https://api.aiven.io",
+		userAgent:    "aiven-go-client/" + Version(),
+		retryCount:   2,
+		retryBackoff: 1 * time.Second,
+	}
+}
+
+// NewClientWithOptions creates a new client. Configuration is performed via options
+func NewClientWithOptions(opts ...Option) (*Client, error) {
+	clientParameters := defaultClientParameters()
+	for i := range opts {
+		opts[i](&clientParameters)
+	}
+
+	if clientParameters.authMethod == nil {
+		return nil, fmt.Errorf("must provide authorization method")
+	}
+
+	c := &Client{
+		Client:       clientParameters.httpClient,
+		APIUrl:       clientParameters.apiUrl,
+		RetryCount:   clientParameters.retryCount,
+		RetryBackoff: clientParameters.retryBackoff,
+	}
+
+	// the client still needs to be authorized
+	APIToken, err := clientParameters.authMethod.token(c)
+	if err != nil {
+		return nil, fmt.Errorf("unable to authorize client: %w", err)
+	}
+	c.APIKey = APIToken
+
+	c.Projects = &ProjectsHandler{c}
+	c.ProjectUsers = &ProjectUsersHandler{c}
+	c.CA = &CAHandler{c}
+	c.CardsHandler = &CardsHandler{c}
+	c.ServiceIntegrationEndpoints = &ServiceIntegrationEndpointsHandler{c}
+	c.ServiceIntegrations = &ServiceIntegrationsHandler{c}
+	c.Services = &ServicesHandler{c}
+	c.ConnectionPools = &ConnectionPoolsHandler{c}
+	c.Databases = &DatabasesHandler{c}
+	c.ServiceUsers = &ServiceUsersHandler{c}
+	c.KafkaACLs = &KafkaACLHandler{c}
+	c.KafkaSubjectSchemas = &KafkaSubjectSchemasHandler{c}
+	c.KafkaGlobalSchemaConfig = &KafkaGlobalSchemaConfigHandler{c}
+	c.KafkaConnectors = &KafkaConnectorsHandler{c}
+	c.KafkaMirrorMakerReplicationFlow = &MirrorMakerReplicationFlowHandler{c}
+	c.ElasticsearchACLs = &ElasticSearchACLsHandler{c}
+	c.KafkaTopics = &KafkaTopicsHandler{c}
+	c.VPCs = &VPCsHandler{c}
+	c.VPCPeeringConnections = &VPCPeeringConnectionsHandler{c}
+	c.Accounts = &AccountsHandler{c}
+	c.AccountTeams = &AccountTeamsHandler{c}
+	c.AccountTeamMembers = &AccountTeamMembersHandler{c}
+	c.AccountTeamProjects = &AccountTeamProjectsHandler{c}
+	c.AccountAuthentications = &AccountAuthenticationsHandler{c}
+	c.AccountTeamInvites = &AccountTeamInvitesHandler{c}
+	c.TransitGatewayVPCAttachment = &TransitGatewayVPCAttachmentHandler{c}
+	c.BillingGroup = &BillingGroupHandler{c}
+	c.ServiceTask = &ServiceTaskHandler{c}
+	c.AWSPrivatelink = &AWSPrivatelinkHandler{c}
+
+	return c, nil
+}
+
+// NewMFAUserClient creates a new client based on email, one-time password and password.
+// Deprecated: use NewClientWithOptions
+func NewMFAUserClient(email, otp, password string, userAgent string) (*Client, error) {
+	return NewClientWithOptions(
+		WithHTTPClient(buildHttpClient()),
+		WithUserAgent(GetUserAgentOrDefault(userAgent)),
+		WithMFAAuth(email, password, otp),
+		WithAPIUrl(GetApiUrlFromEnvOrDefault()),
+	)
+}
+
+// NewUserClient creates a new client based on email and password.
+// Deprecated: use NewClientWithOptions
+func NewUserClient(email, password string, userAgent string) (*Client, error) {
+	return NewClientWithOptions(
+		WithHTTPClient(buildHttpClient()),
+		WithUserAgent(GetUserAgentOrDefault(userAgent)),
+		WithUserAuth(email, password),
+		WithAPIUrl(GetApiUrlFromEnvOrDefault()),
+	)
+}
+
+// NewTokenClient creates a new client based on a given token.
+// Deprecated: use NewClientWithOptions
+func NewTokenClient(key string, userAgent string) (*Client, error) {
+	return NewClientWithOptions(
+		WithHTTPClient(buildHttpClient()),
+		WithUserAgent(GetUserAgentOrDefault(userAgent)),
+		WithTokenAuth(key),
+		WithAPIUrl(GetApiUrlFromEnvOrDefault()),
+	)
+}
+
 // GetUserAgentOrDefault configures a default userAgent value, if one has not been provided.
+// Deprecated: just pass the user agent using the option "WithUserAgent"
+// needed for backwards compatibility
 func GetUserAgentOrDefault(userAgent string) string {
 	if userAgent != "" {
 		return userAgent
@@ -72,45 +254,20 @@ func GetUserAgentOrDefault(userAgent string) string {
 	return "aiven-go-client/" + Version()
 }
 
-// NewMFAUserClient creates a new client based on email, one-time password and password.
-func NewMFAUserClient(email, otp, password string, userAgent string) (*Client, error) {
-	c := &Client{
-		Client:    buildHttpClient(),
-		UserAgent: GetUserAgentOrDefault(userAgent),
+// Deprecated: just pass the api url using the option "WithAPIUrl"
+// needed for backwards compatibility
+func GetApiUrlFromEnvOrDefault() string {
+	if value, ok := os.LookupEnv("AIVEN_WEB_URL"); !ok {
+		return "https://api.aiven.io"
+	} else {
+		return value
 	}
-
-	bts, err := c.doPostRequest("/userauth", authRequest{email, otp, password})
-	if err != nil {
-		return nil, err
-	}
-
-	var r authResponse
-	if err := checkAPIResponse(bts, &r); err != nil {
-		return nil, err
-	}
-
-	return NewTokenClient(r.Token, userAgent)
-}
-
-// NewUserClient creates a new client based on email and password.
-func NewUserClient(email, password string, userAgent string) (*Client, error) {
-	return NewMFAUserClient(email, "", password, userAgent)
-}
-
-// NewTokenClient creates a new client based on a given token.
-func NewTokenClient(key string, userAgent string) (*Client, error) {
-	c := &Client{
-		APIKey:    key,
-		Client:    buildHttpClient(),
-		UserAgent: GetUserAgentOrDefault(userAgent),
-	}
-	c.Init()
-
-	return c, nil
 }
 
 // buildHttpClient it builds http.Client, if environment variable AIVEN_CA_CERT
 // contains a path to a valid CA certificate HTTPS client will be configured to use it
+// Deprecated: just pass an appropriate *http.Client using the option "WithHTTPClient"
+// needed for backwards compatibility
 func buildHttpClient() *http.Client {
 	caFilename := os.Getenv("AIVEN_CA_CERT")
 	if caFilename == "" {
@@ -143,69 +300,36 @@ func buildHttpClient() *http.Client {
 	return client
 }
 
-// Init initializes the client and sets up all the handlers.
-func (c *Client) Init() {
-	c.Projects = &ProjectsHandler{c}
-	c.ProjectUsers = &ProjectUsersHandler{c}
-	c.CA = &CAHandler{c}
-	c.CardsHandler = &CardsHandler{c}
-	c.ServiceIntegrationEndpoints = &ServiceIntegrationEndpointsHandler{c}
-	c.ServiceIntegrations = &ServiceIntegrationsHandler{c}
-	c.Services = &ServicesHandler{c}
-	c.ConnectionPools = &ConnectionPoolsHandler{c}
-	c.Databases = &DatabasesHandler{c}
-	c.ServiceUsers = &ServiceUsersHandler{c}
-	c.KafkaACLs = &KafkaACLHandler{c}
-	c.KafkaSubjectSchemas = &KafkaSubjectSchemasHandler{c}
-	c.KafkaGlobalSchemaConfig = &KafkaGlobalSchemaConfigHandler{c}
-	c.KafkaConnectors = &KafkaConnectorsHandler{c}
-	c.KafkaMirrorMakerReplicationFlow = &MirrorMakerReplicationFlowHandler{c}
-	c.ElasticsearchACLs = &ElasticSearchACLsHandler{c}
-	c.KafkaTopics = &KafkaTopicsHandler{c}
-	c.VPCs = &VPCsHandler{c}
-	c.VPCPeeringConnections = &VPCPeeringConnectionsHandler{c}
-	c.Accounts = &AccountsHandler{c}
-	c.AccountTeams = &AccountTeamsHandler{c}
-	c.AccountTeamMembers = &AccountTeamMembersHandler{c}
-	c.AccountTeamProjects = &AccountTeamProjectsHandler{c}
-	c.AccountAuthentications = &AccountAuthenticationsHandler{c}
-	c.AccountTeamInvites = &AccountTeamInvitesHandler{c}
-	c.TransitGatewayVPCAttachment = &TransitGatewayVPCAttachmentHandler{c}
-	c.BillingGroup = &BillingGroupHandler{c}
-	c.ServiceTask = &ServiceTaskHandler{c}
-	c.AWSPrivatelink = &AWSPrivatelinkHandler{c}
-}
-
 func (c *Client) doGetRequest(endpoint string, req interface{}) ([]byte, error) {
-	return c.doRequest("GET", endpoint, req, 1)
+	return c.doRequest(http.MethodGet, endpoint, req, 1)
 }
 
 func (c *Client) doPutRequest(endpoint string, req interface{}) ([]byte, error) {
-	return c.doRequest("PUT", endpoint, req, 1)
+	return c.doRequest(http.MethodPut, endpoint, req, 1)
 }
 
 func (c *Client) doPostRequest(endpoint string, req interface{}) ([]byte, error) {
-	return c.doRequest("POST", endpoint, req, 1)
+	return c.doRequest(http.MethodPost, endpoint, req, 1)
 }
 
 func (c *Client) doDeleteRequest(endpoint string, req interface{}) ([]byte, error) {
-	return c.doRequest("DELETE", endpoint, req, 1)
+	return c.doRequest(http.MethodDelete, endpoint, req, 1)
 }
 
 func (c *Client) doV2GetRequest(endpoint string, req interface{}) ([]byte, error) {
-	return c.doRequest("GET", endpoint, req, 2)
+	return c.doRequest(http.MethodGet, endpoint, req, 2)
 }
 
 func (c *Client) doV2PutRequest(endpoint string, req interface{}) ([]byte, error) {
-	return c.doRequest("PUT", endpoint, req, 2)
+	return c.doRequest(http.MethodPut, endpoint, req, 2)
 }
 
 func (c *Client) doV2PostRequest(endpoint string, req interface{}) ([]byte, error) {
-	return c.doRequest("POST", endpoint, req, 2)
+	return c.doRequest(http.MethodPost, endpoint, req, 2)
 }
 
 func (c *Client) doV2DeleteRequest(endpoint string, req interface{}) ([]byte, error) {
-	return c.doRequest("DELETE", endpoint, req, 2)
+	return c.doRequest(http.MethodDelete, endpoint, req, 2)
 }
 
 func (c *Client) doRequest(method, uri string, body interface{}, apiVersion int) ([]byte, error) {
@@ -221,14 +345,14 @@ func (c *Client) doRequest(method, uri string, body interface{}, apiVersion int)
 	var url string
 	switch apiVersion {
 	case 1:
-		url = endpoint(uri)
+		url = c.endpoint(uri)
 	case 2:
-		url = endpointV2(uri)
+		url = c.endpointV2(uri)
 	default:
 		return nil, fmt.Errorf("aiven API apiVersion `%d` is not supported", apiVersion)
 	}
 
-	retryCount := 2
+	retryCount := c.RetryCount
 	for {
 		req, err := http.NewRequest(method, url, bytes.NewBuffer(bts))
 		if err != nil {
@@ -263,12 +387,12 @@ func (c *Client) doRequest(method, uri string, body interface{}, apiVersion int)
 	}
 }
 
-func endpoint(uri string) string {
-	return apiurl + uri
+func (c Client) endpoint(uri string) string {
+	return c.APIUrl + "/v1" + uri
 }
 
-func endpointV2(uri string) string {
-	return apiurlV2 + uri
+func (c Client) endpointV2(uri string) string {
+	return c.APIUrl + "/v2" + uri
 }
 
 // ToStringPointer converts string to a string pointer

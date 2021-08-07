@@ -18,7 +18,7 @@ func setupMirrormakerReplicationFlowTestCase(t *testing.T) (*Client, func(t *tes
 	)
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path == "/userauth" {
+		if r.URL.Path == "/v1/userauth" {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
 			err := json.NewEncoder(w).Encode(authResponse{
@@ -32,7 +32,7 @@ func setupMirrormakerReplicationFlowTestCase(t *testing.T) (*Client, func(t *tes
 			return
 		}
 
-		if r.URL.Path == "/project/test-pr/service/test-sr/mirrormaker/replication-flows" {
+		if r.URL.Path == "/v1/project/test-pr/service/test-sr/mirrormaker/replication-flows" {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
 			_, err := w.Write([]byte(`
@@ -61,7 +61,7 @@ func setupMirrormakerReplicationFlowTestCase(t *testing.T) (*Client, func(t *tes
 			return
 		}
 
-		if r.URL.Path == "/project/test-pr/service/test-sr/mirrormaker/replication-flows/kafka-sc/kafka-tc" {
+		if r.URL.Path == "/v1/project/test-pr/service/test-sr/mirrormaker/replication-flows/kafka-sc/kafka-tc" {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
 			_, err := w.Write([]byte(`
@@ -88,9 +88,12 @@ func setupMirrormakerReplicationFlowTestCase(t *testing.T) (*Client, func(t *tes
 		}
 	}))
 
-	apiurl = ts.URL
-
-	c, err := NewUserClient(UserName, UserPassword, "aiven-go-client-test/"+Version())
+	c, err := NewClientWithOptions(
+		WithHTTPClient(ts.Client()),
+		WithUserAgent("aiven-go-client-test/"+Version()),
+		WithUserAuth(UserName, UserPassword),
+		WithAPIUrl(ts.URL),
+	)
 	if err != nil {
 		t.Fatalf("user authentication error: %s", err)
 	}

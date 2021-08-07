@@ -18,7 +18,7 @@ func setupAccountAuthenticationsTestCase(t *testing.T) (*Client, func(t *testing
 	)
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path == "/userauth" {
+		if r.URL.Path == "/v1/userauth" {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
 			err := json.NewEncoder(w).Encode(authResponse{
@@ -32,7 +32,7 @@ func setupAccountAuthenticationsTestCase(t *testing.T) (*Client, func(t *testing
 			return
 		}
 
-		if r.URL.Path == "/account/a28707e316df/authentication/am28707eb0055" {
+		if r.URL.Path == "/v1/account/a28707e316df/authentication/am28707eb0055" {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
 			err := json.NewEncoder(w).Encode(AccountAuthenticationResponse{
@@ -55,7 +55,7 @@ func setupAccountAuthenticationsTestCase(t *testing.T) (*Client, func(t *testing
 			return
 		}
 
-		if r.URL.Path == "/account/a28707e316df/authentication" {
+		if r.URL.Path == "/v1/account/a28707e316df/authentication" {
 			if r.Method == "POST" {
 				w.Header().Set("Content-Type", "application/json")
 				w.WriteHeader(http.StatusOK)
@@ -104,9 +104,12 @@ func setupAccountAuthenticationsTestCase(t *testing.T) (*Client, func(t *testing
 
 	}))
 
-	apiurl = ts.URL
-
-	c, err := NewUserClient(UserName, UserPassword, "aiven-go-client-test/"+Version())
+	c, err := NewClientWithOptions(
+		WithHTTPClient(ts.Client()),
+		WithUserAgent("aiven-go-client-test/"+Version()),
+		WithUserAuth(UserName, UserPassword),
+		WithAPIUrl(ts.URL),
+	)
 	if err != nil {
 		t.Fatalf("user authentication error: %s", err)
 	}

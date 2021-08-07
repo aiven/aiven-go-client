@@ -303,6 +303,7 @@ func buildHttpClient() *http.Client {
 	return client
 }
 
+// TODO: these methods probably should return (*http.Response, error)
 func (c *Client) doGetRequest(endpoint string, req interface{}) ([]byte, error) {
 	return c.doRequest(http.MethodGet, endpoint, req, 1)
 }
@@ -335,13 +336,11 @@ func (c *Client) doV2DeleteRequest(endpoint string, req interface{}) ([]byte, er
 	return c.doRequest(http.MethodDelete, endpoint, req, 2)
 }
 
-func (c *Client) doRequest(method, uri string, body interface{}, apiVersion int) ([]byte, error) {
+func (c *Client) doRequest(method, uri string, body interface{}, apiVersion int) (res []byte, err error) {
 	var bts []byte
 	if body != nil {
-		var err error
-		bts, err = json.Marshal(body)
-		if err != nil {
-			return nil, err
+		if bts, err = json.Marshal(body); err != nil {
+			return nil, fmt.Errorf("unable to marshal request body: %w", err)
 		}
 	}
 
@@ -357,7 +356,7 @@ func (c *Client) doRequest(method, uri string, body interface{}, apiVersion int)
 
 	req, err := retryhttp.NewRequest(method, url, bytes.NewBuffer(bts))
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("unable to build http request: %w", err)
 	}
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("User-Agent", c.userAgent)
@@ -365,19 +364,35 @@ func (c *Client) doRequest(method, uri string, body interface{}, apiVersion int)
 
 	rsp, err := c.client.Do(req)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("unable to perform http request: %w", err)
 	}
 	defer func() { _ = rsp.Body.Close() }()
 
-	responseBody, err := ioutil.ReadAll(rsp.Body)
+	res, err = ioutil.ReadAll(rsp.Body)
 	if err != nil {
 		return nil, fmt.Errorf("unable to read request body: %w", err)
 	}
-	if rsp.StatusCode < 200 || rsp.StatusCode >= 300 {
-		return nil, Error{Message: string(responseBody), Status: rsp.StatusCode}
+	switch sc := rsp.StatusCode; {
+	case sc >= 200 && sc < 300:
+		// 2xx
+		return res, nil
+	case sc >= 400 && sc < 600:
+		// 4xx or 5xx
+		/*
+		   TODO: include the aiven error fields here, they look like
+		   "errors": [
+		     {
+		       "message": "string",
+		       "more_info": "string",
+		       "status": 0
+		     }
+		   ],
+		*/
+		return nil, Error{Message: string(res), Status: sc}
+	default:
+		// 1xx or 3xx or weird
+		return nil, Error{Message: fmt.Sprintf("unexpected status code, also: %s", res), Status: sc}
 	}
-
-	return responseBody, nil
 }
 
 func (c Client) endpoint(uri string) string {

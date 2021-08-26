@@ -44,6 +44,25 @@ type (
 		APIResponse
 		Connector KafkaConnector
 	}
+
+	// KafkaConnectorStatusResponse represents single Kafka Connector API status response
+	KafkaConnectorStatusResponse struct {
+		APIResponse
+		Status KafkaConnectorStatus `json:"status"`
+	}
+
+	// KafkaConnectorStatus represents the status of a kafka connector
+	KafkaConnectorStatus struct {
+		State string                     `json:"state"`
+		Tasks []KafkaConnectorTaskStatus `json:"tasks"`
+	}
+
+	// KafkaConnectorTaskStatus represents the status of a kafka connector task
+	KafkaConnectorTaskStatus struct {
+		Id    int    `json:"id"`
+		State string `json:"state"`
+		Trace string `json:"trace"`
+	}
 )
 
 // Create creates Kafka Connector attached to Kafka or Kafka Connector service based on configuration
@@ -84,19 +103,18 @@ func (h *KafkaConnectorsHandler) List(project, service string) (*KafkaConnectors
 	return &rsp, nil
 }
 
-// Get gets a single Kafka Connector by Connector Name
-func (h *KafkaConnectorsHandler) Get(project, service, name string) (*KafkaConnectorResponse, error) {
-	path := buildPath("project", project, "service", service, "connectors", name)
+// Get the status of a single Kafka Connector by name
+func (h *KafkaConnectorsHandler) Status(project, service, name string) (*KafkaConnectorStatusResponse, error) {
+	path := buildPath("project", project, "service", service, "connectors", name, "status")
 	bts, err := h.client.doGetRequest(path, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	var rsp KafkaConnectorResponse
+	var rsp KafkaConnectorStatusResponse
 	if err := checkAPIResponse(bts, &rsp); err != nil {
 		return nil, err
 	}
-
 	return &rsp, nil
 }
 
@@ -112,6 +130,5 @@ func (h *KafkaConnectorsHandler) Update(project, service, name string, c KafkaCo
 	if err := checkAPIResponse(bts, &rsp); err != nil {
 		return nil, err
 	}
-
 	return &rsp, nil
 }

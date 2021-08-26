@@ -65,7 +65,7 @@ func setupKafkaConnectorsTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
 
-			err := json.NewEncoder(w).Encode(KafkaConnectorResponse{
+			err := json.NewEncoder(w).Encode(&KafkaConnectorResponse{
 				APIResponse: APIResponse{},
 				Connector: KafkaConnector{
 					Name: "test-kafka-con",
@@ -80,6 +80,23 @@ func setupKafkaConnectorsTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 					},
 					Plugin: KafkaConnectorPlugin{},
 					Tasks:  []KafkaConnectorTask{},
+				},
+			})
+
+			if err != nil {
+				t.Error(err)
+			}
+		}
+
+		if r.URL.Path == "/project/test-pr/service/test-sr/connectors/test-kafka-con/status" {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+
+			err := json.NewEncoder(w).Encode(KafkaConnectorStatusResponse{
+				APIResponse: APIResponse{},
+				Status: KafkaConnectorStatus{
+					State: "RUNNING",
+					Tasks: []KafkaConnectorTaskStatus{},
 				},
 			})
 
@@ -256,7 +273,7 @@ func TestKafkaConnectorsHandler_List(t *testing.T) {
 	}
 }
 
-func TestKafkaConnectorsHandler_Get(t *testing.T) {
+func TestKafkaConnectorsHandler_Status(t *testing.T) {
 	c, tearDown := setupKafkaConnectorsTestCase(t)
 	defer tearDown(t)
 
@@ -272,7 +289,7 @@ func TestKafkaConnectorsHandler_Get(t *testing.T) {
 		name    string
 		fields  fields
 		args    args
-		want    *KafkaConnectorResponse
+		want    *KafkaConnectorStatusResponse
 		wantErr bool
 	}{
 		{
@@ -283,21 +300,11 @@ func TestKafkaConnectorsHandler_Get(t *testing.T) {
 				service: "test-sr",
 				name:    "test-kafka-con",
 			},
-			&KafkaConnectorResponse{
+			&KafkaConnectorStatusResponse{
 				APIResponse: APIResponse{},
-				Connector: KafkaConnector{
-					Name: "test-kafka-con",
-					Config: KafkaConnectorConfig{
-						"topics":              "TestT1",
-						"connection.username": "testUser1",
-						"name":                "es-connector",
-						"connection.password": "pass",
-						"connector.class":     "io.aiven.connect.elasticsearch.ElasticsearchSinkConnector",
-						"type.name":           "test-kafka-con",
-						"connection.url":      " https://elasticsearchUrl.aive.io:28038",
-					},
-					Plugin: KafkaConnectorPlugin{},
-					Tasks:  []KafkaConnectorTask{},
+				Status: KafkaConnectorStatus{
+					State: "RUNNING",
+					Tasks: []KafkaConnectorTaskStatus{},
 				},
 			},
 			false,
@@ -308,13 +315,13 @@ func TestKafkaConnectorsHandler_Get(t *testing.T) {
 			h := &KafkaConnectorsHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.Get(tt.args.project, tt.args.service, tt.args.name)
+			got, err := h.Status(tt.args.project, tt.args.service, tt.args.name)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("Get() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Status() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Get() got = %v, want %v", got, tt.want)
+				t.Errorf("Status() got = %v, want %v", got, tt.want)
 			}
 		})
 	}

@@ -117,5 +117,5 @@ Add support for AWS Transit Gateway and expose Azure config parameters
 
 ## [1.6.0] - not yet released
 - Add KafkaConnector Status call
-- Remove KafkaConnector Get-By-Name call since it does not exist in the API
+- Fix KafkaConnector Get call by delegating to List
 

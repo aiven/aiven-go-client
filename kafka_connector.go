@@ -1,5 +1,10 @@
 package aiven
 
+import (
+	"fmt"
+	"net/http"
+)
+
 type (
 	// KafkaConnectorsHandler Aiven go-client handler for Kafka Connectors
 	KafkaConnectorsHandler struct {
@@ -101,6 +106,35 @@ func (h *KafkaConnectorsHandler) List(project, service string) (*KafkaConnectors
 	}
 
 	return &rsp, nil
+}
+
+// GetByName gets a KafkaConnector by name
+func (h *KafkaConnectorsHandler) GetByName(project, service, name string) (*KafkaConnector, error) {
+	path := buildPath("project", project, "service", service, "connectors")
+	bts, err := h.client.doGetRequest(path, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	var rsp KafkaConnectorsResponse
+	if err := checkAPIResponse(bts, &rsp); err != nil {
+		return nil, err
+	}
+
+	for i := range rsp.Connectors {
+		con := rsp.Connectors[i]
+		if con.Name == name {
+			return &con, nil
+		}
+	}
+
+	// TODO: This is a hack. We pretend that this was an API call all along, even though this is only convenience
+	// It is acceptable because all other functions here have the contract that we return a non nil result if the
+	// error is nil. So for the sake of API consistency we pretend that the remote API returned this error.
+	return nil, Error{
+		Message: fmt.Sprintf("no kafka connector with name '%s' found in project '%s' for service '%s'", name, project, service),
+		Status:  http.StatusNotFound,
+	}
 }
 
 // Get the status of a single Kafka Connector by name

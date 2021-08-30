@@ -273,6 +273,78 @@ func TestKafkaConnectorsHandler_List(t *testing.T) {
 	}
 }
 
+func TestKafkaConnectorsHandler_GetByName(t *testing.T) {
+	c, tearDown := setupKafkaConnectorsTestCase(t)
+	defer tearDown(t)
+
+	type fields struct {
+		client *Client
+	}
+	type args struct {
+		project string
+		service string
+		name    string
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    *KafkaConnector
+		wantErr bool
+	}{
+		{
+			"connector found",
+			fields{client: c},
+			args{
+				project: "test-pr",
+				service: "test-sr",
+				name:    "es-connector",
+			},
+			&KafkaConnector{
+				Name: "es-connector",
+				Config: KafkaConnectorConfig{
+					"topics":              "TestT1",
+					"connection.username": "testUser1",
+					"name":                "es-connector",
+					"connection.password": "pass",
+					"connector.class":     "io.aiven.connect.elasticsearch.ElasticsearchSinkConnector",
+					"type.name":           "es-connector",
+					"connection.url":      " https://elasticsearchUrl.aive.io:28038",
+				},
+				Plugin: KafkaConnectorPlugin{},
+				Tasks:  []KafkaConnectorTask{},
+			},
+			false,
+		},
+		{
+			"connector not found",
+			fields{client: c},
+			args{
+				project: "test-pr",
+				service: "test-sr",
+				name:    "does-not-exist",
+			},
+			nil,
+			true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			h := &KafkaConnectorsHandler{
+				client: tt.fields.client,
+			}
+			got, err := h.GetByName(tt.args.project, tt.args.service, tt.args.name)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("GetByName() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("GetByName() got = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
 func TestKafkaConnectorsHandler_Status(t *testing.T) {
 	c, tearDown := setupKafkaConnectorsTestCase(t)
 	defer tearDown(t)

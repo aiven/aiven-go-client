@@ -115,7 +115,8 @@ Add support for AWS Transit Gateway and expose Azure config parameters
 - Fix account team project update method
 - Add missing TransitGatewayVPCAttachment handler initialization
 
-## [1.6.0] - not yet released
+## [1.6.0] - 2021-08-30
 - Add KafkaConnector Status call
-- Fix KafkaConnector Get call by delegating to List
+- Add KafkaConnector GetByName wrapper around List and returns the named kafka connector
+- Remove KafkaConnector Get call since it is not included in the API
 

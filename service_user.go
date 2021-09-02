@@ -42,9 +42,10 @@ type (
 
 	// ModifyServiceUserRequest params required to modify a ServiceUser
 	ModifyServiceUserRequest struct {
-		Operation      *string `json:"operation"`
-		Authentication *string `json:"authentication,omitempty"`
-		NewPassword    string  `json:"new_password"`
+		Operation      *string        `json:"operation"`
+		Authentication *string        `json:"authentication,omitempty"`
+		NewPassword    string         `json:"new_password"`
+		AccessControl  *AccessControl `json:"access_control"`
 	}
 
 	// ServiceUserResponse represents the response after creating a ServiceUser.

@@ -8,6 +8,11 @@ import (
 	"fmt"
 )
 
+const (
+	UpdateOperationResetCredentials = "reset-credentials"
+	UpdateOperationSetAccessControl = "set-access-control"
+)
+
 type (
 	// ServiceUser is the representation of a Service User in the Aiven API.
 	ServiceUser struct {
@@ -21,10 +26,11 @@ type (
 	}
 
 	AccessControl struct {
-		RedisACLCategories []string `json:"redis_acl_categories"`
-		RedisACLCommands   []string `json:"redis_acl_commands"`
-		RedisACLKeys       []string `json:"redis_acl_keys"`
-		RedisACLChannels   []string `json:"redis_acl_channels"`
+		RedisACLCategories       []string `json:"redis_acl_categories"`
+		RedisACLCommands         []string `json:"redis_acl_commands"`
+		RedisACLKeys             []string `json:"redis_acl_keys"`
+		RedisACLChannels         []string `json:"redis_acl_channels"`
+		PostgresAllowReplication bool     `json:"pg_allow_replication"`
 	}
 
 	// ServiceUsersHandler is the client that interacts with the ServiceUsers
@@ -42,9 +48,10 @@ type (
 
 	// ModifyServiceUserRequest params required to modify a ServiceUser
 	ModifyServiceUserRequest struct {
-		Operation      *string `json:"operation"`
-		Authentication *string `json:"authentication,omitempty"`
-		NewPassword    string  `json:"new_password"`
+		Operation      *string        `json:"operation"`
+		Authentication *string        `json:"authentication,omitempty"`
+		NewPassword    string         `json:"new_password"`
+		AccessControl  *AccessControl `json:"access_control"`
 	}
 
 	// ServiceUserResponse represents the response after creating a ServiceUser.
@@ -98,9 +105,17 @@ func (h *ServiceUsersHandler) Get(project, serviceName, username string) (*Servi
 
 // Update modifies the given Service User in Aiven.
 func (h *ServiceUsersHandler) Update(project, service, username string, update ModifyServiceUserRequest) (*ServiceUser, error) {
-	var DefaultOperation = "reset-credentials"
+	var DefaultOperation = UpdateOperationResetCredentials
 	if update.Operation == nil {
 		update.Operation = &DefaultOperation
+	}
+
+	if update.AccessControl != nil && *update.Operation != UpdateOperationSetAccessControl {
+		return nil, errors.New("wrong operation for updating access control")
+	}
+
+	if (update.NewPassword != "" || update.Authentication != nil) && *update.Operation != UpdateOperationResetCredentials {
+		return nil, errors.New("wrong operation for updating credentials")
 	}
 	path := buildPath("project", project, "service", service, "user", username)
 	svc, err := h.client.doPutRequest(path, update)

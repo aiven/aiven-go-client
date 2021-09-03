@@ -8,6 +8,11 @@ import (
 	"fmt"
 )
 
+const (
+	UpdateOperationResetCredentials = "reset-credentials"
+	UpdateOperationSetAccessControl = "set-access-control"
+)
+
 type (
 	// ServiceUser is the representation of a Service User in the Aiven API.
 	ServiceUser struct {
@@ -100,9 +105,17 @@ func (h *ServiceUsersHandler) Get(project, serviceName, username string) (*Servi
 
 // Update modifies the given Service User in Aiven.
 func (h *ServiceUsersHandler) Update(project, service, username string, update ModifyServiceUserRequest) (*ServiceUser, error) {
-	var DefaultOperation = "reset-credentials"
+	var DefaultOperation = UpdateOperationResetCredentials
 	if update.Operation == nil {
 		update.Operation = &DefaultOperation
+	}
+
+	if update.AccessControl != nil && *update.Operation != UpdateOperationSetAccessControl {
+		return nil, errors.New("wrong operation for updating access control")
+	}
+
+	if (update.NewPassword != "" || update.Authentication != nil) && *update.Operation != UpdateOperationResetCredentials {
+		return nil, errors.New("wrong operation for updating credentials")
 	}
 	path := buildPath("project", project, "service", service, "user", username)
 	svc, err := h.client.doPutRequest(path, update)

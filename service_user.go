@@ -50,8 +50,8 @@ type (
 	ModifyServiceUserRequest struct {
 		Operation      *string        `json:"operation"`
 		Authentication *string        `json:"authentication,omitempty"`
-		NewPassword    string         `json:"new_password"`
-		AccessControl  *AccessControl `json:"access_control"`
+		NewPassword    *string        `json:"new_password,omitempty"`
+		AccessControl  *AccessControl `json:"access_control,omitempty"`
 	}
 
 	// ServiceUserResponse represents the response after creating a ServiceUser.
@@ -114,7 +114,7 @@ func (h *ServiceUsersHandler) Update(project, service, username string, update M
 		return nil, errors.New("wrong operation for updating access control")
 	}
 
-	if (update.NewPassword != "" || update.Authentication != nil) && *update.Operation != UpdateOperationResetCredentials {
+	if (update.NewPassword != nil || update.Authentication != nil) && *update.Operation != UpdateOperationResetCredentials {
 		return nil, errors.New("wrong operation for updating credentials")
 	}
 	path := buildPath("project", project, "service", service, "user", username)

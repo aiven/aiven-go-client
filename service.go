@@ -78,6 +78,11 @@ type (
 		ElasticsearchPassword string   `json:"elasticsearch_password"`
 		KibanaURI             string   `json:"kibana_uri"`
 
+		OpensearchURIs          []string `json:"opensearch"`
+		OpensearchDashboardsURI string   `json:"opensearch_dashboards_uri"`
+		OpensearchPassword      string   `json:"opensearch_password"`
+		OpensearchUsername      string   `json:"opensearch_username"`
+
 		GrafanaURIs []string `json:"grafana"`
 
 		InfluxDBURIs         []string `json:"influxdb"`

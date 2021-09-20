@@ -120,3 +120,7 @@ Add support for AWS Transit Gateway and expose Azure config parameters
 - Add KafkaConnector GetByName wrapper around List and returns the named kafka connector
 - Remove KafkaConnector Get call since it is not included in the API
 
+## [1.6.1] - 2021-09-20
+- Add Opensearch connection info
+- Fix AccessControl struct fields should be omitted if empty
+- Add AccessControl to ModifyServiceUserRequest

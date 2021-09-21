@@ -129,3 +129,5 @@ Add support for AWS Transit Gateway and expose Azure config parameters
 - Add support for the new mirror maker flow fields
 - Make username an optional field on ConnectionPool requests
 
+## [1.7.0] - not yet released
+- Add Flink APIs

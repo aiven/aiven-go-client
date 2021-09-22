@@ -15,19 +15,19 @@ type (
 
 	// CreateConnectionPoolRequest are the parameters used to create a connection pool entry.
 	CreateConnectionPoolRequest struct {
-		Database string `json:"database"`
-		PoolMode string `json:"pool_mode"`
-		PoolName string `json:"pool_name"`
-		PoolSize int    `json:"pool_size"`
-		Username string `json:"username,omitempty"`
+		Database string  `json:"database"`
+		PoolMode string  `json:"pool_mode"`
+		PoolName string  `json:"pool_name"`
+		PoolSize int     `json:"pool_size"`
+		Username *string `json:"username,omitempty"`
 	}
 
 	// UpdateConnectionPoolRequest are the parameters used to update a connection pool entry.
 	UpdateConnectionPoolRequest struct {
-		Database string `json:"database"`
-		PoolMode string `json:"pool_mode"`
-		PoolSize int    `json:"pool_size"`
-		Username string `json:"username,omitempty"`
+		Database string  `json:"database"`
+		PoolMode string  `json:"pool_mode"`
+		PoolSize int     `json:"pool_size"`
+		Username *string `json:"username,omitempty"`
 	}
 )
 

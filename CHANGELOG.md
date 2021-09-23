@@ -124,3 +124,8 @@ Add support for AWS Transit Gateway and expose Azure config parameters
 - Add Opensearch connection info
 - Fix AccessControl struct fields should be omitted if empty
 - Add AccessControl to ModifyServiceUserRequest
+
+## [1.6.2] - 2021-09-23
+- Add support for the new mirror maker flow fields
+- Make username an optional field on ConnectionPool requests
+

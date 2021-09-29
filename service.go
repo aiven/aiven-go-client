@@ -105,6 +105,8 @@ type (
 		RedisPassword  string   `json:"redis_password"`
 		RedisSlaveURIs []string `json:"redis_slave"`
 		RedisURIs      []string `json:"redis"`
+
+		FlinkHostPorts []string `json:"flink"`
 	}
 
 	// PostgresParams represents individual parameters for a PostgreSQL ConnectionInfo

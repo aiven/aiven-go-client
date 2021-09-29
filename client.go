@@ -62,6 +62,8 @@ type Client struct {
 	BillingGroup                    *BillingGroupHandler
 	ServiceTask                     *ServiceTaskHandler
 	AWSPrivatelink                  *AWSPrivatelinkHandler
+	FlinkJobs                       *FlinkJobHandler
+	FlinkTables                     *FlinkTableHandler
 }
 
 // GetUserAgentOrDefault configures a default userAgent value, if one has not been provided.
@@ -174,6 +176,8 @@ func (c *Client) Init() {
 	c.BillingGroup = &BillingGroupHandler{c}
 	c.ServiceTask = &ServiceTaskHandler{c}
 	c.AWSPrivatelink = &AWSPrivatelinkHandler{c}
+	c.FlinkJobs = &FlinkJobHandler{c}
+	c.FlinkTables = &FlinkTableHandler{c}
 }
 
 func (c *Client) doGetRequest(endpoint string, req interface{}) ([]byte, error) {
@@ -186,6 +190,10 @@ func (c *Client) doPutRequest(endpoint string, req interface{}) ([]byte, error) 
 
 func (c *Client) doPostRequest(endpoint string, req interface{}) ([]byte, error) {
 	return c.doRequest("POST", endpoint, req, 1)
+}
+
+func (c *Client) doPatchRequest(endpoint string, req interface{}) ([]byte, error) {
+	return c.doRequest("PATCH", endpoint, req, 1)
 }
 
 func (c *Client) doDeleteRequest(endpoint string, req interface{}) ([]byte, error) {

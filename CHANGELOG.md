@@ -131,3 +131,4 @@ Add support for AWS Transit Gateway and expose Azure config parameters
 
 ## [1.7.0] - not yet released
 - Add Flink APIs
+- Add Azure Privatelink support

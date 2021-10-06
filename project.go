@@ -48,6 +48,7 @@ type (
 		VatID                        *string          `json:"vat_id,omitempty"`
 		UseSourceProjectBillingGroup bool             `json:"use_source_project_billing_group,omitempty"`
 		BillingGroupId               string           `json:"billing_group_id,omitempty"`
+		AddAccountOwnersAdminAccess  bool             `json:"add_account_owners_admin_access"`
 	}
 
 	// UpdateProjectRequest are the parameters for updating a project.

@@ -1,7 +1,7 @@
 package aiven
 
 type (
-	// FlinkTableHandler aiven go-client handler for Flink Jobs
+	// FlinkJobHandler aiven go-client handler for Flink Jobs
 	FlinkJobHandler struct {
 		client *Client
 	}
@@ -11,7 +11,7 @@ type (
 	CreateFlinkJobRequest struct {
 		JobName   string   `json:"job_name,omitempty"`
 		Statement string   `json:"statement"`
-		Tables    []string `json:"tables"`
+		TablesIds []string `json:"table_ids"`
 	}
 
 	// CreateFlinkJobResponse Aiven API response

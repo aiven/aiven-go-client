@@ -21,7 +21,7 @@ type (
 		PeerAzureTenantId        string                  `json:"peer_azure_tenant_id,omitempty"`
 		UserPeerNetworkCIDRs     []string                `json:"user_peer_network_cidrs,omitempty"`
 		VPCPeeringConnectionType string                  `json:"vpc_peering_connection_type,omitempty"`
-		PeerResourceGroup        *string                 `json:"peer_resource_group,omitempty"`
+		PeerResourceGroup        string                  `json:"peer_resource_group,omitempty"`
 	}
 
 	// VPC holds parameters associated with a Virtual Private Cloud

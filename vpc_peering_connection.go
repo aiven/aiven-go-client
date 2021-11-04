@@ -86,7 +86,7 @@ func (h *VPCPeeringConnectionsHandler) GetVPCPeeringWithResourceGroup(
 	peerCloudAccount string,
 	peerVPC string,
 	peerRegion *string,
-	peerResourceGroup *string,
+	peerResourceGroup string,
 ) (*VPCPeeringConnection, error) {
 	// There's no API call for getting individual peering connection. Get the VPC
 	// info and filter from there
@@ -99,7 +99,7 @@ func (h *VPCPeeringConnectionsHandler) GetVPCPeeringWithResourceGroup(
 		if (peerRegion == nil || pc.PeerRegion == nil || *pc.PeerRegion == *peerRegion) &&
 			pc.PeerCloudAccount == peerCloudAccount &&
 			pc.PeerVPC == peerVPC &&
-			(peerResourceGroup == nil || pc.PeerResourceGroup == nil || *pc.PeerResourceGroup == *peerResourceGroup) {
+			peerResourceGroup == pc.PeerResourceGroup {
 			return pc, nil
 		}
 	}

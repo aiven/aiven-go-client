@@ -16,10 +16,10 @@ type (
 
 	// TransitGatewayVPCAttachment represents Transit Gateway VPC Attachment
 	TransitGatewayVPCAttachment struct {
-		CIDR              string `json:"cidr"`
-		PeerCloudAccount  string `json:"peer_cloud_account"`
-		PeerResourceGroup string `json:"peer_resource_group"`
-		PeerVPC           string `json:"peer_vpc"`
+		CIDR              string  `json:"cidr"`
+		PeerCloudAccount  string  `json:"peer_cloud_account"`
+		PeerResourceGroup *string `json:"peer_resource_group"`
+		PeerVPC           string  `json:"peer_vpc"`
 	}
 )
 

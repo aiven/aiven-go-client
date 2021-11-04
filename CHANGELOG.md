@@ -129,6 +129,8 @@ Add support for AWS Transit Gateway and expose Azure config parameters
 - Add support for the new mirror maker flow fields
 - Make username an optional field on ConnectionPool requests
 
-## [1.7.0] - not yet released
+## [1.7.0] - 2021-11-04
 - Add Flink APIs
 - Add Azure Privatelink support
+- Fix aws tgv vpc attachments
+- Fix `peer_resource_group` type

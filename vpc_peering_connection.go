@@ -21,7 +21,7 @@ type (
 		PeerRegion           *string  `json:"peer_region,omitempty"`
 		PeerAzureAppId       string   `json:"peer_azure_app_id,omitempty"`
 		PeerAzureTenantId    string   `json:"peer_azure_tenant_id,omitempty"`
-		PeerResourceGroup    string   `json:"peer_resource_group,omitempty"`
+		PeerResourceGroup    *string  `json:"peer_resource_group,omitempty"`
 		UserPeerNetworkCIDRs []string `json:"user_peer_network_cidrs,omitempty"`
 	}
 )
@@ -86,7 +86,7 @@ func (h *VPCPeeringConnectionsHandler) GetVPCPeeringWithResourceGroup(
 	peerCloudAccount string,
 	peerVPC string,
 	peerRegion *string,
-	peerResourceGroup string,
+	peerResourceGroup *string,
 ) (*VPCPeeringConnection, error) {
 	// There's no API call for getting individual peering connection. Get the VPC
 	// info and filter from there
@@ -99,7 +99,7 @@ func (h *VPCPeeringConnectionsHandler) GetVPCPeeringWithResourceGroup(
 		if (peerRegion == nil || pc.PeerRegion == nil || *pc.PeerRegion == *peerRegion) &&
 			pc.PeerCloudAccount == peerCloudAccount &&
 			pc.PeerVPC == peerVPC &&
-			pc.PeerResourceGroup == peerResourceGroup {
+			(peerResourceGroup == nil || pc.PeerResourceGroup == nil || *pc.PeerResourceGroup == *peerResourceGroup) {
 			return pc, nil
 		}
 	}

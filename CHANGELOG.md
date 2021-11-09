@@ -134,3 +134,6 @@ Add support for AWS Transit Gateway and expose Azure config parameters
 - Add Azure Privatelink support
 - Fix aws tgv vpc attachments
 - Fix `peer_resource_group` type
+
+## [1.8.0] - not yet released
+- Sync Flink Table API

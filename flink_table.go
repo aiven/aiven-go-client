@@ -9,13 +9,17 @@ type (
 	// CreateFlinkTableRequest Aiven API request
 	// POST https://api.aiven.io/v1/project/<project>/service/<service_name>/flink/table
 	CreateFlinkTableRequest struct {
-		IntegrationId string `json:"integration_id"`
-		JDBCTable     string `json:"jdbc_table,omitempty"`
-		KafkaTopic    string `json:"kafka_topic,omitempty"`
-		LikeOptions   string `json:"like_options,omitempty"`
-		Name          string `json:"name"`
-		PartitionedBy string `json:"partitioned_by,omitempty"`
-		SchemaSQL     string `json:"schema_sql"`
+		Name               string   `json:"name"`
+		SchemaSQL          string   `json:"schema_sql"`
+		IntegrationId      string   `json:"integration_id"`
+		JDBCTable          string   `json:"jdbc_table,omitempty"`
+		KafkaConnectorType string   `json:"kafka_connector_type,omitempty"`
+		KafkaTopic         string   `json:"kafka_topic,omitempty"`
+		KafkaKeyFields     []string `json:"kafka_key_fields,omitempty"`
+		KafkaKeyFormat     string   `json:"kafka_key_format,omitempty"`
+		KafkaValueFormat   string   `json:"kafka_value_format,omitempty"`
+		KafkaStartupMode   string   `json:"kafka_startup_mode,omitempty"`
+		LikeOptions        string   `json:"like_options,omitempty"`
 	}
 
 	// CreateFlinkTableResponse Aiven API response
@@ -56,9 +60,10 @@ type (
 
 	// shared fields by some responses
 	flinkTable struct {
-		IntegrationId string `json:"integration_id"`
 		TableId       string `json:"table_id"`
 		TableName     string `json:"table_name"`
+		IntegrationId string `json:"integration_id"`
+		SchemaSQL     string `json:"schema_sql"`
 	}
 )
 

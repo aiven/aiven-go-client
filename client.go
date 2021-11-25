@@ -39,6 +39,8 @@ type Client struct {
 	CardsHandler                    *CardsHandler
 	ServiceIntegrationEndpoints     *ServiceIntegrationEndpointsHandler
 	ServiceIntegrations             *ServiceIntegrationsHandler
+	ServiceTypes                    *ServiceTypesHandler
+	ServiceTask                     *ServiceTaskHandler
 	Services                        *ServicesHandler
 	ConnectionPools                 *ConnectionPoolsHandler
 	Databases                       *DatabasesHandler
@@ -60,7 +62,6 @@ type Client struct {
 	AccountTeamInvites              *AccountTeamInvitesHandler
 	TransitGatewayVPCAttachment     *TransitGatewayVPCAttachmentHandler
 	BillingGroup                    *BillingGroupHandler
-	ServiceTask                     *ServiceTaskHandler
 	AWSPrivatelink                  *AWSPrivatelinkHandler
 	FlinkJobs                       *FlinkJobHandler
 	FlinkTables                     *FlinkTableHandler
@@ -154,6 +155,8 @@ func (c *Client) Init() {
 	c.CardsHandler = &CardsHandler{c}
 	c.ServiceIntegrationEndpoints = &ServiceIntegrationEndpointsHandler{c}
 	c.ServiceIntegrations = &ServiceIntegrationsHandler{c}
+	c.ServiceTypes = &ServiceTypesHandler{c}
+	c.ServiceTask = &ServiceTaskHandler{c}
 	c.Services = &ServicesHandler{c}
 	c.ConnectionPools = &ConnectionPoolsHandler{c}
 	c.Databases = &DatabasesHandler{c}
@@ -175,7 +178,6 @@ func (c *Client) Init() {
 	c.AccountTeamInvites = &AccountTeamInvitesHandler{c}
 	c.TransitGatewayVPCAttachment = &TransitGatewayVPCAttachmentHandler{c}
 	c.BillingGroup = &BillingGroupHandler{c}
-	c.ServiceTask = &ServiceTaskHandler{c}
 	c.AWSPrivatelink = &AWSPrivatelinkHandler{c}
 	c.FlinkJobs = &FlinkJobHandler{c}
 	c.FlinkTables = &FlinkTableHandler{c}

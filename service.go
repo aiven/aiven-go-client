@@ -32,6 +32,28 @@ type (
 		Powered               bool                   `json:"powered"`
 		NodeStates            []*NodeState           `json:"node_states"`
 		DiskSpaceMB           int                    `json:"disk_space_mb"`
+		Features              ServiceFeatures        `json:"features"`
+	}
+
+	ServiceFeatures struct {
+		EnhancedLogging                bool `json:"enhanced_logging"`
+		ImprovedTopicManagement        bool `json:"improved_topic_management"`
+		ServiceIntegrations            bool `json:"service_integrations"`
+		KafkaConnectServiceIntegration bool `json:"kafka_connect_service_integration"`
+		PGAllowReplication             bool `json:"pg_allow_replication"`
+		Letsencrypt                    bool `json:"letsencrypt"`
+		IndexPatterns                  bool `json:"index_patterns"`
+		Karapace                       bool `json:"karapace"`
+		KarapaceRest                   bool `json:"karapace_rest"`
+		KarapaceJSONSchema             bool `json:"karapace_json_schema"`
+		KafkaConfigBackupsEnabled      bool `json:"kafka_config_backups_enabled"`
+		TopicManagement                bool `json:"topic_management"`
+		KafkaStrictAccessCertChecks    bool `json:"kafka_strict_access_cert_checks"`
+		KafkaTopicInfo                 bool `json:"kafka_topic_info"`
+		KafkaConnect                   bool `json:"kafka_connect"`
+		KafkaMirrormaker               bool `json:"kafka_mirrormaker"`
+		KafkaRest                      bool `json:"kafka_rest"`
+		SchemaRegistry                 bool `json:"schema_registry"`
 	}
 
 	// NodeState represents the Node State model on Aiven
@@ -176,6 +198,7 @@ type (
 		TerminationProtection bool                   `json:"termination_protection"`
 		UserConfig            map[string]interface{} `json:"user_config,omitempty"`
 		DiskSpaceMB           int                    `json:"disk_space_mb,omitempty"`
+		Karapace              *bool                  `json:"karapace,omitempty"`
 	}
 
 	// ServiceResponse represents the response from Aiven after interacting with

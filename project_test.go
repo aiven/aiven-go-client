@@ -142,7 +142,7 @@ func TestProjectsHandler_Create(t *testing.T) {
 			fields{client: c},
 			args{req: CreateProjectRequest{
 				Project:   "test-pr",
-				AccountId: "account-id",
+				AccountId: ToStringPointer("account-id"),
 			}},
 			testGetProject(),
 			false,

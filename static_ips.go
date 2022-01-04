@@ -9,7 +9,7 @@ type (
 	// CreateStaticIPRequest Aiven API request
 	// POST https://api.aiven.io/v1/project/<project>/static-ips
 	CreateStaticIPRequest struct {
-		CloudName string `json:"name"`
+		CloudName string `json:"cloud_name"`
 	}
 
 	// CreateStaticIPResponse Aiven API response

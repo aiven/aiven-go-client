@@ -27,7 +27,7 @@ type (
 		Database string  `json:"database"`
 		PoolMode string  `json:"pool_mode"`
 		PoolSize int     `json:"pool_size"`
-		Username *string `json:"username,omitempty"`
+		Username *string `json:"username"`
 	}
 )
 

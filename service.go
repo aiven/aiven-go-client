@@ -185,6 +185,7 @@ type (
 		UserConfig            map[string]interface{}  `json:"user_config,omitempty"`
 		ServiceIntegrations   []NewServiceIntegration `json:"service_integrations"`
 		DiskSpaceMB           int                     `json:"disk_space_mb,omitempty"`
+		StaticIPs             []string                `json:"static_ips,omitempty"`
 	}
 
 	// UpdateServiceRequest are the parameters to update a Service.

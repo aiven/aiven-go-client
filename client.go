@@ -66,6 +66,7 @@ type Client struct {
 	FlinkJobs                       *FlinkJobHandler
 	FlinkTables                     *FlinkTableHandler
 	AzurePrivatelink                *AzurePrivatelinkHandler
+	StaticIPs                       *StaticIPsHandler
 }
 
 // GetUserAgentOrDefault configures a default userAgent value, if one has not been provided.
@@ -182,6 +183,7 @@ func (c *Client) Init() {
 	c.FlinkJobs = &FlinkJobHandler{c}
 	c.FlinkTables = &FlinkTableHandler{c}
 	c.AzurePrivatelink = &AzurePrivatelinkHandler{c}
+	c.StaticIPs = &StaticIPsHandler{c}
 }
 
 func (c *Client) doGetRequest(endpoint string, req interface{}) ([]byte, error) {
@@ -250,6 +252,13 @@ func (c *Client) doRequest(method, uri string, body interface{}, apiVersion int)
 		req.Header.Set("Content-Type", "application/json")
 		req.Header.Set("User-Agent", c.UserAgent)
 		req.Header.Set("Authorization", "aivenv1 "+c.APIKey)
+
+		// TODO: BAD hack to get around pagination in most cases
+		// we should implement this properly at some point but for now
+		// that should be its own issue
+		query := req.URL.Query()
+		query.Add("limit", "999")
+		req.URL.RawQuery = query.Encode()
 
 		rsp, err := c.Client.Do(req)
 		if err != nil {

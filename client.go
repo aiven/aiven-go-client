@@ -67,6 +67,7 @@ type Client struct {
 	FlinkTables                     *FlinkTableHandler
 	AzurePrivatelink                *AzurePrivatelinkHandler
 	StaticIPs                       *StaticIPsHandler
+	ClickhouseDatabase              *ClickhouseDatabaseHandler
 }
 
 // GetUserAgentOrDefault configures a default userAgent value, if one has not been provided.
@@ -184,6 +185,7 @@ func (c *Client) Init() {
 	c.FlinkTables = &FlinkTableHandler{c}
 	c.AzurePrivatelink = &AzurePrivatelinkHandler{c}
 	c.StaticIPs = &StaticIPsHandler{c}
+	c.ClickhouseDatabase = &ClickhouseDatabaseHandler{c}
 }
 
 func (c *Client) doGetRequest(endpoint string, req interface{}) ([]byte, error) {

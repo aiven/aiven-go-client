@@ -26,6 +26,7 @@ type (
 	}
 
 	AccessControl struct {
+		M3Group                  *string  `json:"m3_group,omitempty"`
 		RedisACLCategories       []string `json:"redis_acl_categories,omitempty"`
 		RedisACLCommands         []string `json:"redis_acl_commands,omitempty"`
 		RedisACLKeys             []string `json:"redis_acl_keys,omitempty"`

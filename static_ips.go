@@ -42,7 +42,7 @@ type (
 		ServiceName string `json:"service_name"`
 	}
 
-	// shared fields by some responses
+	// StaticIP shared fields by API responses
 	StaticIP struct {
 		CloudName         string `json:"cloud_name"`
 		IPAddress         string `json:"ip_address"`

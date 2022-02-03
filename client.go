@@ -68,6 +68,7 @@ type Client struct {
 	AzurePrivatelink                *AzurePrivatelinkHandler
 	StaticIPs                       *StaticIPsHandler
 	ClickhouseDatabase              *ClickhouseDatabaseHandler
+	ClickhouseUser                  *ClickhouseUserHandler
 }
 
 // GetUserAgentOrDefault configures a default userAgent value, if one has not been provided.
@@ -186,6 +187,7 @@ func (c *Client) Init() {
 	c.AzurePrivatelink = &AzurePrivatelinkHandler{c}
 	c.StaticIPs = &StaticIPsHandler{c}
 	c.ClickhouseDatabase = &ClickhouseDatabaseHandler{c}
+	c.ClickhouseUser = &ClickhouseUserHandler{c}
 }
 
 func (c *Client) doGetRequest(endpoint string, req interface{}) ([]byte, error) {

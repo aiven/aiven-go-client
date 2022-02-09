@@ -42,7 +42,7 @@ func setupServiceTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 				Name:      "test-service",
 				Type:      "kafka",
 				NodeStates: []*NodeState{
-					&NodeState{
+					{
 						Name:            "test-service-1",
 						Role:            "master",
 						State:           "running",
@@ -156,7 +156,7 @@ func TestServicesHandler_Create(t *testing.T) {
 				Name:      "test-service",
 				Type:      "kafka",
 				NodeStates: []*NodeState{
-					&NodeState{
+					{
 						Name:            "test-service-1",
 						Role:            "master",
 						State:           "running",
@@ -212,7 +212,7 @@ func TestServicesHandler_Get(t *testing.T) {
 				Name:      "test-service",
 				Type:      "kafka",
 				NodeStates: []*NodeState{
-					&NodeState{
+					{
 						Name:            "test-service-1",
 						Role:            "master",
 						State:           "running",

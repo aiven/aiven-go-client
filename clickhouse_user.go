@@ -111,3 +111,21 @@ func (h *ClickhouseUserHandler) Delete(project, service, uuid string) error {
 
 	return checkAPIResponse(bts, nil)
 }
+
+func (h *ClickhouseUserHandler) ResetPassword(project, service, uuid string) (string, error) {
+	path := buildPath("project", project, "service", service, "clickhouse", "user", uuid, "password")
+	bts, err := h.client.doPutRequest(path, nil)
+	if err != nil {
+		return "", err
+	}
+
+	type Pass struct {
+		APIResponse
+		Password string `json:"name"`
+	}
+
+	var r Pass
+	errR := checkAPIResponse(bts, &r)
+
+	return r.Password, errR
+}

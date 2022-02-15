@@ -189,7 +189,7 @@ func (c *Client) Init() {
 	c.StaticIPs = &StaticIPsHandler{c}
 	c.ClickhouseDatabase = &ClickhouseDatabaseHandler{c}
 	c.ClickhouseUser = &ClickhouseUserHandler{c}
-	c.ClickHouseQuery = &ClickhouseQueryHandler{}
+	c.ClickHouseQuery = &ClickhouseQueryHandler{c}
 }
 
 func (c *Client) doGetRequest(endpoint string, req interface{}) ([]byte, error) {

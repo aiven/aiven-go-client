@@ -27,13 +27,14 @@ type (
 
 	// Account represents account
 	Account struct {
-		Id             string     `json:"account_id,omitempty"`
-		Name           string     `json:"account_name"`
-		OwnerTeamId    string     `json:"account_owner_team_id,omitempty"`
-		CreateTime     *time.Time `json:"create_time,omitempty"`
-		UpdateTime     *time.Time `json:"update_time,omitempty"`
-		BillingEnabled bool       `json:"account_billing_enabled,omitempty"`
-		TenantId       string     `json:"tenant_id,omitempty"`
+		Id                    string     `json:"account_id,omitempty"`
+		Name                  string     `json:"account_name"`
+		OwnerTeamId           string     `json:"account_owner_team_id,omitempty"`
+		CreateTime            *time.Time `json:"create_time,omitempty"`
+		UpdateTime            *time.Time `json:"update_time,omitempty"`
+		BillingEnabled        bool       `json:"account_billing_enabled,omitempty"`
+		TenantId              string     `json:"tenant_id,omitempty"`
+		PrimaryBillingGroupId string     `json:"primary_billing_group_id,omitempty"`
 	}
 )
 

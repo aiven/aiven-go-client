@@ -6,24 +6,25 @@ package aiven
 type (
 	// Project represents the Project model on Aiven.
 	Project struct {
-		AvailableCredits string          `json:"available_credits"`
-		BillingAddress   string          `json:"billing_address"`
-		BillingEmails    []*ContactEmail `json:"billing_emails"`
-		BillingExtraText string          `json:"billing_extra_text"`
-		Card             Card            `json:"card_info"`
-		Country          string          `json:"country"`
-		CountryCode      string          `json:"country_code"`
-		DefaultCloud     string          `json:"default_cloud"`
-		EstimatedBalance string          `json:"estimated_balance"`
-		PaymentMethod    string          `json:"payment_method"`
-		Name             string          `json:"project_name"`
-		TechnicalEmails  []*ContactEmail `json:"tech_emails"`
-		VatID            string          `json:"vat_id"`
-		AccountId        string          `json:"account_id"`
-		BillingCurrency  string          `json:"billing_currency"`
-		CopyFromProject  string          `json:"copy_from_project"`
-		BillingGroupId   string          `json:"billing_group_id"`
-		BillingGroupName string          `json:"billing_group_name"`
+		AvailableCredits string            `json:"available_credits"`
+		BillingAddress   string            `json:"billing_address"`
+		BillingEmails    []*ContactEmail   `json:"billing_emails"`
+		BillingExtraText string            `json:"billing_extra_text"`
+		Card             Card              `json:"card_info"`
+		Country          string            `json:"country"`
+		CountryCode      string            `json:"country_code"`
+		DefaultCloud     string            `json:"default_cloud"`
+		EstimatedBalance string            `json:"estimated_balance"`
+		PaymentMethod    string            `json:"payment_method"`
+		Name             string            `json:"project_name"`
+		TechnicalEmails  []*ContactEmail   `json:"tech_emails"`
+		VatID            string            `json:"vat_id"`
+		AccountId        string            `json:"account_id"`
+		BillingCurrency  string            `json:"billing_currency"`
+		CopyFromProject  string            `json:"copy_from_project"`
+		BillingGroupId   string            `json:"billing_group_id"`
+		BillingGroupName string            `json:"billing_group_name"`
+		Tags             map[string]string `json:"tags"`
 	}
 
 	// ProjectsHandler is the client which interacts with the Projects endpoints
@@ -34,36 +35,38 @@ type (
 
 	// CreateProjectRequest are the parameters for creating a project.
 	CreateProjectRequest struct {
-		BillingAddress               *string          `json:"billing_address,omitempty"`
-		BillingEmails                *[]*ContactEmail `json:"billing_emails,omitempty"`
-		BillingExtraText             *string          `json:"billing_extra_text,omitempty"`
-		CardID                       *string          `json:"card_id,omitempty"`
-		Cloud                        *string          `json:"cloud,omitempty"`
-		CopyFromProject              string           `json:"copy_from_project,omitempty"`
-		CountryCode                  *string          `json:"country_code,omitempty"`
-		Project                      string           `json:"project"`
-		AccountId                    *string          `json:"account_id,omitempty"`
-		TechnicalEmails              *[]*ContactEmail `json:"tech_emails,omitempty"`
-		BillingCurrency              string           `json:"billing_currency,omitempty"`
-		VatID                        *string          `json:"vat_id,omitempty"`
-		UseSourceProjectBillingGroup bool             `json:"use_source_project_billing_group,omitempty"`
-		BillingGroupId               string           `json:"billing_group_id,omitempty"`
-		AddAccountOwnersAdminAccess  bool             `json:"add_account_owners_admin_access"`
+		BillingAddress               *string           `json:"billing_address,omitempty"`
+		BillingEmails                *[]*ContactEmail  `json:"billing_emails,omitempty"`
+		BillingExtraText             *string           `json:"billing_extra_text,omitempty"`
+		CardID                       *string           `json:"card_id,omitempty"`
+		Cloud                        *string           `json:"cloud,omitempty"`
+		CopyFromProject              string            `json:"copy_from_project,omitempty"`
+		CountryCode                  *string           `json:"country_code,omitempty"`
+		Project                      string            `json:"project"`
+		AccountId                    *string           `json:"account_id,omitempty"`
+		TechnicalEmails              *[]*ContactEmail  `json:"tech_emails,omitempty"`
+		BillingCurrency              string            `json:"billing_currency,omitempty"`
+		VatID                        *string           `json:"vat_id,omitempty"`
+		UseSourceProjectBillingGroup bool              `json:"use_source_project_billing_group,omitempty"`
+		BillingGroupId               string            `json:"billing_group_id,omitempty"`
+		AddAccountOwnersAdminAccess  bool              `json:"add_account_owners_admin_access"`
+		Tags                         map[string]string `json:"tags"`
 	}
 
 	// UpdateProjectRequest are the parameters for updating a project.
 	UpdateProjectRequest struct {
-		Name             string           `json:"project_name,omitempty"`
-		BillingAddress   *string          `json:"billing_address,omitempty"`
-		BillingEmails    *[]*ContactEmail `json:"billing_emails,omitempty"`
-		BillingExtraText *string          `json:"billing_extra_text,omitempty"`
-		CardID           *string          `json:"card_id,omitempty"`
-		Cloud            *string          `json:"cloud,omitempty"`
-		CountryCode      *string          `json:"country_code,omitempty"`
-		AccountId        string           `json:"account_id"`
-		TechnicalEmails  *[]*ContactEmail `json:"tech_emails,omitempty"`
-		BillingCurrency  string           `json:"billing_currency,omitempty"`
-		VatID            *string          `json:"vat_id,omitempty"`
+		Name             string            `json:"project_name,omitempty"`
+		BillingAddress   *string           `json:"billing_address,omitempty"`
+		BillingEmails    *[]*ContactEmail  `json:"billing_emails,omitempty"`
+		BillingExtraText *string           `json:"billing_extra_text,omitempty"`
+		CardID           *string           `json:"card_id,omitempty"`
+		Cloud            *string           `json:"cloud,omitempty"`
+		CountryCode      *string           `json:"country_code,omitempty"`
+		AccountId        string            `json:"account_id"`
+		TechnicalEmails  *[]*ContactEmail  `json:"tech_emails,omitempty"`
+		BillingCurrency  string            `json:"billing_currency,omitempty"`
+		VatID            *string           `json:"vat_id,omitempty"`
+		Tags             map[string]string `json:"tags"`
 	}
 
 	// ContactEmail represents either a technical contact or billing contact.

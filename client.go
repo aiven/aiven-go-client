@@ -70,6 +70,7 @@ type Client struct {
 	ClickhouseDatabase              *ClickhouseDatabaseHandler
 	ClickhouseUser                  *ClickhouseUserHandler
 	ClickHouseQuery                 *ClickhouseQueryHandler
+	ServiceTags                     *ServiceTagsHandler
 }
 
 // GetUserAgentOrDefault configures a default userAgent value, if one has not been provided.
@@ -190,6 +191,7 @@ func (c *Client) Init() {
 	c.ClickhouseDatabase = &ClickhouseDatabaseHandler{c}
 	c.ClickhouseUser = &ClickhouseUserHandler{c}
 	c.ClickHouseQuery = &ClickhouseQueryHandler{c}
+	c.ServiceTags = &ServiceTagsHandler{c}
 }
 
 func (c *Client) doGetRequest(endpoint string, req interface{}) ([]byte, error) {

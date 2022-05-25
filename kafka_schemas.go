@@ -57,7 +57,8 @@ type (
 
 	// KafkaSchemaSubject Kafka SchemaS Subject representation
 	KafkaSchemaSubject struct {
-		Schema string `json:"schema"`
+		Schema     string `json:"schema"`
+		SchemaType string `json:"schemaType,omitempty"`
 	}
 
 	// KafkaSchemaSubjectResponse Kafka Schemas Subject API endpoint response representation
@@ -68,10 +69,11 @@ type (
 
 	// KafkaSchemaSubjectVersion Kafka Schema Subject Version representation
 	KafkaSchemaSubjectVersion struct {
-		Id      int    `json:"id"`
-		Schema  string `json:"schema"`
-		Subject string `json:"subject"`
-		Version int    `json:"version"`
+		Id         int    `json:"id"`
+		Schema     string `json:"schema"`
+		Subject    string `json:"subject"`
+		Version    int    `json:"version"`
+		SchemaType string `json:"schemaType"`
 	}
 
 	// KafkaSchemaSubjectVersionResponse Kafka Schemas Subject Version API endpoint response representation

@@ -9,17 +9,28 @@ type (
 	// CreateFlinkTableRequest Aiven API request
 	// POST https://api.aiven.io/v1/project/<project>/service/<service_name>/flink/table
 	CreateFlinkTableRequest struct {
-		Name               string   `json:"name"`
-		SchemaSQL          string   `json:"schema_sql"`
-		IntegrationId      string   `json:"integration_id"`
-		JDBCTable          string   `json:"jdbc_table,omitempty"`
-		KafkaConnectorType string   `json:"kafka_connector_type,omitempty"`
-		KafkaTopic         string   `json:"kafka_topic,omitempty"`
-		KafkaKeyFields     []string `json:"kafka_key_fields,omitempty"`
-		KafkaKeyFormat     string   `json:"kafka_key_format,omitempty"`
-		KafkaValueFormat   string   `json:"kafka_value_format,omitempty"`
-		KafkaStartupMode   string   `json:"kafka_startup_mode,omitempty"`
-		LikeOptions        string   `json:"like_options,omitempty"`
+		Name                    string                `json:"name"`
+		SchemaSQL               string                `json:"schema_sql"`
+		IntegrationId           string                `json:"integration_id"`
+		JDBCTable               string                `json:"jdbc_table,omitempty"`
+		KafkaConnectorType      string                `json:"kafka_connector_type,omitempty"`
+		KafkaTopic              string                `json:"kafka_topic,omitempty"`
+		KafkaKeyFields          []string              `json:"kafka_key_fields,omitempty"`
+		KafkaKeyFormat          string                `json:"kafka_key_format,omitempty"`
+		KafkaValueFormat        string                `json:"kafka_value_format,omitempty"`
+		KafkaStartupMode        string                `json:"kafka_startup_mode,omitempty"`
+		LikeOptions             string                `json:"like_options,omitempty"`
+		KafkaValueFieldsInclude string                `json:"kafka_value_fields_include,omitempty"`
+		UpsertKafka             FlinkTableUpsertKafka `json:"upsert_kafka,omitempty"`
+	}
+
+	FlinkTableUpsertKafka struct {
+		KeyFields          []string `json:"key_fields,omitempty"`
+		KeyFormat          string   `json:"key_format,omitempty"`
+		ScanStartupMode    string   `json:"scan_startup_mode,omitempty"`
+		Topic              string   `json:"topic,omitempty"`
+		ValueFieldsInclude string   `json:"value_fields_include,omitempty"`
+		ValueFormat        string   `json:"value_format,omitempty"`
 	}
 
 	// CreateFlinkTableResponse Aiven API response

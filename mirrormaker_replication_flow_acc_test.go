@@ -1,11 +1,12 @@
 package aiven
 
 import (
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
 	"math/rand"
 	"os"
 	"strconv"
+
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 )
 
 var _ = Describe("MirrorMaker 2 Replication flow", func() {

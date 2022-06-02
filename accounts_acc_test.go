@@ -1,10 +1,11 @@
 package aiven
 
 import (
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
 	"math/rand"
 	"strconv"
+
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 )
 
 var _ = Describe("Accounts", func() {

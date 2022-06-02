@@ -13,7 +13,7 @@ bootstrap:
 # Testing and linting
 #################################################
 testacc:
-	AIVEN_ACC=1 go test -v -count 1 -parallel 20 --cover -timeout 30m . $(TESTARGS)
+	AIVEN_ACC=1 go test -v -count 1 -parallel 20 -ginkgo.v -ginkgo.progress -ginkgo.focus=$(FOCUS) --cover -timeout 30m .
 
 test:
 	go test -v --cover ./... -timeout 15m

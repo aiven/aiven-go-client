@@ -33,6 +33,7 @@ var _ = Describe("Projects", func() {
 			TechnicalEmails:              ContactEmailFromStringSlice([]string{"test@example.com"}),
 			UseSourceProjectBillingGroup: false,
 			BillingGroupId:               billingG.Id,
+			Tags:                         map[string]string{},
 		})
 	})
 
@@ -61,6 +62,7 @@ var _ = Describe("Projects", func() {
 		It("update project name", func() {
 			project, err = client.Projects.Update(projectName, UpdateProjectRequest{
 				Name: projectName + "-new",
+				Tags: map[string]string{},
 			})
 
 			if err == nil {

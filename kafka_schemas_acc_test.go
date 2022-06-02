@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-var _ = Describe("Kafka ", func() {
+var _ = Describe("Kafka", func() {
 	var (
 		projectName string
 		project     *Project
@@ -29,7 +29,6 @@ var _ = Describe("Kafka ", func() {
 
 			if project != nil {
 				Expect(project.Name).NotTo(BeEmpty())
-				Expect(project.AccountId).To(BeEmpty())
 			}
 		})
 

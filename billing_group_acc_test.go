@@ -78,6 +78,7 @@ var _ = Describe("BillingGroup", func() {
 			_, err = client.Projects.Create(CreateProjectRequest{
 				Project: projectName,
 				VatID:   ToStringPointer(""),
+				Tags:    map[string]string{},
 			})
 			Expect(err).NotTo(HaveOccurred())
 

@@ -9,19 +9,20 @@ type (
 
 	// BillingGroupRequest  is the request from Aiven for the billing group endpoints.
 	BillingGroupRequest struct {
-		BillingGroupName string          `json:"billing_group_name,omitempty"`
-		AccountId        *string         `json:"account_id,omitempty"`
-		CardId           *string         `json:"card_id,omitempty"`
-		VatId            *string         `json:"vat_id,omitempty"`
-		BillingCurrency  *string         `json:"billing_currency,omitempty"`
-		BillingExtraText *string         `json:"billing_extra_text,omitempty"`
-		BillingEmails    []*ContactEmail `json:"billing_emails,omitempty"`
-		Company          *string         `json:"company,omitempty"`
-		AddressLines     []string        `json:"address_lines,omitempty"`
-		CountryCode      *string         `json:"country_code,omitempty"`
-		City             *string         `json:"city,omitempty"`
-		State            *string         `json:"state,omitempty"`
-		ZipCode          *string         `json:"zip_code,omitempty"`
+		BillingGroupName     string          `json:"billing_group_name,omitempty"`
+		AccountId            *string         `json:"account_id,omitempty"`
+		CardId               *string         `json:"card_id,omitempty"`
+		VatId                *string         `json:"vat_id,omitempty"`
+		BillingCurrency      *string         `json:"billing_currency,omitempty"`
+		BillingExtraText     *string         `json:"billing_extra_text,omitempty"`
+		BillingEmails        []*ContactEmail `json:"billing_emails,omitempty"`
+		Company              *string         `json:"company,omitempty"`
+		AddressLines         []string        `json:"address_lines,omitempty"`
+		CountryCode          *string         `json:"country_code,omitempty"`
+		City                 *string         `json:"city,omitempty"`
+		State                *string         `json:"state,omitempty"`
+		ZipCode              *string         `json:"zip_code,omitempty"`
+		CopyFromBillingGroup *string         `json:"copy_from_billing_group,omitempty"`
 	}
 
 	// BillingGroupHandler is the client that interacts with billing groups on Aiven

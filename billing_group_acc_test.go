@@ -1,16 +1,18 @@
 package aiven
 
 import (
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
 	"math/rand"
 	"strconv"
+
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 )
 
 var _ = Describe("BillingGroup", func() {
 	var (
 		billingGName string
 		billingG     *BillingGroup
+		copiedBG     *BillingGroup
 		err          error
 	)
 
@@ -97,6 +99,23 @@ var _ = Describe("BillingGroup", func() {
 			list, err := client.BillingGroup.ListAll()
 			Expect(err).NotTo(HaveOccurred())
 			Expect(list).NotTo(BeEmpty())
+		})
+
+		It("create billing group by copy from an existing one", func() {
+			billingGName = "copy-from-" + billingG.BillingGroupName
+			copiedBG, err = client.BillingGroup.Create(BillingGroupRequest{
+				BillingGroupName:     billingGName,
+				CopyFromBillingGroup: ToStringPointer(billingG.Id),
+			})
+			Expect(err).NotTo(HaveOccurred())
+			Expect(copiedBG.Id).NotTo(BeNil())
+			Expect(copiedBG.Id).NotTo(Equal(billingG.Id))
+			Expect(copiedBG.Company).To(Equal(billingG.Company))
+			Expect(copiedBG.AddressLines).To(Equal(billingG.AddressLines))
+			Expect(copiedBG.CountryCode).To(Equal(billingG.CountryCode))
+			Expect(copiedBG.City).To(Equal(billingG.City))
+			Expect(copiedBG.ZipCode).To(Equal(billingG.ZipCode))
+			Expect(copiedBG.BillingCurrency).To(Equal(billingG.BillingCurrency))
 		})
 	})
 

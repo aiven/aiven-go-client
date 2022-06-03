@@ -1,11 +1,12 @@
 package aiven
 
 import (
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
 	"math/rand"
 	"os"
 	"strconv"
+
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 )
 
 var _ = Describe("MirrorMaker 2 Replication flow", func() {
@@ -30,7 +31,6 @@ var _ = Describe("MirrorMaker 2 Replication flow", func() {
 
 			if project != nil {
 				Expect(project.Name).NotTo(BeEmpty())
-				Expect(project.AccountId).To(BeEmpty())
 			}
 		})
 
@@ -80,11 +80,13 @@ var _ = Describe("MirrorMaker 2 Replication flow", func() {
 			JustBeforeEach(func() {
 				errR = client.KafkaMirrorMakerReplicationFlow.Create(projectName, serviceName, MirrorMakerReplicationFlowRequest{
 					ReplicationFlow{
-						Enabled:         false,
-						SourceCluster:   "source",
-						TargetCluster:   "target",
-						Topics:          []string{".*"},
-						TopicsBlacklist: []string{},
+						Enabled:                         false,
+						SourceCluster:                   "source",
+						TargetCluster:                   "target",
+						Topics:                          []string{".*"},
+						TopicsBlacklist:                 []string{},
+						SyncGroupOffsetsIntervalSeconds: 2,
+						ReplicationPolicyClass:          "org.apache.kafka.connect.mirror.DefaultReplicationPolicy",
 					},
 				})
 			})
@@ -108,9 +110,11 @@ var _ = Describe("MirrorMaker 2 Replication flow", func() {
 				It("should update", func() {
 					r, errU := client.KafkaMirrorMakerReplicationFlow.Update(projectName, serviceName, "source", "target", MirrorMakerReplicationFlowRequest{
 						ReplicationFlow: ReplicationFlow{
-							Enabled:         false,
-							Topics:          []string{".*"},
-							TopicsBlacklist: []string{"test"},
+							Enabled:                         false,
+							Topics:                          []string{".*"},
+							TopicsBlacklist:                 []string{"test"},
+							SyncGroupOffsetsIntervalSeconds: 2,
+							ReplicationPolicyClass:          "org.apache.kafka.connect.mirror.DefaultReplicationPolicy",
 						},
 					})
 					Expect(errU).NotTo(HaveOccurred())

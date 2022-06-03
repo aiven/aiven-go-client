@@ -1,9 +1,10 @@
 package main
 
 import (
-	client "github.com/aiven/aiven-go-client"
 	"log"
 	"os"
+
+	client "github.com/aiven/aiven-go-client"
 )
 
 func main() {

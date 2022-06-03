@@ -1,10 +1,11 @@
 package aiven
 
 import (
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
 	"math/rand"
 	"strconv"
+
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 )
 
 var _ = Describe("Accounts", func() {
@@ -102,6 +103,7 @@ var _ = Describe("Accounts", func() {
 			if _, errP := client.Projects.Create(CreateProjectRequest{
 				Project:   projectName,
 				AccountId: ToStringPointer(account.Account.Id),
+				Tags:      map[string]string{},
 			}); errP != nil {
 				Fail("cannot create project :" + errP.Error())
 			}

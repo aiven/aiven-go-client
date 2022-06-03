@@ -1,15 +1,16 @@
 package aiven
 
 import (
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
 	"math/rand"
 	"os"
 	"strconv"
 	"time"
+
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
 )
 
-var _ = Describe("Kafka ", func() {
+var _ = Describe("Kafka", func() {
 	var (
 		projectName string
 		project     *Project
@@ -29,7 +30,6 @@ var _ = Describe("Kafka ", func() {
 
 			if project != nil {
 				Expect(project.Name).NotTo(BeEmpty())
-				Expect(project.AccountId).To(BeEmpty())
 			}
 		})
 

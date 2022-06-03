@@ -13,3 +13,6 @@
 
 # Folders
 bin
+
+# Editor
+.vscode

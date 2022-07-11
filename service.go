@@ -6,33 +6,34 @@ package aiven
 type (
 	// Service represents the Service model on Aiven.
 	Service struct {
-		ACL                   []*KafkaACL            `json:"acl"`
-		Backups               []*Backup              `json:"backups"`
-		CloudName             string                 `json:"cloud_name"`
-		ConnectionPools       []*ConnectionPool      `json:"connection_pools"`
-		CreateTime            string                 `json:"create_time"`
-		UpdateTime            string                 `json:"update_time"`
-		GroupList             []string               `json:"group_list"`
-		NodeCount             int                    `json:"node_count"`
-		Plan                  string                 `json:"plan"`
-		Name                  string                 `json:"service_name"`
-		Type                  string                 `json:"service_type"`
-		ProjectVPCID          *string                `json:"project_vpc_id"`
-		URI                   string                 `json:"service_uri"`
-		URIParams             map[string]string      `json:"service_uri_params"`
-		State                 string                 `json:"state"`
-		Metadata              interface{}            `json:"metadata"`
-		Users                 []*ServiceUser         `json:"users"`
-		UserConfig            map[string]interface{} `json:"user_config"`
-		ConnectionInfo        ConnectionInfo         `json:"connection_info"`
-		TerminationProtection bool                   `json:"termination_protection"`
-		MaintenanceWindow     MaintenanceWindow      `json:"maintenance"`
-		Integrations          []*ServiceIntegration  `json:"service_integrations"`
-		Components            []*ServiceComponents   `json:"components"`
-		Powered               bool                   `json:"powered"`
-		NodeStates            []*NodeState           `json:"node_states"`
-		DiskSpaceMB           int                    `json:"disk_space_mb"`
-		Features              ServiceFeatures        `json:"features"`
+		ACL                   []*KafkaACL               `json:"acl"`
+		SchemaRegistryACL     []*KafkaSchemaRegistryACL `json:"schema_registry_acl"`
+		Backups               []*Backup                 `json:"backups"`
+		CloudName             string                    `json:"cloud_name"`
+		ConnectionPools       []*ConnectionPool         `json:"connection_pools"`
+		CreateTime            string                    `json:"create_time"`
+		UpdateTime            string                    `json:"update_time"`
+		GroupList             []string                  `json:"group_list"`
+		NodeCount             int                       `json:"node_count"`
+		Plan                  string                    `json:"plan"`
+		Name                  string                    `json:"service_name"`
+		Type                  string                    `json:"service_type"`
+		ProjectVPCID          *string                   `json:"project_vpc_id"`
+		URI                   string                    `json:"service_uri"`
+		URIParams             map[string]string         `json:"service_uri_params"`
+		State                 string                    `json:"state"`
+		Metadata              interface{}               `json:"metadata"`
+		Users                 []*ServiceUser            `json:"users"`
+		UserConfig            map[string]interface{}    `json:"user_config"`
+		ConnectionInfo        ConnectionInfo            `json:"connection_info"`
+		TerminationProtection bool                      `json:"termination_protection"`
+		MaintenanceWindow     MaintenanceWindow         `json:"maintenance"`
+		Integrations          []*ServiceIntegration     `json:"service_integrations"`
+		Components            []*ServiceComponents      `json:"components"`
+		Powered               bool                      `json:"powered"`
+		NodeStates            []*NodeState              `json:"node_states"`
+		DiskSpaceMB           int                       `json:"disk_space_mb"`
+		Features              ServiceFeatures           `json:"features"`
 	}
 
 	ServiceFeatures struct {
@@ -147,6 +148,14 @@ type (
 		ID         string `json:"id"`
 		Permission string `json:"permission"`
 		Topic      string `json:"topic"`
+		Username   string `json:"username"`
+	}
+
+	// KafkaSchemaRegistryACL represents a Kafka Schema Registry ACL entry on Aiven.
+	KafkaSchemaRegistryACL struct {
+		ID         string `json:"id"`
+		Permission string `json:"permission"`
+		Resource   string `json:"resource"`
 		Username   string `json:"username"`
 	}
 

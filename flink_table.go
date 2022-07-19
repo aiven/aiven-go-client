@@ -76,6 +76,22 @@ type (
 		IntegrationId string `json:"integration_id"`
 		SchemaSQL     string `json:"schema_sql"`
 	}
+
+	// ValidateFlinkTableRequest Aiven API request
+	// POST https://api.aiven.io/v1/project/<project>/service/<service_name>/flink/table/validate
+	ValidateFlinkTableRequest CreateFlinkTableRequest
+
+	// ValidateFlinkTableResponse Aiven API response
+	// POST https://api.aiven.io/v1/project/<project>/service/<service_name>/flink/table/validate
+	ValidateFlinkTableResponse struct {
+		APIResponse
+
+		TableValidateError struct {
+			Message  string        `json:"message"`
+			Name     string        `json:"name"`
+			Position flinkPosition `json:"position"`
+		} `json:"table_validate_error"`
+	}
 )
 
 // Create creates a flink table
@@ -126,6 +142,20 @@ func (h *FlinkTableHandler) List(project, service string) (*ListFlinkTableRespon
 	}
 
 	var r ListFlinkTableResponse
+	errR := checkAPIResponse(bts, &r)
+
+	return &r, errR
+}
+
+// Validate validates a flink table
+func (h *FlinkTableHandler) Validate(project, service string, req ValidateFlinkTableRequest) (*ValidateFlinkTableResponse, error) {
+	path := buildPath("project", project, "service", service, "flink", "table", "validate")
+	bts, err := h.client.doPostRequest(path, req)
+	if err != nil {
+		return nil, err
+	}
+
+	var r ValidateFlinkTableResponse
 	errR := checkAPIResponse(bts, &r)
 
 	return &r, errR

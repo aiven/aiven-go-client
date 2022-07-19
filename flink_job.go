@@ -88,6 +88,24 @@ type (
 
 		Vertices []interface{} `json:"vertices"`
 	}
+
+	// ValidateFlinkJobRequest Aiven API request
+	// POST https://api.aiven.io/v1/project/<project>/service/<service_name>/flink/job/validate
+	ValidateFlinkJobRequest struct {
+		Statement string   `json:"statement"`
+		TableIDs  []string `json:"table_ids"`
+	}
+
+	// ValidateFlinkJobResponse Aiven API response
+	// POST https://api.aiven.io/v1/project/<project>/service/<service_name>/flink/job/validate
+	ValidateFlinkJobResponse struct {
+		APIResponse
+
+		JobValidateError struct {
+			Message  string        `json:"message"`
+			Position flinkPosition `json:"position"`
+		} `json:"job_validate_error"`
+	}
 )
 
 // Create creates a flink job
@@ -127,4 +145,18 @@ func (h *FlinkJobHandler) Patch(project, service string, req PatchFlinkJobReques
 	}
 
 	return checkAPIResponse(bts, nil)
+}
+
+// Validate validates a flink job
+func (h *FlinkJobHandler) Validate(project, service string, req ValidateFlinkJobRequest) (*ValidateFlinkJobResponse, error) {
+	path := buildPath("project", project, "service", service, "flink", "job", "validate")
+	bts, err := h.client.doPostRequest(path, req)
+	if err != nil {
+		return nil, err
+	}
+
+	var r ValidateFlinkJobResponse
+	errR := checkAPIResponse(bts, &r)
+
+	return &r, errR
 }

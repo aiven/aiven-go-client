@@ -13,16 +13,27 @@ type (
 
 	// AccountAuthenticationMethod represents account authentication method
 	AccountAuthenticationMethod struct {
-		AccountId                     string     `json:"account_id,omitempty"`
-		Enabled                       bool       `json:"authentication_method_enabled,omitempty"`
-		Id                            string     `json:"authentication_method_id,omitempty"`
-		Name                          string     `json:"authentication_method_name"`
-		Type                          string     `json:"authentication_method_type"`
-		AutoJoinTeamId                string     `json:"auto_join_team_id,omitempty"`
-		State                         string     `json:"state,omitempty"`
-		SAMLCertificate               string     `json:"saml_certificate,omitempty"`
-		SAMLIdpUrl                    string     `json:"saml_idp_url,omitempty"`
-		SAMLEntity                    string     `json:"saml_entity_id,omitempty"`
+		AccountId           string `json:"account_id,omitempty"`
+		Enabled             bool   `json:"authentication_method_enabled,omitempty"`
+		Id                  string `json:"authentication_method_id,omitempty"`
+		Name                string `json:"authentication_method_name"`
+		Type                string `json:"authentication_method_type"`
+		AutoJoinTeamId      string `json:"auto_join_team_id,omitempty"`
+		State               string `json:"state,omitempty"`
+		SAMLCertificate     string `json:"saml_certificate,omitempty"`
+		SAMLDigestAlgorithm string `json:"saml_digest_algorithm,omitempty"`
+		SAMLIdpUrl          string `json:"saml_idp_url,omitempty"`
+		SAMLEntity          string `json:"saml_entity_id,omitempty"`
+		SAMLFieldMapping    struct {
+			Email     string `json:"email,omitempty"`
+			FirstName string `json:"first_name,omitempty"`
+			Identity  string `json:"identity,omitempty"`
+			LastName  string `json:"last_name,omitempty"`
+			RealName  string `json:"real_name,omitempty"`
+		} `json:"saml_field_mapping,omitempty"`
+		SAMLIdpLoginAllowed           bool       `json:"saml_idp_login_allowed,omitempty"`
+		SAMLSignatureAlgorithm        string     `json:"saml_signature_algorithm,omitempty"`
+		SAMLVariant                   string     `json:"saml_variant,omitempty"`
 		SAMLAcsUrl                    string     `json:"saml_acs_url,omitempty"`
 		SAMLMetadataUrl               string     `json:"saml_metadata_url,omitempty"`
 		SAMLCertificateIssuer         string     `json:"saml_certificate_issuer,omitempty"`

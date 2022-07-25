@@ -81,6 +81,7 @@ var _ = Describe("MirrorMaker 2 Replication flow", func() {
 				errR = client.KafkaMirrorMakerReplicationFlow.Create(projectName, serviceName, MirrorMakerReplicationFlowRequest{
 					ReplicationFlow{
 						Enabled:                         false,
+						OffsetSyncsTopicLocation:        "source",
 						SourceCluster:                   "source",
 						TargetCluster:                   "target",
 						Topics:                          []string{".*"},

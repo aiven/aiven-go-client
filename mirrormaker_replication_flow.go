@@ -12,6 +12,7 @@ type (
 	// ReplicationFlow a replication flow entity
 	ReplicationFlow struct {
 		Enabled                         bool     `json:"enabled"`
+		OffsetSyncsTopicLocation        string   `json:"offset_syncs_topic_location,omitempty"`
 		SourceCluster                   string   `json:"source_cluster,omitempty"`
 		TargetCluster                   string   `json:"target_cluster,omitempty"`
 		ReplicationPolicyClass          string   `json:"replication_policy_class"`

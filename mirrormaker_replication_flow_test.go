@@ -42,6 +42,7 @@ func setupMirrormakerReplicationFlowTestCase(t *testing.T) (*Client, func(t *tes
 					"message": "Completed",
 					"replication_flows": [{
 						"enabled": true,
+						"offset_syncs_topic_location": "source",
 						"source_cluster": "kafka-sc",
 						"target_cluster": "kafka-tc",
 						"topics": [
@@ -68,6 +69,7 @@ func setupMirrormakerReplicationFlowTestCase(t *testing.T) (*Client, func(t *tes
 				{
 					"replication_flow": {
 						"enabled": true,
+						"offset_syncs_topic_location": "source",
 						"source_cluster": "kafka-sc",
 						"target_cluster": "kafka-tc",
 						"topics": [
@@ -207,9 +209,10 @@ func TestMirrorMakerReplicationFlowHandler_Update(t *testing.T) {
 			},
 			&MirrorMakerReplicationFlowResponse{
 				ReplicationFlow: ReplicationFlow{
-					Enabled:       true,
-					SourceCluster: "kafka-sc",
-					TargetCluster: "kafka-tc",
+					Enabled:                  true,
+					OffsetSyncsTopicLocation: "source",
+					SourceCluster:            "kafka-sc",
+					TargetCluster:            "kafka-tc",
 					Topics: []string{
 						".*",
 					},
@@ -274,9 +277,10 @@ func TestMirrorMakerReplicationFlowHandler_List(t *testing.T) {
 				},
 				ReplicationFlows: []ReplicationFlow{
 					{
-						Enabled:       true,
-						SourceCluster: "kafka-sc",
-						TargetCluster: "kafka-tc",
+						Enabled:                  true,
+						OffsetSyncsTopicLocation: "source",
+						SourceCluster:            "kafka-sc",
+						TargetCluster:            "kafka-tc",
 						Topics: []string{
 							".*",
 						},
@@ -384,9 +388,10 @@ func TestMirrorMakerReplicationFlowHandler_Get(t *testing.T) {
 			},
 			&MirrorMakerReplicationFlowResponse{
 				ReplicationFlow: ReplicationFlow{
-					Enabled:       true,
-					SourceCluster: "kafka-sc",
-					TargetCluster: "kafka-tc",
+					Enabled:                  true,
+					OffsetSyncsTopicLocation: "source",
+					SourceCluster:            "kafka-sc",
+					TargetCluster:            "kafka-tc",
 					Topics: []string{
 						".*",
 					},

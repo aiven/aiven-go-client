@@ -21,6 +21,7 @@ type (
 		KafkaStartupMode        string                 `json:"kafka_startup_mode,omitempty"`
 		LikeOptions             string                 `json:"like_options,omitempty"`
 		KafkaValueFieldsInclude string                 `json:"kafka_value_fields_include,omitempty"`
+		OpenSearchIndex         string                 `json:"opensearch_index,omitempty"`
 		UpsertKafka             *FlinkTableUpsertKafka `json:"upsert_kafka,omitempty"`
 	}
 

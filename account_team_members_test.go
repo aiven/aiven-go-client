@@ -1,5 +1,3 @@
-// Copyright (c) 2020 Aiven, Helsinki, Finland. https://aiven.io/
-
 package aiven
 
 import (

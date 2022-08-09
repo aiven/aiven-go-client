@@ -12,15 +12,17 @@ import (
 	"os"
 )
 
-// APIURL is the URL we'll use to speak to Aiven. This can be overwritten.
-var apiurl = "https://api.aiven.io/v1"
-var apiurlV2 = "https://api.aiven.io/v2"
+// apiUrl and apiUrlV2 are the URLs we'll use to speak to Aiven. This can be overwritten.
+var (
+	apiUrl   = "https://api.aiven.io/v1"
+	apiUrlV2 = "https://api.aiven.io/v2"
+)
 
 func init() {
 	value, isSet := os.LookupEnv("AIVEN_WEB_URL")
 	if isSet {
-		apiurl = value + "/v1"
-		apiurlV2 = value + "/v2"
+		apiUrl = value + "/v1"
+		apiUrlV2 = value + "/v2"
 	}
 }
 
@@ -292,11 +294,11 @@ func (c *Client) doRequest(method, uri string, body interface{}, apiVersion int)
 }
 
 func endpoint(uri string) string {
-	return apiurl + uri
+	return apiUrl + uri
 }
 
 func endpointV2(uri string) string {
-	return apiurlV2 + uri
+	return apiUrlV2 + uri
 }
 
 // ToStringPointer converts string to a string pointer

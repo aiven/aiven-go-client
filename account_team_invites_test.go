@@ -70,7 +70,7 @@ func setupAccountTeamInvitesTestCase(t *testing.T) (*Client, func(t *testing.T))
 		}
 	}))
 
-	apiurl = ts.URL
+	apiUrl = ts.URL
 
 	c, err := NewUserClient(UserName, UserPassword, "aiven-go-client-test/"+Version())
 	if err != nil {

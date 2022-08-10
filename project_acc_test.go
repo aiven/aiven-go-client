@@ -86,6 +86,42 @@ var _ = Describe("Projects", func() {
 		})
 	})
 
+	Context("Get service types", func() {
+		It("check returned service types", func() {
+			serviceTypes, err := client.Projects.ServiceTypes(projectName)
+			Expect(err).To(BeNil())
+			Expect(serviceTypes).ToNot(BeNil())
+			Expect(serviceTypes).Should(Not(BeEmpty()))
+			for _, serviceType := range serviceTypes {
+				Expect(serviceType).NotTo(BeNil())
+			}
+		})
+	})
+
+	Context("Get integration types", func() {
+		It("check returned integration types", func() {
+			integrationTypes, err := client.Projects.IntegrationTypes(projectName)
+			Expect(err).To(BeNil())
+			Expect(integrationTypes).ToNot(BeNil())
+			Expect(integrationTypes).Should(Not(BeEmpty()))
+			for _, integrationType := range integrationTypes {
+				Expect(integrationType).NotTo(BeNil())
+			}
+		})
+	})
+
+	Context("Get integration endpoint types", func() {
+		It("check returned integration endpoint types", func() {
+			endpointTypes, err := client.Projects.IntegrationEndpointTypes(projectName)
+			Expect(err).To(BeNil())
+			Expect(endpointTypes).ToNot(BeNil())
+			Expect(endpointTypes).Should(Not(BeEmpty()))
+			for _, endpointType := range endpointTypes {
+				Expect(endpointType).NotTo(BeNil())
+			}
+		})
+	})
+
 	AfterEach(func() {
 		err = client.Projects.Delete(projectName)
 		if err != nil {

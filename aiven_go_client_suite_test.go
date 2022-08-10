@@ -28,10 +28,10 @@ var _ = BeforeSuite(func() {
 	)
 
 	url := os.Getenv("AIVEN_WEB_URL")
-	if url == "" {
-		Fail("environment variable `AIVEN_WEB_URL` is not set")
+	if url != "" {
+		apiUrl = url + "/v1"
+		apiUrlV2 = url + "/v2"
 	}
-	apiurl = url + "/v1"
 
 	token := os.Getenv("AIVEN_TOKEN")
 	if token == "" {

@@ -272,7 +272,7 @@ func (h *ProjectsHandler) GetEventLog(project string) ([]*ProjectEvent, error) {
 	return r.Events, errR
 }
 
-// ServiceTypes returns all the available service types
+// ServiceTypes returns all the available service types.
 func (h *ProjectsHandler) ServiceTypes(project string) (map[string]ServiceType, error) {
 	bts, err := h.client.doGetRequest(buildPath("project", project, "service_types"), nil)
 	if err != nil {
@@ -285,7 +285,7 @@ func (h *ProjectsHandler) ServiceTypes(project string) (map[string]ServiceType, 
 	return r.ServiceTypes, err
 }
 
-// IntegrationTypes returns all the available integration types
+// IntegrationTypes returns all the available integration types.
 func (h *ProjectsHandler) IntegrationTypes(project string) ([]IntegrationType, error) {
 	bts, err := h.client.doGetRequest(buildPath("project", project, "integration_types"), nil)
 	if err != nil {
@@ -298,7 +298,7 @@ func (h *ProjectsHandler) IntegrationTypes(project string) ([]IntegrationType, e
 	return r.IntegrationTypes, err
 }
 
-// IntegrationEndpointTypes returns all the available integration endpoint types
+// IntegrationEndpointTypes returns all the available integration endpoint types.
 func (h *ProjectsHandler) IntegrationEndpointTypes(project string) ([]EndpointType, error) {
 	bts, err := h.client.doGetRequest(buildPath("project", project, "integration_endpoint_types"), nil)
 	if err != nil {

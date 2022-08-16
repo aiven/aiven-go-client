@@ -5,6 +5,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -16,6 +17,13 @@ import (
 var (
 	apiUrl   = "https://api.aiven.io/v1"
 	apiUrlV2 = "https://api.aiven.io/v2"
+)
+
+var (
+	// errUnableToCreateAivenClient is a template error for when the client cannot be created.
+	errUnableToCreateAivenClient = func(err error) error {
+		return fmt.Errorf("unable to create Aiven client: %w", err)
+	}
 )
 
 func init() {
@@ -118,6 +126,28 @@ func NewTokenClient(key string, userAgent string) (*Client, error) {
 	return c, nil
 }
 
+// SetupEnvClient creates a new client using the provided web URL and token in the environment.
+// This should only be used for testing and development purposes, or if you know what you're doing.
+func SetupEnvClient(userAgent string) (*Client, error) {
+	webUrl := os.Getenv("AIVEN_WEB_URL")
+	if webUrl != "" {
+		apiUrl = webUrl + "/v1"
+		apiUrlV2 = webUrl + "/v2"
+	}
+
+	token := os.Getenv("AIVEN_TOKEN")
+	if token == "" {
+		return nil, errUnableToCreateAivenClient(errors.New("AIVEN_TOKEN environment variable is required"))
+	}
+
+	client, err := NewTokenClient(token, userAgent)
+	if err != nil {
+		return nil, errUnableToCreateAivenClient(err)
+	}
+
+	return client, nil
+}
+
 // buildHttpClient it builds http.Client, if environment variable AIVEN_CA_CERT
 // contains a path to a valid CA certificate HTTPS client will be configured to use it
 func buildHttpClient() *http.Client {
@@ -215,10 +245,12 @@ func (c *Client) doDeleteRequest(endpoint string, req interface{}) ([]byte, erro
 	return c.doRequest("DELETE", endpoint, req, 1)
 }
 
+//nolint:unused
 func (c *Client) doV2GetRequest(endpoint string, req interface{}) ([]byte, error) {
 	return c.doRequest("GET", endpoint, req, 2)
 }
 
+//nolint:unused
 func (c *Client) doV2PutRequest(endpoint string, req interface{}) ([]byte, error) {
 	return c.doRequest("PUT", endpoint, req, 2)
 }
@@ -227,6 +259,7 @@ func (c *Client) doV2PostRequest(endpoint string, req interface{}) ([]byte, erro
 	return c.doRequest("POST", endpoint, req, 2)
 }
 
+//nolint:unused
 func (c *Client) doV2DeleteRequest(endpoint string, req interface{}) ([]byte, error) {
 	return c.doRequest("DELETE", endpoint, req, 2)
 }

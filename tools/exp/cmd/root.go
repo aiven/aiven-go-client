@@ -7,18 +7,14 @@ import (
 	"strings"
 
 	"github.com/aiven/aiven-go-client"
+	"github.com/aiven/aiven-go-client/tools/exp/diff"
 	"github.com/aiven/aiven-go-client/tools/exp/gen"
+	"github.com/aiven/aiven-go-client/tools/exp/reader"
 	"github.com/aiven/aiven-go-client/tools/exp/util"
+	"github.com/aiven/aiven-go-client/tools/exp/writer"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 )
-
-// rootCmd represents the base command when called without any subcommands.
-var rootCmd = &cobra.Command{
-	Use:   "exp",
-	Short: "exp is a tool for generating and persisting user configuration option schemas from Aiven APIs.",
-	Run:   run,
-}
 
 // logger is the logger of the application.
 var logger = &util.Logger{}
@@ -31,15 +27,18 @@ var env = util.EnvMap{
 // client is a pointer to the Aiven client.
 var client = &aiven.Client{}
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-func Execute(l *util.Logger) {
+func NewCmdRoot(l *util.Logger) *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "exp",
+		Short: "exp is a tool for generating and persisting user configuration option schemas from Aiven APIs.",
+		Run:   run,
+	}
+
+	cmd.Flags().StringP("output-dir", "o", "", "the output directory for the generated files")
+
 	logger = l
 
-	rootCmd.Flags().StringP("output-dir", "o", "", "the output directory for the generated files")
-
-	if err := rootCmd.Execute(); err != nil {
-		panic(err)
-	}
+	return cmd
 }
 
 // setupOutputDir sets up the output directory.
@@ -100,14 +99,37 @@ func setup(flags *pflag.FlagSet) {
 
 // run is the function that is called when the rootCmd is executed.
 func run(cmd *cobra.Command, _ []string) {
-	setup(cmd.Flags())
+	flags := cmd.Flags()
+
+	setup(flags)
 
 	ctx := context.Background()
 
-	logger.Info.Println("generating files")
+	logger.Info.Println("generating")
 
-	if err := gen.Run(ctx, logger, cmd.Flags(), env, client); err != nil {
-		logger.Error.Fatalf("error generating files: %s", err)
+	gr, err := gen.Run(ctx, logger, env, client)
+	if err != nil {
+		logger.Error.Fatalf("error generating: %s", err)
+	}
+
+	logger.Info.Println("reading files")
+
+	rr, err := reader.Run(ctx, logger, flags)
+	if err != nil && !os.IsNotExist(err) {
+		logger.Error.Fatalf("error reading files: %s", err)
+	}
+
+	logger.Info.Println("diffing")
+
+	dr, err := diff.Run(ctx, logger, gr, rr)
+	if err != nil {
+		logger.Error.Fatalf("error diffing: %s", err)
+	}
+
+	logger.Info.Println("writing files")
+
+	if err = writer.Run(ctx, logger, flags, dr); err != nil {
+		logger.Error.Fatalf("error writing files: %s", err)
 	}
 
 	logger.Info.Println("done")

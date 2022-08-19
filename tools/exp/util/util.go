@@ -10,15 +10,26 @@ import (
 	"github.com/aiven/aiven-go-client"
 )
 
-// EnvAivenProjectName is the environment variable for the Aiven project name.
-const EnvAivenProjectName = "AIVEN_PROJECT_NAME"
-
 const (
 	// logSeparator is the separator for the log.
 	logSeparator = " "
 
 	// logFlag is the flag for the log.
 	logFlag = log.LstdFlags | log.LUTC | log.Lmsgprefix
+)
+
+// EnvAivenProjectName is the environment variable for the Aiven project name.
+const EnvAivenProjectName = "AIVEN_PROJECT_NAME"
+
+const (
+	// ServiceTypesFilename is the name of the service types file.
+	ServiceTypesFilename = "service_types.yml"
+
+	// IntegrationTypesFilename is the name of the integration types file.
+	IntegrationTypesFilename = "integration_types.yml"
+
+	// IntegrationEndpointTypesFilename is the name of the integration endpoint types file.
+	IntegrationEndpointTypesFilename = "integration_endpoint_types.yml"
 )
 
 // Logger is a struct that holds the loggers for the application.

@@ -106,11 +106,11 @@ type (
 
 	// ServiceType represents a service type
 	ServiceType struct {
-		DefaultVersion         string        `json:"default_version"`
-		Description            string        `json:"description"`
-		LatestAvailableVersion string        `json:"latest_available_version"`
-		ServicePlans           []ServicePlan `json:"service_plans"`
-		UserConfigSchema       interface{}   `json:"user_config_schema"`
+		DefaultVersion         string                 `json:"default_version"`
+		Description            string                 `json:"description"`
+		LatestAvailableVersion string                 `json:"latest_available_version"`
+		ServicePlans           []ServicePlan          `json:"service_plans"`
+		UserConfigSchema       map[string]interface{} `json:"user_config_schema"`
 	}
 
 	// ServicePlan represents a service plan
@@ -142,26 +142,26 @@ type (
 
 	// IntegrationType represents an integration type
 	IntegrationType struct {
-		DestDescription    string      `json:"dest_description"`
-		DestServiceTypes   []string    `json:"dest_service_types"`
-		IntegrationType    string      `json:"integration_type"`
-		SourceDescription  string      `json:"source_description"`
-		SourceServiceTypes []string    `json:"source_service_types"`
-		UserConfigSchema   interface{} `json:"user_config_schema"`
+		DestDescription    string                 `json:"dest_description"`
+		DestServiceTypes   []string               `json:"dest_service_types"`
+		IntegrationType    string                 `json:"integration_type"`
+		SourceDescription  string                 `json:"source_description"`
+		SourceServiceTypes []string               `json:"source_service_types"`
+		UserConfigSchema   map[string]interface{} `json:"user_config_schema"`
 	}
 
 	// ProjectIntegrationEndpointTypesResponse is the response from Aiven for listing project integration endpoint types
 	ProjectIntegrationEndpointTypesResponse struct {
 		APIResponse
-		EndpointTypes []EndpointType `json:"endpoint_types"`
+		EndpointTypes []IntegrationEndpointType `json:"endpoint_types"`
 	}
 
-	// EndpointType represents an endpoint type
-	EndpointType struct {
-		EndpointType     string      `json:"endpoint_type"`
-		ServiceTypes     []string    `json:"service_types"`
-		Title            string      `json:"title"`
-		UserConfigSchema interface{} `json:"user_config_schema"`
+	// IntegrationEndpointType represents an integration endpoint type
+	IntegrationEndpointType struct {
+		EndpointType     string                 `json:"endpoint_type"`
+		ServiceTypes     []string               `json:"service_types"`
+		Title            string                 `json:"title"`
+		UserConfigSchema map[string]interface{} `json:"user_config_schema"`
 	}
 )
 
@@ -299,7 +299,7 @@ func (h *ProjectsHandler) IntegrationTypes(project string) ([]IntegrationType, e
 }
 
 // IntegrationEndpointTypes returns all the available integration endpoint types.
-func (h *ProjectsHandler) IntegrationEndpointTypes(project string) ([]EndpointType, error) {
+func (h *ProjectsHandler) IntegrationEndpointTypes(project string) ([]IntegrationEndpointType, error) {
 	bts, err := h.client.doGetRequest(buildPath("project", project, "integration_endpoint_types"), nil)
 	if err != nil {
 		return nil, err

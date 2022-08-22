@@ -27,26 +27,12 @@ var _ = BeforeSuite(func() {
 		err error
 	)
 
-	url := os.Getenv("AIVEN_WEB_URL")
-	if url != "" {
-		apiUrl = url + "/v1"
-		apiUrlV2 = url + "/v2"
-	}
-
-	token := os.Getenv("AIVEN_TOKEN")
-	if token == "" {
-		Fail("cannot create Aiven API client, `AIVEN_TOKEN` is required")
-	}
-
-	cardId := os.Getenv("AIVEN_PROJECT_NAME")
-	if cardId == "" {
+	projectName := os.Getenv("AIVEN_PROJECT_NAME")
+	if projectName == "" {
 		Fail("cannot create Aiven API client, `AIVEN_PROJECT_NAME` is required")
 	}
 
-	client, err = NewTokenClient(
-		token,
-		"aiven-go-client-test/")
-
+	client, err = SetupEnvClient("aiven-go-client/test")
 	if err != nil {
 		Fail("cannot create Aiven API client :" + err.Error())
 	}

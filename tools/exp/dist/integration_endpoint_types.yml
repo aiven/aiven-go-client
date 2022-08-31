@@ -1,34 +1,34 @@
 datadog:
-  additionalProperties: false
+  type: object
   properties:
     datadog_api_key:
-      example: 848f30907c15c55d601fe45487cce9b6
-      maxLength: "32"
-      minLength: "32"
-      pattern: ^[A-Za-z0-9]{32}$
       title: Datadog API key
       type: string
+      min_length: 32
+      max_length: 32
+      pattern: ^[A-Za-z0-9]{32}$
+      example: 848f30907c15c55d601fe45487cce9b6
       user_error: Must consist of alpha-numeric characters and contain 32 characters
     datadog_tags:
-      example:
-        - tag: foo
-        - comment: Useful tag
-          tag: bar:buzz
+      title: Custom tags provided by user
+      type: array
       items:
+        title: Datadog tag defined by user
+        type: object
         properties:
           comment:
-            example: Used to tag primary replica metrics
-            maxLength: "1024"
             title: Optional tag explanation
             type: string
+            max_length: 1024
+            example: Used to tag primary replica metrics
           tag:
-            description: 'Tag format and usage are described here: https://docs.datadoghq.com/getting_started/tagging. Tags with prefix ''aiven-'' are reserved for Aiven.'
-            example: replica:primary
-            maxLength: "200"
-            minLength: "1"
-            pattern: ^(?!aiven-)[^\W\d_](?:[:\w./-]*[\w./-])?$
             title: Tag value
+            description: 'Tag format and usage are described here: https://docs.datadoghq.com/getting_started/tagging. Tags with prefix ''aiven-'' are reserved for Aiven.'
             type: string
+            min_length: 1
+            max_length: 200
+            pattern: ^(?!aiven-)[^\W\d_](?:[:\w./-]*[\w./-])?$
+            example: replica:primary
             user_error: |
               Tags must start with a letter and after that may contain the characters listed below:
               alphanumerics, underscores, minuses, colons, periods, slashes.
@@ -36,536 +36,481 @@ datadog:
               Tags can be up to 200 characters long and support Unicode.
               Tags with prefix 'aiven-' are reserved for Aiven.
               More info: https://docs.datadoghq.com/getting_started/tagging.
-        required:
-          - tag
-        title: Datadog tag defined by user
-        type: object
-      maxItems: "32"
-      title: Custom tags provided by user
-      type: array
+      maxItems: 32
+      example:
+        - tag: foo
+        - comment: Useful tag
+          tag: bar:buzz
     disable_consumer_stats:
-      example: true
       title: Disable consumer group metrics
       type: boolean
+      example: true
     kafka_consumer_check_instances:
-      example: "8"
-      maximum: "100"
-      minimum: "1"
       title: Number of separate instances to fetch kafka consumer statistics with
       type: integer
+      minimum: 1
+      maximum: 100
+      example: "8"
     kafka_consumer_stats_timeout:
-      example: "60"
-      maximum: "600"
-      minimum: "2"
       title: Number of seconds that datadog will wait to get consumer statistics from brokers
       type: integer
+      minimum: 2
+      maximum: 600
+      example: "60"
     max_partition_contexts:
-      example: "32000"
-      maximum: "200000"
-      minimum: "200"
       title: Maximum number of partition contexts to send
       type: integer
+      minimum: 200
+      maximum: 200000
+      example: "32000"
     site:
-      enum:
-        - datadoghq.com
-        - datadoghq.eu
-      example: datadoghq.com
       title: Datadog intake site. Defaults to datadoghq.com
       type: string
-  required:
-    - datadog_api_key
-  type: object
+      enum:
+        - value: datadoghq.com
+        - value: datadoghq.eu
+      example: datadoghq.com
 external_aws_cloudwatch_logs:
-  additionalProperties: false
+  type: object
   properties:
     access_key:
-      example: AAAAAAAAAAAAAAAAAAAA
-      maxLength: "4096"
       title: AWS access key. Required permissions are logs:CreateLogGroup, logs:CreateLogStream, logs:PutLogEvents and logs:DescribeLogStreams
       type: string
+      max_length: 4096
+      example: AAAAAAAAAAAAAAAAAAAA
     log_group_name:
-      example: my-log-group
-      maxLength: "512"
-      minLength: "1"
-      pattern: ^[\.\-_/#A-Za-z0-9]+$
       title: AWS CloudWatch log group name
       type: string
+      min_length: 1
+      max_length: 512
+      pattern: ^[\.\-_/#A-Za-z0-9]+$
+      example: my-log-group
     region:
-      example: us-east-1
-      maxLength: "32"
       title: AWS region
       type: string
+      max_length: 32
+      example: us-east-1
     secret_key:
-      example: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-      maxLength: "4096"
       title: AWS secret key
       type: string
-  required:
-    - access_key
-    - secret_key
-    - region
-  type: object
+      max_length: 4096
+      example: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 external_aws_cloudwatch_metrics:
-  additionalProperties: false
+  type: object
   properties:
     access_key:
-      example: AAAAAAAAAAAAAAAAAAAA
-      maxLength: "4096"
       title: AWS access key. Required permissions are cloudwatch:PutMetricData
       type: string
+      max_length: 4096
+      example: AAAAAAAAAAAAAAAAAAAA
     namespace:
-      example: my-metrics-namespace
-      maxLength: "255"
-      minLength: "1"
-      pattern: ^(?!(AWS/|:))[:\.\-_/#A-Za-z0-9]+$
       title: AWS CloudWatch Metrics Namespace
       type: string
+      min_length: 1
+      max_length: 255
+      pattern: ^(?!(AWS/|:))[:\.\-_/#A-Za-z0-9]+$
+      example: my-metrics-namespace
     region:
-      example: us-east-1
-      maxLength: "32"
       title: AWS region
       type: string
+      max_length: 32
+      example: us-east-1
     secret_key:
-      example: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-      maxLength: "4096"
       title: AWS secret key
       type: string
-  required:
-    - access_key
-    - secret_key
-    - region
-    - namespace
-  type: object
+      max_length: 4096
+      example: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 external_elasticsearch_logs:
-  additionalProperties: false
+  type: object
   properties:
     ca:
-      example: |
-        -----BEGIN CERTIFICATE-----
-        ...
-        -----END CERTIFICATE-----
-      maxLength: "16384"
       title: PEM encoded CA certificate
       type:
         - string
         - "null"
+      max_length: 16384
+      example: |
+        -----BEGIN CERTIFICATE-----
+        ...
+        -----END CERTIFICATE-----
     index_days_max:
-      default: "3"
-      example: "3"
-      maximum: "10000"
-      minimum: "1"
       title: Maximum number of days of logs to keep
       type: integer
+      default: "3"
+      minimum: 1
+      maximum: 10000
+      example: "3"
     index_prefix:
-      default: logs
-      example: logs
-      maxLength: "1000"
-      minLength: "1"
-      pattern: ^[a-z0-9][a-z0-9-_.]+$
       title: Elasticsearch index prefix
       type: string
+      default: logs
+      min_length: 1
+      max_length: 1000
+      pattern: ^[a-z0-9][a-z0-9-_.]+$
+      example: logs
       user_error: Must start with alpha-numeric character, and only contain alpha-numeric characters, dashes, underscores and dots
     timeout:
-      default: "10.0"
-      example: "10.0"
-      maximum: "120.0"
-      minimum: "10.0"
       title: Elasticsearch request timeout limit
       type: number
+      default: "10.0"
+      minimum: 10
+      maximum: 120
+      example: "10.0"
     url:
-      example: https://user:passwd@logs.example.com/
-      maxLength: "2048"
-      minLength: "12"
       title: Elasticsearch connection URL
       type: string
-  required:
-    - url
-    - index_prefix
-  type: object
+      min_length: 12
+      max_length: 2048
+      example: https://user:passwd@logs.example.com/
 external_google_cloud_logging:
-  additionalProperties: false
-  properties:
-    log_id:
-      example: syslog
-      maxLength: "512"
-      title: Google Cloud Logging log id
-      type: string
-    project_id:
-      example: snappy-photon-12345
-      maxLength: "30"
-      minLength: "6"
-      title: GCP project id.
-      type: string
-    service_account_credentials:
-      description: This is a JSON object with the fields documented in https://cloud.google.com/iam/docs/creating-managing-service-account-keys .
-      example: '{"type": "service_account", ...'
-      maxLength: "4096"
-      title: Google Service Account Credentials
-      type: string
-  required:
-    - project_id
-    - log_id
-    - service_account_credentials
   title: User configuration for Google Cloud Logging integration
   type: object
+  properties:
+    log_id:
+      title: Google Cloud Logging log id
+      type: string
+      max_length: 512
+      example: syslog
+    project_id:
+      title: GCP project id.
+      type: string
+      min_length: 6
+      max_length: 30
+      example: snappy-photon-12345
+    service_account_credentials:
+      title: Google Service Account Credentials
+      description: This is a JSON object with the fields documented in https://cloud.google.com/iam/docs/creating-managing-service-account-keys .
+      type: string
+      max_length: 4096
+      example: '{"type": "service_account", ...'
 external_kafka:
-  additionalProperties: false
+  type: object
   properties:
     bootstrap_servers:
-      example: 10.0.0.1:9092,10.0.0.2:9092
-      maxLength: "256"
-      minLength: "3"
       title: Bootstrap servers
       type: string
+      min_length: 3
+      max_length: 256
+      example: 10.0.0.1:9092,10.0.0.2:9092
     sasl_mechanism:
-      enum:
-        - PLAIN
-      example: PLAIN
       title: The list of SASL mechanisms enabled in the Kafka server.
       type:
         - string
+      enum:
+        - value: PLAIN
+      example: PLAIN
     sasl_plain_password:
-      example: admin
-      maxLength: "256"
-      minLength: "1"
       title: Password for SASL PLAIN mechanism in the Kafka server.
       type:
         - string
         - "null"
-    sasl_plain_username:
+      min_length: 1
+      max_length: 256
       example: admin
-      maxLength: "256"
-      minLength: "1"
+    sasl_plain_username:
       title: Username for SASL PLAIN mechanism in the Kafka server.
       type:
         - string
         - "null"
+      min_length: 1
+      max_length: 256
+      example: admin
     security_protocol:
-      enum:
-        - PLAINTEXT
-        - SSL
-        - SASL_PLAINTEXT
-        - SASL_SSL
-      example: PLAINTEXT
       title: Security protocol
       type: string
+      enum:
+        - value: PLAINTEXT
+        - value: SSL
+        - value: SASL_PLAINTEXT
+        - value: SASL_SSL
+      example: PLAINTEXT
     ssl_ca_cert:
-      example: |
-        -----BEGIN CERTIFICATE-----
-        ...
-        -----END CERTIFICATE-----
-      maxLength: "16384"
       title: PEM-encoded CA certificate
       type:
         - string
         - "null"
-    ssl_client_cert:
+      max_length: 16384
       example: |
         -----BEGIN CERTIFICATE-----
         ...
         -----END CERTIFICATE-----
-      maxLength: "16384"
+    ssl_client_cert:
       title: PEM-encoded client certificate
       type:
         - string
         - "null"
-    ssl_client_key:
+      max_length: 16384
       example: |
-        -----BEGIN PRIVATE KEY-----
+        -----BEGIN CERTIFICATE-----
         ...
-        -----END PRIVATE KEY-----
-      maxLength: "16384"
+        -----END CERTIFICATE-----
+    ssl_client_key:
       title: PEM-encoded client key
       type:
         - string
         - "null"
-    ssl_endpoint_identification_algorithm:
-      enum:
-        - https
-        - ""
-      example: https
-      title: The endpoint identification algorithm to validate server hostname using server certificate.
-      type:
-        - string
-  required:
-    - bootstrap_servers
-    - security_protocol
-  type: object
-external_opensearch_logs:
-  additionalProperties: false
-  properties:
-    ca:
-      example: |
-        -----BEGIN CERTIFICATE-----
-        ...
-        -----END CERTIFICATE-----
-      maxLength: "16384"
-      title: PEM encoded CA certificate
-      type:
-        - string
-        - "null"
-    index_days_max:
-      default: "3"
-      example: "3"
-      maximum: "10000"
-      minimum: "1"
-      title: Maximum number of days of logs to keep
-      type: integer
-    index_prefix:
-      default: logs
-      example: logs
-      maxLength: "1000"
-      minLength: "1"
-      pattern: ^[a-z0-9][a-z0-9-_.]+$
-      title: OpenSearch index prefix
-      type: string
-      user_error: Must start with alpha-numeric character, and only contain alpha-numeric characters, dashes, underscores and dots
-    timeout:
-      default: "10.0"
-      example: "10.0"
-      maximum: "120.0"
-      minimum: "10.0"
-      title: OpenSearch request timeout limit
-      type: number
-    url:
-      example: https://user:passwd@logs.example.com/
-      maxLength: "2048"
-      minLength: "12"
-      title: OpenSearch connection URL
-      type: string
-  required:
-    - url
-    - index_prefix
-  type: object
-external_postgresql:
-  additionalProperties: false
-  properties:
-    host:
-      example: my.server.com
-      maxLength: "255"
-      title: Hostname or IP address of the server
-      type: string
-    password:
-      example: jjKk45Nnd
-      maxLength: "256"
-      title: Password
-      type: string
-    port:
-      example: "5432"
-      maximum: "65535"
-      minimum: "1"
-      title: Port number of the server
-      type: integer
-    ssl_mode:
-      default: verify-full
-      enum:
-        - disable
-        - allow
-        - prefer
-        - require
-        - verify-ca
-        - verify-full
-      example: verify-full
-      title: SSL Mode
-      type: string
-    ssl_root_cert:
-      default: ""
-      example: |
-        -----BEGIN CERTIFICATE-----
-        ...
-        -----END CERTIFICATE-----
-      maxLength: "16384"
-      title: SSL Root Cert
-      type: string
-    username:
-      example: myname
-      maxLength: "256"
-      title: User name
-      type: string
-  required:
-    - host
-    - port
-    - username
-    - password
-  type: object
-external_schema_registry:
-  additionalProperties: false
-  properties:
-    authentication:
-      enum:
-        - none
-        - basic
-      example: basic
-      title: Authentication method
-      type: string
-    basic_auth_password:
-      example: Zm9vYg==
-      maxLength: "256"
-      title: Basic authentication password
-      type:
-        - string
-        - "null"
-    basic_auth_username:
-      example: avnadmin
-      maxLength: "256"
-      title: Basic authentication user name
-      type:
-        - string
-        - "null"
-    url:
-      example: https://schema-registry.kafka.company.com:28419
-      maxLength: "2048"
-      title: Schema Registry URL
-      type: string
-  required:
-    - url
-    - authentication
-  type: object
-jolokia:
-  additionalProperties: false
-  properties:
-    basic_auth_password:
-      example: yhfBNFii4C
-      maxLength: "64"
-      minLength: "8"
-      title: Jolokia basic authentication password
-      type: string
-    basic_auth_username:
-      example: jol48k51
-      maxLength: "32"
-      minLength: "5"
-      pattern: ^[a-z0-9\-@_]{5,32}$
-      title: Jolokia basic authentication username
-      type: string
-      user_error: Must be 5-32 characters long and may contain only lower case letters and numbers.
-  type: object
-prometheus:
-  additionalProperties: false
-  properties:
-    basic_auth_password:
-      example: fhyFNBjj3R
-      maxLength: "64"
-      minLength: "8"
-      title: Prometheus basic authentication password
-      type: string
-    basic_auth_username:
-      example: prom4851
-      maxLength: "32"
-      minLength: "5"
-      pattern: ^[a-z0-9\-@_]{5,32}$
-      title: Prometheus basic authentication username
-      type: string
-      user_error: Must be 5-32 characters long and may contain only lower case letters and numbers.
-  type: object
-rsyslog:
-  additionalProperties: false
-  properties:
-    ca:
-      example: |
-        -----BEGIN CERTIFICATE-----
-        ...
-        -----END CERTIFICATE-----
-      maxLength: "16384"
-      title: PEM encoded CA certificate
-      type:
-        - string
-        - "null"
-    cert:
-      example: |
-        -----BEGIN CERTIFICATE-----
-        ...
-        -----END CERTIFICATE-----
-      maxLength: "16384"
-      title: PEM encoded client certificate
-      type:
-        - string
-        - "null"
-    format:
-      default: rfc5424
-      enum:
-        - rfc5424
-        - rfc3164
-        - custom
-      example: rfc5424
-      title: message format
-      type: string
-    key:
+      max_length: 16384
       example: |
         -----BEGIN PRIVATE KEY-----
         ...
         -----END PRIVATE KEY-----
-      maxLength: "16384"
+    ssl_endpoint_identification_algorithm:
+      title: The endpoint identification algorithm to validate server hostname using server certificate.
+      type:
+        - string
+      enum:
+        - value: https
+        - value: ""
+      example: https
+external_opensearch_logs:
+  type: object
+  properties:
+    ca:
+      title: PEM encoded CA certificate
+      type:
+        - string
+        - "null"
+      max_length: 16384
+      example: |
+        -----BEGIN CERTIFICATE-----
+        ...
+        -----END CERTIFICATE-----
+    index_days_max:
+      title: Maximum number of days of logs to keep
+      type: integer
+      default: "3"
+      minimum: 1
+      maximum: 10000
+      example: "3"
+    index_prefix:
+      title: OpenSearch index prefix
+      type: string
+      default: logs
+      min_length: 1
+      max_length: 1000
+      pattern: ^[a-z0-9][a-z0-9-_.]+$
+      example: logs
+      user_error: Must start with alpha-numeric character, and only contain alpha-numeric characters, dashes, underscores and dots
+    timeout:
+      title: OpenSearch request timeout limit
+      type: number
+      default: "10.0"
+      minimum: 10
+      maximum: 120
+      example: "10.0"
+    url:
+      title: OpenSearch connection URL
+      type: string
+      min_length: 12
+      max_length: 2048
+      example: https://user:passwd@logs.example.com/
+external_postgresql:
+  type: object
+  properties:
+    host:
+      title: Hostname or IP address of the server
+      type: string
+      max_length: 255
+      example: my.server.com
+    password:
+      title: Password
+      type: string
+      max_length: 256
+      example: jjKk45Nnd
+    port:
+      title: Port number of the server
+      type: integer
+      minimum: 1
+      maximum: 65535
+      example: "5432"
+    ssl_mode:
+      title: SSL Mode
+      type: string
+      default: verify-full
+      enum:
+        - value: disable
+        - value: allow
+        - value: prefer
+        - value: require
+        - value: verify-ca
+        - value: verify-full
+      example: verify-full
+    ssl_root_cert:
+      title: SSL Root Cert
+      type: string
+      default: ""
+      max_length: 16384
+      example: |
+        -----BEGIN CERTIFICATE-----
+        ...
+        -----END CERTIFICATE-----
+    username:
+      title: User name
+      type: string
+      max_length: 256
+      example: myname
+external_schema_registry:
+  type: object
+  properties:
+    authentication:
+      title: Authentication method
+      type: string
+      enum:
+        - value: none
+        - value: basic
+      example: basic
+    basic_auth_password:
+      title: Basic authentication password
+      type:
+        - string
+        - "null"
+      max_length: 256
+      example: Zm9vYg==
+    basic_auth_username:
+      title: Basic authentication user name
+      type:
+        - string
+        - "null"
+      max_length: 256
+      example: avnadmin
+    url:
+      title: Schema Registry URL
+      type: string
+      max_length: 2048
+      example: https://schema-registry.kafka.company.com:28419
+jolokia:
+  type: object
+  properties:
+    basic_auth_password:
+      title: Jolokia basic authentication password
+      type: string
+      min_length: 8
+      max_length: 64
+      example: yhfBNFii4C
+    basic_auth_username:
+      title: Jolokia basic authentication username
+      type: string
+      min_length: 5
+      max_length: 32
+      pattern: ^[a-z0-9\-@_]{5,32}$
+      example: jol48k51
+      user_error: Must be 5-32 characters long and may contain only lower case letters and numbers.
+prometheus:
+  type: object
+  properties:
+    basic_auth_password:
+      title: Prometheus basic authentication password
+      type: string
+      min_length: 8
+      max_length: 64
+      example: fhyFNBjj3R
+    basic_auth_username:
+      title: Prometheus basic authentication username
+      type: string
+      min_length: 5
+      max_length: 32
+      pattern: ^[a-z0-9\-@_]{5,32}$
+      example: prom4851
+      user_error: Must be 5-32 characters long and may contain only lower case letters and numbers.
+rsyslog:
+  type: object
+  properties:
+    ca:
+      title: PEM encoded CA certificate
+      type:
+        - string
+        - "null"
+      max_length: 16384
+      example: |
+        -----BEGIN CERTIFICATE-----
+        ...
+        -----END CERTIFICATE-----
+    cert:
+      title: PEM encoded client certificate
+      type:
+        - string
+        - "null"
+      max_length: 16384
+      example: |
+        -----BEGIN CERTIFICATE-----
+        ...
+        -----END CERTIFICATE-----
+    format:
+      title: message format
+      type: string
+      default: rfc5424
+      enum:
+        - value: rfc5424
+        - value: rfc3164
+        - value: custom
+      example: rfc5424
+    key:
       title: PEM encoded client key
       type:
         - string
         - "null"
+      max_length: 16384
+      example: |
+        -----BEGIN PRIVATE KEY-----
+        ...
+        -----END PRIVATE KEY-----
     logline:
-      example: <%pri%>%timestamp:::date-rfc3339% %HOSTNAME% %app-name% %msg%
-      maxLength: "512"
-      minLength: "1"
       title: custom syslog message format
       type: string
+      min_length: 1
+      max_length: 512
+      example: <%pri%>%timestamp:::date-rfc3339% %HOSTNAME% %app-name% %msg%
     port:
-      default: "514"
-      example: "514"
-      maximum: "65535"
-      minimum: "1"
       title: rsyslog server port
       type: integer
+      default: "514"
+      minimum: 1
+      maximum: 65535
+      example: "514"
     sd:
-      example: TOKEN tag="LiteralValue"
-      maxLength: "1024"
       title: Structured data block for log message
       type:
         - string
         - "null"
+      max_length: 1024
+      example: TOKEN tag="LiteralValue"
     server:
-      example: logs.example.com
-      maxLength: "255"
-      minLength: "4"
       title: rsyslog server IP address or hostname
       type: string
+      min_length: 4
+      max_length: 255
+      example: logs.example.com
     tls:
-      default: true
-      example: true
       title: Require TLS
       type: boolean
-  required:
-    - server
-    - port
-    - format
-    - tls
-  type: object
+      default: true
+      example: true
 signalfx:
-  additionalProperties: false
+  type: object
   properties:
     enabled_metrics:
+      title: list of metrics to send
+      type: array
       default:
         - '*.*'
+      items:
+        title: metric to send (glob pattern)
+        type: string
+        max_length: 1024
+      maxItems: 256
       example:
         - load.*
         - vmpage.*
-      items:
-        maxLength: "1024"
-        title: metric to send (glob pattern)
-        type: string
-      maxItems: "256"
-      title: list of metrics to send
-      type: array
     signalfx_api_key:
-      example: 848f30907c15c55d601fe45487cce9b6
-      maxLength: "255"
-      minLength: "8"
       title: SignalFX API key
       type: string
+      min_length: 8
+      max_length: 255
+      example: 848f30907c15c55d601fe45487cce9b6
     signalfx_realm:
-      default: us0
-      example: us0
-      maxLength: "8"
-      minLength: "2"
       title: SignalFX realm
       type: string
-  required:
-    - signalfx_api_key
-    - signalfx_realm
-  type: object
+      default: us0
+      min_length: 2
+      max_length: 8
+      example: us0

@@ -1,16 +1,13 @@
 package gen
 
 import (
-	"os"
-	"strings"
-
 	"github.com/aiven/aiven-go-client"
+	"github.com/aiven/aiven-go-client/tools/exp/convert"
 	"github.com/aiven/aiven-go-client/tools/exp/filter"
+	"github.com/aiven/aiven-go-client/tools/exp/types"
 	"github.com/aiven/aiven-go-client/tools/exp/util"
-	"github.com/spf13/pflag"
 	"golang.org/x/net/context"
 	"golang.org/x/sync/errgroup"
-	"gopkg.in/yaml.v3"
 )
 
 const (
@@ -18,22 +15,8 @@ const (
 	generating = "generating %s"
 )
 
-const (
-	// serviceTypesFilename is the name of the service types file.
-	serviceTypesFilename = "service_types.yml"
-
-	// integrationTypesFilename is the name of the integration types file.
-	integrationTypesFilename = "integration_types.yml"
-
-	// integrationEndpointTypesFilename is the name of the integration endpoint types file.
-	integrationEndpointTypesFilename = "integration_endpoint_types.yml"
-)
-
 // logger is a pointer to the logger.
 var logger *util.Logger
-
-// flags is a pointer to the flags.
-var flags *pflag.FlagSet
 
 // env is a map of environment variables.
 var env util.EnvMap
@@ -41,123 +24,117 @@ var env util.EnvMap
 // client is a pointer to the Aiven client.
 var client *aiven.Client
 
-// write is a function that writes the generated file to the specified path.
-func write(filename string, in interface{}) error {
-	outputDir, err := flags.GetString("output-dir")
-	if err != nil {
-		return err
-	}
+// result is the result of the generation process.
+var result types.GenerationResult
 
-	f, err := os.Create(strings.Join([]string{outputDir, filename}, string(os.PathSeparator)))
-	if err != nil {
-		return err
-	}
-
-	defer func(f *os.File) {
-		err = f.Close()
-	}(f)
-
-	e := yaml.NewEncoder(f)
-
-	defer func(e *yaml.Encoder) {
-		err = e.Close()
-	}(e)
-
-	e.SetIndent(2)
-
-	if err = e.Encode(in); err != nil {
-		return err
-	}
-
-	return err
-}
-
-// serviceTypes generates the service types file.
+// serviceTypes generates the service types.
 func serviceTypes() error {
 	defer util.MeasureExecutionTime(logger)()
 
-	logger.Info.Printf(generating, serviceTypesFilename)
+	logger.Info.Printf(generating, "service types")
 
-	result, err := client.Projects.ServiceTypes(env[util.EnvAivenProjectName])
+	r, err := client.Projects.ServiceTypes(env[util.EnvAivenProjectName])
 	if err != nil {
 		return err
 	}
 
-	filtered, err := filter.ServiceTypes(result)
+	filtered, err := filter.ServiceTypes(r)
 	if err != nil {
 		return err
 	}
 
-	out := map[string]interface{}{}
+	out := map[string]types.UserConfigSchema{}
 
 	for k, v := range filtered {
-		out[k] = v.UserConfigSchema
+		cv, err := convert.UserConfigSchema(v.UserConfigSchema)
+		if err != nil {
+			return err
+		}
+
+		out[k] = *cv
 	}
 
-	return write(serviceTypesFilename, out)
+	result[types.KeyServiceTypes] = out
+
+	return nil
 }
 
-// integrationTypes generates the integration types file.
+// integrationTypes generates the integration types.
 func integrationTypes() error {
 	defer util.MeasureExecutionTime(logger)()
 
-	logger.Info.Printf(generating, integrationTypesFilename)
+	logger.Info.Printf(generating, "integration types")
 
-	result, err := client.Projects.IntegrationTypes(env[util.EnvAivenProjectName])
+	r, err := client.Projects.IntegrationTypes(env[util.EnvAivenProjectName])
 	if err != nil {
 		return err
 	}
 
-	filtered, err := filter.IntegrationTypes(result)
+	filtered, err := filter.IntegrationTypes(r)
 	if err != nil {
 		return err
 	}
 
-	out := map[string]interface{}{}
+	out := map[string]types.UserConfigSchema{}
 
 	for _, v := range filtered {
-		out[v.IntegrationType] = v.UserConfigSchema
+		cv, err := convert.UserConfigSchema(v.UserConfigSchema)
+		if err != nil {
+			return err
+		}
+
+		out[v.IntegrationType] = *cv
 	}
 
-	return write(integrationTypesFilename, out)
+	result[types.KeyIntegrationTypes] = out
+
+	return nil
 }
 
-// integrationEndpointTypes generates the integration endpoint types file.
+// integrationEndpointTypes generates the integration endpoint types.
 func integrationEndpointTypes() error {
 	defer util.MeasureExecutionTime(logger)()
 
-	logger.Info.Printf(generating, integrationEndpointTypesFilename)
+	logger.Info.Printf(generating, "integration endpoint types")
 
-	result, err := client.Projects.IntegrationEndpointTypes(env[util.EnvAivenProjectName])
+	r, err := client.Projects.IntegrationEndpointTypes(env[util.EnvAivenProjectName])
 	if err != nil {
 		return err
 	}
 
-	filtered, err := filter.IntegrationEndpointTypes(result)
+	filtered, err := filter.IntegrationEndpointTypes(r)
 	if err != nil {
 		return err
 	}
 
-	out := map[string]interface{}{}
+	out := map[string]types.UserConfigSchema{}
 
 	for _, v := range filtered {
-		out[v.EndpointType] = v.UserConfigSchema
+		cv, err := convert.UserConfigSchema(v.UserConfigSchema)
+		if err != nil {
+			return err
+		}
+
+		out[v.EndpointType] = *cv
 	}
 
-	return write(integrationEndpointTypesFilename, out)
+	result[types.KeyIntegrationEndpointTypes] = out
+
+	return nil
 }
 
 // setup sets up the generation process.
-func setup(l *util.Logger, f *pflag.FlagSet, e util.EnvMap, c *aiven.Client) {
+func setup(l *util.Logger, e util.EnvMap, c *aiven.Client) {
 	logger = l
-	flags = f
 	env = e
 	client = c
+
+	result = types.GenerationResult{}
 }
 
 // Run executes the generation process.
-func Run(ctx context.Context, logger *util.Logger, flags *pflag.FlagSet, env util.EnvMap, client *aiven.Client) error {
-	setup(logger, flags, env, client)
+func Run(ctx context.Context, logger *util.Logger, env util.EnvMap, client *aiven.Client) (types.GenerationResult, error) {
+	setup(logger, env, client)
 
 	errs, _ := errgroup.WithContext(ctx)
 
@@ -165,5 +142,5 @@ func Run(ctx context.Context, logger *util.Logger, flags *pflag.FlagSet, env uti
 	errs.Go(integrationTypes)
 	errs.Go(integrationEndpointTypes)
 
-	return errs.Wait()
+	return result, errs.Wait()
 }

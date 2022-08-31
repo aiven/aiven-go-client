@@ -1,10 +1,10 @@
 package filter
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/aiven/aiven-go-client"
+	"github.com/google/go-cmp/cmp"
 )
 
 // TestServiceTypes is a test for ServiceTypes.
@@ -37,12 +37,12 @@ func TestServiceTypes(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := ServiceTypes(tt.args.f)
-			if !reflect.DeepEqual(err, tt.wantErr) {
+			if !cmp.Equal(err, tt.wantErr) {
 				t.Errorf("ServiceTypes() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 
-			if !reflect.DeepEqual(got, tt.want) {
+			if !cmp.Equal(got, tt.want) {
 				t.Errorf("ServiceTypes() = %v, want %v", got, tt.want)
 			}
 		})
@@ -92,12 +92,12 @@ func TestIntegrationTypes(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := IntegrationTypes(tt.args.f)
-			if !reflect.DeepEqual(err, tt.wantErr) {
+			if !cmp.Equal(err, tt.wantErr) {
 				t.Errorf("IntegrationTypes() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 
-			if !reflect.DeepEqual(got, tt.want) {
+			if !cmp.Equal(got, tt.want) {
 				t.Errorf("IntegrationTypes() = %v, want %v", got, tt.want)
 			}
 		})
@@ -154,12 +154,12 @@ func TestIntegrationEndpointTypes(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := IntegrationEndpointTypes(tt.args.f)
-			if !reflect.DeepEqual(err, tt.wantErr) {
+			if !cmp.Equal(err, tt.wantErr) {
 				t.Errorf("IntegrationEndpointTypes() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 
-			if !reflect.DeepEqual(got, tt.want) {
+			if !cmp.Equal(got, tt.want) {
 				t.Errorf("IntegrationEndpointTypes() = %v, want %v", got, tt.want)
 			}
 		})

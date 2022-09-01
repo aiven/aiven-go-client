@@ -1,0 +1,27 @@
+name: "exp-updater"
+
+on:
+  schedule:
+    - cron: "0 3 * * *"
+
+jobs:
+  exp-updater:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version: "1.19"
+      - run: go build
+        working-directory: ./tools/exp
+      - run: ./tools/exp/exp
+        env:
+          AIVEN_TOKEN: ${{ secrets.AIVEN_TOKEN }}
+          AIVEN_PROJECT_NAME: ${{ secrets.AIVEN_PROJECT_NAME }}
+      - id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - uses: peter-evans/create-pull-request@v4
+        with:
+          title: "exp-updater: bump tools/exp/dist/*.yml (${{ steps.date.outputs.date }})"
+          commit-message: "exp-updater: bump tools/exp/dist/*.yml (${{ steps.date.outputs.date }})"
+          branch: "exp-updater/${{ steps.date.outputs.date }}"

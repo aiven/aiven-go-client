@@ -28,6 +28,8 @@ var _ = Describe("Accounts", func() {
 			Expect(account.Account.Name).To(Equal(accountName))
 			Expect(account.Account.CreateTime).NotTo(BeNil())
 			Expect(account.Account.UpdateTime).NotTo(BeNil())
+			Expect(account.Account.IsAccountOwner).To(Equal(true))
+			Expect(account.Account.PrimaryBillingGroupId).NotTo(BeNil())
 			Expect(account.APIResponse.Message).To(BeEmpty())
 			Expect(account.APIResponse.Errors).To(BeEmpty())
 		})

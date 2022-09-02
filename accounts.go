@@ -33,6 +33,7 @@ type (
 		BillingEnabled        bool       `json:"account_billing_enabled,omitempty"`
 		TenantId              string     `json:"tenant_id,omitempty"`
 		PrimaryBillingGroupId string     `json:"primary_billing_group_id,omitempty"`
+		IsAccountOwner        bool       `json:"is_account_owner,omitempty"`
 	}
 )
 

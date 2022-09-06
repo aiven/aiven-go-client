@@ -3,6 +3,7 @@ module github.com/aiven/aiven-go-client/tools/exp
 go 1.19
 
 require (
+	github.com/ChimeraCoder/gojson v1.1.0
 	github.com/aiven/aiven-go-client v0.0.0
 	github.com/google/go-cmp v0.5.8
 	github.com/mitchellh/copystructure v1.2.0
@@ -21,6 +22,7 @@ require (
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
 	golang.org/x/sys v0.0.0-20220817070843-5a390386f1f2 // indirect
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
 replace github.com/aiven/aiven-go-client => ../../

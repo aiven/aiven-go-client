@@ -18,6 +18,8 @@ jobs:
         env:
           AIVEN_TOKEN: ${{ secrets.AIVEN_TOKEN }}
           AIVEN_PROJECT_NAME: ${{ secrets.AIVEN_PROJECT_NAME }}
+      - run: go generate ./...
+        working-directory: ./tools/exp
       - id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
       - uses: peter-evans/create-pull-request@v4

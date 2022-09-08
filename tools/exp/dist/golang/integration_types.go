@@ -140,6 +140,11 @@ type IntegrationTypes struct {
 	} `yaml:"dashboard"`
 	Datadog struct {
 		Properties struct {
+			DatadogDbmEnabled struct {
+				Example bool   `yaml:"example"`
+				Title   string `yaml:"title"`
+				Type    string `yaml:"type"`
+			} `yaml:"datadog_dbm_enabled"`
 			DatadogTags struct {
 				Example []struct {
 					Comment string `yaml:"comment"`

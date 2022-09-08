@@ -109,6 +109,10 @@ dashboard:
 datadog:
   type: object
   properties:
+    datadog_dbm_enabled:
+      title: Enable Datadog Database Monitoring
+      type: boolean
+      example: true
     datadog_tags:
       title: Custom tags provided by user
       type: array

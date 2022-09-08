@@ -24,6 +24,8 @@ jobs:
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
       - uses: peter-evans/create-pull-request@v4
         with:
-          title: "exp-updater: bump tools/exp/dist/*.yml (${{ steps.date.outputs.date }})"
+          author: GitHub <noreply@github.com>
+          body: automated changes by [exp-updater](https://github.com/aiven/aiven-go-client/blob/master/.github/workflows/exp-updater.yml) GitHub Actions workflow
+          branch: exp-updater/${{ steps.date.outputs.date }}
           commit-message: "exp-updater: bump tools/exp/dist/*.yml (${{ steps.date.outputs.date }})"
-          branch: "exp-updater/${{ steps.date.outputs.date }}"
+          title: "exp-updater: bump tools/exp/dist/*.yml (${{ steps.date.outputs.date }})"

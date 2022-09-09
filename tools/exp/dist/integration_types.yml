@@ -323,13 +323,13 @@ kafka_mirrormaker:
           description: The minimum amount of data the server should return for a fetch request
           type: integer
           minimum: 1
-          maximum: 1.048576e+06
+          maximum: 5.24288e+06
           example: "1024"
         producer_batch_size:
           title: producer.batch.size
           description: The batch size in bytes producer will attempt to collect before publishing to broker.
           type: integer
-          maximum: 1.048576e+06
+          maximum: 5.24288e+06
           example: "1024"
         producer_buffer_memory:
           title: producer.buffer.memory
@@ -348,7 +348,7 @@ kafka_mirrormaker:
           title: producer.max.request.size
           description: The maximum request size in bytes.
           type: integer
-          maximum: 1.048576e+07
+          maximum: 6.7108864e+07
           example: "1048576"
 logs:
   type: object

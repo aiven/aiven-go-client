@@ -1745,7 +1745,7 @@ kafka:
           description: This setting will limit the number of record batches the producer will send in a single request to avoid sending huge requests.
           type: integer
           minimum: 131072
-          maximum: 1.048576e+07
+          maximum: 6.7108864e+07
           example: "1048576"
         session_timeout_ms:
           title: The timeout used to detect failures when using Kafka’s group management facilities
@@ -2014,7 +2014,7 @@ kafka_connect:
           description: This setting will limit the number of record batches the producer will send in a single request to avoid sending huge requests.
           type: integer
           minimum: 131072
-          maximum: 1.048576e+07
+          maximum: 6.7108864e+07
           example: "1048576"
         session_timeout_ms:
           title: The timeout used to detect failures when using Kafka’s group management facilities

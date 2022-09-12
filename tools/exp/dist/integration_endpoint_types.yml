@@ -36,7 +36,7 @@ datadog:
               Tags can be up to 200 characters long and support Unicode.
               Tags with prefix 'aiven-' are reserved for Aiven.
               More info: https://docs.datadoghq.com/getting_started/tagging.
-      maxItems: 32
+      max_items: 32
       example:
         - tag: foo
         - comment: Useful tag
@@ -497,7 +497,7 @@ signalfx:
         title: metric to send (glob pattern)
         type: string
         max_length: 1024
-      maxItems: 256
+      max_items: 256
       example:
         - load.*
         - vmpage.*

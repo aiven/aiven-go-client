@@ -30,7 +30,7 @@ clickhouse_kafka:
                   min_length: 1
                   max_length: 200
                   example: UInt64
-            maxItems: 100
+            max_items: 100
           data_format:
             title: Message data format
             type: string
@@ -72,8 +72,8 @@ clickhouse_kafka:
                   min_length: 1
                   max_length: 249
                   example: topic_name
-            maxItems: 100
-      maxItems: 100
+            max_items: 100
+      max_items: 100
 clickhouse_postgresql:
   title: Integration user config
   type: object
@@ -102,7 +102,7 @@ clickhouse_postgresql:
             min_length: 1
             max_length: 63
             example: public
-      maxItems: 10
+      max_items: 10
 dashboard:
   title: Integration user config
   type: object
@@ -140,7 +140,7 @@ datadog:
               Tags can be up to 200 characters long and support Unicode.
               Tags with prefix 'aiven-' are reserved for Aiven.
               More info: https://docs.datadoghq.com/getting_started/tagging.
-      maxItems: 32
+      max_items: 32
       example:
         - tag: foo
         - comment: Useful tag
@@ -153,7 +153,7 @@ datadog:
         type: string
         max_length: 1024
         example: '[ group_a, group_b ]'
-      maxItems: 1024
+      max_items: 1024
     exclude_topics:
       title: List of topics to exclude
       type: array
@@ -162,7 +162,7 @@ datadog:
         type: string
         max_length: 1024
         example: '[ topic_x, topic_y ]'
-      maxItems: 1024
+      max_items: 1024
     include_consumer_groups:
       title: List of custom metrics
       type: array
@@ -171,7 +171,7 @@ datadog:
         type: string
         max_length: 1024
         example: '[ group_a, group_b ]'
-      maxItems: 1024
+      max_items: 1024
     include_topics:
       title: List of topics to include
       type: array
@@ -180,7 +180,7 @@ datadog:
         type: string
         max_length: 1024
         example: '[ topic_x, topic_y ]'
-      maxItems: 1024
+      max_items: 1024
     kafka_custom_metrics:
       title: List of custom metrics
       type: array
@@ -189,7 +189,7 @@ datadog:
         type: string
         max_length: 1024
         example: kafka.log.log_size
-      maxItems: 1024
+      max_items: 1024
     max_jmx_metrics:
       title: Maximum number of JMX metrics to send
       type: integer
@@ -223,7 +223,7 @@ external_aws_cloudwatch_metrics:
             type: string
             max_length: 1000
             example: java.lang:Memory
-      maxItems: 1024
+      max_items: 1024
       example:
         - field: evicted_keys
           metric: redis
@@ -244,7 +244,7 @@ external_aws_cloudwatch_metrics:
             type: string
             max_length: 1000
             example: java.lang:Memory
-      maxItems: 1024
+      max_items: 1024
       example:
         - field: evicted_keys
           metric: redis

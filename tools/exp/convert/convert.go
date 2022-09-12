@@ -98,6 +98,7 @@ func UserConfigSchema(v aiven.UserConfigSchema) (*types.UserConfigSchema, error)
 		MinLength:   v.MinLength,
 		MaxLength:   v.MaxLength,
 		MaxItems:    v.MaxItems,
+		CreateOnly:  v.CreateOnly,
 		Pattern:     v.Pattern,
 		Example:     v.Example,
 		UserError:   v.UserError,

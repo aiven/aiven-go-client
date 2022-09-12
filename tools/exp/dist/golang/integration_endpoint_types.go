@@ -49,7 +49,7 @@ type IntegrationEndpointTypes struct {
 					Title string `yaml:"title"`
 					Type  string `yaml:"type"`
 				} `yaml:"items"`
-				MaxItems int    `yaml:"maxItems"`
+				MaxItems int    `yaml:"max_items"`
 				Title    string `yaml:"title"`
 				Type     string `yaml:"type"`
 			} `yaml:"datadog_tags"`
@@ -529,7 +529,7 @@ type IntegrationEndpointTypes struct {
 					Title     string `yaml:"title"`
 					Type      string `yaml:"type"`
 				} `yaml:"items"`
-				MaxItems int    `yaml:"maxItems"`
+				MaxItems int    `yaml:"max_items"`
 				Title    string `yaml:"title"`
 				Type     string `yaml:"type"`
 			} `yaml:"enabled_metrics"`

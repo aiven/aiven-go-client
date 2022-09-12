@@ -180,6 +180,7 @@ type (
 		MinLength            int                         `json:"minLength"`
 		MaxLength            int                         `json:"maxLength"`
 		MaxItems             int                         `json:"maxItems"`
+		CreateOnly           bool                        `json:"createOnly"`
 		Pattern              string                      `json:"pattern"`
 		Example              interface{}                 `json:"example"`
 		UserError            string                      `json:"user_error"`

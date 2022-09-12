@@ -65,7 +65,7 @@ type ServiceTypes struct {
 					Title string   `yaml:"title"`
 					Type  []string `yaml:"type"`
 				} `yaml:"items"`
-				MaxItems int    `yaml:"maxItems"`
+				MaxItems int    `yaml:"max_items"`
 				Title    string `yaml:"title"`
 				Type     string `yaml:"type"`
 			} `yaml:"ip_filter"`
@@ -87,10 +87,11 @@ type ServiceTypes struct {
 				Type  string `yaml:"type"`
 			} `yaml:"private_access"`
 			ProjectToForkFrom struct {
-				Example   string   `yaml:"example"`
-				MaxLength int      `yaml:"max_length"`
-				Title     string   `yaml:"title"`
-				Type      []string `yaml:"type"`
+				CreateOnly bool     `yaml:"create_only"`
+				Example    string   `yaml:"example"`
+				MaxLength  int      `yaml:"max_length"`
+				Title      string   `yaml:"title"`
+				Type       []string `yaml:"type"`
 			} `yaml:"project_to_fork_from"`
 			PublicAccess struct {
 				Properties struct {
@@ -104,10 +105,11 @@ type ServiceTypes struct {
 				Type  string `yaml:"type"`
 			} `yaml:"public_access"`
 			ServiceToForkFrom struct {
-				Example   string   `yaml:"example"`
-				MaxLength int      `yaml:"max_length"`
-				Title     string   `yaml:"title"`
-				Type      []string `yaml:"type"`
+				CreateOnly bool     `yaml:"create_only"`
+				Example    string   `yaml:"example"`
+				MaxLength  int      `yaml:"max_length"`
+				Title      string   `yaml:"title"`
+				Type       []string `yaml:"type"`
 			} `yaml:"service_to_fork_from"`
 			StaticIps struct {
 				Description string `yaml:"description"`
@@ -143,21 +145,23 @@ type ServiceTypes struct {
 					Title string   `yaml:"title"`
 					Type  []string `yaml:"type"`
 				} `yaml:"items"`
-				MaxItems int    `yaml:"maxItems"`
+				MaxItems int    `yaml:"max_items"`
 				Title    string `yaml:"title"`
 				Type     string `yaml:"type"`
 			} `yaml:"ip_filter"`
 			ProjectToForkFrom struct {
-				Example   string   `yaml:"example"`
-				MaxLength int      `yaml:"max_length"`
-				Title     string   `yaml:"title"`
-				Type      []string `yaml:"type"`
+				CreateOnly bool     `yaml:"create_only"`
+				Example    string   `yaml:"example"`
+				MaxLength  int      `yaml:"max_length"`
+				Title      string   `yaml:"title"`
+				Type       []string `yaml:"type"`
 			} `yaml:"project_to_fork_from"`
 			ServiceToForkFrom struct {
-				Example   string   `yaml:"example"`
-				MaxLength int      `yaml:"max_length"`
-				Title     string   `yaml:"title"`
-				Type      []string `yaml:"type"`
+				CreateOnly bool     `yaml:"create_only"`
+				Example    string   `yaml:"example"`
+				MaxLength  int      `yaml:"max_length"`
+				Title      string   `yaml:"title"`
+				Type       []string `yaml:"type"`
 			} `yaml:"service_to_fork_from"`
 		} `yaml:"properties"`
 		Type string `yaml:"type"`
@@ -309,7 +313,7 @@ type ServiceTypes struct {
 							Title     string   `yaml:"title"`
 							Type      []string `yaml:"type"`
 						} `yaml:"items"`
-						MaxItems int      `yaml:"maxItems"`
+						MaxItems int      `yaml:"max_items"`
 						Title    string   `yaml:"title"`
 						Type     []string `yaml:"type"`
 					} `yaml:"reindex_remote_whitelist"`
@@ -446,7 +450,7 @@ type ServiceTypes struct {
 					Title string `yaml:"title"`
 					Type  string `yaml:"type"`
 				} `yaml:"items"`
-				MaxItems int    `yaml:"maxItems"`
+				MaxItems int    `yaml:"max_items"`
 				Title    string `yaml:"title"`
 				Type     string `yaml:"type"`
 			} `yaml:"index_patterns"`
@@ -501,7 +505,7 @@ type ServiceTypes struct {
 					Title string   `yaml:"title"`
 					Type  []string `yaml:"type"`
 				} `yaml:"items"`
-				MaxItems int    `yaml:"maxItems"`
+				MaxItems int    `yaml:"max_items"`
 				Title    string `yaml:"title"`
 				Type     string `yaml:"type"`
 			} `yaml:"ip_filter"`
@@ -594,10 +598,11 @@ type ServiceTypes struct {
 				Type  string `yaml:"type"`
 			} `yaml:"privatelink_access"`
 			ProjectToForkFrom struct {
-				Example   string   `yaml:"example"`
-				MaxLength int      `yaml:"max_length"`
-				Title     string   `yaml:"title"`
-				Type      []string `yaml:"type"`
+				CreateOnly bool     `yaml:"create_only"`
+				Example    string   `yaml:"example"`
+				MaxLength  int      `yaml:"max_length"`
+				Title      string   `yaml:"title"`
+				Type       []string `yaml:"type"`
 			} `yaml:"project_to_fork_from"`
 			PublicAccess struct {
 				Properties struct {
@@ -628,10 +633,11 @@ type ServiceTypes struct {
 				Type      string `yaml:"type"`
 			} `yaml:"recovery_basebackup_name"`
 			ServiceToForkFrom struct {
-				Example   string   `yaml:"example"`
-				MaxLength int      `yaml:"max_length"`
-				Title     string   `yaml:"title"`
-				Type      []string `yaml:"type"`
+				CreateOnly bool     `yaml:"create_only"`
+				Example    string   `yaml:"example"`
+				MaxLength  int      `yaml:"max_length"`
+				Title      string   `yaml:"title"`
+				Type       []string `yaml:"type"`
 			} `yaml:"service_to_fork_from"`
 			StaticIps struct {
 				Description string `yaml:"description"`
@@ -690,7 +696,7 @@ type ServiceTypes struct {
 					Title string   `yaml:"title"`
 					Type  []string `yaml:"type"`
 				} `yaml:"items"`
-				MaxItems int    `yaml:"maxItems"`
+				MaxItems int    `yaml:"max_items"`
 				Title    string `yaml:"title"`
 				Type     string `yaml:"type"`
 			} `yaml:"ip_filter"`
@@ -810,7 +816,7 @@ type ServiceTypes struct {
 							Title     string `yaml:"title"`
 							Type      string `yaml:"type"`
 						} `yaml:"items"`
-						MaxItems int    `yaml:"maxItems"`
+						MaxItems int    `yaml:"max_items"`
 						Title    string `yaml:"title"`
 						Type     string `yaml:"type"`
 					} `yaml:"allowed_domains"`
@@ -823,7 +829,7 @@ type ServiceTypes struct {
 							Type      string `yaml:"type"`
 							UserError string `yaml:"user_error"`
 						} `yaml:"items"`
-						MaxItems int    `yaml:"maxItems"`
+						MaxItems int    `yaml:"max_items"`
 						Title    string `yaml:"title"`
 						Type     string `yaml:"type"`
 					} `yaml:"allowed_groups"`
@@ -878,7 +884,7 @@ type ServiceTypes struct {
 							Title     string `yaml:"title"`
 							Type      string `yaml:"type"`
 						} `yaml:"items"`
-						MaxItems int    `yaml:"maxItems"`
+						MaxItems int    `yaml:"max_items"`
 						Title    string `yaml:"title"`
 						Type     string `yaml:"type"`
 					} `yaml:"allowed_domains"`
@@ -891,7 +897,7 @@ type ServiceTypes struct {
 							Type      string `yaml:"type"`
 							UserError string `yaml:"user_error"`
 						} `yaml:"items"`
-						MaxItems int    `yaml:"maxItems"`
+						MaxItems int    `yaml:"max_items"`
 						Title    string `yaml:"title"`
 						Type     string `yaml:"type"`
 					} `yaml:"allowed_organizations"`
@@ -940,7 +946,7 @@ type ServiceTypes struct {
 							Type      string `yaml:"type"`
 							UserError string `yaml:"user_error"`
 						} `yaml:"items"`
-						MaxItems int    `yaml:"maxItems"`
+						MaxItems int    `yaml:"max_items"`
 						Title    string `yaml:"title"`
 						Type     string `yaml:"type"`
 					} `yaml:"scopes"`
@@ -970,7 +976,7 @@ type ServiceTypes struct {
 							Type      string `yaml:"type"`
 							UserError string `yaml:"user_error"`
 						} `yaml:"items"`
-						MaxItems int    `yaml:"maxItems"`
+						MaxItems int    `yaml:"max_items"`
 						Title    string `yaml:"title"`
 						Type     string `yaml:"type"`
 					} `yaml:"allowed_organizations"`
@@ -998,7 +1004,7 @@ type ServiceTypes struct {
 							Title   string  `yaml:"title"`
 							Type    string  `yaml:"type"`
 						} `yaml:"items"`
-						MaxItems int    `yaml:"maxItems"`
+						MaxItems int    `yaml:"max_items"`
 						Title    string `yaml:"title"`
 						Type     string `yaml:"type"`
 					} `yaml:"team_ids"`
@@ -1022,7 +1028,7 @@ type ServiceTypes struct {
 							Type      string `yaml:"type"`
 							UserError string `yaml:"user_error"`
 						} `yaml:"items"`
-						MaxItems int    `yaml:"maxItems"`
+						MaxItems int    `yaml:"max_items"`
 						Title    string `yaml:"title"`
 						Type     string `yaml:"type"`
 					} `yaml:"allowed_groups"`
@@ -1078,7 +1084,7 @@ type ServiceTypes struct {
 							Title     string `yaml:"title"`
 							Type      string `yaml:"type"`
 						} `yaml:"items"`
-						MaxItems int    `yaml:"maxItems"`
+						MaxItems int    `yaml:"max_items"`
 						Title    string `yaml:"title"`
 						Type     string `yaml:"type"`
 					} `yaml:"allowed_domains"`
@@ -1287,7 +1293,7 @@ type ServiceTypes struct {
 					Title string   `yaml:"title"`
 					Type  []string `yaml:"type"`
 				} `yaml:"items"`
-				MaxItems int    `yaml:"maxItems"`
+				MaxItems int    `yaml:"max_items"`
 				Title    string `yaml:"title"`
 				Type     string `yaml:"type"`
 			} `yaml:"ip_filter"`
@@ -1319,10 +1325,11 @@ type ServiceTypes struct {
 				Type  string `yaml:"type"`
 			} `yaml:"privatelink_access"`
 			ProjectToForkFrom struct {
-				Example   string   `yaml:"example"`
-				MaxLength int      `yaml:"max_length"`
-				Title     string   `yaml:"title"`
-				Type      []string `yaml:"type"`
+				CreateOnly bool     `yaml:"create_only"`
+				Example    string   `yaml:"example"`
+				MaxLength  int      `yaml:"max_length"`
+				Title      string   `yaml:"title"`
+				Type       []string `yaml:"type"`
 			} `yaml:"project_to_fork_from"`
 			PublicAccess struct {
 				Properties struct {
@@ -1343,10 +1350,11 @@ type ServiceTypes struct {
 				Type      string `yaml:"type"`
 			} `yaml:"recovery_basebackup_name"`
 			ServiceToForkFrom struct {
-				Example   string   `yaml:"example"`
-				MaxLength int      `yaml:"max_length"`
-				Title     string   `yaml:"title"`
-				Type      []string `yaml:"type"`
+				CreateOnly bool     `yaml:"create_only"`
+				Example    string   `yaml:"example"`
+				MaxLength  int      `yaml:"max_length"`
+				Title      string   `yaml:"title"`
+				Type       []string `yaml:"type"`
 			} `yaml:"service_to_fork_from"`
 			SMTPServer struct {
 				Properties struct {
@@ -1504,7 +1512,7 @@ type ServiceTypes struct {
 					Title string   `yaml:"title"`
 					Type  []string `yaml:"type"`
 				} `yaml:"items"`
-				MaxItems int    `yaml:"maxItems"`
+				MaxItems int    `yaml:"max_items"`
 				Title    string `yaml:"title"`
 				Type     string `yaml:"type"`
 			} `yaml:"ip_filter"`
@@ -1531,10 +1539,11 @@ type ServiceTypes struct {
 				Type  string `yaml:"type"`
 			} `yaml:"privatelink_access"`
 			ProjectToForkFrom struct {
-				Example   string   `yaml:"example"`
-				MaxLength int      `yaml:"max_length"`
-				Title     string   `yaml:"title"`
-				Type      []string `yaml:"type"`
+				CreateOnly bool     `yaml:"create_only"`
+				Example    string   `yaml:"example"`
+				MaxLength  int      `yaml:"max_length"`
+				Title      string   `yaml:"title"`
+				Type       []string `yaml:"type"`
 			} `yaml:"project_to_fork_from"`
 			PublicAccess struct {
 				Properties struct {
@@ -1555,10 +1564,11 @@ type ServiceTypes struct {
 				Type      string `yaml:"type"`
 			} `yaml:"recovery_basebackup_name"`
 			ServiceToForkFrom struct {
-				Example   string   `yaml:"example"`
-				MaxLength int      `yaml:"max_length"`
-				Title     string   `yaml:"title"`
-				Type      []string `yaml:"type"`
+				CreateOnly bool     `yaml:"create_only"`
+				Example    string   `yaml:"example"`
+				MaxLength  int      `yaml:"max_length"`
+				Title      string   `yaml:"title"`
+				Type       []string `yaml:"type"`
 			} `yaml:"service_to_fork_from"`
 			StaticIps struct {
 				Description string `yaml:"description"`
@@ -1601,7 +1611,7 @@ type ServiceTypes struct {
 					Title string   `yaml:"title"`
 					Type  []string `yaml:"type"`
 				} `yaml:"items"`
-				MaxItems int    `yaml:"maxItems"`
+				MaxItems int    `yaml:"max_items"`
 				Title    string `yaml:"title"`
 				Type     string `yaml:"type"`
 			} `yaml:"ip_filter"`
@@ -2219,7 +2229,7 @@ type ServiceTypes struct {
 					Title string   `yaml:"title"`
 					Type  []string `yaml:"type"`
 				} `yaml:"items"`
-				MaxItems int    `yaml:"maxItems"`
+				MaxItems int    `yaml:"max_items"`
 				Title    string `yaml:"title"`
 				Type     string `yaml:"type"`
 			} `yaml:"ip_filter"`
@@ -2412,7 +2422,7 @@ type ServiceTypes struct {
 					Title string   `yaml:"title"`
 					Type  []string `yaml:"type"`
 				} `yaml:"items"`
-				MaxItems int    `yaml:"maxItems"`
+				MaxItems int    `yaml:"max_items"`
 				Title    string `yaml:"title"`
 				Type     string `yaml:"type"`
 			} `yaml:"ip_filter"`
@@ -2534,7 +2544,7 @@ type ServiceTypes struct {
 					Title string   `yaml:"title"`
 					Type  []string `yaml:"type"`
 				} `yaml:"items"`
-				MaxItems int    `yaml:"maxItems"`
+				MaxItems int    `yaml:"max_items"`
 				Title    string `yaml:"title"`
 				Type     string `yaml:"type"`
 			} `yaml:"ip_filter"`
@@ -2595,7 +2605,7 @@ type ServiceTypes struct {
 					Title string   `yaml:"title"`
 					Type  []string `yaml:"type"`
 				} `yaml:"items"`
-				MaxItems int    `yaml:"maxItems"`
+				MaxItems int    `yaml:"max_items"`
 				Title    string `yaml:"title"`
 				Type     string `yaml:"type"`
 			} `yaml:"ip_filter"`
@@ -2755,7 +2765,7 @@ type ServiceTypes struct {
 					Title string `yaml:"title"`
 					Type  string `yaml:"type"`
 				} `yaml:"items"`
-				MaxItems int    `yaml:"maxItems"`
+				MaxItems int    `yaml:"max_items"`
 				Title    string `yaml:"title"`
 				Type     string `yaml:"type"`
 			} `yaml:"namespaces"`
@@ -2771,10 +2781,11 @@ type ServiceTypes struct {
 				Type  string `yaml:"type"`
 			} `yaml:"private_access"`
 			ProjectToForkFrom struct {
-				Example   string   `yaml:"example"`
-				MaxLength int      `yaml:"max_length"`
-				Title     string   `yaml:"title"`
-				Type      []string `yaml:"type"`
+				CreateOnly bool     `yaml:"create_only"`
+				Example    string   `yaml:"example"`
+				MaxLength  int      `yaml:"max_length"`
+				Title      string   `yaml:"title"`
+				Type       []string `yaml:"type"`
 			} `yaml:"project_to_fork_from"`
 			PublicAccess struct {
 				Properties struct {
@@ -2803,7 +2814,7 @@ type ServiceTypes struct {
 										Title   string `yaml:"title"`
 										Type    string `yaml:"type"`
 									} `yaml:"items"`
-									MaxItems int    `yaml:"maxItems"`
+									MaxItems int    `yaml:"max_items"`
 									Title    string `yaml:"title"`
 									Type     string `yaml:"type"`
 								} `yaml:"aggregations"`
@@ -2856,7 +2867,7 @@ type ServiceTypes struct {
 											Type  string `yaml:"type"`
 										} `yaml:"one_of"`
 									} `yaml:"items"`
-									MaxItems int    `yaml:"maxItems"`
+									MaxItems int    `yaml:"max_items"`
 									Title    string `yaml:"title"`
 									Type     string `yaml:"type"`
 								} `yaml:"namespaces"`
@@ -2881,7 +2892,7 @@ type ServiceTypes struct {
 										Title string `yaml:"title"`
 										Type  string `yaml:"type"`
 									} `yaml:"items"`
-									MaxItems int    `yaml:"maxItems"`
+									MaxItems int    `yaml:"max_items"`
 									Title    string `yaml:"title"`
 									Type     string `yaml:"type"`
 								} `yaml:"tags"`
@@ -2889,7 +2900,7 @@ type ServiceTypes struct {
 							Title string `yaml:"title"`
 							Type  string `yaml:"type"`
 						} `yaml:"items"`
-						MaxItems int    `yaml:"maxItems"`
+						MaxItems int    `yaml:"max_items"`
 						Title    string `yaml:"title"`
 						Type     string `yaml:"type"`
 					} `yaml:"mapping"`
@@ -2898,10 +2909,11 @@ type ServiceTypes struct {
 				Type  string `yaml:"type"`
 			} `yaml:"rules"`
 			ServiceToForkFrom struct {
-				Example   string   `yaml:"example"`
-				MaxLength int      `yaml:"max_length"`
-				Title     string   `yaml:"title"`
-				Type      []string `yaml:"type"`
+				CreateOnly bool     `yaml:"create_only"`
+				Example    string   `yaml:"example"`
+				MaxLength  int      `yaml:"max_length"`
+				Title      string   `yaml:"title"`
+				Type       []string `yaml:"type"`
 			} `yaml:"service_to_fork_from"`
 			StaticIps struct {
 				Description string `yaml:"description"`
@@ -2915,21 +2927,23 @@ type ServiceTypes struct {
 	Mysql struct {
 		Properties struct {
 			AdminPassword struct {
-				Example   string   `yaml:"example"`
-				MaxLength int      `yaml:"max_length"`
-				MinLength int      `yaml:"min_length"`
-				Pattern   string   `yaml:"pattern"`
-				Title     string   `yaml:"title"`
-				Type      []string `yaml:"type"`
-				UserError string   `yaml:"user_error"`
+				CreateOnly bool     `yaml:"create_only"`
+				Example    string   `yaml:"example"`
+				MaxLength  int      `yaml:"max_length"`
+				MinLength  int      `yaml:"min_length"`
+				Pattern    string   `yaml:"pattern"`
+				Title      string   `yaml:"title"`
+				Type       []string `yaml:"type"`
+				UserError  string   `yaml:"user_error"`
 			} `yaml:"admin_password"`
 			AdminUsername struct {
-				Example   string   `yaml:"example"`
-				MaxLength int      `yaml:"max_length"`
-				Pattern   string   `yaml:"pattern"`
-				Title     string   `yaml:"title"`
-				Type      []string `yaml:"type"`
-				UserError string   `yaml:"user_error"`
+				CreateOnly bool     `yaml:"create_only"`
+				Example    string   `yaml:"example"`
+				MaxLength  int      `yaml:"max_length"`
+				Pattern    string   `yaml:"pattern"`
+				Title      string   `yaml:"title"`
+				Type       []string `yaml:"type"`
+				UserError  string   `yaml:"user_error"`
 			} `yaml:"admin_username"`
 			BackupHour struct {
 				Example string   `yaml:"example"`
@@ -2973,7 +2987,7 @@ type ServiceTypes struct {
 					Title string   `yaml:"title"`
 					Type  []string `yaml:"type"`
 				} `yaml:"items"`
-				MaxItems int    `yaml:"maxItems"`
+				MaxItems int    `yaml:"max_items"`
 				Title    string `yaml:"title"`
 				Type     string `yaml:"type"`
 			} `yaml:"ip_filter"`
@@ -3318,10 +3332,11 @@ type ServiceTypes struct {
 				Type  string `yaml:"type"`
 			} `yaml:"privatelink_access"`
 			ProjectToForkFrom struct {
-				Example   string   `yaml:"example"`
-				MaxLength int      `yaml:"max_length"`
-				Title     string   `yaml:"title"`
-				Type      []string `yaml:"type"`
+				CreateOnly bool     `yaml:"create_only"`
+				Example    string   `yaml:"example"`
+				MaxLength  int      `yaml:"max_length"`
+				Title      string   `yaml:"title"`
+				Type       []string `yaml:"type"`
 			} `yaml:"project_to_fork_from"`
 			PublicAccess struct {
 				Properties struct {
@@ -3345,16 +3360,18 @@ type ServiceTypes struct {
 				Type  string `yaml:"type"`
 			} `yaml:"public_access"`
 			RecoveryTargetTime struct {
-				Example   string   `yaml:"example"`
-				MaxLength int      `yaml:"max_length"`
-				Title     string   `yaml:"title"`
-				Type      []string `yaml:"type"`
+				CreateOnly bool     `yaml:"create_only"`
+				Example    string   `yaml:"example"`
+				MaxLength  int      `yaml:"max_length"`
+				Title      string   `yaml:"title"`
+				Type       []string `yaml:"type"`
 			} `yaml:"recovery_target_time"`
 			ServiceToForkFrom struct {
-				Example   string   `yaml:"example"`
-				MaxLength int      `yaml:"max_length"`
-				Title     string   `yaml:"title"`
-				Type      []string `yaml:"type"`
+				CreateOnly bool     `yaml:"create_only"`
+				Example    string   `yaml:"example"`
+				MaxLength  int      `yaml:"max_length"`
+				Title      string   `yaml:"title"`
+				Type       []string `yaml:"type"`
 			} `yaml:"service_to_fork_from"`
 			StaticIps struct {
 				Description string `yaml:"description"`
@@ -3410,7 +3427,7 @@ type ServiceTypes struct {
 					Title string `yaml:"title"`
 					Type  string `yaml:"type"`
 				} `yaml:"items"`
-				MaxItems int    `yaml:"maxItems"`
+				MaxItems int    `yaml:"max_items"`
 				Title    string `yaml:"title"`
 				Type     string `yaml:"type"`
 			} `yaml:"index_patterns"`
@@ -3465,7 +3482,7 @@ type ServiceTypes struct {
 					Title string   `yaml:"title"`
 					Type  []string `yaml:"type"`
 				} `yaml:"items"`
-				MaxItems int    `yaml:"maxItems"`
+				MaxItems int    `yaml:"max_items"`
 				Title    string `yaml:"title"`
 				Type     string `yaml:"type"`
 			} `yaml:"ip_filter"`
@@ -3614,7 +3631,7 @@ type ServiceTypes struct {
 							Title     string   `yaml:"title"`
 							Type      []string `yaml:"type"`
 						} `yaml:"items"`
-						MaxItems int      `yaml:"maxItems"`
+						MaxItems int      `yaml:"max_items"`
 						Title    string   `yaml:"title"`
 						Type     []string `yaml:"type"`
 					} `yaml:"reindex_remote_whitelist"`
@@ -3790,10 +3807,11 @@ type ServiceTypes struct {
 				Type  string `yaml:"type"`
 			} `yaml:"privatelink_access"`
 			ProjectToForkFrom struct {
-				Example   string   `yaml:"example"`
-				MaxLength int      `yaml:"max_length"`
-				Title     string   `yaml:"title"`
-				Type      []string `yaml:"type"`
+				CreateOnly bool     `yaml:"create_only"`
+				Example    string   `yaml:"example"`
+				MaxLength  int      `yaml:"max_length"`
+				Title      string   `yaml:"title"`
+				Type       []string `yaml:"type"`
 			} `yaml:"project_to_fork_from"`
 			PublicAccess struct {
 				Properties struct {
@@ -3824,10 +3842,11 @@ type ServiceTypes struct {
 				Type      string `yaml:"type"`
 			} `yaml:"recovery_basebackup_name"`
 			ServiceToForkFrom struct {
-				Example   string   `yaml:"example"`
-				MaxLength int      `yaml:"max_length"`
-				Title     string   `yaml:"title"`
-				Type      []string `yaml:"type"`
+				CreateOnly bool     `yaml:"create_only"`
+				Example    string   `yaml:"example"`
+				MaxLength  int      `yaml:"max_length"`
+				Title      string   `yaml:"title"`
+				Type       []string `yaml:"type"`
 			} `yaml:"service_to_fork_from"`
 			StaticIps struct {
 				Description string `yaml:"description"`
@@ -3841,21 +3860,23 @@ type ServiceTypes struct {
 	Pg struct {
 		Properties struct {
 			AdminPassword struct {
-				Example   string   `yaml:"example"`
-				MaxLength int      `yaml:"max_length"`
-				MinLength int      `yaml:"min_length"`
-				Pattern   string   `yaml:"pattern"`
-				Title     string   `yaml:"title"`
-				Type      []string `yaml:"type"`
-				UserError string   `yaml:"user_error"`
+				CreateOnly bool     `yaml:"create_only"`
+				Example    string   `yaml:"example"`
+				MaxLength  int      `yaml:"max_length"`
+				MinLength  int      `yaml:"min_length"`
+				Pattern    string   `yaml:"pattern"`
+				Title      string   `yaml:"title"`
+				Type       []string `yaml:"type"`
+				UserError  string   `yaml:"user_error"`
 			} `yaml:"admin_password"`
 			AdminUsername struct {
-				Example   string   `yaml:"example"`
-				MaxLength int      `yaml:"max_length"`
-				Pattern   string   `yaml:"pattern"`
-				Title     string   `yaml:"title"`
-				Type      []string `yaml:"type"`
-				UserError string   `yaml:"user_error"`
+				CreateOnly bool     `yaml:"create_only"`
+				Example    string   `yaml:"example"`
+				MaxLength  int      `yaml:"max_length"`
+				Pattern    string   `yaml:"pattern"`
+				Title      string   `yaml:"title"`
+				Type       []string `yaml:"type"`
+				UserError  string   `yaml:"user_error"`
 			} `yaml:"admin_username"`
 			BackupHour struct {
 				Example string   `yaml:"example"`
@@ -3898,7 +3919,7 @@ type ServiceTypes struct {
 					Title string   `yaml:"title"`
 					Type  []string `yaml:"type"`
 				} `yaml:"items"`
-				MaxItems int    `yaml:"maxItems"`
+				MaxItems int    `yaml:"max_items"`
 				Title    string `yaml:"title"`
 				Type     string `yaml:"type"`
 			} `yaml:"ip_filter"`
@@ -4310,10 +4331,11 @@ type ServiceTypes struct {
 				Type        []string `yaml:"type"`
 			} `yaml:"pg_read_replica"`
 			PgServiceToForkFrom struct {
-				Example   string   `yaml:"example"`
-				MaxLength int      `yaml:"max_length"`
-				Title     string   `yaml:"title"`
-				Type      []string `yaml:"type"`
+				CreateOnly bool     `yaml:"create_only"`
+				Example    string   `yaml:"example"`
+				MaxLength  int      `yaml:"max_length"`
+				Title      string   `yaml:"title"`
+				Type       []string `yaml:"type"`
 			} `yaml:"pg_service_to_fork_from"`
 			PgStatMonitorEnable struct {
 				Default     bool   `yaml:"default"`
@@ -4365,7 +4387,7 @@ type ServiceTypes struct {
 							Title string `yaml:"title"`
 							Type  string `yaml:"type"`
 						} `yaml:"items"`
-						MaxItems int    `yaml:"maxItems"`
+						MaxItems int    `yaml:"max_items"`
 						Title    string `yaml:"title"`
 						Type     string `yaml:"type"`
 					} `yaml:"ignore_startup_parameters"`
@@ -4457,10 +4479,11 @@ type ServiceTypes struct {
 				Type  string `yaml:"type"`
 			} `yaml:"privatelink_access"`
 			ProjectToForkFrom struct {
-				Example   string   `yaml:"example"`
-				MaxLength int      `yaml:"max_length"`
-				Title     string   `yaml:"title"`
-				Type      []string `yaml:"type"`
+				CreateOnly bool     `yaml:"create_only"`
+				Example    string   `yaml:"example"`
+				MaxLength  int      `yaml:"max_length"`
+				Title      string   `yaml:"title"`
+				Type       []string `yaml:"type"`
 			} `yaml:"project_to_fork_from"`
 			PublicAccess struct {
 				Properties struct {
@@ -4484,16 +4507,18 @@ type ServiceTypes struct {
 				Type  string `yaml:"type"`
 			} `yaml:"public_access"`
 			RecoveryTargetTime struct {
-				Example   string   `yaml:"example"`
-				MaxLength int      `yaml:"max_length"`
-				Title     string   `yaml:"title"`
-				Type      []string `yaml:"type"`
+				CreateOnly bool     `yaml:"create_only"`
+				Example    string   `yaml:"example"`
+				MaxLength  int      `yaml:"max_length"`
+				Title      string   `yaml:"title"`
+				Type       []string `yaml:"type"`
 			} `yaml:"recovery_target_time"`
 			ServiceToForkFrom struct {
-				Example   string   `yaml:"example"`
-				MaxLength int      `yaml:"max_length"`
-				Title     string   `yaml:"title"`
-				Type      []string `yaml:"type"`
+				CreateOnly bool     `yaml:"create_only"`
+				Example    string   `yaml:"example"`
+				MaxLength  int      `yaml:"max_length"`
+				Title      string   `yaml:"title"`
+				Type       []string `yaml:"type"`
 			} `yaml:"service_to_fork_from"`
 			SharedBuffersPercentage struct {
 				Description string `yaml:"description"`
@@ -4575,7 +4600,7 @@ type ServiceTypes struct {
 					Title string   `yaml:"title"`
 					Type  []string `yaml:"type"`
 				} `yaml:"items"`
-				MaxItems int    `yaml:"maxItems"`
+				MaxItems int    `yaml:"max_items"`
 				Title    string `yaml:"title"`
 				Type     string `yaml:"type"`
 			} `yaml:"ip_filter"`
@@ -4668,10 +4693,11 @@ type ServiceTypes struct {
 				Type  string `yaml:"type"`
 			} `yaml:"privatelink_access"`
 			ProjectToForkFrom struct {
-				Example   string   `yaml:"example"`
-				MaxLength int      `yaml:"max_length"`
-				Title     string   `yaml:"title"`
-				Type      []string `yaml:"type"`
+				CreateOnly bool     `yaml:"create_only"`
+				Example    string   `yaml:"example"`
+				MaxLength  int      `yaml:"max_length"`
+				Title      string   `yaml:"title"`
+				Type       []string `yaml:"type"`
 			} `yaml:"project_to_fork_from"`
 			PublicAccess struct {
 				Properties struct {
@@ -4775,10 +4801,11 @@ type ServiceTypes struct {
 				Type    string  `yaml:"type"`
 			} `yaml:"redis_timeout"`
 			ServiceToForkFrom struct {
-				Example   string   `yaml:"example"`
-				MaxLength int      `yaml:"max_length"`
-				Title     string   `yaml:"title"`
-				Type      []string `yaml:"type"`
+				CreateOnly bool     `yaml:"create_only"`
+				Example    string   `yaml:"example"`
+				MaxLength  int      `yaml:"max_length"`
+				Title      string   `yaml:"title"`
+				Type       []string `yaml:"type"`
 			} `yaml:"service_to_fork_from"`
 			StaticIps struct {
 				Description string `yaml:"description"`

@@ -199,6 +199,8 @@ func diff(gen map[string]types.UserConfigSchema, read map[string]types.UserConfi
 
 			nv.MaxItems = gen[k].MaxItems
 
+			nv.CreateOnly = gen[k].CreateOnly
+
 			nv.Pattern = gen[k].Pattern
 
 			nv.Example = gen[k].Example

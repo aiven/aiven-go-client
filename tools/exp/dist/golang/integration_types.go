@@ -39,7 +39,7 @@ type IntegrationTypes struct {
 								Title string `yaml:"title"`
 								Type  string `yaml:"type"`
 							} `yaml:"items"`
-							MaxItems int    `yaml:"maxItems"`
+							MaxItems int    `yaml:"max_items"`
 							Title    string `yaml:"title"`
 							Type     string `yaml:"type"`
 						} `yaml:"columns"`
@@ -81,7 +81,7 @@ type IntegrationTypes struct {
 								Title string `yaml:"title"`
 								Type  string `yaml:"type"`
 							} `yaml:"items"`
-							MaxItems int    `yaml:"maxItems"`
+							MaxItems int    `yaml:"max_items"`
 							Title    string `yaml:"title"`
 							Type     string `yaml:"type"`
 						} `yaml:"topics"`
@@ -89,7 +89,7 @@ type IntegrationTypes struct {
 					Title string `yaml:"title"`
 					Type  string `yaml:"type"`
 				} `yaml:"items"`
-				MaxItems int    `yaml:"maxItems"`
+				MaxItems int    `yaml:"max_items"`
 				Title    string `yaml:"title"`
 				Type     string `yaml:"type"`
 			} `yaml:"tables"`
@@ -126,7 +126,7 @@ type IntegrationTypes struct {
 					Title string `yaml:"title"`
 					Type  string `yaml:"type"`
 				} `yaml:"items"`
-				MaxItems int    `yaml:"maxItems"`
+				MaxItems int    `yaml:"max_items"`
 				Title    string `yaml:"title"`
 				Type     string `yaml:"type"`
 			} `yaml:"databases"`
@@ -172,7 +172,7 @@ type IntegrationTypes struct {
 					Title string `yaml:"title"`
 					Type  string `yaml:"type"`
 				} `yaml:"items"`
-				MaxItems int    `yaml:"maxItems"`
+				MaxItems int    `yaml:"max_items"`
 				Title    string `yaml:"title"`
 				Type     string `yaml:"type"`
 			} `yaml:"datadog_tags"`
@@ -183,7 +183,7 @@ type IntegrationTypes struct {
 					Title     string `yaml:"title"`
 					Type      string `yaml:"type"`
 				} `yaml:"items"`
-				MaxItems int    `yaml:"maxItems"`
+				MaxItems int    `yaml:"max_items"`
 				Title    string `yaml:"title"`
 				Type     string `yaml:"type"`
 			} `yaml:"exclude_consumer_groups"`
@@ -194,7 +194,7 @@ type IntegrationTypes struct {
 					Title     string `yaml:"title"`
 					Type      string `yaml:"type"`
 				} `yaml:"items"`
-				MaxItems int    `yaml:"maxItems"`
+				MaxItems int    `yaml:"max_items"`
 				Title    string `yaml:"title"`
 				Type     string `yaml:"type"`
 			} `yaml:"exclude_topics"`
@@ -205,7 +205,7 @@ type IntegrationTypes struct {
 					Title     string `yaml:"title"`
 					Type      string `yaml:"type"`
 				} `yaml:"items"`
-				MaxItems int    `yaml:"maxItems"`
+				MaxItems int    `yaml:"max_items"`
 				Title    string `yaml:"title"`
 				Type     string `yaml:"type"`
 			} `yaml:"include_consumer_groups"`
@@ -216,7 +216,7 @@ type IntegrationTypes struct {
 					Title     string `yaml:"title"`
 					Type      string `yaml:"type"`
 				} `yaml:"items"`
-				MaxItems int    `yaml:"maxItems"`
+				MaxItems int    `yaml:"max_items"`
 				Title    string `yaml:"title"`
 				Type     string `yaml:"type"`
 			} `yaml:"include_topics"`
@@ -227,7 +227,7 @@ type IntegrationTypes struct {
 					Title     string `yaml:"title"`
 					Type      string `yaml:"type"`
 				} `yaml:"items"`
-				MaxItems int    `yaml:"maxItems"`
+				MaxItems int    `yaml:"max_items"`
 				Title    string `yaml:"title"`
 				Type     string `yaml:"type"`
 			} `yaml:"kafka_custom_metrics"`
@@ -274,7 +274,7 @@ type IntegrationTypes struct {
 					Title string `yaml:"title"`
 					Type  string `yaml:"type"`
 				} `yaml:"items"`
-				MaxItems int    `yaml:"maxItems"`
+				MaxItems int    `yaml:"max_items"`
 				Title    string `yaml:"title"`
 				Type     string `yaml:"type"`
 			} `yaml:"dropped_metrics"`
@@ -301,7 +301,7 @@ type IntegrationTypes struct {
 					Title string `yaml:"title"`
 					Type  string `yaml:"type"`
 				} `yaml:"items"`
-				MaxItems int    `yaml:"maxItems"`
+				MaxItems int    `yaml:"max_items"`
 				Title    string `yaml:"title"`
 				Type     string `yaml:"type"`
 			} `yaml:"extra_metrics"`

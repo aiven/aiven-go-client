@@ -29,7 +29,8 @@ type UserConfigSchema struct {
 	Maximum     float64                     `yaml:"maximum,omitempty"`
 	MinLength   int                         `yaml:"min_length,omitempty"`
 	MaxLength   int                         `yaml:"max_length,omitempty"`
-	MaxItems    int                         `yaml:"maxItems,omitempty"`
+	MaxItems    int                         `yaml:"max_items,omitempty"`
+	CreateOnly  bool                        `yaml:"create_only,omitempty"`
 	Pattern     string                      `yaml:"pattern,omitempty"`
 	Example     interface{}                 `yaml:"example,omitempty"`
 	UserError   string                      `yaml:"user_error,omitempty"`

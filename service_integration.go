@@ -52,7 +52,7 @@ type (
 
 	// UpdateServiceIntegrationRequest are the parameters to update a Service Integration.
 	UpdateServiceIntegrationRequest struct {
-		UserConfig map[string]interface{} `json:"user_config,omitempty"`
+		UserConfig map[string]interface{} `json:"user_config"`
 	}
 
 	// ServiceIntegrationResponse represents the response from Aiven

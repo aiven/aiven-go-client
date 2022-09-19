@@ -25,7 +25,9 @@ cassandra:
         - string
         - "null"
       enum:
-        - value: "3"
+        - is_deprecated: true
+          deprecation_notice: This value is deprecated.
+          value: "3"
         - value: "4"
     ip_filter:
       title: IP filter
@@ -373,8 +375,12 @@ elasticsearch:
         - string
         - "null"
       enum:
-        - value: "7"
-        - value: "1"
+        - is_deprecated: true
+          deprecation_notice: This value is deprecated.
+          value: "7"
+        - is_deprecated: true
+          deprecation_notice: This value is deprecated.
+          value: "1"
     index_patterns:
       title: Index patterns
       type: array
@@ -1823,8 +1829,12 @@ kafka:
         - string
         - "null"
       enum:
-        - value: "2.8"
-        - value: "3.0"
+        - is_deprecated: true
+          deprecation_notice: This value is deprecated.
+          value: "2.8"
+        - is_deprecated: true
+          deprecation_notice: This value is deprecated.
+          value: "3.0"
         - value: "3.1"
         - value: "3.2"
     private_access:
@@ -3834,7 +3844,9 @@ pg:
         - string
         - "null"
       enum:
-        - value: "10"
+        - is_deprecated: true
+          deprecation_notice: This value is deprecated.
+          value: "10"
         - value: "11"
         - value: "12"
         - value: "13"

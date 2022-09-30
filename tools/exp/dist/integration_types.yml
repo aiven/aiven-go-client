@@ -28,7 +28,7 @@ clickhouse_kafka:
                   title: Column type
                   type: string
                   min_length: 1
-                  max_length: 200
+                  max_length: 1000
                   example: UInt64
             max_items: 100
           data_format:

@@ -488,7 +488,7 @@ elasticsearch:
           type: integer
           default: "128"
           minimum: 64
-          maximum: 1024
+          maximum: 2048
     max_index_count:
       title: Maximum index count
       description: 'DEPRECATED: use index_patterns instead'
@@ -3312,7 +3312,7 @@ opensearch:
           type: integer
           default: "128"
           minimum: 64
-          maximum: 1024
+          maximum: 2048
         opensearch_request_timeout:
           title: Timeout in milliseconds for requests made by OpenSearch Dashboards towards OpenSearch
           type: integer

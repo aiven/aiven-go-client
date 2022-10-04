@@ -45,6 +45,7 @@ clickhouse_kafka:
               - value: TSKV
               - value: TSV
               - value: TabSeparated
+              - value: JSONAsString
             example: JSONEachRow
           group_name:
             title: Kafka consumers group
@@ -71,7 +72,9 @@ clickhouse_kafka:
                   type: string
                   min_length: 1
                   max_length: 249
+                  pattern: ^(?!\.$|\.\.$)[-_.A-Za-z0-9]+$
                   example: topic_name
+                  user_error: Must consist of alpha-numeric characters, underscores, dashes or dots, max 249 characters
             max_items: 100
       max_items: 100
 clickhouse_postgresql:

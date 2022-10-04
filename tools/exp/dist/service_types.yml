@@ -502,6 +502,7 @@ elasticsearch:
         - "null"
       enum:
         - value: "1"
+        - value: "2"
     private_access:
       title: Allow access to selected service ports from private networks
       type: object

@@ -35,19 +35,35 @@ func setupAccountAuthenticationsTestCase(t *testing.T) (*Client, func(t *testing
 		if r.URL.Path == "/account/a28707e316df/authentication/am28707eb0055" {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
-			err := json.NewEncoder(w).Encode(AccountAuthenticationResponse{
-				APIResponse: APIResponse{},
-				AuthenticationMethod: AccountAuthenticationMethod{
-					AccountId:  "a28707e316df",
-					Enabled:    true,
-					Id:         "am28707eb0055",
-					Name:       "test",
-					Type:       "saml",
-					State:      "active",
-					CreateTime: getTime(t),
-					UpdateTime: getTime(t),
-				},
-			})
+
+			var err error
+			switch r.Method {
+			case "PUT":
+				err = json.NewEncoder(w).Encode(AccountAuthenticationResponse{
+					APIResponse: APIResponse{},
+					AuthenticationMethod: AccountAuthenticationMethod{
+						AccountID:  "a28707e316df",
+						State:      "active",
+						CreateTime: getTime(t),
+						UpdateTime: getTime(t),
+						DeleteTime: getTime(t),
+					},
+				})
+			default:
+				err = json.NewEncoder(w).Encode(AccountAuthenticationResponse{
+					APIResponse: APIResponse{},
+					AuthenticationMethod: AccountAuthenticationMethod{
+						AccountID:                   "a28707e316df",
+						AuthenticationMethodEnabled: true,
+						AuthenticationMethodName:    "test",
+						AuthenticationMethodType:    "saml",
+						State:                       "active",
+						CreateTime:                  getTime(t),
+						UpdateTime:                  getTime(t),
+						DeleteTime:                  getTime(t),
+					},
+				})
+			}
 
 			if err != nil {
 				t.Error(err)
@@ -62,14 +78,14 @@ func setupAccountAuthenticationsTestCase(t *testing.T) (*Client, func(t *testing
 				err := json.NewEncoder(w).Encode(AccountAuthenticationResponse{
 					APIResponse: APIResponse{},
 					AuthenticationMethod: AccountAuthenticationMethod{
-						AccountId:  "a28707e316df",
-						Enabled:    true,
-						Id:         "am28707eb0055",
-						Name:       "test",
-						Type:       "saml",
-						State:      "active",
-						CreateTime: getTime(t),
-						UpdateTime: getTime(t),
+						AccountID:                   "a28707e316df",
+						AuthenticationMethodEnabled: true,
+						AuthenticationMethodName:    "test",
+						AuthenticationMethodType:    "saml",
+						State:                       "active",
+						CreateTime:                  getTime(t),
+						UpdateTime:                  getTime(t),
+						DeleteTime:                  getTime(t),
 					},
 				})
 
@@ -81,17 +97,18 @@ func setupAccountAuthenticationsTestCase(t *testing.T) (*Client, func(t *testing
 
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
-			err := json.NewEncoder(w).Encode(AccountAuthenticationsResponse{
+			err := json.NewEncoder(w).Encode(AccountAuthenticationListResponse{
 				AuthenticationMethods: []AccountAuthenticationMethod{
 					{
-						AccountId:  "a28707e316df",
-						Enabled:    true,
-						Id:         "am28707eb0055",
-						Name:       "Platform authentication",
-						Type:       "internal",
-						State:      "active",
-						CreateTime: getTime(t),
-						UpdateTime: getTime(t),
+						AccountID:                   "a28707e316df",
+						AuthenticationMethodID:      "am28707eb0055",
+						AuthenticationMethodEnabled: true,
+						AuthenticationMethodName:    "Platform authentication",
+						AuthenticationMethodType:    "internal",
+						State:                       "active",
+						CreateTime:                  getTime(t),
+						UpdateTime:                  getTime(t),
+						DeleteTime:                  getTime(t),
 					},
 				},
 			})
@@ -131,25 +148,26 @@ func TestAccountAuthenticationsHandler_List(t *testing.T) {
 		name    string
 		fields  fields
 		args    args
-		want    *AccountAuthenticationsResponse
+		want    *AccountAuthenticationListResponse
 		wantErr bool
 	}{
 		{
 			"normal",
 			fields{client: c},
 			args{accountId: "a28707e316df"},
-			&AccountAuthenticationsResponse{
+			&AccountAuthenticationListResponse{
 				APIResponse: APIResponse{},
 				AuthenticationMethods: []AccountAuthenticationMethod{
 					{
-						AccountId:  "a28707e316df",
-						Enabled:    true,
-						Id:         "am28707eb0055",
-						Name:       "Platform authentication",
-						Type:       "internal",
-						State:      "active",
-						CreateTime: getTime(t),
-						UpdateTime: getTime(t),
+						AccountID:                   "a28707e316df",
+						AuthenticationMethodEnabled: true,
+						AuthenticationMethodID:      "am28707eb0055",
+						AuthenticationMethodName:    "Platform authentication",
+						AuthenticationMethodType:    "internal",
+						State:                       "active",
+						CreateTime:                  getTime(t),
+						UpdateTime:                  getTime(t),
+						DeleteTime:                  getTime(t),
 					},
 				},
 			},
@@ -188,8 +206,9 @@ func TestAccountAuthenticationsHandler_Create(t *testing.T) {
 		client *Client
 	}
 	type args struct {
-		accountId string
-		a         AccountAuthenticationMethod
+		accountId         string
+		accountAuthMethId string
+		a                 AccountAuthenticationMethodCreate
 	}
 	tests := []struct {
 		name    string
@@ -202,23 +221,24 @@ func TestAccountAuthenticationsHandler_Create(t *testing.T) {
 			"normal",
 			fields{client: c},
 			args{
-				accountId: "a28707e316df",
-				a: AccountAuthenticationMethod{
-					Name: "test1",
-					Type: "saml",
+				accountId:         "a28707e316df",
+				accountAuthMethId: "am28707eb0055",
+				a: AccountAuthenticationMethodCreate{
+					AuthenticationMethodName: "test1",
+					AuthenticationMethodType: "saml",
 				},
 			},
 			&AccountAuthenticationResponse{
 				APIResponse: APIResponse{},
 				AuthenticationMethod: AccountAuthenticationMethod{
-					AccountId:  "a28707e316df",
-					Enabled:    true,
-					Id:         "am28707eb0055",
-					Name:       "test",
-					Type:       "saml",
-					State:      "active",
-					CreateTime: getTime(t),
-					UpdateTime: getTime(t),
+					AccountID:                   "a28707e316df",
+					AuthenticationMethodEnabled: true,
+					AuthenticationMethodName:    "test",
+					AuthenticationMethodType:    "saml",
+					State:                       "active",
+					CreateTime:                  getTime(t),
+					UpdateTime:                  getTime(t),
+					DeleteTime:                  getTime(t),
 				},
 			},
 			false,
@@ -228,9 +248,9 @@ func TestAccountAuthenticationsHandler_Create(t *testing.T) {
 			fields{client: c},
 			args{
 				accountId: "",
-				a: AccountAuthenticationMethod{
-					Name: "test1",
-					Type: "saml",
+				a: AccountAuthenticationMethodCreate{
+					AuthenticationMethodName: "test1",
+					AuthenticationMethodType: "saml",
 				},
 			},
 			nil,
@@ -262,8 +282,9 @@ func TestAccountAuthenticationsHandler_Update(t *testing.T) {
 		client *Client
 	}
 	type args struct {
-		accountId string
-		a         AccountAuthenticationMethod
+		accountId         string
+		accountAuthMethId string
+		a                 AccountAuthenticationMethodUpdate
 	}
 	tests := []struct {
 		name    string
@@ -276,29 +297,21 @@ func TestAccountAuthenticationsHandler_Update(t *testing.T) {
 			"normal",
 			fields{client: c},
 			args{
-				accountId: "a28707e316df",
-				a: AccountAuthenticationMethod{
-					AccountId:  "a28707e316df",
-					Enabled:    true,
-					Id:         "am28707eb0055",
-					Name:       "test",
-					Type:       "saml",
-					State:      "active",
-					CreateTime: getTime(t),
-					UpdateTime: getTime(t),
+				accountId:         "a28707e316df",
+				accountAuthMethId: "am28707eb0055",
+				a: AccountAuthenticationMethodUpdate{
+					AuthenticationMethodEnabled: true,
+					AuthenticationMethodName:    "test",
 				},
 			},
 			&AccountAuthenticationResponse{
 				APIResponse: APIResponse{},
 				AuthenticationMethod: AccountAuthenticationMethod{
-					AccountId:  "a28707e316df",
-					Enabled:    true,
-					Id:         "am28707eb0055",
-					Name:       "test",
-					Type:       "saml",
+					AccountID:  "a28707e316df",
 					State:      "active",
 					CreateTime: getTime(t),
 					UpdateTime: getTime(t),
+					DeleteTime: getTime(t),
 				},
 			},
 			false,
@@ -307,16 +320,11 @@ func TestAccountAuthenticationsHandler_Update(t *testing.T) {
 			"empty-account-id",
 			fields{client: c},
 			args{
-				accountId: "",
-				a: AccountAuthenticationMethod{
-					AccountId:  "a28707e316df",
-					Enabled:    true,
-					Id:         "am28707eb0055",
-					Name:       "test",
-					Type:       "saml",
-					State:      "active",
-					CreateTime: getTime(t),
-					UpdateTime: getTime(t),
+				accountId:         "",
+				accountAuthMethId: "am28707eb0055",
+				a: AccountAuthenticationMethodUpdate{
+					AuthenticationMethodEnabled: true,
+					AuthenticationMethodName:    "test",
 				},
 			},
 			nil,
@@ -326,16 +334,11 @@ func TestAccountAuthenticationsHandler_Update(t *testing.T) {
 			"empty-id",
 			fields{client: c},
 			args{
-				accountId: "a28707e316df",
-				a: AccountAuthenticationMethod{
-					AccountId:  "a28707e316df",
-					Enabled:    true,
-					Id:         "",
-					Name:       "test",
-					Type:       "saml",
-					State:      "active",
-					CreateTime: getTime(t),
-					UpdateTime: getTime(t),
+				accountId:         "a28707e316df",
+				accountAuthMethId: "",
+				a: AccountAuthenticationMethodUpdate{
+					AuthenticationMethodEnabled: true,
+					AuthenticationMethodName:    "test",
 				},
 			},
 			nil,
@@ -347,7 +350,7 @@ func TestAccountAuthenticationsHandler_Update(t *testing.T) {
 			h := AccountAuthenticationsHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.Update(tt.args.accountId, tt.args.a)
+			got, err := h.Update(tt.args.accountId, tt.args.accountAuthMethId, tt.args.a)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Update() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -443,14 +446,14 @@ func TestAccountAuthenticationsHandler_Get(t *testing.T) {
 			&AccountAuthenticationResponse{
 				APIResponse: APIResponse{},
 				AuthenticationMethod: AccountAuthenticationMethod{
-					AccountId:  "a28707e316df",
-					Enabled:    true,
-					Id:         "am28707eb0055",
-					Name:       "test",
-					Type:       "saml",
-					State:      "active",
-					CreateTime: getTime(t),
-					UpdateTime: getTime(t),
+					AccountID:                   "a28707e316df",
+					AuthenticationMethodEnabled: true,
+					AuthenticationMethodName:    "test",
+					AuthenticationMethodType:    "saml",
+					State:                       "active",
+					CreateTime:                  getTime(t),
+					UpdateTime:                  getTime(t),
+					DeleteTime:                  getTime(t),
 				},
 			},
 			false,

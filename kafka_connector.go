@@ -152,7 +152,7 @@ func (h *KafkaConnectorsHandler) Status(project, service, name string) (*KafkaCo
 	return &rsp, nil
 }
 
-// Update updates a Kafka Connector configuration by Connector Name
+// Update updates a Kafka Connector configuration by Connector AuthenticationMethodName
 func (h *KafkaConnectorsHandler) Update(project, service, name string, c KafkaConnectorConfig) (*KafkaConnectorResponse, error) {
 	path := buildPath("project", project, "service", service, "connectors", name)
 	bts, err := h.client.doPutRequest(path, c)

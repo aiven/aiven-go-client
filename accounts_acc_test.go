@@ -151,15 +151,15 @@ var _ = Describe("Accounts", func() {
 		})
 
 		It("AccountAuthentications  add new one", func() {
-			resp, errL := client.AccountAuthentications.Create(account.Account.Id, AccountAuthenticationMethod{
-				Name: "test-auth",
-				Type: "saml",
+			resp, errL := client.AccountAuthentications.Create(account.Account.Id, AccountAuthenticationMethodCreate{
+				AuthenticationMethodName: "test-auth",
+				AuthenticationMethodType: "saml",
 			})
 			Expect(errL).NotTo(HaveOccurred())
-			Expect(resp.AuthenticationMethod.Id).NotTo(BeEmpty())
-			Expect(resp.AuthenticationMethod.SAMLMetadataUrl).NotTo(BeEmpty())
-			Expect(resp.AuthenticationMethod.SAMLAcsUrl).NotTo(BeEmpty())
-			Expect(resp.AuthenticationMethod.AccountId).To(Equal(account.Account.Id))
+			Expect(resp.AuthenticationMethod.AuthenticationMethodID).NotTo(BeEmpty())
+			Expect(resp.AuthenticationMethod.SAMLMetadataURL).NotTo(BeEmpty())
+			Expect(resp.AuthenticationMethod.SAMLAcsURL).NotTo(BeEmpty())
+			Expect(resp.AuthenticationMethod.AccountID).To(Equal(account.Account.Id))
 			Expect(resp.APIResponse.Message).To(BeEmpty())
 			Expect(resp.APIResponse.Errors).To(BeEmpty())
 		})

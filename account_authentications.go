@@ -11,32 +11,65 @@ type (
 		client *Client
 	}
 
-	// AccountAuthenticationMethod represents account authentication method
+	// AccountAuthenticationMethodCreate request object for AccountAuthenticationMethodCreate
+	// https://api.aiven.io/doc/#operation/AccountAuthenticationMethodCreate
+	AccountAuthenticationMethodCreate struct {
+		AuthenticationMethodName string            `json:"authentication_method_name"`
+		AuthenticationMethodType string            `json:"authentication_method_type"`
+		AutoJoinTeamID           string            `json:"auto_join_team_id,omitempty"`
+		SAMLCertificate          string            `json:"saml_certificate,omitempty"`
+		SAMLDigestAlgorithm      string            `json:"saml_digest_algorithm,omitempty"`
+		SAMLEntityID             string            `json:"saml_entity_id,omitempty"`
+		SAMLFieldMapping         *SAMLFieldMapping `json:"saml_field_mapping,omitempty"`
+		SAMLIdpLoginAllowed      bool              `json:"saml_idp_login_allowed,omitempty"`
+		SAMLIdpURL               string            `json:"saml_idp_url,omitempty"`
+		SAMLSignatureAlgorithm   string            `json:"saml_signature_algorithm,omitempty"`
+		SAMLVariant              string            `json:"saml_variant,omitempty"`
+	}
+
+	// AccountAuthenticationMethodUpdate request object for AccountAuthenticationMethodUpdate
+	// https://api.aiven.io/doc/#operation/AccountAuthenticationMethodUpdate
+	AccountAuthenticationMethodUpdate struct {
+		AuthenticationMethodEnabled bool              `json:"authentication_method_enabled,omitempty"`
+		AuthenticationMethodName    string            `json:"authentication_method_name"`
+		AutoJoinTeamID              string            `json:"auto_join_team_id,omitempty"`
+		SAMLCertificate             string            `json:"saml_certificate,omitempty"`
+		SAMLDigestAlgorithm         string            `json:"saml_digest_algorithm,omitempty"`
+		SAMLEntity                  string            `json:"saml_entity_id,omitempty"`
+		SAMLFieldMapping            *SAMLFieldMapping `json:"saml_field_mapping,omitempty"`
+		SAMLIdpLoginAllowed         bool              `json:"saml_idp_login_allowed,omitempty"`
+		SAMLIdpURL                  string            `json:"saml_idp_url,omitempty"`
+		SAMLSignatureAlgorithm      string            `json:"saml_signature_algorithm,omitempty"`
+		SAMLVariant                 string            `json:"saml_variant,omitempty"`
+	}
+
+	// AccountAuthenticationMethod response object for AccountAuthenticationMethodUpdate
+	// https://api.aiven.io/doc/#operation/AccountAuthenticationMethodUpdate
 	AccountAuthenticationMethod struct {
-		AccountId                     string            `json:"account_id,omitempty"`
-		Enabled                       bool              `json:"authentication_method_enabled,omitempty"`
-		Id                            string            `json:"authentication_method_id,omitempty"`
-		Name                          string            `json:"authentication_method_name"`
-		Type                          string            `json:"authentication_method_type"`
-		AutoJoinTeamId                string            `json:"auto_join_team_id,omitempty"`
-		State                         string            `json:"state,omitempty"`
+		AccountID                     string            `json:"account_id"`
+		AuthenticationMethodEnabled   bool              `json:"authentication_method_enabled"`
+		AuthenticationMethodID        string            `json:"authentication_method_id"`
+		AuthenticationMethodName      string            `json:"authentication_method_name"`
+		AuthenticationMethodType      string            `json:"authentication_method_type"`
+		AutoJoinTeamID                string            `json:"auto_join_team_id"`
+		CreateTime                    *time.Time        `json:"create_time"`
+		DeleteTime                    *time.Time        `json:"delete_time"`
+		SAMLAcsURL                    string            `json:"saml_acs_url,omitempty"`
 		SAMLCertificate               string            `json:"saml_certificate,omitempty"`
+		SAMLCertificateIssuer         string            `json:"saml_certificate_issuer,omitempty"`
+		SAMLCertificateNotValidAfter  string            `json:"saml_certificate_not_valid_after,omitempty"`
+		SAMLCertificateNotValidBefore string            `json:"saml_certificate_not_valid_before,omitempty"`
+		SAMLCertificateSubject        string            `json:"saml_certificate_subject,omitempty"`
 		SAMLDigestAlgorithm           string            `json:"saml_digest_algorithm,omitempty"`
-		SAMLIdpUrl                    string            `json:"saml_idp_url,omitempty"`
-		SAMLEntity                    string            `json:"saml_entity_id,omitempty"`
+		SAMLEntityID                  string            `json:"saml_entity_id,omitempty"`
 		SAMLFieldMapping              *SAMLFieldMapping `json:"saml_field_mapping,omitempty"`
 		SAMLIdpLoginAllowed           bool              `json:"saml_idp_login_allowed,omitempty"`
+		SAMLIdpURL                    string            `json:"saml_idp_url,omitempty"`
+		SAMLMetadataURL               string            `json:"saml_metadata_url,omitempty"`
 		SAMLSignatureAlgorithm        string            `json:"saml_signature_algorithm,omitempty"`
 		SAMLVariant                   string            `json:"saml_variant,omitempty"`
-		SAMLAcsUrl                    string            `json:"saml_acs_url,omitempty"`
-		SAMLMetadataUrl               string            `json:"saml_metadata_url,omitempty"`
-		SAMLCertificateIssuer         string            `json:"saml_certificate_issuer,omitempty"`
-		SAMLCertificateSubject        string            `json:"saml_certificate_subject,omitempty"`
-		SAMLCertificateNotValidAfter  *time.Time        `json:"saml_certificate_not_valid_after,omitempty"`
-		SAMLCertificateNotValidBefore *time.Time        `json:"saml_certificate_not_valid_before,omitempty"`
-		CreateTime                    *time.Time        `json:"create_time,omitempty"`
-		UpdateTime                    *time.Time        `json:"update_time,omitempty"`
-		DeleteTime                    *time.Time        `json:"delete_time,omitempty"`
+		State                         string            `json:"state"`
+		UpdateTime                    *time.Time        `json:"update_time"`
 	}
 
 	SAMLFieldMapping struct {
@@ -47,8 +80,8 @@ type (
 		RealName  string `json:"real_name,omitempty"`
 	}
 
-	// AccountAuthenticationsResponse represents account list of available authentication methods API response
-	AccountAuthenticationsResponse struct {
+	// AccountAuthenticationListResponse represents account list of available authentication methods API response
+	AccountAuthenticationListResponse struct {
 		APIResponse
 		AuthenticationMethods []AccountAuthenticationMethod `json:"authentication_methods"`
 	}
@@ -61,7 +94,7 @@ type (
 )
 
 // List returns a list of all available account authentication methods
-func (h AccountAuthenticationsHandler) List(accountId string) (*AccountAuthenticationsResponse, error) {
+func (h AccountAuthenticationsHandler) List(accountId string) (*AccountAuthenticationListResponse, error) {
 	if accountId == "" {
 		return nil, errors.New("cannot get a list of account authentication methods when account id is empty")
 	}
@@ -72,7 +105,7 @@ func (h AccountAuthenticationsHandler) List(accountId string) (*AccountAuthentic
 		return nil, err
 	}
 
-	var rsp AccountAuthenticationsResponse
+	var rsp AccountAuthenticationListResponse
 	if errR := checkAPIResponse(bts, &rsp); errR != nil {
 		return nil, errR
 	}
@@ -101,7 +134,7 @@ func (h AccountAuthenticationsHandler) Get(accountId, authId string) (*AccountAu
 }
 
 // Create creates an account authentication method
-func (h AccountAuthenticationsHandler) Create(accountId string, a AccountAuthenticationMethod) (*AccountAuthenticationResponse, error) {
+func (h AccountAuthenticationsHandler) Create(accountId string, a AccountAuthenticationMethodCreate) (*AccountAuthenticationResponse, error) {
 	if accountId == "" {
 		return nil, errors.New("cannot create an account authentication method when account id is empty")
 	}
@@ -120,13 +153,13 @@ func (h AccountAuthenticationsHandler) Create(accountId string, a AccountAuthent
 	return &rsp, nil
 }
 
-// Update updates an account authentication method
-func (h AccountAuthenticationsHandler) Update(accountId string, a AccountAuthenticationMethod) (*AccountAuthenticationResponse, error) {
-	if accountId == "" || a.Id == "" {
+// Update updates an account authentication method empty fields are omitted, acts like PATCH
+func (h AccountAuthenticationsHandler) Update(accountId, accountAuthMethID string, a AccountAuthenticationMethodUpdate) (*AccountAuthenticationResponse, error) {
+	if accountId == "" || accountAuthMethID == "" {
 		return nil, errors.New("cannot update an account authentication method when account id or auth id is empty")
 	}
 
-	path := buildPath("account", accountId, "authentication", a.Id)
+	path := buildPath("account", accountId, "authentication", accountAuthMethID)
 	bts, err := h.client.doPutRequest(path, a)
 	if err != nil {
 		return nil, err

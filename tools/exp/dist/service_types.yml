@@ -19,6 +19,12 @@ cassandra:
           minimum: 1
           maximum: 1e+06
           example: "5"
+        datacenter:
+          title: Cassandra datacenter name
+          description: Name of the datacenter to which nodes of this service belong. Can be set only when creating the service.
+          type: string
+          max_length: 128
+          example: my-service-google-west1
     cassandra_version:
       title: Cassandra major version
       type:
@@ -91,6 +97,12 @@ cassandra:
       max_length: 64
       create_only: true
       example: anotherservicename
+    service_to_join_with:
+      title: Name of the service to form a bigger cluster with
+      description: When bootstrapping, instead of creating a new Cassandra cluster try to join an existing one from another service. Can only be set on service creation.
+      type: string
+      max_length: 64
+      example: my-test-cassandra
     static_ips:
       title: Static IP addresses
       description: Use static public IP addresses
@@ -3327,6 +3339,7 @@ opensearch:
         - "null"
       enum:
         - value: "1"
+        - value: "2"
     private_access:
       title: Allow access to selected service ports from private networks
       type: object

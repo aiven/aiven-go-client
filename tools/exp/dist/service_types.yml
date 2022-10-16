@@ -1,6 +1,17 @@
 cassandra:
   type: object
   properties:
+    additional_backup_regions:
+      title: Additional Cloud Regions for Backup Replication
+      type: array
+      items:
+        title: Target cloud
+        type: string
+        max_length: 256
+        pattern: ^[a-z0-9-]+$
+        example: aws-eu-central-1
+        user_error: Must consist of lower-case alpha-numeric characters or dashes
+      max_items: 1
     cassandra:
       title: cassandra configuration values
       type: object
@@ -111,6 +122,17 @@ cassandra:
 clickhouse:
   type: object
   properties:
+    additional_backup_regions:
+      title: Additional Cloud Regions for Backup Replication
+      type: array
+      items:
+        title: Target cloud
+        type: string
+        max_length: 256
+        pattern: ^[a-z0-9-]+$
+        example: aws-eu-central-1
+        user_error: Must consist of lower-case alpha-numeric characters or dashes
+      max_items: 1
     ip_filter:
       title: IP filter
       description: Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'
@@ -155,6 +177,17 @@ clickhouse:
 elasticsearch:
   type: object
   properties:
+    additional_backup_regions:
+      title: Additional Cloud Regions for Backup Replication
+      type: array
+      items:
+        title: Target cloud
+        type: string
+        max_length: 256
+        pattern: ^[a-z0-9-]+$
+        example: aws-eu-central-1
+        user_error: Must consist of lower-case alpha-numeric characters or dashes
+      max_items: 1
     custom_domain:
       title: Custom domain
       description: Serve the web frontend using a custom CNAME pointing to the Aiven DNS name
@@ -593,6 +626,17 @@ elasticsearch:
 flink:
   type: object
   properties:
+    additional_backup_regions:
+      title: Additional Cloud Regions for Backup Replication
+      type: array
+      items:
+        title: Target cloud
+        type: string
+        max_length: 256
+        pattern: ^[a-z0-9-]+$
+        example: aws-eu-central-1
+        user_error: Must consist of lower-case alpha-numeric characters or dashes
+      max_items: 1
     execution_checkpointing_interval_ms:
       title: Flink execution.checkpointing.interval in milliseconds
       description: Checkpointing is Flink’s primary fault-tolerance mechanism, wherein a snapshot of your job’s state persisted periodically to some durable location. In the case of failure, Flink will restart from the most recent checkpoint and resume processing. A jobs checkpoint interval configures how often Flink will take these snapshots.
@@ -700,6 +744,17 @@ flink:
 grafana:
   type: object
   properties:
+    additional_backup_regions:
+      title: Additional Cloud Regions for Backup Replication
+      type: array
+      items:
+        title: Target cloud
+        type: string
+        max_length: 256
+        pattern: ^[a-z0-9-]+$
+        example: aws-eu-central-1
+        user_error: Must consist of lower-case alpha-numeric characters or dashes
+      max_items: 1
     alerting_enabled:
       title: Enable or disable Grafana alerting functionality
       type: boolean
@@ -1278,6 +1333,17 @@ grafana:
 influxdb:
   type: object
   properties:
+    additional_backup_regions:
+      title: Additional Cloud Regions for Backup Replication
+      type: array
+      items:
+        title: Target cloud
+        type: string
+        max_length: 256
+        pattern: ^[a-z0-9-]+$
+        example: aws-eu-central-1
+        user_error: Must consist of lower-case alpha-numeric characters or dashes
+      max_items: 1
     custom_domain:
       title: Custom domain
       description: Serve the web frontend using a custom CNAME pointing to the Aiven DNS name
@@ -1393,6 +1459,17 @@ influxdb:
 kafka:
   type: object
   properties:
+    additional_backup_regions:
+      title: Additional Cloud Regions for Backup Replication
+      type: array
+      items:
+        title: Target cloud
+        type: string
+        max_length: 256
+        pattern: ^[a-z0-9-]+$
+        example: aws-eu-central-1
+        user_error: Must consist of lower-case alpha-numeric characters or dashes
+      max_items: 1
     custom_domain:
       title: Custom domain
       description: Serve the web frontend using a custom CNAME pointing to the Aiven DNS name
@@ -1940,6 +2017,17 @@ kafka:
 kafka_connect:
   type: object
   properties:
+    additional_backup_regions:
+      title: Additional Cloud Regions for Backup Replication
+      type: array
+      items:
+        title: Target cloud
+        type: string
+        max_length: 256
+        pattern: ^[a-z0-9-]+$
+        example: aws-eu-central-1
+        user_error: Must consist of lower-case alpha-numeric characters or dashes
+      max_items: 1
     ip_filter:
       title: IP filter
       description: Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'
@@ -2104,6 +2192,17 @@ kafka_connect:
 kafka_mirrormaker:
   type: object
   properties:
+    additional_backup_regions:
+      title: Additional Cloud Regions for Backup Replication
+      type: array
+      items:
+        title: Target cloud
+        type: string
+        max_length: 256
+        pattern: ^[a-z0-9-]+$
+        example: aws-eu-central-1
+        user_error: Must consist of lower-case alpha-numeric characters or dashes
+      max_items: 1
     ip_filter:
       title: IP filter
       description: Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'
@@ -2263,6 +2362,17 @@ m3aggregator:
 m3db:
   type: object
   properties:
+    additional_backup_regions:
+      title: Additional Cloud Regions for Backup Replication
+      type: array
+      items:
+        title: Target cloud
+        type: string
+        max_length: 256
+        pattern: ^[a-z0-9-]+$
+        example: aws-eu-central-1
+        user_error: Must consist of lower-case alpha-numeric characters or dashes
+      max_items: 1
     custom_domain:
       title: Custom domain
       description: Serve the web frontend using a custom CNAME pointing to the Aiven DNS name
@@ -2586,6 +2696,17 @@ m3db:
 mysql:
   type: object
   properties:
+    additional_backup_regions:
+      title: Additional Cloud Regions for Backup Replication
+      type: array
+      items:
+        title: Target cloud
+        type: string
+        max_length: 256
+        pattern: ^[a-z0-9-]+$
+        example: aws-eu-central-1
+        user_error: Must consist of lower-case alpha-numeric characters or dashes
+      max_items: 1
     admin_password:
       title: Custom password for admin user. Defaults to random string. This must be set only when a new service is being created.
       type:
@@ -2992,6 +3113,17 @@ mysql:
 opensearch:
   type: object
   properties:
+    additional_backup_regions:
+      title: Additional Cloud Regions for Backup Replication
+      type: array
+      items:
+        title: Target cloud
+        type: string
+        max_length: 256
+        pattern: ^[a-z0-9-]+$
+        example: aws-eu-central-1
+        user_error: Must consist of lower-case alpha-numeric characters or dashes
+      max_items: 1
     custom_domain:
       title: Custom domain
       description: Serve the web frontend using a custom CNAME pointing to the Aiven DNS name
@@ -3418,6 +3550,17 @@ opensearch:
 pg:
   type: object
   properties:
+    additional_backup_regions:
+      title: Additional Cloud Regions for Backup Replication
+      type: array
+      items:
+        title: Target cloud
+        type: string
+        max_length: 256
+        pattern: ^[a-z0-9-]+$
+        example: aws-eu-central-1
+        user_error: Must consist of lower-case alpha-numeric characters or dashes
+      max_items: 1
     admin_password:
       title: Custom password for admin user. Defaults to random string. This must be set only when a new service is being created.
       type:
@@ -4059,6 +4202,17 @@ pg:
 redis:
   type: object
   properties:
+    additional_backup_regions:
+      title: Additional Cloud Regions for Backup Replication
+      type: array
+      items:
+        title: Target cloud
+        type: string
+        max_length: 256
+        pattern: ^[a-z0-9-]+$
+        example: aws-eu-central-1
+        user_error: Must consist of lower-case alpha-numeric characters or dashes
+      max_items: 1
     ip_filter:
       title: IP filter
       description: Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'

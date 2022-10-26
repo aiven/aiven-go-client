@@ -68,7 +68,7 @@ func (h *VPCPeeringConnectionsHandler) GetVPCPeering(
 	}
 
 	for _, pc := range vpc.PeeringConnections {
-		if (peerRegion == nil || pc.PeerRegion == nil || *pc.PeerRegion == *peerRegion) && pc.PeerCloudAccount == peerCloudAccount && pc.PeerVPC == peerVPC {
+		if (peerRegion == nil || eqStrPointers(pc.PeerRegion, peerRegion)) && pc.PeerCloudAccount == peerCloudAccount && pc.PeerVPC == peerVPC {
 			return pc, nil
 		}
 	}
@@ -84,7 +84,7 @@ func (h *VPCPeeringConnectionsHandler) GetVPCPeeringWithResourceGroup(
 	peerCloudAccount string,
 	peerVPC string,
 	peerRegion *string,
-	peerResourceGroup string,
+	peerResourceGroup *string,
 ) (*VPCPeeringConnection, error) {
 	// There's no API call for getting individual peering connection. Get the VPC
 	// info and filter from there
@@ -94,10 +94,13 @@ func (h *VPCPeeringConnectionsHandler) GetVPCPeeringWithResourceGroup(
 	}
 
 	for _, pc := range vpc.PeeringConnections {
-		if (peerRegion == nil || pc.PeerRegion == nil || *pc.PeerRegion == *peerRegion) &&
-			pc.PeerCloudAccount == peerCloudAccount &&
+		found := pc.PeerCloudAccount == peerCloudAccount &&
 			pc.PeerVPC == peerVPC &&
-			pc.PeerResourceGroup == peerResourceGroup {
+			// Not given or equal
+			(peerRegion == nil || eqStrPointers(pc.PeerRegion, peerRegion)) &&
+			(peerResourceGroup == nil || eqStrPointers(pc.PeerResourceGroup, peerResourceGroup))
+
+		if found {
 			return pc, nil
 		}
 	}
@@ -166,4 +169,12 @@ func (h *VPCPeeringConnectionsHandler) List(project, vpcID string) ([]*VPCPeerin
 	}
 
 	return vpc.PeeringConnections, nil
+}
+
+func eqStrPointers(a, b *string) bool {
+	if a != nil && b != nil {
+		return *a == *b
+	}
+	// one or both of them nil
+	return a == b
 }

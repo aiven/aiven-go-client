@@ -1053,6 +1053,11 @@ grafana:
         - "null"
       max_length: 255
       example: grafana.example.org
+    dashboard_previews_enabled:
+      title: Enable browsing of dashboards in grid (pictures) mode
+      description: This feature is new in Grafana 9 and is quite resource intensive. It may cause low-end plans to work more slowly while the dashboard previews are rendering.
+      type: boolean
+      example: false
     dashboards_min_refresh_interval:
       title: Minimum refresh interval
       description: Signed sequence of decimal numbers, followed by a unit suffix (ms, s, m, h, d), e.g. 30s, 1h

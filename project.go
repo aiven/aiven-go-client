@@ -46,24 +46,25 @@ type (
 		VatID                        *string           `json:"vat_id,omitempty"`
 		UseSourceProjectBillingGroup bool              `json:"use_source_project_billing_group,omitempty"`
 		BillingGroupId               string            `json:"billing_group_id,omitempty"`
-		AddAccountOwnersAdminAccess  bool              `json:"add_account_owners_admin_access"`
+		AddAccountOwnersAdminAccess  *bool             `json:"add_account_owners_admin_access,omitempty"`
 		Tags                         map[string]string `json:"tags"`
 	}
 
 	// UpdateProjectRequest are the parameters for updating a project.
 	UpdateProjectRequest struct {
-		Name             string            `json:"project_name,omitempty"`
-		BillingAddress   *string           `json:"billing_address,omitempty"`
-		BillingEmails    *[]*ContactEmail  `json:"billing_emails,omitempty"`
-		BillingExtraText *string           `json:"billing_extra_text,omitempty"`
-		CardID           *string           `json:"card_id,omitempty"`
-		Cloud            *string           `json:"cloud,omitempty"`
-		CountryCode      *string           `json:"country_code,omitempty"`
-		AccountId        string            `json:"account_id"`
-		TechnicalEmails  *[]*ContactEmail  `json:"tech_emails,omitempty"`
-		BillingCurrency  string            `json:"billing_currency,omitempty"`
-		VatID            *string           `json:"vat_id,omitempty"`
-		Tags             map[string]string `json:"tags"`
+		Name                        string            `json:"project_name,omitempty"`
+		BillingAddress              *string           `json:"billing_address,omitempty"`
+		BillingEmails               *[]*ContactEmail  `json:"billing_emails,omitempty"`
+		BillingExtraText            *string           `json:"billing_extra_text,omitempty"`
+		CardID                      *string           `json:"card_id,omitempty"`
+		Cloud                       *string           `json:"cloud,omitempty"`
+		CountryCode                 *string           `json:"country_code,omitempty"`
+		AccountId                   string            `json:"account_id"`
+		TechnicalEmails             *[]*ContactEmail  `json:"tech_emails,omitempty"`
+		BillingCurrency             string            `json:"billing_currency,omitempty"`
+		VatID                       *string           `json:"vat_id,omitempty"`
+		Tags                        map[string]string `json:"tags"`
+		AddAccountOwnersAdminAccess *bool             `json:"add_account_owners_admin_access,omitempty"`
 	}
 
 	// ContactEmail represents either a technical contact or billing contact.

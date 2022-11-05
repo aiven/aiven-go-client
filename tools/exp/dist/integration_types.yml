@@ -306,10 +306,14 @@ kafka_logs:
       example: mytopic
       user_error: Must consist of alpha-numeric characters, underscores, dashes or dots, max 249 characters
 kafka_mirrormaker:
+  is_deprecated: true
+  deprecation_notice: This property is deprecated.
   title: Integration user config
   type: object
   properties:
     cluster_alias:
+      is_deprecated: true
+      deprecation_notice: This property is deprecated.
       title: Kafka cluster alias
       description: 'The alias under which the Kafka cluster is known to MirrorMaker. Can contain the following symbols: ASCII alphanumerics, ''.'', ''_'', and ''-''.'
       type: string
@@ -318,10 +322,14 @@ kafka_mirrormaker:
       example: kafka-abc
       user_error: Must consist of alpha-numeric ASCII characters, dashes, underscores, and dots.
     kafka_mirrormaker:
+      is_deprecated: true
+      deprecation_notice: This property is deprecated.
       title: Kafka MirrorMaker configuration values
       type: object
       properties:
         consumer_fetch_min_bytes:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: consumer.fetch.min.bytes
           description: The minimum amount of data the server should return for a fetch request
           type: integer
@@ -329,12 +337,16 @@ kafka_mirrormaker:
           maximum: 5.24288e+06
           example: "1024"
         producer_batch_size:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: producer.batch.size
           description: The batch size in bytes producer will attempt to collect before publishing to broker.
           type: integer
           maximum: 5.24288e+06
           example: "1024"
         producer_buffer_memory:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: producer.buffer.memory
           description: The amount of bytes producer can use for buffering data before publishing to broker.
           type: integer
@@ -342,12 +354,16 @@ kafka_mirrormaker:
           maximum: 1.34217728e+08
           example: "8388608"
         producer_linger_ms:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: producer.linger.ms
           description: The linger time (ms) for waiting new data to arrive for publishing.
           type: integer
           maximum: 5000
           example: "100"
         producer_max_request_size:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: producer.max.request.size
           description: The maximum request size in bytes.
           type: integer

@@ -338,3 +338,10 @@ func endpointV2(uri string) string {
 func ToStringPointer(s string) *string {
 	return &s
 }
+
+func PointerToString(s *string) string {
+	if s == nil {
+		return ""
+	}
+	return *s
+}

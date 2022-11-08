@@ -131,23 +131,25 @@ func (h *AzurePrivatelinkHandler) ConnectionsList(project, serviceName string) (
 // ConnectionGet retrieves an Azure Privatelink connection
 // This is a convenience function as API does not support GET /v1/project/{project}/service/{service}/privatelink/azure/connetions/{connection-id}
 // (returns 405). Fetch all, filter by ID and fake a 404 if nothing is found.
-func (h *AzurePrivatelinkHandler) ConnectionGet(project, serviceName, privatelinkConnectionID string) (*AzurePrivatelinkConnectionResponse, error) {
+func (h *AzurePrivatelinkHandler) ConnectionGet(project, serviceName string, privatelinkConnectionID *string) (*AzurePrivatelinkConnectionResponse, error) {
 	plConnections, err := h.ConnectionsList(project, serviceName)
 	if err != nil {
 		return nil, err
 	}
 
-	var privatelinkConnection AzurePrivatelinkConnectionResponse
+	pID := PointerToString(privatelinkConnectionID)
 
+	var privatelinkConnection AzurePrivatelinkConnectionResponse
 	for _, plConnection := range plConnections.Connections {
-		if plConnection.PrivatelinkConnectionID == privatelinkConnectionID {
+		if pID == "" || plConnection.PrivatelinkConnectionID == pID {
 			privatelinkConnection = plConnection
+			break
 		}
 	}
 
 	if privatelinkConnection.PrivatelinkConnectionID == "" {
 		return nil, Error{
-			Message: fmt.Sprintf("azure privatelink connection not found by id::%s", privatelinkConnectionID),
+			Message: fmt.Sprintf("azure privatelink connection not found by id::%s", pID),
 			Status:  404,
 		}
 	}

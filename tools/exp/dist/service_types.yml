@@ -1938,8 +1938,24 @@ kafka:
       title: Allow access to selected service ports from private networks
       type: object
       properties:
+        kafka:
+          title: Allow clients to connect to kafka with a DNS name that always resolves to the service's private IP addresses. Only available in certain network locations
+          type: boolean
+          example: true
+        kafka_connect:
+          title: Allow clients to connect to kafka_connect with a DNS name that always resolves to the service's private IP addresses. Only available in certain network locations
+          type: boolean
+          example: true
+        kafka_rest:
+          title: Allow clients to connect to kafka_rest with a DNS name that always resolves to the service's private IP addresses. Only available in certain network locations
+          type: boolean
+          example: true
         prometheus:
           title: Allow clients to connect to prometheus with a DNS name that always resolves to the service's private IP addresses. Only available in certain network locations
+          type: boolean
+          example: true
+        schema_registry:
+          title: Allow clients to connect to schema_registry with a DNS name that always resolves to the service's private IP addresses. Only available in certain network locations
           type: boolean
           example: true
     privatelink_access:

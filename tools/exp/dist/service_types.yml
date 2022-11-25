@@ -1869,6 +1869,10 @@ kafka:
       title: Enable Kafka-REST service
       type: boolean
       default: false
+    kafka_rest_authorization:
+      title: Enable authorization in Kafka-REST service
+      type: boolean
+      example: true
     kafka_rest_config:
       title: Kafka REST configuration
       type: object

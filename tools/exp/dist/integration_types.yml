@@ -46,6 +46,7 @@ clickhouse_kafka:
               - value: TSV
               - value: TabSeparated
               - value: JSONAsString
+              - value: Avro
             example: JSONEachRow
           group_name:
             title: Kafka consumers group

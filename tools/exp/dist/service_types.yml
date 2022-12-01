@@ -658,6 +658,7 @@ flink:
         - "null"
       enum:
         - value: "1.15"
+        - value: "1.16"
     ip_filter:
       title: IP filter
       description: Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'

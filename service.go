@@ -168,8 +168,17 @@ type (
 
 	// MaintenanceWindow during which maintenance operations should take place
 	MaintenanceWindow struct {
-		DayOfWeek string `json:"dow"`
-		TimeOfDay string `json:"time"`
+		DayOfWeek string               `json:"dow"`
+		TimeOfDay string               `json:"time"`
+		Updates   []*MaintenanceUpdate `json:"updates,omitempty"`
+	}
+
+	// MaintenanceUpdate represents a maintenance needing to be applied on the service.
+	MaintenanceUpdate struct {
+		Deadline    *string `json:"deadline,omitempty"`
+		Description string  `json:"description,omitempty"`
+		StartAfter  string  `json:"start_after,omitempty"`
+		StartAt     *string `json:"start_at,omitempty"`
 	}
 
 	// ServicesHandler is the client that interacts with the Service API

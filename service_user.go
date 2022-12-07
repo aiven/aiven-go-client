@@ -1,8 +1,10 @@
 package aiven
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
+	"reflect"
 )
 
 const (
@@ -58,6 +60,28 @@ type (
 		User *ServiceUser `json:"user"`
 	}
 )
+
+// MarshalJSON implements a custom marshalling process for AccessControl where only null fields are omitted
+func (ac AccessControl) MarshalJSON() ([]byte, error) {
+	out := make(map[string]interface{})
+
+	fields := reflect.TypeOf(ac)
+	values := reflect.ValueOf(ac)
+
+	for i := 0; i < fields.NumField(); i++ {
+		field := fields.Field(i)
+		value := values.Field(i)
+
+		switch value.Kind() {
+		case reflect.Pointer, reflect.Slice: // *string, *bool, []string
+			if !value.IsNil() {
+				jsonName := field.Tag.Get("json")
+				out[jsonName] = value.Interface()
+			}
+		}
+	}
+	return json.Marshal(out)
+}
 
 // Create creates the given User on Aiven.
 func (h *ServiceUsersHandler) Create(project, service string, req CreateServiceUserRequest) (*ServiceUser, error) {

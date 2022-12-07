@@ -23,12 +23,12 @@ type (
 	}
 
 	AccessControl struct {
-		M3Group                  *string  `json:"m3_group,omitempty"`
-		RedisACLCategories       []string `json:"redis_acl_categories,omitempty"`
-		RedisACLCommands         []string `json:"redis_acl_commands,omitempty"`
-		RedisACLKeys             []string `json:"redis_acl_keys,omitempty"`
-		RedisACLChannels         []string `json:"redis_acl_channels,omitempty"`
-		PostgresAllowReplication *bool    `json:"pg_allow_replication,omitempty"`
+		M3Group                  *string  `json:"m3_group"`
+		RedisACLCategories       []string `json:"redis_acl_categories"`
+		RedisACLCommands         []string `json:"redis_acl_commands"`
+		RedisACLKeys             []string `json:"redis_acl_keys"`
+		RedisACLChannels         []string `json:"redis_acl_channels"`
+		PostgresAllowReplication *bool    `json:"pg_allow_replication"`
 	}
 
 	// ServiceUsersHandler is the client that interacts with the ServiceUsers

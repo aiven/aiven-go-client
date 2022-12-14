@@ -200,6 +200,22 @@ datadog:
       minimum: 10
       maximum: 100000
       example: "2000"
+    opensearch:
+      title: Datadog Opensearch Options
+      type: object
+      properties:
+        index_stats_enabled:
+          title: Enable Datadog Opensearch Index Monitoring
+          type: boolean
+          example: true
+        pending_task_stats_enabled:
+          title: Enable Datadog Opensearch Pending Task Monitoring
+          type: boolean
+          example: true
+        pshard_stats_enabled:
+          title: Enable Datadog Opensearch Primary Shard Monitoring
+          type: boolean
+          example: true
 datasource:
   title: Integration user config
   type: object

@@ -1842,6 +1842,19 @@ kafka:
           minimum: 1
           maximum: 2.147483647e+09
           example: "5000"
+        producer_batch_size:
+          title: The batch size in bytes the producer will attempt to collect for the same partition before publishing to broker
+          description: This setting gives the upper bound of the batch size to be sent. If there are fewer than this many bytes accumulated for this partition, the producer will 'linger' for the linger.ms time waiting for more records to show up. A batch size of zero will disable batching entirely (defaults to 16384).
+          type: integer
+          maximum: 5.24288e+06
+          example: "1024"
+        producer_buffer_memory:
+          title: The total bytes of memory the producer can use to buffer records waiting to be sent to the broker
+          description: The total bytes of memory the producer can use to buffer records waiting to be sent to the broker (defaults to 33554432).
+          type: integer
+          minimum: 5.24288e+06
+          maximum: 1.34217728e+08
+          example: "8388608"
         producer_compression_type:
           title: The default compression type for producers
           description: Specify the default compression type for producers. This configuration accepts the standard compression codecs ('gzip', 'snappy', 'lz4', 'zstd'). It additionally accepts 'none' which is the default and equivalent to no compression.
@@ -1852,6 +1865,12 @@ kafka:
             - value: lz4
             - value: zstd
             - value: none
+        producer_linger_ms:
+          title: Wait for up to the given delay to allow batching records together
+          description: 'This setting gives the upper bound on the delay for batching: once there is batch.size worth of records for a partition it will be sent immediately regardless of this setting, however if there are fewer than this many bytes accumulated for this partition the producer will ''linger'' for the specified time waiting for more records to show up. Defaults to 0.'
+          type: integer
+          maximum: 5000
+          example: "100"
         producer_max_request_size:
           title: The maximum size of a request in bytes
           description: This setting will limit the number of record batches the producer will send in a single request to avoid sending huge requests.
@@ -1910,6 +1929,16 @@ kafka:
             - value: "-1"
             - value: "0"
             - value: "1"
+        producer_compression_type:
+          title: producer.compression.type
+          description: Specify the default compression type for producers. This configuration accepts the standard compression codecs ('gzip', 'snappy', 'lz4', 'zstd'). It additionally accepts 'none' which is the default and equivalent to no compression.
+          type: string
+          enum:
+            - value: gzip
+            - value: snappy
+            - value: lz4
+            - value: zstd
+            - value: none
         producer_linger_ms:
           title: producer.linger.ms
           description: Wait for up to the given delay to allow batching records together
@@ -2148,6 +2177,19 @@ kafka_connect:
           minimum: 1
           maximum: 2.147483647e+09
           example: "5000"
+        producer_batch_size:
+          title: The batch size in bytes the producer will attempt to collect for the same partition before publishing to broker
+          description: This setting gives the upper bound of the batch size to be sent. If there are fewer than this many bytes accumulated for this partition, the producer will 'linger' for the linger.ms time waiting for more records to show up. A batch size of zero will disable batching entirely (defaults to 16384).
+          type: integer
+          maximum: 5.24288e+06
+          example: "1024"
+        producer_buffer_memory:
+          title: The total bytes of memory the producer can use to buffer records waiting to be sent to the broker
+          description: The total bytes of memory the producer can use to buffer records waiting to be sent to the broker (defaults to 33554432).
+          type: integer
+          minimum: 5.24288e+06
+          maximum: 1.34217728e+08
+          example: "8388608"
         producer_compression_type:
           title: The default compression type for producers
           description: Specify the default compression type for producers. This configuration accepts the standard compression codecs ('gzip', 'snappy', 'lz4', 'zstd'). It additionally accepts 'none' which is the default and equivalent to no compression.
@@ -2158,6 +2200,12 @@ kafka_connect:
             - value: lz4
             - value: zstd
             - value: none
+        producer_linger_ms:
+          title: Wait for up to the given delay to allow batching records together
+          description: 'This setting gives the upper bound on the delay for batching: once there is batch.size worth of records for a partition it will be sent immediately regardless of this setting, however if there are fewer than this many bytes accumulated for this partition the producer will ''linger'' for the specified time waiting for more records to show up. Defaults to 0.'
+          type: integer
+          maximum: 5000
+          example: "100"
         producer_max_request_size:
           title: The maximum size of a request in bytes
           description: This setting will limit the number of record batches the producer will send in a single request to avoid sending huge requests.

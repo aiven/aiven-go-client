@@ -128,16 +128,31 @@ type (
 		RedisURIs      []string `json:"redis"`
 
 		FlinkHostPorts []string `json:"flink"`
+
+		MySQLURIs        []string      `json:"mysql"`
+		MySQLParams      []MySQLParams `json:"mysql_params"`
+		MySQLReplicaURI  string        `json:"mysql_replica_uri"`
+		MySQLStandbyURIs []string      `json:"mysql_standby"`
 	}
 
 	// PostgresParams represents individual parameters for a PostgreSQL ConnectionInfo
 	PostgresParams struct {
 		DatabaseName string `json:"dbname"`
-		Host         string `string:"host"`
-		Password     string `string:"password"`
-		Port         string `string:"port"`
-		SSLMode      string `string:"sslmode"`
-		User         string `string:"user"`
+		Host         string `json:"host"`
+		Password     string `json:"password"`
+		Port         string `json:"port"`
+		SSLMode      string `json:"sslmode"`
+		User         string `json:"user"`
+	}
+
+	// MySQLParams represents individual parameters for a MySQL ConnectionInfo
+	MySQLParams struct {
+		DatabaseName string `json:"dbname"`
+		Host         string `json:"host"`
+		Password     string `json:"password"`
+		Port         string `json:"port"`
+		SSLMode      string `json:"ssl-mode"`
+		User         string `json:"user"`
 	}
 
 	// KafkaACL represents a Kafka ACL entry on Aiven.

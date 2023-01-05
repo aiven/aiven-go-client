@@ -1,5 +1,7 @@
 datadog:
   type: object
+  required:
+    - datadog_api_key
   properties:
     datadog_api_key:
       title: Datadog API key
@@ -72,6 +74,10 @@ datadog:
       example: datadoghq.com
 external_aws_cloudwatch_logs:
   type: object
+  required:
+    - access_key
+    - secret_key
+    - region
   properties:
     access_key:
       title: AWS access key. Required permissions are logs:CreateLogGroup, logs:CreateLogStream, logs:PutLogEvents and logs:DescribeLogStreams
@@ -97,6 +103,11 @@ external_aws_cloudwatch_logs:
       example: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 external_aws_cloudwatch_metrics:
   type: object
+  required:
+    - access_key
+    - secret_key
+    - region
+    - namespace
   properties:
     access_key:
       title: AWS access key. Required permissions are cloudwatch:PutMetricData
@@ -122,6 +133,9 @@ external_aws_cloudwatch_metrics:
       example: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 external_elasticsearch_logs:
   type: object
+  required:
+    - url
+    - index_prefix
   properties:
     ca:
       title: PEM encoded CA certificate
@@ -165,6 +179,10 @@ external_elasticsearch_logs:
 external_google_cloud_logging:
   title: User configuration for Google Cloud Logging integration
   type: object
+  required:
+    - project_id
+    - log_id
+    - service_account_credentials
   properties:
     log_id:
       title: Google Cloud Logging log id
@@ -185,6 +203,9 @@ external_google_cloud_logging:
       example: '{"type": "service_account", ...'
 external_kafka:
   type: object
+  required:
+    - bootstrap_servers
+    - security_protocol
   properties:
     bootstrap_servers:
       title: Bootstrap servers
@@ -264,6 +285,9 @@ external_kafka:
       example: https
 external_opensearch_logs:
   type: object
+  required:
+    - url
+    - index_prefix
   properties:
     ca:
       title: PEM encoded CA certificate
@@ -306,6 +330,11 @@ external_opensearch_logs:
       example: https://user:passwd@logs.example.com/
 external_postgresql:
   type: object
+  required:
+    - host
+    - port
+    - username
+    - password
   properties:
     host:
       title: Hostname or IP address of the server
@@ -351,6 +380,9 @@ external_postgresql:
       example: myname
 external_schema_registry:
   type: object
+  required:
+    - url
+    - authentication
   properties:
     authentication:
       title: Authentication method
@@ -414,6 +446,11 @@ prometheus:
       user_error: Must be 5-32 characters long and may contain only lower case letters and numbers.
 rsyslog:
   type: object
+  required:
+    - server
+    - port
+    - format
+    - tls
   properties:
     ca:
       title: PEM encoded CA certificate
@@ -487,6 +524,9 @@ rsyslog:
       example: true
 signalfx:
   type: object
+  required:
+    - signalfx_api_key
+    - signalfx_realm
   properties:
     enabled_metrics:
       title: list of metrics to send

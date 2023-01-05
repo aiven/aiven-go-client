@@ -13,6 +13,12 @@ var errUnexpected = errors.New("unexpected conversion error")
 
 // UserConfigSchema converts aiven.UserConfigSchema to UserConfigSchema.
 func UserConfigSchema(v aiven.UserConfigSchema) (*types.UserConfigSchema, error) {
+	var r []string
+
+	for _, v := range v.Required {
+		r = append(r, v)
+	}
+
 	var cnp map[string]types.UserConfigSchema = nil
 
 	if len(v.Properties) != 0 {
@@ -89,6 +95,7 @@ func UserConfigSchema(v aiven.UserConfigSchema) (*types.UserConfigSchema, error)
 		Description: v.Description,
 		Type:        v.Type,
 		Default:     v.Default,
+		Required:    r,
 		Properties:  cnp,
 		Items:       cni,
 		OneOf:       cno,

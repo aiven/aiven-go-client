@@ -171,6 +171,7 @@ type (
 		Description          string                      `json:"description"`
 		Type                 interface{}                 `json:"type"`
 		Default              interface{}                 `json:"default"`
+		Required             []string                    `json:"required"`
 		Properties           map[string]UserConfigSchema `json:"properties"`
 		AdditionalProperties interface{}                 `json:"additionalProperties"`
 		Items                *UserConfigSchema           `json:"items"`

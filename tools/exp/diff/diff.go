@@ -173,6 +173,8 @@ func diff(gen map[string]types.UserConfigSchema, read map[string]types.UserConfi
 
 			nv.Default = gen[k].Default
 
+			nv.Required = gen[k].Required
+
 			if len(nv.Properties) == 0 {
 				nv.Properties = gen[k].Properties
 			}

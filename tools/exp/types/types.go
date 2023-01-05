@@ -21,6 +21,7 @@ type UserConfigSchema struct {
 	Description string                      `yaml:"description,omitempty"`
 	Type        interface{}                 `yaml:"type,omitempty"`
 	Default     interface{}                 `yaml:"default,omitempty"`
+	Required    []string                    `yaml:"required,omitempty"`
 	Properties  map[string]UserConfigSchema `yaml:"properties,omitempty"`
 	Items       *UserConfigSchema           `yaml:"items,omitempty"`
 	OneOf       []UserConfigSchema          `yaml:"one_of,omitempty"`

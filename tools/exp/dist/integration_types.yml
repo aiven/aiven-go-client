@@ -313,6 +313,8 @@ kafka_connect:
           example: __connect_status
 kafka_logs:
   type: object
+  required:
+    - kafka_topic
   properties:
     kafka_topic:
       title: Topic name

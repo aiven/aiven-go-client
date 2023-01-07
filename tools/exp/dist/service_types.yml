@@ -788,6 +788,11 @@ grafana:
     auth_azuread:
       title: Azure AD OAuth integration
       type: object
+      required:
+        - client_id
+        - client_secret
+        - auth_url
+        - token_url
       properties:
         allow_sign_up:
           title: Automatically sign-up users on successful sign-in
@@ -844,6 +849,12 @@ grafana:
     auth_generic_oauth:
       title: Generic OAuth integration
       type: object
+      required:
+        - api_url
+        - auth_url
+        - client_id
+        - client_secret
+        - token_url
       properties:
         allow_sign_up:
           title: Automatically sign-up users on successful sign-in
@@ -919,6 +930,9 @@ grafana:
     auth_github:
       title: Github Auth integration
       type: object
+      required:
+        - client_id
+        - client_secret
       properties:
         allow_sign_up:
           title: Automatically sign-up users on successful sign-in
@@ -962,6 +976,10 @@ grafana:
     auth_gitlab:
       title: GitLab Auth integration
       type: object
+      required:
+        - client_id
+        - client_secret
+        - allowed_groups
       properties:
         allow_sign_up:
           title: Automatically sign-up users on successful sign-in
@@ -1010,6 +1028,10 @@ grafana:
     auth_google:
       title: Google Auth integration
       type: object
+      required:
+        - client_id
+        - client_secret
+        - allowed_domains
       properties:
         allow_sign_up:
           title: Automatically sign-up users on successful sign-in
@@ -1153,6 +1175,11 @@ grafana:
     external_image_storage:
       title: External image store settings
       type: object
+      required:
+        - provider
+        - bucket_url
+        - access_key
+        - secret_key
       properties:
         access_key:
           title: S3 access key. Requires permissions to the S3 bucket for the s3:PutObject and s3:PutObjectAcl actions
@@ -1260,6 +1287,10 @@ grafana:
     smtp_server:
       title: SMTP server settings
       type: object
+      required:
+        - host
+        - port
+        - from_address
       properties:
         from_address:
           title: Address used for sending emails
@@ -2563,6 +2594,8 @@ m3db:
           options:
             title: Namespace options
             type: object
+            required:
+              - retention_options
             properties:
               retention_options:
                 title: Retention options
@@ -2855,6 +2888,9 @@ mysql:
       type:
         - object
         - "null"
+      required:
+        - host
+        - port
       properties:
         dbname:
           title: Database name for bootstrapping the initial connection
@@ -3708,6 +3744,9 @@ pg:
       type:
         - object
         - "null"
+      required:
+        - host
+        - port
       properties:
         dbname:
           title: Database name for bootstrapping the initial connection
@@ -4332,6 +4371,9 @@ redis:
       type:
         - object
         - "null"
+      required:
+        - host
+        - port
       properties:
         dbname:
           title: Database name for bootstrapping the initial connection

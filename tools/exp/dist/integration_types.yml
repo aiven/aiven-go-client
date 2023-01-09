@@ -9,6 +9,12 @@ clickhouse_kafka:
       items:
         title: Table to create
         type: object
+        required:
+          - name
+          - columns
+          - topics
+          - data_format
+          - group_name
         properties:
           columns:
             title: Table columns
@@ -17,6 +23,9 @@ clickhouse_kafka:
             items:
               title: Table column
               type: object
+              required:
+                - name
+                - type
               properties:
                 name:
                   title: Column name
@@ -67,6 +76,8 @@ clickhouse_kafka:
             items:
               title: Kafka topic
               type: object
+              required:
+                - name
               properties:
                 name:
                   title: Name of the topic
@@ -123,6 +134,8 @@ datadog:
       items:
         title: Datadog tag defined by user
         type: object
+        required:
+          - tag
         properties:
           comment:
             title: Optional tag explanation
@@ -232,6 +245,9 @@ external_aws_cloudwatch_metrics:
       items:
         title: Metric name and subfield
         type: object
+        required:
+          - metric
+          - field
         properties:
           field:
             title: Identifier of a value in the metric
@@ -253,6 +269,9 @@ external_aws_cloudwatch_metrics:
       items:
         title: Metric name and subfield
         type: object
+        required:
+          - metric
+          - field
         properties:
           field:
             title: Identifier of a value in the metric

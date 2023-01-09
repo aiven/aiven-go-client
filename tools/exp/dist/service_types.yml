@@ -57,6 +57,8 @@ cassandra:
         type:
           - string
           - object
+        required:
+          - network
         properties:
           description:
             title: Description for IP filter list entry
@@ -144,6 +146,8 @@ clickhouse:
         type:
           - string
           - object
+        required:
+          - network
         properties:
           description:
             title: Description for IP filter list entry
@@ -433,6 +437,9 @@ elasticsearch:
         title: Glob pattern and number of indexes matching that pattern to be kept
         description: 'Allows you to create glob style patterns and set a max number of indexes matching this pattern you want to keep. Creating indexes exceeding this value will cause the oldest one to get deleted. You could for example create a pattern looking like ''logs.?'' and then create index logs.1, logs.2 etc, it will delete logs.1 once you create logs.6. Do note ''logs.?'' does not apply to logs.10. Note: Setting max_index_count to 0 will do nothing and the pattern gets ignored.'
         type: object
+        required:
+          - pattern
+          - max_index_count
         properties:
           max_index_count:
             title: Maximum number of indexes to keep
@@ -494,6 +501,8 @@ elasticsearch:
         type:
           - string
           - object
+        required:
+          - network
         properties:
           description:
             title: Description for IP filter list entry
@@ -670,6 +679,8 @@ flink:
         type:
           - string
           - object
+        required:
+          - network
         properties:
           description:
             title: Description for IP filter list entry
@@ -1220,6 +1231,8 @@ grafana:
         type:
           - string
           - object
+        required:
+          - network
         properties:
           description:
             title: Description for IP filter list entry
@@ -1428,6 +1441,8 @@ influxdb:
         type:
           - string
           - object
+        required:
+          - network
         properties:
           description:
             title: Description for IP filter list entry
@@ -1526,6 +1541,8 @@ kafka:
         type:
           - string
           - object
+        required:
+          - network
         properties:
           description:
             title: Description for IP filter list entry
@@ -2126,6 +2143,8 @@ kafka_connect:
         type:
           - string
           - object
+        required:
+          - network
         properties:
           description:
             title: Description for IP filter list entry
@@ -2320,6 +2339,8 @@ kafka_mirrormaker:
         type:
           - string
           - object
+        required:
+          - network
         properties:
           description:
             title: Description for IP filter list entry
@@ -2426,6 +2447,8 @@ m3aggregator:
         type:
           - string
           - object
+        required:
+          - network
         properties:
           description:
             title: Description for IP filter list entry
@@ -2498,6 +2521,8 @@ m3db:
         type:
           - string
           - object
+        required:
+          - network
         properties:
           description:
             title: Description for IP filter list entry
@@ -2582,6 +2607,9 @@ m3db:
       items:
         title: M3 Namespace
         type: object
+        required:
+          - name
+          - type
         properties:
           name:
             title: The name of the namespace
@@ -2686,6 +2714,8 @@ m3db:
             title: M3 Mapping rule
             description: Mapping rules allow more granular use of aggregation, not simply sending everything to a namespace. If mapping rules exist that target a namespace, only data matching mapping rules will be sent to it and nothing else.
             type: object
+            required:
+              - filter
             properties:
               aggregations:
                 title: List of aggregations to be applied
@@ -2753,6 +2783,9 @@ m3db:
                     - title: Namespaces matching this storage policy
                       description: Filter the namespace by exact match of retention period and resolution
                       type: object
+                      required:
+                        - retention_period_duration
+                        - resolution
                       properties:
                         resolution:
                           title: The resolution for the matching namespace
@@ -2773,6 +2806,9 @@ m3db:
                 items:
                   title: Tag to be added
                   type: object
+                  required:
+                    - name
+                    - value
                   properties:
                     name:
                       title: Name of the tag
@@ -2867,6 +2903,8 @@ mysql:
         type:
           - string
           - object
+        required:
+          - network
         properties:
           description:
             title: Description for IP filter list entry
@@ -3257,6 +3295,9 @@ opensearch:
         title: Glob pattern and number of indexes matching that pattern to be kept
         description: 'Allows you to create glob style patterns and set a max number of indexes matching this pattern you want to keep. Creating indexes exceeding this value will cause the oldest one to get deleted. You could for example create a pattern looking like ''logs.?'' and then create index logs.1, logs.2 etc, it will delete logs.1 once you create logs.6. Do note ''logs.?'' does not apply to logs.10. Note: Setting max_index_count to 0 will do nothing and the pattern gets ignored.'
         type: object
+        required:
+          - pattern
+          - max_index_count
         properties:
           max_index_count:
             title: Maximum number of indexes to keep
@@ -3318,6 +3359,8 @@ opensearch:
         type:
           - string
           - object
+        required:
+          - network
         properties:
           description:
             title: Description for IP filter list entry
@@ -3723,6 +3766,8 @@ pg:
         type:
           - string
           - object
+        required:
+          - network
         properties:
           description:
             title: Description for IP filter list entry
@@ -4350,6 +4395,8 @@ redis:
         type:
           - string
           - object
+        required:
+          - network
         properties:
           description:
             title: Description for IP filter list entry

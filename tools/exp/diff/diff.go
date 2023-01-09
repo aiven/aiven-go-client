@@ -47,6 +47,8 @@ func diff(gen map[string]types.UserConfigSchema, read map[string]types.UserConfi
 
 			nv.Items.Type = gen[k].Items.Type
 
+			nv.Items.Required = gen[k].Items.Required
+
 			d, err = diff(gen[k].Items.Properties, nv.Items.Properties)
 			if err != nil {
 				return nil, err
@@ -93,6 +95,8 @@ func diff(gen map[string]types.UserConfigSchema, read map[string]types.UserConfi
 								nv.Items.OneOf[k].Description = vn.Description
 
 								nv.Items.OneOf[k].Type = vn.Type
+
+								nv.Items.OneOf[k].Required = vn.Required
 
 								nv.Items.OneOf[k].MaxLength = vn.MaxLength
 

@@ -91,3 +91,8 @@ func MeasureExecutionTime(logger *Logger) func() {
 		logger.Info.Printf("%s took %dms", fn.Name(), time.Since(start).Milliseconds())
 	}
 }
+
+// Ref returns the reference (pointer) of the provided value.
+func Ref[T any](v T) *T {
+	return &v
+}

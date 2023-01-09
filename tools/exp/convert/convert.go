@@ -5,6 +5,7 @@ import (
 
 	"github.com/aiven/aiven-go-client"
 	"github.com/aiven/aiven-go-client/tools/exp/types"
+	"github.com/aiven/aiven-go-client/tools/exp/util"
 	"github.com/mitchellh/copystructure"
 )
 
@@ -90,6 +91,18 @@ func UserConfigSchema(v aiven.UserConfigSchema) (*types.UserConfigSchema, error)
 		e = append(e, types.UserConfigSchemaEnumValue{Value: v})
 	}
 
+	var min *int
+
+	if v.Minimum != nil {
+		min = util.Ref(int(*v.Minimum))
+	}
+
+	var max *int
+
+	if v.Maximum != nil {
+		max = util.Ref(int(*v.Maximum))
+	}
+
 	return &types.UserConfigSchema{
 		Title:       v.Title,
 		Description: v.Description,
@@ -100,8 +113,8 @@ func UserConfigSchema(v aiven.UserConfigSchema) (*types.UserConfigSchema, error)
 		Items:       cni,
 		OneOf:       cno,
 		Enum:        e,
-		Minimum:     int(v.Minimum),
-		Maximum:     int(v.Maximum),
+		Minimum:     min,
+		Maximum:     max,
 		MinLength:   v.MinLength,
 		MaxLength:   v.MaxLength,
 		MaxItems:    v.MaxItems,

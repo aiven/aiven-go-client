@@ -177,11 +177,11 @@ type (
 		Items                *UserConfigSchema           `json:"items"`
 		OneOf                []UserConfigSchema          `json:"oneOf"`
 		Enum                 []interface{}               `json:"enum"`
-		Minimum              float64                     `json:"minimum"`
-		Maximum              float64                     `json:"maximum"`
-		MinLength            int                         `json:"minLength"`
-		MaxLength            int                         `json:"maxLength"`
-		MaxItems             int                         `json:"maxItems"`
+		Minimum              *float64                    `json:"minimum"`
+		Maximum              *float64                    `json:"maximum"`
+		MinLength            *int                        `json:"minLength"`
+		MaxLength            *int                        `json:"maxLength"`
+		MaxItems             *int                        `json:"maxItems"`
 		CreateOnly           bool                        `json:"createOnly"`
 		Pattern              string                      `json:"pattern"`
 		Example              interface{}                 `json:"example"`

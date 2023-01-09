@@ -370,6 +370,7 @@ kafka_mirrormaker:
           title: producer.batch.size
           description: The batch size in bytes producer will attempt to collect before publishing to broker.
           type: integer
+          minimum: 0
           maximum: 5242880
           example: "1024"
         producer_buffer_memory:
@@ -383,12 +384,14 @@ kafka_mirrormaker:
           title: producer.linger.ms
           description: The linger time (ms) for waiting new data to arrive for publishing.
           type: integer
+          minimum: 0
           maximum: 5000
           example: "100"
         producer_max_request_size:
           title: producer.max.request.size
           description: The maximum request size in bytes.
           type: integer
+          minimum: 0
           maximum: 67108864
           example: "1048576"
 logs:
@@ -428,6 +431,7 @@ metrics:
     retention_days:
       title: Number of days to keep old metrics. Only affects PostgreSQL destinations. Set to 0 for no automatic cleanup. Defaults to 30 days.
       type: integer
+      minimum: 0
       maximum: 10000
       example: "30"
     ro_username:

@@ -444,6 +444,7 @@ elasticsearch:
           max_index_count:
             title: Maximum number of indexes to keep
             type: integer
+            minimum: 0
             maximum: 9223372036854775807
             example: "3"
           pattern:
@@ -471,6 +472,7 @@ elasticsearch:
           type:
             - integer
             - "null"
+          minimum: 0
           maximum: 100000
           example: "10000"
         number_of_replicas:
@@ -479,6 +481,7 @@ elasticsearch:
           type:
             - integer
             - "null"
+          minimum: 0
           maximum: 29
           example: "1"
         number_of_shards:
@@ -548,6 +551,7 @@ elasticsearch:
       description: 'DEPRECATED: use index_patterns instead'
       type: integer
       default: "0"
+      minimum: 0
       maximum: 9223372036854775807
     opensearch_version:
       title: OpenSearch major version
@@ -781,6 +785,7 @@ grafana:
     alerting_max_annotations_to_keep:
       title: Max number of alert annotations that Grafana stores. 0 (default) keeps all alert annotations.
       type: integer
+      minimum: 0
       maximum: 1000000
       example: "0"
     alerting_nodata_or_nullvalues:
@@ -1409,26 +1414,32 @@ influxdb:
         log_queries_after:
           title: The maximum duration in seconds before a query is logged as a slow query. Setting this to 0 (the default) will never log slow queries.
           type: integer
+          minimum: 0
           maximum: 3600
         max_connection_limit:
           title: Maximum number of connections to InfluxDB. Setting this to 0 (default) means no limit. If using max_connection_limit, it is recommended to set the value to be large enough in order to not block clients unnecessarily.
           type: integer
+          minimum: 0
           maximum: 1000000
         max_row_limit:
           title: The maximum number of rows returned in a non-chunked query. Setting this to 0 (the default) allows an unlimited number to be returned.
           type: integer
+          minimum: 0
           maximum: 10000000
         max_select_buckets:
           title: The maximum number of `GROUP BY time()` buckets that can be processed in a query. Setting this to 0 (the default) allows an unlimited number to be processed.
           type: integer
+          minimum: 0
           maximum: 100000
         max_select_point:
           title: The maximum number of points that can be processed in a SELECT statement. Setting this to 0 (the default) allows an unlimited number to be processed.
           type: integer
+          minimum: 0
           maximum: 10000000
         query_timeout:
           title: The maximum duration in seconds before a query is killed. Setting this to 0 (the default) will never kill slow queries.
           type: integer
+          minimum: 0
           maximum: 3600
     ip_filter:
       title: IP filter
@@ -1595,24 +1606,28 @@ kafka:
           title: group.initial.rebalance.delay.ms
           description: The amount of time, in milliseconds, the group coordinator will wait for more consumers to join a new group before performing the first rebalance. A longer delay means potentially fewer rebalances, but increases the time until processing begins. The default value for this is 3 seconds. During development and testing it might be desirable to set this to 0 in order to not delay test execution time.
           type: integer
+          minimum: 0
           maximum: 300000
           example: "3000"
         group_max_session_timeout_ms:
           title: group.max.session.timeout.ms
           description: The maximum allowed session timeout for registered consumers. Longer timeouts give consumers more time to process messages in between heartbeats at the cost of a longer time to detect failures.
           type: integer
+          minimum: 0
           maximum: 1800000
           example: "1800000"
         group_min_session_timeout_ms:
           title: group.min.session.timeout.ms
           description: The minimum allowed session timeout for registered consumers. Longer timeouts give consumers more time to process messages in between heartbeats at the cost of a longer time to detect failures.
           type: integer
+          minimum: 0
           maximum: 60000
           example: "6000"
         log_cleaner_delete_retention_ms:
           title: log.cleaner.delete.retention.ms
           description: How long are delete records retained?
           type: integer
+          minimum: 0
           maximum: 315569260000
           example: "86400000"
         log_cleaner_max_compaction_lag_ms:
@@ -1625,11 +1640,14 @@ kafka:
           title: log.cleaner.min.cleanable.ratio
           description: Controls log compactor frequency. Larger value means more frequent compactions but also more space wasted for logs. Consider setting log.cleaner.max.compaction.lag.ms to enforce compactions sooner, instead of setting a very high value for this option.
           type: number
+          minimum: 0
+          maximum: 0
           example: "0.5"
         log_cleaner_min_compaction_lag_ms:
           title: log.cleaner.min.compaction.lag.ms
           description: The minimum time a message will remain uncompacted in the log. Only applicable for logs that are being compacted.
           type: integer
+          minimum: 0
           maximum: 9223372036854775807
         log_cleanup_policy:
           title: log.cleanup.policy
@@ -1651,11 +1669,13 @@ kafka:
           title: log.flush.interval.ms
           description: The maximum time in ms that a message in any topic is kept in memory before flushed to disk. If not set, the value in log.flush.scheduler.interval.ms is used
           type: integer
+          minimum: 0
           maximum: 9223372036854775807
         log_index_interval_bytes:
           title: log.index.interval.bytes
           description: The interval with which Kafka adds an entry to the offset index
           type: integer
+          minimum: 0
           maximum: 104857600
           example: "4096"
         log_index_size_max_bytes:
@@ -1674,6 +1694,7 @@ kafka:
           title: log.message.timestamp.difference.max.ms
           description: The maximum difference allowed between the timestamp when a broker receives a message and the timestamp specified in the message
           type: integer
+          minimum: 0
           maximum: 9223372036854775807
         log_message_timestamp_type:
           title: log.message.timestamp.type
@@ -1709,6 +1730,7 @@ kafka:
           title: log.roll.jitter.ms
           description: The maximum jitter to subtract from logRollTimeMillis (in milliseconds). If not set, the value in log.roll.jitter.hours is used
           type: integer
+          minimum: 0
           maximum: 9223372036854775807
         log_roll_ms:
           title: log.roll.ms
@@ -1726,6 +1748,7 @@ kafka:
           title: log.segment.delete.delay.ms
           description: The amount of time to wait before deleting a file from the filesystem
           type: integer
+          minimum: 0
           maximum: 3600000
           example: "60000"
         max_connections_per_ip:
@@ -1745,6 +1768,7 @@ kafka:
           title: message.max.bytes
           description: The maximum size of message that the server can receive.
           type: integer
+          minimum: 0
           maximum: 100001200
           example: "1048588"
         min_insync_replicas:
@@ -1892,6 +1916,7 @@ kafka:
           title: The batch size in bytes the producer will attempt to collect for the same partition before publishing to broker
           description: This setting gives the upper bound of the batch size to be sent. If there are fewer than this many bytes accumulated for this partition, the producer will 'linger' for the linger.ms time waiting for more records to show up. A batch size of zero will disable batching entirely (defaults to 16384).
           type: integer
+          minimum: 0
           maximum: 5242880
           example: "1024"
         producer_buffer_memory:
@@ -1915,6 +1940,7 @@ kafka:
           title: Wait for up to the given delay to allow batching records together
           description: 'This setting gives the upper bound on the delay for batching: once there is batch.size worth of records for a partition it will be sent immediately regardless of this setting, however if there are fewer than this many bytes accumulated for this partition the producer will ''linger'' for the specified time waiting for more records to show up. Defaults to 0.'
           type: integer
+          minimum: 0
           maximum: 5000
           example: "100"
         producer_max_request_size:
@@ -1953,6 +1979,7 @@ kafka:
           description: Maximum number of bytes in unencoded message keys and values by a single request
           type: integer
           default: "67108864"
+          minimum: 0
           maximum: 671088640
         consumer_request_timeout_ms:
           title: consumer.request.timeout.ms
@@ -1990,6 +2017,7 @@ kafka:
           description: Wait for up to the given delay to allow batching records together
           type: integer
           default: "0"
+          minimum: 0
           maximum: 5000
         simpleconsumer_pool_size_max:
           title: simpleconsumer.pool.size.max
@@ -2230,6 +2258,7 @@ kafka_connect:
           title: The batch size in bytes the producer will attempt to collect for the same partition before publishing to broker
           description: This setting gives the upper bound of the batch size to be sent. If there are fewer than this many bytes accumulated for this partition, the producer will 'linger' for the linger.ms time waiting for more records to show up. A batch size of zero will disable batching entirely (defaults to 16384).
           type: integer
+          minimum: 0
           maximum: 5242880
           example: "1024"
         producer_buffer_memory:
@@ -2253,6 +2282,7 @@ kafka_connect:
           title: Wait for up to the given delay to allow batching records together
           description: 'This setting gives the upper bound on the delay for batching: once there is batch.size worth of records for a partition it will be sent immediately regardless of this setting, however if there are fewer than this many bytes accumulated for this partition the producer will ''linger'' for the specified time waiting for more records to show up. Defaults to 0.'
           type: integer
+          minimum: 0
           maximum: 5000
           example: "100"
         producer_max_request_size:
@@ -2544,11 +2574,13 @@ m3db:
         max_recently_queried_series_blocks:
           title: The maximum number of blocks that can be read in a given lookback period.
           type: integer
+          minimum: 0
           maximum: 9223372036854775807
           example: "20000"
         max_recently_queried_series_disk_bytes_read:
           title: The maximum number of disk bytes that can be read in a given lookback period.
           type: integer
+          minimum: 0
           maximum: 9223372036854775807
           example: "104857600"
         max_recently_queried_series_lookback:
@@ -2560,6 +2592,7 @@ m3db:
         query_docs:
           title: The maximum number of docs fetched in single query.
           type: integer
+          minimum: 0
           maximum: 9223372036854775807
           example: "100000"
         query_require_exhaustive:
@@ -2877,6 +2910,7 @@ mysql:
       type:
         - integer
         - "null"
+      minimum: 0
       maximum: 23
       example: "3"
     backup_minute:
@@ -2884,6 +2918,7 @@ mysql:
       type:
         - integer
         - "null"
+      minimum: 0
       maximum: 59
       example: "30"
     binlog_retention_period:
@@ -3006,18 +3041,21 @@ mysql:
           title: innodb_change_buffer_max_size
           description: Maximum size for the InnoDB change buffer, as a percentage of the total size of the buffer pool. Default is 25
           type: integer
+          minimum: 0
           maximum: 50
           example: "30"
         innodb_flush_neighbors:
           title: innodb_flush_neighbors
           description: 'Specifies whether flushing a page from the InnoDB buffer pool also flushes other dirty pages in the same extent (default is 1): 0 - dirty pages in the same extent are not flushed,  1 - flush contiguous dirty pages in the same extent,  2 - flush dirty pages in the same extent'
           type: integer
+          minimum: 0
           maximum: 2
           example: "0"
         innodb_ft_min_token_size:
           title: innodb_ft_min_token_size
           description: Minimum length of words that are stored in an InnoDB FULLTEXT index. Changing this parameter will lead to a restart of the MySQL service.
           type: integer
+          minimum: 0
           maximum: 16
           example: "3"
         innodb_ft_server_stopword_table:
@@ -3071,6 +3109,7 @@ mysql:
           title: innodb_thread_concurrency
           description: Defines the maximum number of threads permitted inside of InnoDB. Default is 0 (infinite concurrency - no limit)
           type: integer
+          minimum: 0
           maximum: 1000
           example: "10"
         innodb_write_io_threads:
@@ -3099,6 +3138,7 @@ mysql:
           title: long_query_time
           description: The slow_query_logs work as SQL statements that take more than long_query_time seconds to execute. Default is 10s
           type: number
+          minimum: 0
           maximum: 3600
           example: "10"
         max_allowed_packet:
@@ -3302,6 +3342,7 @@ opensearch:
           max_index_count:
             title: Maximum number of indexes to keep
             type: integer
+            minimum: 0
             maximum: 9223372036854775807
             example: "3"
           pattern:
@@ -3329,6 +3370,7 @@ opensearch:
           type:
             - integer
             - "null"
+          minimum: 0
           maximum: 100000
           example: "10000"
         number_of_replicas:
@@ -3337,6 +3379,7 @@ opensearch:
           type:
             - integer
             - "null"
+          minimum: 0
           maximum: 29
           example: "1"
         number_of_shards:
@@ -3385,6 +3428,7 @@ opensearch:
       description: 'DEPRECATED: use index_patterns instead'
       type: integer
       default: "0"
+      minimum: 0
       maximum: 9223372036854775807
     opensearch:
       title: OpenSearch settings
@@ -3741,6 +3785,7 @@ pg:
       type:
         - integer
         - "null"
+      minimum: 0
       maximum: 23
       example: "3"
     backup_minute:
@@ -3748,6 +3793,7 @@ pg:
       type:
         - integer
         - "null"
+      minimum: 0
       maximum: 59
       example: "30"
     enable_ipv6:
@@ -3841,11 +3887,13 @@ pg:
           title: autovacuum_analyze_scale_factor
           description: Specifies a fraction of the table size to add to autovacuum_analyze_threshold when deciding whether to trigger an ANALYZE. The default is 0.2 (20% of table size)
           type: number
+          minimum: 0
           maximum: 1
         autovacuum_analyze_threshold:
           title: autovacuum_analyze_threshold
           description: Specifies the minimum number of inserted, updated or deleted tuples needed to trigger an  ANALYZE in any one table. The default is 50 tuples.
           type: integer
+          minimum: 0
           maximum: 2147483647
         autovacuum_freeze_max_age:
           title: autovacuum_freeze_max_age
@@ -3882,11 +3930,13 @@ pg:
           title: autovacuum_vacuum_scale_factor
           description: Specifies a fraction of the table size to add to autovacuum_vacuum_threshold when deciding whether to trigger a VACUUM. The default is 0.2 (20% of table size)
           type: number
+          minimum: 0
           maximum: 1
         autovacuum_vacuum_threshold:
           title: autovacuum_vacuum_threshold
           description: Specifies the minimum number of updated or deleted tuples needed to trigger a VACUUM in any one table. The default is 50 tuples
           type: integer
+          minimum: 0
           maximum: 2147483647
         bgwriter_delay:
           title: bgwriter_delay
@@ -3899,18 +3949,21 @@ pg:
           title: bgwriter_flush_after
           description: Whenever more than bgwriter_flush_after bytes have been written by the background writer, attempt to force the OS to issue these writes to the underlying storage. Specified in kilobytes, default is 512. Setting of 0 disables forced writeback.
           type: integer
+          minimum: 0
           maximum: 2048
           example: "512"
         bgwriter_lru_maxpages:
           title: bgwriter_lru_maxpages
           description: In each round, no more than this many buffers will be written by the background writer. Setting this to zero disables background writing. Default is 100.
           type: integer
+          minimum: 0
           maximum: 1073741823
           example: "100"
         bgwriter_lru_multiplier:
           title: bgwriter_lru_multiplier
           description: The average recent need for new buffers is multiplied by bgwriter_lru_multiplier to arrive at an estimate of the number that will be needed during the next round, (up to bgwriter_lru_maxpages). 1.0 represents a “just in time” policy of writing exactly the number of buffers predicted to be needed. Larger values provide some cushion against spikes in demand, while smaller values intentionally leave writes to be done by server processes. The default is 2.0.
           type: number
+          minimum: 0
           maximum: 10
           example: "2.0"
         deadlock_timeout:
@@ -3932,6 +3985,7 @@ pg:
           title: idle_in_transaction_session_timeout
           description: Time out sessions with open transactions after this number of milliseconds
           type: integer
+          minimum: 0
           maximum: 604800000
         jit:
           title: jit
@@ -3994,11 +4048,13 @@ pg:
           title: max_parallel_workers
           description: Sets the maximum number of workers that the system can support for parallel queries
           type: integer
+          minimum: 0
           maximum: 96
         max_parallel_workers_per_gather:
           title: max_parallel_workers_per_gather
           description: Sets the maximum number of workers that can be started by a single Gather or Gather Merge node
           type: integer
+          minimum: 0
           maximum: 96
         max_pred_locks_per_transaction:
           title: max_pred_locks_per_transaction
@@ -4010,6 +4066,7 @@ pg:
           title: max_prepared_transactions
           description: PostgreSQL maximum prepared transactions
           type: integer
+          minimum: 0
           maximum: 10000
         max_replication_slots:
           title: max_replication_slots
@@ -4186,11 +4243,13 @@ pg:
         autodb_idle_timeout:
           title: If the automatically created database pools have been unused this many seconds, they are freed. If 0 then timeout is disabled. [seconds]
           type: integer
+          minimum: 0
           maximum: 86400
           example: "3600"
         autodb_max_db_connections:
           title: Do not allow more than this many server connections per database (regardless of user). Setting it to 0 means unlimited.
           type: integer
+          minimum: 0
           maximum: 2147483647
           example: "0"
         autodb_pool_mode:
@@ -4204,6 +4263,7 @@ pg:
         autodb_pool_size:
           title: If non-zero then create automatically a pool of that size per user when a pool doesn't exist.
           type: integer
+          minimum: 0
           maximum: 10000
           example: "0"
         ignore_startup_parameters:
@@ -4222,11 +4282,13 @@ pg:
         min_pool_size:
           title: Add more server connections to pool if below this number. Improves behavior when usual load comes suddenly back after period of total inactivity. The value is effectively capped at the pool size.
           type: integer
+          minimum: 0
           maximum: 10000
           example: "0"
         server_idle_timeout:
           title: If a server connection has been idle more than this many seconds it will be dropped. If 0 then timeout is disabled. [seconds]
           type: integer
+          minimum: 0
           maximum: 86400
           example: "600"
         server_lifetime:
@@ -4535,6 +4597,7 @@ redis:
       title: Counter logarithm factor for volatile-lfu and allkeys-lfu maxmemory-policies
       type: integer
       default: "10"
+      minimum: 0
       maximum: 100
     redis_maxmemory_policy:
       title: Redis maxmemory-policy
@@ -4586,6 +4649,7 @@ redis:
       title: Redis idle connection timeout in seconds
       type: integer
       default: "300"
+      minimum: 0
       maximum: 31536000
     service_to_fork_from:
       title: Name of another service to fork from. This has effect only when a new service is being created.

@@ -26,11 +26,11 @@ type UserConfigSchema struct {
 	Items       *UserConfigSchema           `yaml:"items,omitempty"`
 	OneOf       []UserConfigSchema          `yaml:"one_of,omitempty"`
 	Enum        []UserConfigSchemaEnumValue `yaml:"enum,omitempty"`
-	Minimum     int                         `yaml:"minimum,omitempty"`
-	Maximum     int                         `yaml:"maximum,omitempty"`
-	MinLength   int                         `yaml:"min_length,omitempty"`
-	MaxLength   int                         `yaml:"max_length,omitempty"`
-	MaxItems    int                         `yaml:"max_items,omitempty"`
+	Minimum     *int                        `yaml:"minimum,omitempty"`
+	Maximum     *int                        `yaml:"maximum,omitempty"`
+	MinLength   *int                        `yaml:"min_length,omitempty"`
+	MaxLength   *int                        `yaml:"max_length,omitempty"`
+	MaxItems    *int                        `yaml:"max_items,omitempty"`
 	CreateOnly  bool                        `yaml:"create_only,omitempty"`
 	Pattern     string                      `yaml:"pattern,omitempty"`
 	Example     interface{}                 `yaml:"example,omitempty"`

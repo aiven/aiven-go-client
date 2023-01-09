@@ -17,6 +17,8 @@ datadog:
       items:
         title: Datadog tag defined by user
         type: object
+        required:
+          - tag
         properties:
           comment:
             title: Optional tag explanation

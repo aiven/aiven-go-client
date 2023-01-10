@@ -445,7 +445,7 @@ elasticsearch:
             title: Maximum number of indexes to keep
             type: integer
             minimum: 0
-            maximum: 9223372036854775807
+            maximum: -9223372036854775808
             example: "3"
           pattern:
             title: fnmatch pattern
@@ -552,7 +552,7 @@ elasticsearch:
       type: integer
       default: "0"
       minimum: 0
-      maximum: 9223372036854775807
+      maximum: -9223372036854775808
     opensearch_version:
       title: OpenSearch major version
       type:
@@ -1635,7 +1635,7 @@ kafka:
           description: The maximum amount of time message will remain uncompacted. Only applicable for logs that are being compacted
           type: integer
           minimum: 30000
-          maximum: 9223372036854775807
+          maximum: -9223372036854775808
         log_cleaner_min_cleanable_ratio:
           title: log.cleaner.min.cleanable.ratio
           description: Controls log compactor frequency. Larger value means more frequent compactions but also more space wasted for logs. Consider setting log.cleaner.max.compaction.lag.ms to enforce compactions sooner, instead of setting a very high value for this option.
@@ -1648,7 +1648,7 @@ kafka:
           description: The minimum time a message will remain uncompacted in the log. Only applicable for logs that are being compacted.
           type: integer
           minimum: 0
-          maximum: 9223372036854775807
+          maximum: -9223372036854775808
         log_cleanup_policy:
           title: log.cleanup.policy
           description: The default cleanup policy for segments beyond the retention window
@@ -1663,14 +1663,14 @@ kafka:
           description: The number of messages accumulated on a log partition before messages are flushed to disk
           type: integer
           minimum: 1
-          maximum: 9223372036854775807
+          maximum: -9223372036854775808
           example: "9223372036854775807"
         log_flush_interval_ms:
           title: log.flush.interval.ms
           description: The maximum time in ms that a message in any topic is kept in memory before flushed to disk. If not set, the value in log.flush.scheduler.interval.ms is used
           type: integer
           minimum: 0
-          maximum: 9223372036854775807
+          maximum: -9223372036854775808
         log_index_interval_bytes:
           title: log.index.interval.bytes
           description: The interval with which Kafka adds an entry to the offset index
@@ -1695,7 +1695,7 @@ kafka:
           description: The maximum difference allowed between the timestamp when a broker receives a message and the timestamp specified in the message
           type: integer
           minimum: 0
-          maximum: 9223372036854775807
+          maximum: -9223372036854775808
         log_message_timestamp_type:
           title: log.message.timestamp.type
           description: Define whether the timestamp in the message is message create time or log append time.
@@ -1713,7 +1713,7 @@ kafka:
           description: The maximum size of the log before deleting messages
           type: integer
           minimum: -1
-          maximum: 9223372036854775807
+          maximum: -9223372036854775808
         log_retention_hours:
           title: log.retention.hours
           description: The number of hours to keep a log file before deleting it
@@ -1725,19 +1725,19 @@ kafka:
           description: The number of milliseconds to keep a log file before deleting it (in milliseconds), If not set, the value in log.retention.minutes is used. If set to -1, no time limit is applied.
           type: integer
           minimum: -1
-          maximum: 9223372036854775807
+          maximum: -9223372036854775808
         log_roll_jitter_ms:
           title: log.roll.jitter.ms
           description: The maximum jitter to subtract from logRollTimeMillis (in milliseconds). If not set, the value in log.roll.jitter.hours is used
           type: integer
           minimum: 0
-          maximum: 9223372036854775807
+          maximum: -9223372036854775808
         log_roll_ms:
           title: log.roll.ms
           description: The maximum time before a new log segment is rolled out (in milliseconds).
           type: integer
           minimum: 1
-          maximum: 9223372036854775807
+          maximum: -9223372036854775808
         log_segment_bytes:
           title: log.segment.bytes
           description: The maximum size of a single log file
@@ -2399,7 +2399,7 @@ kafka_mirrormaker:
           description: 'Frequency at which consumer group offset checkpoints are emitted (default: 60, every minute)'
           type: integer
           minimum: 1
-          maximum: 9223372036854775807
+          maximum: -9223372036854775808
           example: "60"
         refresh_groups_enabled:
           title: Refresh consumer groups
@@ -2411,7 +2411,7 @@ kafka_mirrormaker:
           description: Frequency of consumer group refresh in seconds. Defaults to 600 seconds (10 minutes).
           type: integer
           minimum: 1
-          maximum: 9223372036854775807
+          maximum: -9223372036854775808
           example: "600"
         refresh_topics_enabled:
           title: Refresh topics and partitions
@@ -2423,7 +2423,7 @@ kafka_mirrormaker:
           description: Frequency of topic and partitions refresh in seconds. Defaults to 600 seconds (10 minutes).
           type: integer
           minimum: 1
-          maximum: 9223372036854775807
+          maximum: -9223372036854775808
           example: "600"
         sync_group_offsets_enabled:
           title: Sync consumer group offsets
@@ -2435,7 +2435,7 @@ kafka_mirrormaker:
           description: 'Frequency at which consumer group offsets are synced (default: 60, every minute)'
           type: integer
           minimum: 1
-          maximum: 9223372036854775807
+          maximum: -9223372036854775808
           example: "60"
         sync_topic_configs_enabled:
           title: Sync remote topics
@@ -2575,13 +2575,13 @@ m3db:
           title: The maximum number of blocks that can be read in a given lookback period.
           type: integer
           minimum: 0
-          maximum: 9223372036854775807
+          maximum: -9223372036854775808
           example: "20000"
         max_recently_queried_series_disk_bytes_read:
           title: The maximum number of disk bytes that can be read in a given lookback period.
           type: integer
           minimum: 0
-          maximum: 9223372036854775807
+          maximum: -9223372036854775808
           example: "104857600"
         max_recently_queried_series_lookback:
           title: The lookback period for 'max_recently_queried_series_blocks' and 'max_recently_queried_series_disk_bytes_read'.
@@ -2593,7 +2593,7 @@ m3db:
           title: The maximum number of docs fetched in single query.
           type: integer
           minimum: 0
-          maximum: 9223372036854775807
+          maximum: -9223372036854775808
           example: "100000"
         query_require_exhaustive:
           title: Require exhaustive result
@@ -2604,7 +2604,7 @@ m3db:
           title: The maximum number of series fetched in single query.
           type: integer
           minimum: 10000
-          maximum: 9223372036854775807
+          maximum: -9223372036854775808
           example: "100000"
     m3coordinator_enable_graphite_carbon_ingest:
       title: Enable Graphite ingestion using Carbon plaintext protocol
@@ -3028,7 +3028,7 @@ mysql:
           description: The maximum permitted result length in bytes for the GROUP_CONCAT() function.
           type: integer
           minimum: 4
-          maximum: 9223372036854775807
+          maximum: -9223372036854775808
           example: "1024"
         information_schema_stats_expiry:
           title: information_schema_stats_expiry
@@ -3343,7 +3343,7 @@ opensearch:
             title: Maximum number of indexes to keep
             type: integer
             minimum: 0
-            maximum: 9223372036854775807
+            maximum: -9223372036854775808
             example: "3"
           pattern:
             title: fnmatch pattern
@@ -3429,7 +3429,7 @@ opensearch:
       type: integer
       default: "0"
       minimum: 0
-      maximum: 9223372036854775807
+      maximum: -9223372036854775808
     opensearch:
       title: OpenSearch settings
       type: object
@@ -4313,7 +4313,7 @@ pg:
           type: integer
           default: "60"
           minimum: 10
-          maximum: 9223372036854775807
+          maximum: -9223372036854775808
     private_access:
       title: Allow access to selected service ports from private networks
       type: object

@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/aiven/aiven-go-client"
+	"golang.org/x/exp/constraints"
 )
 
 const (
@@ -95,4 +96,14 @@ func MeasureExecutionTime(logger *Logger) func() {
 // Ref returns the reference (pointer) of the provided value.
 func Ref[T any](v T) *T {
 	return &v
+}
+
+// Min is a function that returns the minimum of two comparable values.
+// It is advised to use this function instead of the built-in math.Min function if the values are not of type float64.
+func Min[T constraints.Ordered](a, b T) T {
+	if a < b {
+		return a
+	}
+
+	return b
 }

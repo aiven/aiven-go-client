@@ -2,6 +2,7 @@ package convert
 
 import (
 	"errors"
+	"math"
 
 	"github.com/aiven/aiven-go-client"
 	"github.com/aiven/aiven-go-client/tools/exp/types"
@@ -97,10 +98,10 @@ func UserConfigSchema(v aiven.UserConfigSchema) (*types.UserConfigSchema, error)
 		min = util.Ref(int(*v.Minimum))
 	}
 
-	var max *int
+	var max *uint
 
 	if v.Maximum != nil {
-		max = util.Ref(int(*v.Maximum))
+		max = util.Ref(util.Min(uint(*v.Maximum), math.MaxInt64))
 	}
 
 	return &types.UserConfigSchema{

@@ -640,6 +640,8 @@ flink:
   type: object
   properties:
     additional_backup_regions:
+      is_deprecated: true
+      deprecation_notice: This property is deprecated.
       title: Additional Cloud Regions for Backup Replication
       type: array
       items:

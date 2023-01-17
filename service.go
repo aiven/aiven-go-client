@@ -86,8 +86,17 @@ type (
 
 	// Backup represents an individual backup of service data on Aiven
 	Backup struct {
-		BackupTime string `json:"backup_time"`
-		DataSize   int    `json:"data_size"`
+		BackupTime        string                    `json:"backup_time"`
+		BackupName        string                    `json:"backup_name"`
+		DataSize          int                       `json:"data_size"`
+		StorageLocation   string                    `json:"storage_location"`
+		AdditionalRegions []*BackupAdditionalRegion `json:"additional_regions"`
+	}
+
+	// BackupAdditionalRegion represents a remote region where the backup is synchronized
+	BackupAdditionalRegion struct {
+		Cloud  string `json:"cloud"`
+		Region string `json:"region"`
 	}
 
 	// ConnectionInfo represents the Service Connection information on Aiven.

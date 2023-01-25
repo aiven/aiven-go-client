@@ -653,6 +653,8 @@ flink:
         user_error: Must consist of lower-case alpha-numeric characters or dashes
       max_items: 1
     execution_checkpointing_interval_ms:
+      is_deprecated: true
+      deprecation_notice: This property is deprecated.
       title: Flink execution.checkpointing.interval in milliseconds
       description: Checkpointing is Flink’s primary fault-tolerance mechanism, wherein a snapshot of your job’s state persisted periodically to some durable location. In the case of failure, Flink will restart from the most recent checkpoint and resume processing. A jobs checkpoint interval configures how often Flink will take these snapshots.
       type: integer
@@ -660,6 +662,8 @@ flink:
       maximum: 3600000
       example: "1000"
     execution_checkpointing_timeout_ms:
+      is_deprecated: true
+      deprecation_notice: This property is deprecated.
       title: Flink execution.checkpointing.timeout in milliseconds
       description: The time after which a checkpoint-in-progress is aborted, if it did not complete by then.
       type: integer
@@ -672,7 +676,9 @@ flink:
         - string
         - "null"
       enum:
-        - value: "1.15"
+        - is_deprecated: true
+          deprecation_notice: This value is deprecated.
+          value: "1.15"
         - value: "1.16"
     ip_filter:
       title: IP filter
@@ -709,6 +715,8 @@ flink:
       maximum: 1024
       example: "1"
     parallelism_default:
+      is_deprecated: true
+      deprecation_notice: This property is deprecated.
       title: Flink parallelism.default
       description: How many parallel task slots each new job is assigned. Unless you understand how Flink parallel dataflows work, please leave this at 1. Please do not set this value higher than (total number of nodes x number_of_task_slots), or every new job created will fail.
       type: integer
@@ -728,17 +736,31 @@ flink:
           type: boolean
           example: true
     restart_strategy:
+      is_deprecated: true
+      deprecation_notice: This property is deprecated.
       title: Flink restart-strategy
       description: 'failure-rate (default): Restarts the job after failure, but when failure rate (failures per time interval) is exceeded, the job eventually fails. Restart strategy waits a fixed amount of time between attempts.fixed-delay: Attempts to restart the job a given number of times before it fails. Restart strategy waits a fixed amount of time between attempts. exponential-delay: Attempts to restart the job infinitely, with increasing delay up to the maximum delay. The job never fails. none: The job fails directly and no restart is attempted.'
       type: string
       enum:
-        - value: default
-        - value: exponential-delay
-        - value: failure-rate
-        - value: fixed-delay
-        - value: none
+        - is_deprecated: true
+          deprecation_notice: This value is deprecated.
+          value: default
+        - is_deprecated: true
+          deprecation_notice: This value is deprecated.
+          value: exponential-delay
+        - is_deprecated: true
+          deprecation_notice: This value is deprecated.
+          value: failure-rate
+        - is_deprecated: true
+          deprecation_notice: This value is deprecated.
+          value: fixed-delay
+        - is_deprecated: true
+          deprecation_notice: This value is deprecated.
+          value: none
       example: failure-rate
     restart_strategy_delay_sec:
+      is_deprecated: true
+      deprecation_notice: This property is deprecated.
       title: Flink restart-strategy.failure-rate.delay in seconds
       description: Delay between two consecutive restart attempts if restart-strategy has been set to fixed-delay or failure-rate. Delaying the retries can be helpful when the program interacts with external systems where for example connections or pending transactions should reach a timeout before re-execution is attempted.
       type: integer
@@ -746,6 +768,8 @@ flink:
       maximum: 3600
       example: "10"
     restart_strategy_failure_rate_interval_min:
+      is_deprecated: true
+      deprecation_notice: This property is deprecated.
       title: Flink restart-strategy.failure-rate.failure-rate-interval in minutes
       description: Time interval for measuring failure rate if restart-strategy has been set to failure-rate. Specified in minutes.
       type: integer
@@ -753,6 +777,8 @@ flink:
       maximum: 2880
       example: "3"
     restart_strategy_max_failures:
+      is_deprecated: true
+      deprecation_notice: This property is deprecated.
       title: Flink restart-strategy.failure-rate.max-failures-per-interval
       description: The number of times that Flink retries the execution before the job is declared as failed if restart-strategy has been set to fixed-delay or failure-rate.
       type: integer

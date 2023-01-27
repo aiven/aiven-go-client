@@ -42,9 +42,6 @@ cassandra:
         - string
         - "null"
       enum:
-        - is_deprecated: true
-          deprecation_notice: This value is deprecated.
-          value: "3"
         - value: "4"
     ip_filter:
       title: IP filter
@@ -423,13 +420,6 @@ elasticsearch:
       type:
         - string
         - "null"
-      enum:
-        - is_deprecated: true
-          deprecation_notice: This value is deprecated.
-          value: "7"
-        - is_deprecated: true
-          deprecation_notice: This value is deprecated.
-          value: "1"
     index_patterns:
       title: Index patterns
       type: array
@@ -639,46 +629,12 @@ elasticsearch:
 flink:
   type: object
   properties:
-    additional_backup_regions:
-      is_deprecated: true
-      deprecation_notice: This property is deprecated.
-      title: Additional Cloud Regions for Backup Replication
-      type: array
-      items:
-        title: Target cloud
-        type: string
-        max_length: 256
-        pattern: ^[a-z0-9-]+$
-        example: aws-eu-central-1
-        user_error: Must consist of lower-case alpha-numeric characters or dashes
-      max_items: 1
-    execution_checkpointing_interval_ms:
-      is_deprecated: true
-      deprecation_notice: This property is deprecated.
-      title: Flink execution.checkpointing.interval in milliseconds
-      description: Checkpointing is Flink’s primary fault-tolerance mechanism, wherein a snapshot of your job’s state persisted periodically to some durable location. In the case of failure, Flink will restart from the most recent checkpoint and resume processing. A jobs checkpoint interval configures how often Flink will take these snapshots.
-      type: integer
-      minimum: 100
-      maximum: 3600000
-      example: "1000"
-    execution_checkpointing_timeout_ms:
-      is_deprecated: true
-      deprecation_notice: This property is deprecated.
-      title: Flink execution.checkpointing.timeout in milliseconds
-      description: The time after which a checkpoint-in-progress is aborted, if it did not complete by then.
-      type: integer
-      minimum: 100
-      maximum: 86400000
-      example: "600000"
     flink_version:
       title: Flink major version
       type:
         - string
         - "null"
       enum:
-        - is_deprecated: true
-          deprecation_notice: This value is deprecated.
-          value: "1.15"
         - value: "1.16"
     ip_filter:
       title: IP filter
@@ -714,15 +670,6 @@ flink:
       minimum: 1
       maximum: 1024
       example: "1"
-    parallelism_default:
-      is_deprecated: true
-      deprecation_notice: This property is deprecated.
-      title: Flink parallelism.default
-      description: How many parallel task slots each new job is assigned. Unless you understand how Flink parallel dataflows work, please leave this at 1. Please do not set this value higher than (total number of nodes x number_of_task_slots), or every new job created will fail.
-      type: integer
-      minimum: 1
-      maximum: 128
-      example: "1"
     privatelink_access:
       title: Allow access to selected service components through Privatelink
       type: object
@@ -735,56 +682,6 @@ flink:
           title: Enable prometheus
           type: boolean
           example: true
-    restart_strategy:
-      is_deprecated: true
-      deprecation_notice: This property is deprecated.
-      title: Flink restart-strategy
-      description: 'failure-rate (default): Restarts the job after failure, but when failure rate (failures per time interval) is exceeded, the job eventually fails. Restart strategy waits a fixed amount of time between attempts.fixed-delay: Attempts to restart the job a given number of times before it fails. Restart strategy waits a fixed amount of time between attempts. exponential-delay: Attempts to restart the job infinitely, with increasing delay up to the maximum delay. The job never fails. none: The job fails directly and no restart is attempted.'
-      type: string
-      enum:
-        - is_deprecated: true
-          deprecation_notice: This value is deprecated.
-          value: default
-        - is_deprecated: true
-          deprecation_notice: This value is deprecated.
-          value: exponential-delay
-        - is_deprecated: true
-          deprecation_notice: This value is deprecated.
-          value: failure-rate
-        - is_deprecated: true
-          deprecation_notice: This value is deprecated.
-          value: fixed-delay
-        - is_deprecated: true
-          deprecation_notice: This value is deprecated.
-          value: none
-      example: failure-rate
-    restart_strategy_delay_sec:
-      is_deprecated: true
-      deprecation_notice: This property is deprecated.
-      title: Flink restart-strategy.failure-rate.delay in seconds
-      description: Delay between two consecutive restart attempts if restart-strategy has been set to fixed-delay or failure-rate. Delaying the retries can be helpful when the program interacts with external systems where for example connections or pending transactions should reach a timeout before re-execution is attempted.
-      type: integer
-      minimum: 1
-      maximum: 3600
-      example: "10"
-    restart_strategy_failure_rate_interval_min:
-      is_deprecated: true
-      deprecation_notice: This property is deprecated.
-      title: Flink restart-strategy.failure-rate.failure-rate-interval in minutes
-      description: Time interval for measuring failure rate if restart-strategy has been set to failure-rate. Specified in minutes.
-      type: integer
-      minimum: 1
-      maximum: 2880
-      example: "3"
-    restart_strategy_max_failures:
-      is_deprecated: true
-      deprecation_notice: This property is deprecated.
-      title: Flink restart-strategy.failure-rate.max-failures-per-interval
-      description: The number of times that Flink retries the execution before the job is declared as failed if restart-strategy has been set to fixed-delay or failure-rate.
-      type: integer
-      minimum: 1
-      maximum: 128
-      example: "5"
 grafana:
   type: object
   properties:
@@ -2060,15 +1957,6 @@ kafka:
         - string
         - "null"
       enum:
-        - is_deprecated: true
-          deprecation_notice: This value is deprecated.
-          value: "2.8"
-        - is_deprecated: true
-          deprecation_notice: This value is deprecated.
-          value: "3.0"
-        - is_deprecated: true
-          deprecation_notice: This value is deprecated.
-          value: "3.1"
         - value: "3.2"
         - value: "3.3"
     private_access:
@@ -4257,9 +4145,6 @@ pg:
         - string
         - "null"
       enum:
-        - is_deprecated: true
-          deprecation_notice: This value is deprecated.
-          value: "10"
         - value: "11"
         - value: "12"
         - value: "13"

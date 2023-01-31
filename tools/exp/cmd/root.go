@@ -10,6 +10,7 @@ import (
 	"github.com/aiven/aiven-go-client/tools/exp/diff"
 	"github.com/aiven/aiven-go-client/tools/exp/gen"
 	"github.com/aiven/aiven-go-client/tools/exp/reader"
+	"github.com/aiven/aiven-go-client/tools/exp/types"
 	"github.com/aiven/aiven-go-client/tools/exp/util"
 	"github.com/aiven/aiven-go-client/tools/exp/writer"
 	"github.com/spf13/cobra"
@@ -35,6 +36,8 @@ func NewCmdRoot(l *util.Logger) *cobra.Command {
 	}
 
 	cmd.Flags().StringP("output-dir", "o", "", "the output directory for the generated files")
+
+	cmd.Flags().BoolP("regenerate", "r", false, "regenerates the files in the output directory")
 
 	logger = l
 
@@ -103,6 +106,11 @@ func run(cmd *cobra.Command, _ []string) {
 
 	setup(flags)
 
+	shouldRegenerate, err := flags.GetBool("regenerate")
+	if err != nil {
+		logger.Error.Fatalf("error getting regeneration flag: %s", err)
+	}
+
 	ctx := context.Background()
 
 	logger.Info.Println("generating")
@@ -112,11 +120,15 @@ func run(cmd *cobra.Command, _ []string) {
 		logger.Error.Fatalf("error generating: %s", err)
 	}
 
-	logger.Info.Println("reading files")
+	rr := make(types.ReadResult)
 
-	rr, err := reader.Run(ctx, logger, flags)
-	if err != nil && !os.IsNotExist(err) {
-		logger.Error.Fatalf("error reading files: %s", err)
+	if !shouldRegenerate {
+		logger.Info.Println("reading files")
+
+		rr, err = reader.Run(ctx, logger, flags)
+		if err != nil && !os.IsNotExist(err) {
+			logger.Error.Fatalf("error reading files: %s", err)
+		}
 	}
 
 	logger.Info.Println("diffing")

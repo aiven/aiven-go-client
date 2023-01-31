@@ -525,12 +525,16 @@ rsyslog:
       default: true
       example: true
 signalfx:
+  is_deprecated: true
+  deprecation_notice: This property is deprecated.
   type: object
   required:
     - signalfx_api_key
     - signalfx_realm
   properties:
     enabled_metrics:
+      is_deprecated: true
+      deprecation_notice: This property is deprecated.
       title: list of metrics to send
       type: array
       default:
@@ -544,12 +548,16 @@ signalfx:
         - load.*
         - vmpage.*
     signalfx_api_key:
+      is_deprecated: true
+      deprecation_notice: This property is deprecated.
       title: SignalFX API key
       type: string
       min_length: 8
       max_length: 255
       example: 848f30907c15c55d601fe45487cce9b6
     signalfx_realm:
+      is_deprecated: true
+      deprecation_notice: This property is deprecated.
       title: SignalFX realm
       type: string
       default: us0

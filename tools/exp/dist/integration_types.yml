@@ -596,5 +596,7 @@ rsyslog:
   title: Integration user config
   type: object
 signalfx:
+  is_deprecated: true
+  deprecation_notice: This property is deprecated.
   title: Integration user config
   type: object

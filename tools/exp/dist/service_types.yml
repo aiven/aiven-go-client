@@ -420,6 +420,8 @@ elasticsearch:
       type:
         - string
         - "null"
+      enum:
+        - value: "1"
     index_patterns:
       title: Index patterns
       type: array

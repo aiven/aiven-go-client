@@ -4151,6 +4151,7 @@ pg:
         - value: "12"
         - value: "13"
         - value: "14"
+        - value: "15"
     pgbouncer:
       title: PGBouncer connection pooling settings
       type: object

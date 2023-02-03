@@ -73,6 +73,8 @@ type Client struct {
 	AWSPrivatelink                  *AWSPrivatelinkHandler
 	FlinkJobs                       *FlinkJobHandler
 	FlinkTables                     *FlinkTableHandler
+	FlinkApplications               *FlinkApplicationHandler
+	FlinkApplicationVersions        *FlinkApplicationVersionHandler
 	AzurePrivatelink                *AzurePrivatelinkHandler
 	StaticIPs                       *StaticIPsHandler
 	ClickhouseDatabase              *ClickhouseDatabaseHandler
@@ -217,6 +219,8 @@ func (c *Client) Init() {
 	c.AWSPrivatelink = &AWSPrivatelinkHandler{c}
 	c.FlinkJobs = &FlinkJobHandler{c}
 	c.FlinkTables = &FlinkTableHandler{c}
+	c.FlinkApplications = &FlinkApplicationHandler{c}
+	c.FlinkApplicationVersions = &FlinkApplicationVersionHandler{c}
 	c.AzurePrivatelink = &AzurePrivatelinkHandler{c}
 	c.StaticIPs = &StaticIPsHandler{c}
 	c.ClickhouseDatabase = &ClickhouseDatabaseHandler{c}

@@ -11,6 +11,9 @@ import (
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/hashicorp/go-cleanhttp"
+	"github.com/hashicorp/go-retryablehttp"
 )
 
 // apiUrl and apiUrlV2 are the URLs we'll use to speak to Aiven. This can be overwritten.
@@ -159,7 +162,7 @@ func buildHttpClient() *http.Client {
 	}
 
 	// Load CA cert
-	caCert, err := ioutil.ReadFile(caFilename)
+	caCert, err := os.ReadFile(caFilename)
 	if err != nil {
 		log.Fatal("cannot load ca cert: %w", err)
 	}
@@ -174,14 +177,22 @@ func buildHttpClient() *http.Client {
 		log.Println("[WARNING] No certs appended, using system certs only")
 	}
 
-	// Setup HTTPS client
-	tlsConfig := &tls.Config{
+	// Setups root custom transport with certs
+	transport := cleanhttp.DefaultPooledTransport()
+	transport.TLSClientConfig = &tls.Config{
 		RootCAs: caCertPool,
 	}
-	transport := &http.Transport{TLSClientConfig: tlsConfig}
-	client := &http.Client{Transport: transport}
 
-	return client
+	// Setups retryable http client
+	// retryablehttp performs automatic retries under certain conditions.
+	// Mainly, if an error is returned by the client (connection errors, etc.),
+	// or if a 500-range response code is received (except 501), then a retry is invoked after a wait period.
+	// Otherwise, the response is returned and left to the caller to interpret.
+	retryClient := retryablehttp.NewClient()
+	retryClient.Logger = nil
+	retryClient.RetryMax = 5
+	retryClient.HTTPClient.Transport = transport
+	return retryClient.StandardClient()
 }
 
 // Init initializes the client and sets up all the handlers.

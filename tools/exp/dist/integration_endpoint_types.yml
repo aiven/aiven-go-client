@@ -73,6 +73,9 @@ datadog:
       enum:
         - value: datadoghq.com
         - value: datadoghq.eu
+        - value: us3.datadoghq.com
+        - value: us5.datadoghq.com
+        - value: ddog-gov.com
       example: datadoghq.com
 external_aws_cloudwatch_logs:
   type: object

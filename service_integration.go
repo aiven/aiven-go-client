@@ -9,7 +9,7 @@ type (
 		IntegrationType       string                 `json:"integration_type"`
 		SourceService         *string                `json:"source_service"`
 		SourceEndpointID      *string                `json:"source_endpoint_id"`
-		UserConfig            map[string]interface{} `json:"user_config"`
+		UserConfig            map[string]interface{} `json:"user_config,omitempty"`
 	}
 
 	// ServiceIntegration represents a service integration endpoint,

@@ -7,7 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -328,7 +328,7 @@ func (c *Client) doRequest(method, uri string, body interface{}, apiVersion int)
 			}
 		}()
 
-		responseBody, err := ioutil.ReadAll(rsp.Body)
+		responseBody, err := io.ReadAll(rsp.Body)
 		// Retry a few times in case of request timeout or server error for GET requests
 		if (rsp.StatusCode == 408 || rsp.StatusCode >= 500) && retryCount > 0 && method == "GET" {
 			retryCount--

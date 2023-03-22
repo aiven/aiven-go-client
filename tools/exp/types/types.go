@@ -26,8 +26,8 @@ type UserConfigSchema struct {
 	Items       *UserConfigSchema           `yaml:"items,omitempty"`
 	OneOf       []UserConfigSchema          `yaml:"one_of,omitempty"`
 	Enum        []UserConfigSchemaEnumValue `yaml:"enum,omitempty"`
-	Minimum     *int                        `yaml:"minimum,omitempty"`
-	Maximum     *uint                       `yaml:"maximum,omitempty"`
+	Minimum     *float64                    `yaml:"minimum,omitempty"`
+	Maximum     *float64                    `yaml:"maximum,omitempty"`
 	MinLength   *int                        `yaml:"min_length,omitempty"`
 	MaxLength   *int                        `yaml:"max_length,omitempty"`
 	MaxItems    *int                        `yaml:"max_items,omitempty"`

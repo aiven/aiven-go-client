@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TesteqStrPointers(t *testing.T) {
+func TestEqStrPointers(t *testing.T) {
 	foo := "foo"
 	bar := "bar"
 	cases := []struct {

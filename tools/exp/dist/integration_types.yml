@@ -56,6 +56,7 @@ clickhouse_kafka:
               - value: TSKV
               - value: TSV
               - value: TabSeparated
+              - value: RawBLOB
             example: JSONEachRow
           group_name:
             title: Kafka consumers group
@@ -364,21 +365,21 @@ kafka_mirrormaker:
           description: The minimum amount of data the server should return for a fetch request
           type: integer
           minimum: 1
-          maximum: 5242880
+          maximum: 5.24288e+06
           example: "1024"
         producer_batch_size:
           title: producer.batch.size
           description: The batch size in bytes producer will attempt to collect before publishing to broker.
           type: integer
           minimum: 0
-          maximum: 5242880
+          maximum: 5.24288e+06
           example: "1024"
         producer_buffer_memory:
           title: producer.buffer.memory
           description: The amount of bytes producer can use for buffering data before publishing to broker.
           type: integer
-          minimum: 5242880
-          maximum: 134217728
+          minimum: 5.24288e+06
+          maximum: 1.34217728e+08
           example: "8388608"
         producer_linger_ms:
           title: producer.linger.ms
@@ -392,7 +393,7 @@ kafka_mirrormaker:
           description: The maximum request size in bytes.
           type: integer
           minimum: 0
-          maximum: 67108864
+          maximum: 6.7108864e+07
           example: "1048576"
 logs:
   type: object
@@ -509,7 +510,7 @@ metrics:
               title: Only include perf_events_statements whose last seen is less than this many seconds
               type: integer
               minimum: 1
-              maximum: 2592000
+              maximum: 2.592e+06
               example: "86400"
     username:
       title: Name of the user used to write metrics. Only affects PostgreSQL destinations. Defaults to 'metrics_writer'. Note that this must be the same for all metrics integrations that write data to the same PostgreSQL service.
@@ -590,7 +591,7 @@ prometheus:
               title: Only include perf_events_statements whose last seen is less than this many seconds
               type: integer
               minimum: 1
-              maximum: 2592000
+              maximum: 2.592e+06
               example: "86400"
 rsyslog:
   title: Integration user config

@@ -2,16 +2,19 @@ package convert
 
 import (
 	"errors"
-	"math"
+
+	"github.com/mitchellh/copystructure"
+	"golang.org/x/exp/slices"
 
 	"github.com/aiven/aiven-go-client"
 	"github.com/aiven/aiven-go-client/tools/exp/types"
-	"github.com/aiven/aiven-go-client/tools/exp/util"
-	"github.com/mitchellh/copystructure"
 )
 
 // errUnexpected is the error that is returned when an unexpected error occurs.
 var errUnexpected = errors.New("unexpected conversion error")
+
+// maxSafeNumber the last number in double precision floating point that can make valid comparison
+const maxSafeNumber = float64(1<<53 - 1)
 
 // UserConfigSchema converts aiven.UserConfigSchema to UserConfigSchema.
 func UserConfigSchema(v aiven.UserConfigSchema) (*types.UserConfigSchema, error) {
@@ -92,16 +95,15 @@ func UserConfigSchema(v aiven.UserConfigSchema) (*types.UserConfigSchema, error)
 		e = append(e, types.UserConfigSchemaEnumValue{Value: v})
 	}
 
-	var min *int
-
-	if v.Minimum != nil {
-		min = util.Ref(int(*v.Minimum))
-	}
-
-	var max *uint
-
+	// YAML uses scientific notation for floats, they won't change that
+	// https://github.com/go-yaml/yaml/issues/669
+	var max *float64
 	if v.Maximum != nil {
-		max = util.Ref(util.Min(uint(*v.Maximum), math.MaxInt64))
+		// If this is an integer it has to be lte maxSafeNumber
+		// Otherwise, uses it as is
+		if !slices.Contains(normalizeTypes(v.Type), "integer") || *v.Maximum <= maxSafeNumber {
+			max = v.Maximum
+		}
 	}
 
 	return &types.UserConfigSchema{
@@ -114,7 +116,7 @@ func UserConfigSchema(v aiven.UserConfigSchema) (*types.UserConfigSchema, error)
 		Items:       cni,
 		OneOf:       cno,
 		Enum:        e,
-		Minimum:     min,
+		Minimum:     v.Minimum,
 		Maximum:     max,
 		MinLength:   v.MinLength,
 		MaxLength:   v.MaxLength,
@@ -124,4 +126,27 @@ func UserConfigSchema(v aiven.UserConfigSchema) (*types.UserConfigSchema, error)
 		Example:     v.Example,
 		UserError:   v.UserError,
 	}, nil
+}
+
+// normalizeTypes json type field can be a string or list of strings.
+// Turns into a slice of strings
+func normalizeTypes(t any) []string {
+	s, ok := t.(string)
+	if ok {
+		return []string{s}
+	}
+
+	typeList := make([]string, 0)
+	a, ok := t.([]any)
+	if !ok {
+		return typeList
+	}
+
+	for _, v := range a {
+		if vv, ok := v.(string); ok {
+			typeList = append(typeList, vv)
+		}
+	}
+
+	return typeList
 }

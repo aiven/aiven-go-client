@@ -21,14 +21,14 @@ cassandra:
           description: Fail any multiple-partition batch exceeding this value. 50kb (10x warn threshold) by default.
           type: integer
           minimum: 1
-          maximum: 1000000
+          maximum: 1e+06
           example: "50"
         batch_size_warn_threshold_in_kb:
           title: batch_size_warn_threshold_in_kb
           description: Log a warning message on any multiple-partition batch size exceeding this value.5kb per batch by default.Caution should be taken on increasing the size of this thresholdas it can lead to node instability.
           type: integer
           minimum: 1
-          maximum: 1000000
+          maximum: 1e+06
           example: "5"
         datacenter:
           title: Cassandra datacenter name
@@ -176,9 +176,13 @@ clickhouse:
       create_only: true
       example: anotherservicename
 elasticsearch:
+  is_deprecated: true
+  deprecation_notice: This property is deprecated.
   type: object
   properties:
     additional_backup_regions:
+      is_deprecated: true
+      deprecation_notice: This property is deprecated.
       title: Additional Cloud Regions for Backup Replication
       type: array
       items:
@@ -190,6 +194,8 @@ elasticsearch:
         user_error: Must consist of lower-case alpha-numeric characters or dashes
       max_items: 1
     custom_domain:
+      is_deprecated: true
+      deprecation_notice: This property is deprecated.
       title: Custom domain
       description: Serve the web frontend using a custom CNAME pointing to the Aiven DNS name
       type:
@@ -198,6 +204,8 @@ elasticsearch:
       max_length: 255
       example: grafana.example.org
     disable_replication_factor_adjustment:
+      is_deprecated: true
+      deprecation_notice: This property is deprecated.
       title: Disable replication factor adjustment
       description: 'DEPRECATED: Disable automatic replication factor adjustment for multi-node services. By default, Aiven ensures all indexes are replicated at least to two nodes. Note: Due to potential data loss in case of losing a service node, this setting can no longer be activated.'
       type:
@@ -205,21 +213,29 @@ elasticsearch:
         - "null"
       example: false
     elasticsearch:
+      is_deprecated: true
+      deprecation_notice: This property is deprecated.
       title: Elasticsearch settings
       type: object
       properties:
         action_auto_create_index_enabled:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: action.auto_create_index
           description: Explicitly allow or block automatic creation of indices. Defaults to true
           type: boolean
           example: false
         action_destructive_requires_name:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: Require explicit index names when deleting
           type:
             - boolean
             - "null"
           example: true
         cluster_max_shards_per_node:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: cluster.max_shards_per_node
           description: Controls the number of shards allowed in the cluster per data node
           type: integer
@@ -227,12 +243,16 @@ elasticsearch:
           maximum: 10000
           example: "1000"
         cluster_routing_allocation_node_concurrent_recoveries:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: Concurrent incoming/outgoing shard recoveries per node
           description: How many concurrent incoming/outgoing shard recoveries (normally replicas) are allowed to happen on a node. Defaults to 2.
           type: integer
           minimum: 2
           maximum: 16
         email_sender_name:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: Sender email name placeholder to be used in Opensearch Dashboards and Opensearch keystore
           description: This should be identical to the Sender name defined in Opensearch dashboards
           type:
@@ -242,6 +262,8 @@ elasticsearch:
           example: alert-sender
           user_error: Must consist of lower-case alpha-numeric characters and dashes, max 40 characters
         email_sender_password:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: Sender email password for Opensearch alerts to authenticate with SMTP server
           description: Sender email password for Opensearch alerts to authenticate with SMTP server
           type:
@@ -250,6 +272,8 @@ elasticsearch:
           pattern: ^[^\x00-\x1F]+$
           example: very-secure-mail-password
         email_sender_username:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: Sender email address for Opensearch alerts
           type:
             - string
@@ -258,12 +282,16 @@ elasticsearch:
           example: jane@example.com
           user_error: Must be a valid email address
         http_max_content_length:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: http.max_content_length
           description: Maximum content length for HTTP requests to the Elasticsearch HTTP API, in bytes.
           type: integer
           minimum: 1
-          maximum: 2147483647
+          maximum: 2.147483647e+09
         http_max_header_size:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: http.max_header_size
           description: The max size of allowed headers, in bytes
           type: integer
@@ -271,6 +299,8 @@ elasticsearch:
           maximum: 262144
           example: "8192"
         http_max_initial_line_length:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: http.max_initial_line_length
           description: The max length of an HTTP URL, in bytes
           type: integer
@@ -278,6 +308,8 @@ elasticsearch:
           maximum: 65536
           example: "4096"
         indices_fielddata_cache_size:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: indices.fielddata.cache.size
           description: Relative amount. Maximum amount of heap memory used for field data cache. This is an expert setting; decreasing the value too much will increase overhead of loading field data; too much memory used for field data cache will decrease amount of heap available for other operations.
           type:
@@ -286,41 +318,55 @@ elasticsearch:
           minimum: 3
           maximum: 100
         indices_memory_index_buffer_size:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: indices.memory.index_buffer_size
           description: Percentage value. Default is 10%. Total amount of heap used for indexing buffer, before writing segments to disk. This is an expert setting. Too low value will slow down indexing; too high value will increase indexing performance but causes performance issues for query performance.
           type: integer
           minimum: 3
           maximum: 40
         indices_queries_cache_size:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: indices.queries.cache.size
           description: Percentage value. Default is 10%. Maximum amount of heap used for query cache. This is an expert setting. Too low value will decrease query performance and increase performance for other operations; too high value will cause issues with other Elasticsearch functionality.
           type: integer
           minimum: 3
           maximum: 40
         indices_query_bool_max_clause_count:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: indices.query.bool.max_clause_count
           description: Maximum number of clauses Lucene BooleanQuery can have. The default value (1024) is relatively high, and increasing it may cause performance issues. Investigate other approaches first before increasing this value.
           type: integer
           minimum: 64
           maximum: 4096
         indices_recovery_max_bytes_per_sec:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: indices.recovery.max_bytes_per_sec
           description: Limits total inbound and outbound recovery traffic for each node. Applies to both peer recoveries as well as snapshot recoveries (i.e., restores from a snapshot). Defaults to 40mb
           type: integer
           minimum: 40
           maximum: 400
         indices_recovery_max_concurrent_file_chunks:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: indices.recovery.max_concurrent_file_chunks
           description: Number of file chunks sent in parallel for each recovery. Defaults to 2.
           type: integer
           minimum: 2
           maximum: 5
         override_main_response_version:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: compatibility.override_main_response_version
           description: Compatibility mode sets OpenSearch to report its version as 7.10 so clients continue to work. Default is false
           type: boolean
           example: true
         reindex_remote_whitelist:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: reindex_remote_whitelist
           description: Whitelisted addresses for reindexing. Changing this value will cause all Elasticsearch instances to restart.
           type:
@@ -335,12 +381,16 @@ elasticsearch:
             example: anotherservice.aivencloud.com:12398
           max_items: 32
         script_max_compilations_rate:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: Script max compilation rate - circuit breaker to prevent/minimize OOMs
           description: Script compilation circuit breaker limits the number of inline script compilations within a period of time. Default is use-context
           type: string
           max_length: 1024
           example: 75/5m
         search_max_buckets:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: search.max_buckets
           description: Maximum number of aggregation buckets allowed in a single response. Elasticsearch default value is used when this is not defined.
           type:
@@ -350,72 +400,96 @@ elasticsearch:
           maximum: 20000
           example: "10000"
         thread_pool_analyze_queue_size:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: analyze thread pool queue size
           description: Size for the thread pool queue. See documentation for exact details.
           type: integer
           minimum: 10
           maximum: 2000
         thread_pool_analyze_size:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: analyze thread pool size
           description: Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
           type: integer
           minimum: 1
           maximum: 128
         thread_pool_force_merge_size:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: force_merge thread pool size
           description: Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
           type: integer
           minimum: 1
           maximum: 128
         thread_pool_get_queue_size:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: get thread pool queue size
           description: Size for the thread pool queue. See documentation for exact details.
           type: integer
           minimum: 10
           maximum: 2000
         thread_pool_get_size:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: get thread pool size
           description: Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
           type: integer
           minimum: 1
           maximum: 128
         thread_pool_search_queue_size:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: search thread pool queue size
           description: Size for the thread pool queue. See documentation for exact details.
           type: integer
           minimum: 10
           maximum: 2000
         thread_pool_search_size:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: search thread pool size
           description: Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
           type: integer
           minimum: 1
           maximum: 128
         thread_pool_search_throttled_queue_size:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: search_throttled thread pool queue size
           description: Size for the thread pool queue. See documentation for exact details.
           type: integer
           minimum: 10
           maximum: 2000
         thread_pool_search_throttled_size:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: search_throttled thread pool size
           description: Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
           type: integer
           minimum: 1
           maximum: 128
         thread_pool_write_queue_size:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: write thread pool queue size
           description: Size for the thread pool queue. See documentation for exact details.
           type: integer
           minimum: 10
           maximum: 2000
         thread_pool_write_size:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: write thread pool size
           description: Size for the thread pool. See documentation for exact details. Do note this may have maximum value depending on CPU count - value is automatically lowered if set to higher than maximum value.
           type: integer
           minimum: 1
           maximum: 128
     elasticsearch_version:
+      is_deprecated: true
+      deprecation_notice: This property is deprecated.
       title: Elasticsearch major version
       type:
         - string
@@ -425,6 +499,8 @@ elasticsearch:
           deprecation_notice: This value is deprecated.
           value: "1"
     index_patterns:
+      is_deprecated: true
+      deprecation_notice: This property is deprecated.
       title: Index patterns
       type: array
       items:
@@ -439,7 +515,7 @@ elasticsearch:
             title: Maximum number of indexes to keep
             type: integer
             minimum: 0
-            maximum: 9223372036854775807
+            maximum: 9.223372036854776e+18
             example: "3"
           pattern:
             title: fnmatch pattern
@@ -457,10 +533,14 @@ elasticsearch:
               - value: creation_date
       max_items: 512
     index_template:
+      is_deprecated: true
+      deprecation_notice: This property is deprecated.
       title: Template settings for all new indexes
       type: object
       properties:
         mapping_nested_objects_limit:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: index.mapping.nested_objects.limit
           description: The maximum number of nested JSON objects that a single document can contain across all nested types. This limit helps to prevent out of memory errors when a document contains too many nested objects. Default is 10000.
           type:
@@ -470,6 +550,8 @@ elasticsearch:
           maximum: 100000
           example: "10000"
         number_of_replicas:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: index.number_of_replicas
           description: The number of replicas each primary shard has.
           type:
@@ -479,6 +561,8 @@ elasticsearch:
           maximum: 29
           example: "1"
         number_of_shards:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: index.number_of_shards
           description: The number of primary shards that an index should have.
           type:
@@ -488,6 +572,8 @@ elasticsearch:
           maximum: 1024
           example: "1"
     ip_filter:
+      is_deprecated: true
+      deprecation_notice: This property is deprecated.
       title: IP filter
       description: Allow incoming connections from CIDR address block, e.g. '10.20.0.0/16'
       type: array
@@ -515,25 +601,35 @@ elasticsearch:
         example: 10.20.0.0/16
       max_items: 1024
     keep_index_refresh_interval:
+      is_deprecated: true
+      deprecation_notice: This property is deprecated.
       title: Don't reset index.refresh_interval to the default value
       description: Aiven automation resets index.refresh_interval to default value for every index to be sure that indices are always visible to search. If it doesn't fit your case, you can disable this by setting up this flag to true.
       type: boolean
       example: true
     kibana:
+      is_deprecated: true
+      deprecation_notice: This property is deprecated.
       title: Kibana settings
       type: object
       properties:
         elasticsearch_request_timeout:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: Timeout in milliseconds for requests made by Kibana towards Elasticsearch
           type: integer
           default: "30000"
           minimum: 5000
           maximum: 120000
         enabled:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: Enable or disable Kibana
           type: boolean
           default: true
         max_old_space_size:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: max_old_space_size
           description: 'Limits the maximum amount of memory (in MiB) the Kibana process can use. This sets the max_old_space_size option of the nodejs running the Kibana. Note: the memory reserved by Kibana is not available for Elasticsearch.'
           type: integer
@@ -541,53 +637,79 @@ elasticsearch:
           minimum: 64
           maximum: 2048
     max_index_count:
+      is_deprecated: true
+      deprecation_notice: This property is deprecated.
       title: Maximum index count
       description: 'DEPRECATED: use index_patterns instead'
       type: integer
       default: "0"
       minimum: 0
-      maximum: 9223372036854775807
+      maximum: 9.223372036854776e+18
     opensearch_version:
+      is_deprecated: true
+      deprecation_notice: This property is deprecated.
       title: OpenSearch major version
       type:
         - string
         - "null"
       enum:
-        - value: "1"
-        - value: "2"
+        - is_deprecated: true
+          deprecation_notice: This value is deprecated.
+          value: "1"
+        - is_deprecated: true
+          deprecation_notice: This value is deprecated.
+          value: "2"
     private_access:
+      is_deprecated: true
+      deprecation_notice: This property is deprecated.
       title: Allow access to selected service ports from private networks
       type: object
       properties:
         elasticsearch:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: Allow clients to connect to elasticsearch with a DNS name that always resolves to the service's private IP addresses. Only available in certain network locations
           type: boolean
           example: true
         kibana:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: Allow clients to connect to kibana with a DNS name that always resolves to the service's private IP addresses. Only available in certain network locations
           type: boolean
           example: true
         prometheus:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: Allow clients to connect to prometheus with a DNS name that always resolves to the service's private IP addresses. Only available in certain network locations
           type: boolean
           example: true
     privatelink_access:
+      is_deprecated: true
+      deprecation_notice: This property is deprecated.
       title: Allow access to selected service components through Privatelink
       type: object
       properties:
         elasticsearch:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: Enable elasticsearch
           type: boolean
           example: true
         kibana:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: Enable kibana
           type: boolean
           example: true
         prometheus:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: Enable prometheus
           type: boolean
           example: true
     project_to_fork_from:
+      is_deprecated: true
+      deprecation_notice: This property is deprecated.
       title: Name of another project to fork a service from. This has effect only when a new service is being created.
       type:
         - string
@@ -596,28 +718,40 @@ elasticsearch:
       create_only: true
       example: anotherprojectname
     public_access:
+      is_deprecated: true
+      deprecation_notice: This property is deprecated.
       title: Allow access to selected service ports from the public Internet
       type: object
       properties:
         elasticsearch:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: Allow clients to connect to elasticsearch from the public internet for service nodes that are in a project VPC or another type of private network
           type: boolean
           example: true
         kibana:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: Allow clients to connect to kibana from the public internet for service nodes that are in a project VPC or another type of private network
           type: boolean
           example: true
         prometheus:
+          is_deprecated: true
+          deprecation_notice: This property is deprecated.
           title: Allow clients to connect to prometheus from the public internet for service nodes that are in a project VPC or another type of private network
           type: boolean
           example: true
     recovery_basebackup_name:
+      is_deprecated: true
+      deprecation_notice: This property is deprecated.
       title: Name of the basebackup to restore in forked service
       type: string
       max_length: 128
       pattern: ^[a-zA-Z0-9-_:.]+$
       example: backup-20191112t091354293891z
     service_to_fork_from:
+      is_deprecated: true
+      deprecation_notice: This property is deprecated.
       title: Name of another service to fork from. This has effect only when a new service is being created.
       type:
         - string
@@ -626,6 +760,8 @@ elasticsearch:
       create_only: true
       example: anotherservicename
     static_ips:
+      is_deprecated: true
+      deprecation_notice: This property is deprecated.
       title: Static IP addresses
       description: Use static public IP addresses
       type: boolean
@@ -715,7 +851,7 @@ grafana:
       title: Max number of alert annotations that Grafana stores. 0 (default) keeps all alert annotations.
       type: integer
       minimum: 0
-      maximum: 1000000
+      maximum: 1e+06
       example: "0"
     alerting_nodata_or_nullvalues:
       title: Default value for 'no data or null values' for new alerting rules
@@ -915,7 +1051,7 @@ grafana:
             title: Team ID
             type: integer
             minimum: 1
-            maximum: 9223372036854775807
+            maximum: 9.223372036854776e+18
             example: "150"
           max_items: 50
     auth_gitlab:
@@ -1349,12 +1485,12 @@ influxdb:
           title: Maximum number of connections to InfluxDB. Setting this to 0 (default) means no limit. If using max_connection_limit, it is recommended to set the value to be large enough in order to not block clients unnecessarily.
           type: integer
           minimum: 0
-          maximum: 1000000
+          maximum: 1e+06
         max_row_limit:
           title: The maximum number of rows returned in a non-chunked query. Setting this to 0 (the default) allows an unlimited number to be returned.
           type: integer
           minimum: 0
-          maximum: 10000000
+          maximum: 1e+07
         max_select_buckets:
           title: The maximum number of `GROUP BY time()` buckets that can be processed in a query. Setting this to 0 (the default) allows an unlimited number to be processed.
           type: integer
@@ -1364,7 +1500,7 @@ influxdb:
           title: The maximum number of points that can be processed in a SELECT statement. Setting this to 0 (the default) allows an unlimited number to be processed.
           type: integer
           minimum: 0
-          maximum: 10000000
+          maximum: 1e+07
         query_timeout:
           title: The maximum duration in seconds before a query is killed. Setting this to 0 (the default) will never kill slow queries.
           type: integer
@@ -1523,7 +1659,7 @@ kafka:
           description: 'Idle connections timeout: the server socket processor threads close the connections that idle for longer than this.'
           type: integer
           minimum: 1000
-          maximum: 3600000
+          maximum: 3.6e+06
           example: "540000"
         default_replication_factor:
           title: default.replication.factor
@@ -1543,7 +1679,7 @@ kafka:
           description: The maximum allowed session timeout for registered consumers. Longer timeouts give consumers more time to process messages in between heartbeats at the cost of a longer time to detect failures.
           type: integer
           minimum: 0
-          maximum: 1800000
+          maximum: 1.8e+06
           example: "1800000"
         group_min_session_timeout_ms:
           title: group.min.session.timeout.ms
@@ -1557,27 +1693,25 @@ kafka:
           description: How long are delete records retained?
           type: integer
           minimum: 0
-          maximum: 315569260000
+          maximum: 3.1556926e+11
           example: "86400000"
         log_cleaner_max_compaction_lag_ms:
           title: log.cleaner.max.compaction.lag.ms
           description: The maximum amount of time message will remain uncompacted. Only applicable for logs that are being compacted
           type: integer
           minimum: 30000
-          maximum: 9223372036854775807
         log_cleaner_min_cleanable_ratio:
           title: log.cleaner.min.cleanable.ratio
           description: Controls log compactor frequency. Larger value means more frequent compactions but also more space wasted for logs. Consider setting log.cleaner.max.compaction.lag.ms to enforce compactions sooner, instead of setting a very high value for this option.
           type: number
-          minimum: 0
-          maximum: 0
+          minimum: 0.2
+          maximum: 0.9
           example: "0.5"
         log_cleaner_min_compaction_lag_ms:
           title: log.cleaner.min.compaction.lag.ms
           description: The minimum time a message will remain uncompacted in the log. Only applicable for logs that are being compacted.
           type: integer
           minimum: 0
-          maximum: 9223372036854775807
         log_cleanup_policy:
           title: log.cleanup.policy
           description: The default cleanup policy for segments beyond the retention window
@@ -1592,27 +1726,25 @@ kafka:
           description: The number of messages accumulated on a log partition before messages are flushed to disk
           type: integer
           minimum: 1
-          maximum: 9223372036854775807
           example: "9223372036854775807"
         log_flush_interval_ms:
           title: log.flush.interval.ms
           description: The maximum time in ms that a message in any topic is kept in memory before flushed to disk. If not set, the value in log.flush.scheduler.interval.ms is used
           type: integer
           minimum: 0
-          maximum: 9223372036854775807
         log_index_interval_bytes:
           title: log.index.interval.bytes
           description: The interval with which Kafka adds an entry to the offset index
           type: integer
           minimum: 0
-          maximum: 104857600
+          maximum: 1.048576e+08
           example: "4096"
         log_index_size_max_bytes:
           title: log.index.size.max.bytes
           description: The maximum size in bytes of the offset index
           type: integer
-          minimum: 1048576
-          maximum: 104857600
+          minimum: 1.048576e+06
+          maximum: 1.048576e+08
           example: "10485760"
         log_message_downconversion_enable:
           title: log.message.downconversion.enable
@@ -1624,7 +1756,6 @@ kafka:
           description: The maximum difference allowed between the timestamp when a broker receives a message and the timestamp specified in the message
           type: integer
           minimum: 0
-          maximum: 9223372036854775807
         log_message_timestamp_type:
           title: log.message.timestamp.type
           description: Define whether the timestamp in the message is message create time or log append time.
@@ -1642,50 +1773,46 @@ kafka:
           description: The maximum size of the log before deleting messages
           type: integer
           minimum: -1
-          maximum: 9223372036854775807
         log_retention_hours:
           title: log.retention.hours
           description: The number of hours to keep a log file before deleting it
           type: integer
           minimum: -1
-          maximum: 2147483647
+          maximum: 2.147483647e+09
         log_retention_ms:
           title: log.retention.ms
           description: The number of milliseconds to keep a log file before deleting it (in milliseconds), If not set, the value in log.retention.minutes is used. If set to -1, no time limit is applied.
           type: integer
           minimum: -1
-          maximum: 9223372036854775807
         log_roll_jitter_ms:
           title: log.roll.jitter.ms
           description: The maximum jitter to subtract from logRollTimeMillis (in milliseconds). If not set, the value in log.roll.jitter.hours is used
           type: integer
           minimum: 0
-          maximum: 9223372036854775807
         log_roll_ms:
           title: log.roll.ms
           description: The maximum time before a new log segment is rolled out (in milliseconds).
           type: integer
           minimum: 1
-          maximum: 9223372036854775807
         log_segment_bytes:
           title: log.segment.bytes
           description: The maximum size of a single log file
           type: integer
-          minimum: 10485760
-          maximum: 1073741824
+          minimum: 1.048576e+07
+          maximum: 1.073741824e+09
         log_segment_delete_delay_ms:
           title: log.segment.delete.delay.ms
           description: The amount of time to wait before deleting a file from the filesystem
           type: integer
           minimum: 0
-          maximum: 3600000
+          maximum: 3.6e+06
           example: "60000"
         max_connections_per_ip:
           title: max.connections.per.ip
           description: The maximum number of connections allowed from each ip address (defaults to 2147483647).
           type: integer
           minimum: 256
-          maximum: 2147483647
+          maximum: 2.147483647e+09
         max_incremental_fetch_session_cache_slots:
           title: max.incremental.fetch.session.cache.slots
           description: The maximum number of incremental fetch sessions that the broker will maintain.
@@ -1698,7 +1825,7 @@ kafka:
           description: The maximum size of message that the server can receive.
           type: integer
           minimum: 0
-          maximum: 100001200
+          maximum: 1.000012e+08
           example: "1048588"
         min_insync_replicas:
           title: min.insync.replicas
@@ -1718,7 +1845,7 @@ kafka:
           description: Log retention window in minutes for offsets topic
           type: integer
           minimum: 1
-          maximum: 2147483647
+          maximum: 2.147483647e+09
           example: "10080"
         producer_purgatory_purge_interval_requests:
           title: producer.purgatory.purge.interval.requests
@@ -1730,33 +1857,33 @@ kafka:
           title: replica.fetch.max.bytes
           description: The number of bytes of messages to attempt to fetch for each partition (defaults to 1048576). This is not an absolute maximum, if the first record batch in the first non-empty partition of the fetch is larger than this value, the record batch will still be returned to ensure that progress can be made.
           type: integer
-          minimum: 1048576
-          maximum: 104857600
+          minimum: 1.048576e+06
+          maximum: 1.048576e+08
         replica_fetch_response_max_bytes:
           title: replica.fetch.response.max.bytes
           description: Maximum bytes expected for the entire fetch response (defaults to 10485760). Records are fetched in batches, and if the first record batch in the first non-empty partition of the fetch is larger than this value, the record batch will still be returned to ensure that progress can be made. As such, this is not an absolute maximum.
           type: integer
-          minimum: 10485760
-          maximum: 1048576000
+          minimum: 1.048576e+07
+          maximum: 1.048576e+09
         socket_request_max_bytes:
           title: socket.request.max.bytes
           description: The maximum number of bytes in a socket request (defaults to 104857600).
           type: integer
-          minimum: 10485760
-          maximum: 209715200
+          minimum: 1.048576e+07
+          maximum: 2.097152e+08
         transaction_remove_expired_transaction_cleanup_interval_ms:
           title: transaction.remove.expired.transaction.cleanup.interval.ms
           description: The interval at which to remove transactions that have expired due to transactional.id.expiration.ms passing (defaults to 3600000 (1 hour)).
           type: integer
           minimum: 600000
-          maximum: 3600000
+          maximum: 3.6e+06
           example: "3600000"
         transaction_state_log_segment_bytes:
           title: transaction.state.log.segment.bytes
           description: The transaction topic segment bytes should be kept relatively small in order to facilitate faster log compaction and cache loads (defaults to 104857600 (100 mebibytes)).
           type: integer
-          minimum: 1048576
-          maximum: 2147483647
+          minimum: 1.048576e+06
+          maximum: 2.147483647e+09
           example: "104857600"
     kafka_authentication_methods:
       title: Kafka authentication methods
@@ -1796,8 +1923,8 @@ kafka:
           title: The maximum amount of data the server should return for a fetch request
           description: Records are fetched in batches by the consumer, and if the first record batch in the first non-empty partition of the fetch is larger than this value, the record batch will still be returned to ensure that the consumer can make progress. As such, this is not a absolute maximum.
           type: integer
-          minimum: 1048576
-          maximum: 104857600
+          minimum: 1.048576e+06
+          maximum: 1.048576e+08
           example: "52428800"
         consumer_isolation_level:
           title: Consumer isolation level
@@ -1810,15 +1937,15 @@ kafka:
           title: The maximum amount of data per-partition the server will return.
           description: 'Records are fetched in batches by the consumer.If the first record batch in the first non-empty partition of the fetch is larger than this limit, the batch will still be returned to ensure that the consumer can make progress. '
           type: integer
-          minimum: 1048576
-          maximum: 104857600
+          minimum: 1.048576e+06
+          maximum: 1.048576e+08
           example: "1048576"
         consumer_max_poll_interval_ms:
           title: The maximum delay between polls when using consumer group management
           description: The maximum delay in milliseconds between invocations of poll() when using consumer group management (defaults to 300000).
           type: integer
           minimum: 1
-          maximum: 2147483647
+          maximum: 2.147483647e+09
           example: "300000"
         consumer_max_poll_records:
           title: The maximum number of records returned by a single poll
@@ -1832,28 +1959,28 @@ kafka:
           description: The interval at which to try committing offsets for tasks (defaults to 60000).
           type: integer
           minimum: 1
-          maximum: 100000000
+          maximum: 1e+08
           example: "60000"
         offset_flush_timeout_ms:
           title: Offset flush timeout
           description: Maximum number of milliseconds to wait for records to flush and partition offset data to be committed to offset storage before cancelling the process and restoring the offset data to be committed in a future attempt (defaults to 5000).
           type: integer
           minimum: 1
-          maximum: 2147483647
+          maximum: 2.147483647e+09
           example: "5000"
         producer_batch_size:
           title: The batch size in bytes the producer will attempt to collect for the same partition before publishing to broker
           description: This setting gives the upper bound of the batch size to be sent. If there are fewer than this many bytes accumulated for this partition, the producer will 'linger' for the linger.ms time waiting for more records to show up. A batch size of zero will disable batching entirely (defaults to 16384).
           type: integer
           minimum: 0
-          maximum: 5242880
+          maximum: 5.24288e+06
           example: "1024"
         producer_buffer_memory:
           title: The total bytes of memory the producer can use to buffer records waiting to be sent to the broker
           description: The total bytes of memory the producer can use to buffer records waiting to be sent to the broker (defaults to 33554432).
           type: integer
-          minimum: 5242880
-          maximum: 134217728
+          minimum: 5.24288e+06
+          maximum: 1.34217728e+08
           example: "8388608"
         producer_compression_type:
           title: The default compression type for producers
@@ -1877,14 +2004,14 @@ kafka:
           description: This setting will limit the number of record batches the producer will send in a single request to avoid sending huge requests.
           type: integer
           minimum: 131072
-          maximum: 67108864
+          maximum: 6.7108864e+07
           example: "1048576"
         session_timeout_ms:
           title: The timeout used to detect failures when using Kafka’s group management facilities
           description: The timeout in milliseconds used to detect failures when using Kafka’s group management facilities (defaults to 10000).
           type: integer
           minimum: 1
-          maximum: 2147483647
+          maximum: 2.147483647e+09
           example: "10000"
     kafka_rest:
       title: Enable Kafka-REST service
@@ -1909,7 +2036,7 @@ kafka:
           type: integer
           default: "67108864"
           minimum: 0
-          maximum: 671088640
+          maximum: 6.7108864e+08
         consumer_request_timeout_ms:
           title: consumer.request.timeout.ms
           description: The maximum total time to wait for messages for a request if the maximum number of messages has not yet been reached
@@ -2129,8 +2256,8 @@ kafka_connect:
           title: The maximum amount of data the server should return for a fetch request
           description: Records are fetched in batches by the consumer, and if the first record batch in the first non-empty partition of the fetch is larger than this value, the record batch will still be returned to ensure that the consumer can make progress. As such, this is not a absolute maximum.
           type: integer
-          minimum: 1048576
-          maximum: 104857600
+          minimum: 1.048576e+06
+          maximum: 1.048576e+08
           example: "52428800"
         consumer_isolation_level:
           title: Consumer isolation level
@@ -2143,15 +2270,15 @@ kafka_connect:
           title: The maximum amount of data per-partition the server will return.
           description: 'Records are fetched in batches by the consumer.If the first record batch in the first non-empty partition of the fetch is larger than this limit, the batch will still be returned to ensure that the consumer can make progress. '
           type: integer
-          minimum: 1048576
-          maximum: 104857600
+          minimum: 1.048576e+06
+          maximum: 1.048576e+08
           example: "1048576"
         consumer_max_poll_interval_ms:
           title: The maximum delay between polls when using consumer group management
           description: The maximum delay in milliseconds between invocations of poll() when using consumer group management (defaults to 300000).
           type: integer
           minimum: 1
-          maximum: 2147483647
+          maximum: 2.147483647e+09
           example: "300000"
         consumer_max_poll_records:
           title: The maximum number of records returned by a single poll
@@ -2165,28 +2292,28 @@ kafka_connect:
           description: The interval at which to try committing offsets for tasks (defaults to 60000).
           type: integer
           minimum: 1
-          maximum: 100000000
+          maximum: 1e+08
           example: "60000"
         offset_flush_timeout_ms:
           title: Offset flush timeout
           description: Maximum number of milliseconds to wait for records to flush and partition offset data to be committed to offset storage before cancelling the process and restoring the offset data to be committed in a future attempt (defaults to 5000).
           type: integer
           minimum: 1
-          maximum: 2147483647
+          maximum: 2.147483647e+09
           example: "5000"
         producer_batch_size:
           title: The batch size in bytes the producer will attempt to collect for the same partition before publishing to broker
           description: This setting gives the upper bound of the batch size to be sent. If there are fewer than this many bytes accumulated for this partition, the producer will 'linger' for the linger.ms time waiting for more records to show up. A batch size of zero will disable batching entirely (defaults to 16384).
           type: integer
           minimum: 0
-          maximum: 5242880
+          maximum: 5.24288e+06
           example: "1024"
         producer_buffer_memory:
           title: The total bytes of memory the producer can use to buffer records waiting to be sent to the broker
           description: The total bytes of memory the producer can use to buffer records waiting to be sent to the broker (defaults to 33554432).
           type: integer
-          minimum: 5242880
-          maximum: 134217728
+          minimum: 5.24288e+06
+          maximum: 1.34217728e+08
           example: "8388608"
         producer_compression_type:
           title: The default compression type for producers
@@ -2210,14 +2337,14 @@ kafka_connect:
           description: This setting will limit the number of record batches the producer will send in a single request to avoid sending huge requests.
           type: integer
           minimum: 131072
-          maximum: 67108864
+          maximum: 6.7108864e+07
           example: "1048576"
         session_timeout_ms:
           title: The timeout used to detect failures when using Kafka’s group management facilities
           description: The timeout in milliseconds used to detect failures when using Kafka’s group management facilities (defaults to 10000).
           type: integer
           minimum: 1
-          maximum: 2147483647
+          maximum: 2.147483647e+09
           example: "10000"
     private_access:
       title: Allow access to selected service ports from private networks
@@ -2319,7 +2446,6 @@ kafka_mirrormaker:
           description: 'Frequency at which consumer group offset checkpoints are emitted (default: 60, every minute)'
           type: integer
           minimum: 1
-          maximum: 9223372036854775807
           example: "60"
         refresh_groups_enabled:
           title: Refresh consumer groups
@@ -2331,7 +2457,6 @@ kafka_mirrormaker:
           description: Frequency of consumer group refresh in seconds. Defaults to 600 seconds (10 minutes).
           type: integer
           minimum: 1
-          maximum: 9223372036854775807
           example: "600"
         refresh_topics_enabled:
           title: Refresh topics and partitions
@@ -2343,7 +2468,6 @@ kafka_mirrormaker:
           description: Frequency of topic and partitions refresh in seconds. Defaults to 600 seconds (10 minutes).
           type: integer
           minimum: 1
-          maximum: 9223372036854775807
           example: "600"
         sync_group_offsets_enabled:
           title: Sync consumer group offsets
@@ -2355,7 +2479,6 @@ kafka_mirrormaker:
           description: 'Frequency at which consumer group offsets are synced (default: 60, every minute)'
           type: integer
           minimum: 1
-          maximum: 9223372036854775807
           example: "60"
         sync_topic_configs_enabled:
           title: Sync remote topics
@@ -2495,13 +2618,11 @@ m3db:
           title: The maximum number of blocks that can be read in a given lookback period.
           type: integer
           minimum: 0
-          maximum: 9223372036854775807
           example: "20000"
         max_recently_queried_series_disk_bytes_read:
           title: The maximum number of disk bytes that can be read in a given lookback period.
           type: integer
           minimum: 0
-          maximum: 9223372036854775807
           example: "104857600"
         max_recently_queried_series_lookback:
           title: The lookback period for 'max_recently_queried_series_blocks' and 'max_recently_queried_series_disk_bytes_read'.
@@ -2513,7 +2634,6 @@ m3db:
           title: The maximum number of docs fetched in single query.
           type: integer
           minimum: 0
-          maximum: 9223372036854775807
           example: "100000"
         query_require_exhaustive:
           title: Require exhaustive result
@@ -2524,8 +2644,23 @@ m3db:
           title: The maximum number of series fetched in single query.
           type: integer
           minimum: 10000
-          maximum: 9223372036854775807
           example: "100000"
+    m3:
+      title: M3 specific configuration options
+      type: object
+      properties:
+        tag_options:
+          title: M3 Tag Options
+          type: object
+          properties:
+            allow_tag_name_duplicates:
+              title: Allows for duplicate tags to appear on series (not allowed by default)
+              type: boolean
+              example: true
+            allow_tag_value_empty:
+              title: Allows for empty tags to appear on series (not allowed by default)
+              type: boolean
+              example: true
     m3coordinator_enable_graphite_carbon_ingest:
       title: Enable Graphite ingestion using Carbon plaintext protocol
       description: Enables access to Graphite Carbon plaintext metrics ingestion. It can be enabled only for services inside VPCs. The metrics are written to aggregated namespaces only.
@@ -2894,12 +3029,12 @@ mysql:
           max_length: 255
           example: my.server.com
         ignore_dbs:
-          title: Comma-separated list of databases, which should be ignored during migration (supported by MySQL only at the moment)
+          title: Comma-separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment)
           type: string
           max_length: 2048
           example: db1,db2
         method:
-          title: The migration method to be used (currently supported only by Redis and MySQL service types)
+          title: The migration method to be used (currently supported only by Redis, MySQL and PostgreSQL service types)
           type: string
           enum:
             - value: dump
@@ -2948,14 +3083,13 @@ mysql:
           description: The maximum permitted result length in bytes for the GROUP_CONCAT() function.
           type: integer
           minimum: 4
-          maximum: 9223372036854775807
           example: "1024"
         information_schema_stats_expiry:
           title: information_schema_stats_expiry
           description: The time, in seconds, before cached statistics expire
           type: integer
           minimum: 900
-          maximum: 31536000
+          maximum: 3.1536e+07
           example: "86400"
         innodb_change_buffer_max_size:
           title: innodb_change_buffer_max_size
@@ -2998,15 +3132,15 @@ mysql:
           title: innodb_log_buffer_size
           description: The size in bytes of the buffer that InnoDB uses to write to the log files on disk.
           type: integer
-          minimum: 1048576
-          maximum: 4294967295
+          minimum: 1.048576e+06
+          maximum: 4.294967295e+09
           example: "16777216"
         innodb_online_alter_log_max_size:
           title: innodb_online_alter_log_max_size
           description: The upper limit in bytes on the size of the temporary log files used during online DDL operations for InnoDB tables.
           type: integer
           minimum: 65536
-          maximum: 1099511627776
+          maximum: 1.099511627776e+12
           example: "134217728"
         innodb_print_all_deadlocks:
           title: innodb_print_all_deadlocks
@@ -3066,21 +3200,21 @@ mysql:
           description: Size of the largest message in bytes that can be received by the server. Default is 67108864 (64M)
           type: integer
           minimum: 102400
-          maximum: 1073741824
+          maximum: 1.073741824e+09
           example: "67108864"
         max_heap_table_size:
           title: max_heap_table_size
           description: Limits the size of internal in-memory tables. Also set tmp_table_size. Default is 16777216 (16M)
           type: integer
-          minimum: 1048576
-          maximum: 1073741824
+          minimum: 1.048576e+06
+          maximum: 1.073741824e+09
           example: "16777216"
         net_buffer_length:
           title: net_buffer_length
           description: Start sizes of connection buffer and result buffer. Default is 16384 (16K). Changing this parameter will lead to a restart of the MySQL service.
           type: integer
           minimum: 1024
-          maximum: 1048576
+          maximum: 1.048576e+06
           example: "16384"
         net_read_timeout:
           title: net_read_timeout
@@ -3106,7 +3240,7 @@ mysql:
           description: Sort buffer size in bytes for ORDER BY optimization. Default is 262144 (256K)
           type: integer
           minimum: 32768
-          maximum: 1073741824
+          maximum: 1.073741824e+09
           example: "262144"
         sql_mode:
           title: sql_mode
@@ -3125,15 +3259,15 @@ mysql:
           title: tmp_table_size
           description: Limits the size of internal in-memory tables. Also set max_heap_table_size. Default is 16777216 (16M)
           type: integer
-          minimum: 1048576
-          maximum: 1073741824
+          minimum: 1.048576e+06
+          maximum: 1.073741824e+09
           example: "16777216"
         wait_timeout:
           title: wait_timeout
           description: The number of seconds the server waits for activity on a noninteractive connection before closing it.
           type: integer
           minimum: 1
-          maximum: 2147483
+          maximum: 2.147483e+06
           example: "28800"
     mysql_version:
       title: MySQL major version
@@ -3263,7 +3397,6 @@ opensearch:
             title: Maximum number of indexes to keep
             type: integer
             minimum: 0
-            maximum: 9223372036854775807
             example: "3"
           pattern:
             title: fnmatch pattern
@@ -3349,7 +3482,6 @@ opensearch:
       type: integer
       default: "0"
       minimum: 0
-      maximum: 9223372036854775807
     opensearch:
       title: OpenSearch settings
       type: object
@@ -3379,7 +3511,7 @@ opensearch:
           minimum: 2
           maximum: 16
         email_sender_name:
-          title: Sender email name placeholder to be used in Opensearch Dashboards and Opensearch keystore
+          title: Sender name placeholder to be used in Opensearch Dashboards and Opensearch keystore
           description: This should be identical to the Sender name defined in Opensearch dashboards
           type:
             - string
@@ -3388,27 +3520,26 @@ opensearch:
           example: alert-sender
           user_error: Must consist of lower-case alpha-numeric characters and dashes, max 40 characters
         email_sender_password:
-          title: Sender email password for Opensearch alerts to authenticate with SMTP server
-          description: Sender email password for Opensearch alerts to authenticate with SMTP server
+          title: Sender password for Opensearch alerts to authenticate with SMTP server
+          description: Sender password for Opensearch alerts to authenticate with SMTP server
           type:
             - string
           max_length: 1024
           pattern: ^[^\x00-\x1F]+$
           example: very-secure-mail-password
         email_sender_username:
-          title: Sender email address for Opensearch alerts
+          title: Sender username for Opensearch alerts
           type:
             - string
           max_length: 320
-          pattern: ^[A-Za-z0-9_\-\.+\'&]+@(([\da-zA-Z])([_\w-]{,62})\.){,127}(([\da-zA-Z])[_\w-]{,61})?([\da-zA-Z]\.((xn\-\-[a-zA-Z\d]+)|([a-zA-Z\d]{2,})))$
+          pattern: ^[^\x00-\x1F]+$
           example: jane@example.com
-          user_error: Must be a valid email address
         http_max_content_length:
           title: http.max_content_length
           description: Maximum content length for HTTP requests to the OpenSearch HTTP API, in bytes.
           type: integer
           minimum: 1
-          maximum: 2147483647
+          maximum: 2.147483647e+09
         http_max_header_size:
           title: http.max_header_size
           description: The max size of allowed headers, in bytes
@@ -3768,12 +3899,12 @@ pg:
           max_length: 255
           example: my.server.com
         ignore_dbs:
-          title: Comma-separated list of databases, which should be ignored during migration (supported by MySQL only at the moment)
+          title: Comma-separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment)
           type: string
           max_length: 2048
           example: db1,db2
         method:
-          title: The migration method to be used (currently supported only by Redis and MySQL service types)
+          title: The migration method to be used (currently supported only by Redis, MySQL and PostgreSQL service types)
           type: string
           enum:
             - value: dump
@@ -3814,13 +3945,13 @@ pg:
           description: Specifies the minimum number of inserted, updated or deleted tuples needed to trigger an  ANALYZE in any one table. The default is 50 tuples.
           type: integer
           minimum: 0
-          maximum: 2147483647
+          maximum: 2.147483647e+09
         autovacuum_freeze_max_age:
           title: autovacuum_freeze_max_age
           description: Specifies the maximum age (in transactions) that a table's pg_class.relfrozenxid field can attain before a VACUUM operation is forced to prevent transaction ID wraparound within the table. Note that the system will launch autovacuum processes to prevent wraparound even when autovacuum is otherwise disabled. This parameter will cause the server to be restarted.
           type: integer
-          minimum: 200000000
-          maximum: 1500000000
+          minimum: 2e+08
+          maximum: 1.5e+09
           example: "200000000"
         autovacuum_max_workers:
           title: autovacuum_max_workers
@@ -3857,7 +3988,7 @@ pg:
           description: Specifies the minimum number of updated or deleted tuples needed to trigger a VACUUM in any one table. The default is 50 tuples
           type: integer
           minimum: 0
-          maximum: 2147483647
+          maximum: 2.147483647e+09
         bgwriter_delay:
           title: bgwriter_delay
           description: Specifies the delay between activity rounds for the background writer in milliseconds. Default is 200.
@@ -3877,7 +4008,7 @@ pg:
           description: In each round, no more than this many buffers will be written by the background writer. Setting this to zero disables background writing. Default is 100.
           type: integer
           minimum: 0
-          maximum: 1073741823
+          maximum: 1.073741823e+09
           example: "100"
         bgwriter_lru_multiplier:
           title: bgwriter_lru_multiplier
@@ -3891,7 +4022,7 @@ pg:
           description: This is the amount of time, in milliseconds, to wait on a lock before checking to see if there is a deadlock condition.
           type: integer
           minimum: 500
-          maximum: 1800000
+          maximum: 1.8e+06
           example: "1000"
         default_toast_compression:
           title: default_toast_compression
@@ -3906,7 +4037,7 @@ pg:
           description: Time out sessions with open transactions after this number of milliseconds
           type: integer
           minimum: 0
-          maximum: 604800000
+          maximum: 6.048e+08
         jit:
           title: jit
           description: Controls system-wide use of Just-in-Time Compilation (JIT).
@@ -3917,7 +4048,7 @@ pg:
           description: Causes each action executed by autovacuum to be logged if it ran for at least the specified number of milliseconds. Setting this to zero logs all autovacuum actions. Minus-one (the default) disables logging autovacuum actions.
           type: integer
           minimum: -1
-          maximum: 2147483647
+          maximum: 2.147483647e+09
         log_error_verbosity:
           title: log_error_verbosity
           description: Controls the amount of detail written in the server log for each message that is logged.
@@ -3939,13 +4070,13 @@ pg:
           description: Log statements that take more than this number of milliseconds to run, -1 disables
           type: integer
           minimum: -1
-          maximum: 86400000
+          maximum: 8.64e+07
         log_temp_files:
           title: log_temp_files
           description: Log statements for each temporary file created larger than this number of kilobytes, -1 disables
           type: integer
           minimum: -1
-          maximum: 2147483647
+          maximum: 2.147483647e+09
         max_files_per_process:
           title: max_files_per_process
           description: PostgreSQL maximum number of files that can be open per process
@@ -3999,25 +4130,25 @@ pg:
           description: PostgreSQL maximum WAL size (MB) reserved for replication slots. Default is -1 (unlimited). wal_keep_size minimum WAL size setting takes precedence over this.
           type: integer
           minimum: -1
-          maximum: 2147483647
+          maximum: 2.147483647e+09
         max_stack_depth:
           title: max_stack_depth
           description: Maximum depth of the stack in bytes
           type: integer
-          minimum: 2097152
-          maximum: 6291456
+          minimum: 2.097152e+06
+          maximum: 6.291456e+06
         max_standby_archive_delay:
           title: max_standby_archive_delay
           description: Max standby archive delay in milliseconds
           type: integer
           minimum: 1
-          maximum: 43200000
+          maximum: 4.32e+07
         max_standby_streaming_delay:
           title: max_standby_streaming_delay
           description: Max standby streaming delay in milliseconds
           type: integer
           minimum: 1
-          maximum: 43200000
+          maximum: 4.32e+07
         max_wal_senders:
           title: max_wal_senders
           description: PostgreSQL maximum WAL senders
@@ -4071,7 +4202,7 @@ pg:
           description: PostgreSQL temporary file limit in KiB, -1 for unlimited
           type: integer
           minimum: -1
-          maximum: 2147483647
+          maximum: 2.147483647e+09
           example: "5000000"
         timezone:
           title: timezone
@@ -4168,7 +4299,7 @@ pg:
           title: Do not allow more than this many server connections per database (regardless of user). Setting it to 0 means unlimited.
           type: integer
           minimum: 0
-          maximum: 2147483647
+          maximum: 2.147483647e+09
           example: "0"
         autodb_pool_mode:
           title: PGBouncer pool mode
@@ -4231,7 +4362,6 @@ pg:
           type: integer
           default: "60"
           minimum: 10
-          maximum: 9223372036854775807
     private_access:
       title: Allow access to selected service ports from private networks
       type: object
@@ -4411,12 +4541,12 @@ redis:
           max_length: 255
           example: my.server.com
         ignore_dbs:
-          title: Comma-separated list of databases, which should be ignored during migration (supported by MySQL only at the moment)
+          title: Comma-separated list of databases, which should be ignored during migration (supported by MySQL and PostgreSQL only at the moment)
           type: string
           max_length: 2048
           example: db1,db2
         method:
-          title: The migration method to be used (currently supported only by Redis and MySQL service types)
+          title: The migration method to be used (currently supported only by Redis, MySQL and PostgreSQL service types)
           type: string
           enum:
             - value: dump
@@ -4568,7 +4698,7 @@ redis:
       type: integer
       default: "300"
       minimum: 0
-      maximum: 31536000
+      maximum: 3.1536e+07
     service_to_fork_from:
       title: Name of another service to fork from. This has effect only when a new service is being created.
       type:

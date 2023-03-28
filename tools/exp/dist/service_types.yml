@@ -2088,7 +2088,9 @@ kafka:
         - string
         - "null"
       enum:
-        - value: "3.2"
+        - is_deprecated: true
+          deprecation_notice: This value is deprecated.
+          value: "3.2"
         - value: "3.3"
     private_access:
       title: Allow access to selected service ports from private networks

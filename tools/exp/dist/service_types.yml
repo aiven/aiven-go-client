@@ -4287,7 +4287,9 @@ pg:
         - value: "13"
         - value: "14"
         - value: "15"
-        - value: "10"
+        - is_deprecated: true
+          deprecation_notice: This value is deprecated.
+          value: "10"
     pgbouncer:
       title: PGBouncer connection pooling settings
       type: object

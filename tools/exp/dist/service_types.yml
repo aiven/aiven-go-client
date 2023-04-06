@@ -3125,7 +3125,7 @@ mysql:
           example: db_name/table_name
         innodb_lock_wait_timeout:
           title: innodb_lock_wait_timeout
-          description: The length of time in seconds an InnoDB transaction waits for a row lock before giving up.
+          description: The length of time in seconds an InnoDB transaction waits for a row lock before giving up. Default is 120.
           type: integer
           minimum: 1
           maximum: 3600

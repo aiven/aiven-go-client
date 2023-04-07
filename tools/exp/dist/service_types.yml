@@ -3785,6 +3785,59 @@ opensearch:
       max_length: 128
       pattern: ^[a-zA-Z0-9-_:.]+$
       example: backup-20191112t091354293891z
+    saml:
+      title: OpenSearch SAML configuration
+      type: object
+      required:
+        - enabled
+        - idp_metadata_url
+        - idp_entity_id
+        - sp_entity_id
+      properties:
+        enabled:
+          title: Enable or disable OpenSearch SAML authentication
+          description: Enables or disables SAML-based authentication for OpenSearch. When enabled, users can authenticate using SAML with an Identity Provider.
+          type: boolean
+          default: true
+        idp_entity_id:
+          title: Identity Provider Entity ID
+          description: The unique identifier for the Identity Provider (IdP) entity that is used for SAML authentication. This value is typically provided by the IdP.
+          type: string
+          min_length: 1
+          max_length: 1024
+          example: test-idp-entity-id
+        idp_metadata_url:
+          title: Identity Provider (IdP) SAML metadata URL
+          description: The URL of the SAML metadata for the Identity Provider (IdP). This is used to configure SAML-based authentication with the IdP.
+          type: string
+          min_length: 1
+          max_length: 2048
+          example: https://test-account.okta.com/app/exk491jujcVc83LEX697/sso/saml/metadata
+        roles_key:
+          title: SAML response role attribute
+          description: Optional. Specifies the attribute in the SAML response where role information is stored, if available. Role attributes are not required for SAML authentication, but can be included in SAML assertions by most Identity Providers (IdPs) to determine user access levels or permissions.
+          type:
+            - string
+            - "null"
+          min_length: 1
+          max_length: 256
+          example: RoleName
+        sp_entity_id:
+          title: Service Provider Entity ID
+          description: The unique identifier for the Service Provider (SP) entity that is used for SAML authentication. This value is typically provided by the SP.
+          type: string
+          min_length: 1
+          max_length: 1024
+          example: test-sp-entity-id
+        subject_key:
+          title: SAML response subject attribute
+          description: Optional. Specifies the attribute in the SAML response where the subject identifier is stored. If not configured, the NameID attribute is used by default.
+          type:
+            - string
+            - "null"
+          min_length: 1
+          max_length: 256
+          example: NameID
     service_to_fork_from:
       title: Name of another service to fork from. This has effect only when a new service is being created.
       type:

@@ -16,6 +16,3 @@ bin
 
 # Editor
 .vscode
-
-# Project specific
-tools/exp/exp

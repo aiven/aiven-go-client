@@ -42,8 +42,9 @@ type (
 	// CreateServiceUserRequest are the parameters required to create a
 	// ServiceUser.
 	CreateServiceUserRequest struct {
-		Username      string         `json:"username"`
-		AccessControl *AccessControl `json:"access_control,omitempty"`
+		Username       string         `json:"username"`
+		Authentication *string        `json:"authentication,omitempty"`
+		AccessControl  *AccessControl `json:"access_control,omitempty"`
 	}
 
 	// ModifyServiceUserRequest params required to modify a ServiceUser

@@ -1,14 +1,14 @@
-name: Lint 
+name: Lint
 
-on: 
-   push : 
-     branches : 
-       -  master 
-   pull_request : 
-     branches : 
-       -  master
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
-jobs :
+jobs:
   commitlint:
     runs-on: ubuntu-latest
     steps:

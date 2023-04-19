@@ -1,0 +1,26 @@
+name: Releaser
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  releaser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - id: sha
+        run: echo "sha=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
+      - id: version
+        uses: anothrNick/github-tag-action@1.61.0
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          WITH_V: true
+      - uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.version.outputs.new_tag }}
+          name: ${{ steps.version.outputs.new_tag }}
+          body: auto-generated release for commit ${{ steps.sha.outputs.sha }}

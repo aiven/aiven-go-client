@@ -1,5 +1,5 @@
 # Aiven client
-[![Build Status](https://travis-ci.org/aiven/terraform-provider-aiven.svg?branch=master)](https://travis-ci.org/aiven/terraform-provider-aiven) [![Go Report Card](https://goreportcard.com/badge/github.com/aiven/aiven-go-client)](https://goreportcard.com/report/github.com/aiven/aiven-go-client) [![Documentation](https://godoc.org/github.com/aiven/aiven-go-client?status.svg)](https://godoc.org/github.com/aiven/aiven-go-client) [![Release](https://img.shields.io/github/release/aiven/aiven-go-client.svg?style=flat-square)](https://github.com/aiven/aiven-go-client/releases)  
+[![Go Report Card](https://goreportcard.com/badge/github.com/aiven/aiven-go-client)](https://goreportcard.com/report/github.com/aiven/aiven-go-client) [![Documentation](https://godoc.org/github.com/aiven/aiven-go-client?status.svg)](https://godoc.org/github.com/aiven/aiven-go-client) [![Release](https://img.shields.io/github/release/aiven/aiven-go-client.svg?style=flat-square)](https://github.com/aiven/aiven-go-client/releases)  
 
 
 Aiven is a next-generation managed cloud services platform with a focus on

@@ -44,8 +44,10 @@ type (
 	CreateServiceIntegrationRequest struct {
 		DestinationService    *string                `json:"dest_service,omitempty"`
 		DestinationEndpointID *string                `json:"dest_endpoint_id,omitempty"`
+		DestinationProject    *string                `json:"dest_project,omitempty"`
 		IntegrationType       string                 `json:"integration_type"`
 		SourceService         *string                `json:"source_service,omitempty"`
+		SourceProject         *string                `json:"source_project,omitempty"`
 		SourceEndpointID      *string                `json:"source_endpoint_id,omitempty"`
 		UserConfig            map[string]interface{} `json:"user_config,omitempty"`
 	}

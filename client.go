@@ -2,6 +2,7 @@ package aiven
 
 import (
 	"bytes"
+	"context"
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/json"
@@ -39,6 +40,7 @@ func init() {
 
 // Client represents the instance that does all the calls to the Aiven API.
 type Client struct {
+	ctx       context.Context
 	APIKey    string
 	Client    *http.Client
 	UserAgent string
@@ -240,6 +242,13 @@ func (c *Client) Init() {
 	c.ServiceTags = &ServiceTagsHandler{c}
 }
 
+// WithContext create a copy of Client where all request would be using the provided context
+func (c *Client) WithContext(ctx context.Context) *Client {
+	o := &Client{ctx: ctx, APIKey: c.APIKey, UserAgent: c.UserAgent, Client: c.Client}
+	o.Init()
+	return o
+}
+
 func (c *Client) doGetRequest(endpoint string, req interface{}) ([]byte, error) {
 	return c.doRequest("GET", endpoint, req, 1)
 }
@@ -301,7 +310,11 @@ func (c *Client) doRequest(method, uri string, body interface{}, apiVersion int)
 
 	retryCount := 2
 	for {
-		req, err := http.NewRequest(method, url, bytes.NewBuffer(bts))
+		ctx := c.ctx
+		if ctx == nil {
+			ctx = context.Background()
+		}
+		req, err := http.NewRequestWithContext(ctx, method, url, bytes.NewBuffer(bts))
 		if err != nil {
 			return nil, err
 		}

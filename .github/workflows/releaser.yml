@@ -6,6 +6,8 @@ on:
       - master
     paths:
       - '**.go'
+      - '**/go.mod'
+      - '**/go.sum'
 
 jobs:
   releaser:

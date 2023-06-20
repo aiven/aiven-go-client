@@ -86,6 +86,7 @@ type Client struct {
 	ClickhouseUser                  *ClickhouseUserHandler
 	ClickHouseQuery                 *ClickhouseQueryHandler
 	ServiceTags                     *ServiceTagsHandler
+	Organizations                   *OrganizationsHandler
 }
 
 // GetUserAgentOrDefault configures a default userAgent value, if one has not been provided.
@@ -240,6 +241,7 @@ func (c *Client) Init() {
 	c.ClickhouseUser = &ClickhouseUserHandler{c}
 	c.ClickHouseQuery = &ClickhouseQueryHandler{c}
 	c.ServiceTags = &ServiceTagsHandler{c}
+	c.Organizations = &OrganizationsHandler{c}
 }
 
 // WithContext create a copy of Client where all request would be using the provided context

@@ -35,6 +35,7 @@ type (
 		PrimaryBillingGroupId string     `json:"primary_billing_group_id,omitempty"`
 		IsAccountOwner        bool       `json:"is_account_owner,omitempty"`
 		ParentAccountId       string     `json:"parent_account_id,omitempty"`
+		OrganizationId        string     `json:"organization_id,omitempty"`
 	}
 )
 

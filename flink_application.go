@@ -34,8 +34,8 @@ type (
 	// CreateFlinkApplicationRequest is the request to create a Flink Application.
 	// POST /project/{project}/service/{service_name}/flink/application
 	CreateFlinkApplicationRequest struct {
-		Name               string                  `json:"name,omitempty"`
-		ApplicationVersion FlinkApplicationVersion `json:"application_version,omitempty"`
+		Name               string                   `json:"name"`
+		ApplicationVersion *FlinkApplicationVersion `json:"application_version,omitempty"`
 	}
 
 	FlinkApplicationVersionCreateInput struct {

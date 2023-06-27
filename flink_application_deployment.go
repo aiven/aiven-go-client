@@ -9,9 +9,9 @@ type (
 	// CreateFlinkApplicationDeploymentRequest Aiven API request
 	// POST https://api.aiven.io/v1/project/<project>/service/<service_name>/flink/application/<application_id>/deployment
 	CreateFlinkApplicationDeploymentRequest struct {
-		Parallelism       int    `json:"parallelism"`
-		RestartEnabled    bool   `json:"restart_enabled"`
-		StartingSavepoint string `json:"starting_savepoint"`
+		Parallelism       int    `json:"parallelism,omitempty"`
+		RestartEnabled    bool   `json:"restart_enabled,omitempty"`
+		StartingSavepoint string `json:"starting_savepoint,omitempty"`
 		VersionID         string `json:"version_id"`
 	}
 
@@ -89,8 +89,8 @@ func (h *FlinkApplicationDeploymentHandler) Create(project, service, application
 }
 
 // Get gets a Flink deployment
-func (h *FlinkApplicationDeploymentHandler) Get(project, service, applicationId, queryId string) (*GetFlinkApplicationDeploymentResponse, error) {
-	path := buildPath("project", project, "service", service, "flink", "application", applicationId, "deployment", queryId)
+func (h *FlinkApplicationDeploymentHandler) Get(project, service, applicationId, deploymentId string) (*GetFlinkApplicationDeploymentResponse, error) {
+	path := buildPath("project", project, "service", service, "flink", "application", applicationId, "deployment", deploymentId)
 	bts, err := h.client.doGetRequest(path, nil)
 	if err != nil {
 		return nil, err
@@ -101,8 +101,8 @@ func (h *FlinkApplicationDeploymentHandler) Get(project, service, applicationId,
 }
 
 // Delete deletes a Flink deployment
-func (h *FlinkApplicationDeploymentHandler) Delete(project, service, applicationId, queryId string) (*DeleteFlinkApplicationDeploymentResponse, error) {
-	path := buildPath("project", project, "service", service, "flink", "application", applicationId, "deployment", queryId)
+func (h *FlinkApplicationDeploymentHandler) Delete(project, service, applicationId, deploymentId string) (*DeleteFlinkApplicationDeploymentResponse, error) {
+	path := buildPath("project", project, "service", service, "flink", "application", applicationId, "deployment", deploymentId)
 	bts, err := h.client.doDeleteRequest(path, nil)
 	if err != nil {
 		return nil, err
@@ -125,8 +125,8 @@ func (h *FlinkApplicationDeploymentHandler) List(project, service, applicationId
 }
 
 // Cancel cancel the Flink of a Flink deployment
-func (h *FlinkApplicationDeploymentHandler) Cancel(project, service, applicationId, queryId string) (*CancelFlinkApplicationDeploymentResponse, error) {
-	path := buildPath("project", project, "service", service, "flink", "application", applicationId, "deployment", queryId, "cancel")
+func (h *FlinkApplicationDeploymentHandler) Cancel(project, service, applicationId, deploymentId string) (*CancelFlinkApplicationDeploymentResponse, error) {
+	path := buildPath("project", project, "service", service, "flink", "application", applicationId, "deployment", deploymentId, "cancel")
 	bts, err := h.client.doPostRequest(path, nil)
 	if err != nil {
 		return nil, err
@@ -137,8 +137,8 @@ func (h *FlinkApplicationDeploymentHandler) Cancel(project, service, application
 }
 
 // Stop cancel the Flink of a Flink deployment
-func (h *FlinkApplicationDeploymentHandler) Stop(project, service, applicationId, queryId string) (*StopFlinkApplicationDeploymentResponse, error) {
-	path := buildPath("project", project, "service", service, "flink", "application", applicationId, "deployment", queryId, "stop")
+func (h *FlinkApplicationDeploymentHandler) Stop(project, service, applicationId, deploymentId string) (*StopFlinkApplicationDeploymentResponse, error) {
+	path := buildPath("project", project, "service", service, "flink", "application", applicationId, "deployment", deploymentId, "stop")
 	bts, err := h.client.doPostRequest(path, nil)
 	if err != nil {
 		return nil, err

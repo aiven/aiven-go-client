@@ -80,10 +80,7 @@ func (h *FlinkApplicationVersionHandler) Get(
 	}
 
 	var r DetailedFlinkApplicationVersionResponse
-
-	err = checkAPIResponse(bts, &r)
-
-	return &r, err
+	return &r, checkAPIResponse(bts, &r)
 }
 
 // Create is the method to create a Flink Application Version.
@@ -101,10 +98,7 @@ func (h *FlinkApplicationVersionHandler) Create(
 	}
 
 	var r DetailedFlinkApplicationVersionResponse
-
-	err = checkAPIResponse(bts, &r)
-
-	return &r, err
+	return &r, checkAPIResponse(bts, &r)
 }
 
 // Delete is the method to delete a Flink Application Version.
@@ -132,10 +126,7 @@ func (h *FlinkApplicationVersionHandler) Delete(
 	}
 
 	var r DetailedFlinkApplicationVersionResponse
-
-	err = checkAPIResponse(bts, &r)
-
-	return &r, err
+	return &r, checkAPIResponse(bts, &r)
 }
 
 // Validate is the method to validate a Flink Application Version.
@@ -163,8 +154,5 @@ func (h *FlinkApplicationVersionHandler) Validate(
 	}
 
 	var r ValidateFlinkApplicationVersionResponse
-
-	err = checkAPIResponse(bts, &r)
-
-	return &r, err
+	return &r, checkAPIResponse(bts, &r)
 }

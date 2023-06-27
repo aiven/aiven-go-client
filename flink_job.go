@@ -35,6 +35,16 @@ type (
 		JobId string `json:"job_id"`
 	}
 
+	// ListFlinkApplicationDeploymentResponse Aiven API response
+	// GET https://api.aiven.io/v1/project/<project>/service/<service_name>/flink/job
+	ListFlinkJobResponse struct {
+		APIResponse
+		Jobs []struct {
+			ID     string `json:"id"`
+			Status string `json:"status"`
+		} `json:"jobs"`
+	}
+
 	// GetFlinkJobResponse Aiven API response
 	// GET https://api.aiven.io/v1/project/<project>/service/<service_name>/flink/proxy/v1/jobs/<job_id>
 	GetFlinkJobResponse struct {
@@ -117,9 +127,19 @@ func (h *FlinkJobHandler) Create(project, service string, req CreateFlinkJobRequ
 	}
 
 	var r CreateFlinkJobResponse
-	errR := checkAPIResponse(bts, &r)
+	return &r, checkAPIResponse(bts, &r)
+}
 
-	return &r, errR
+// List lists a flink job
+func (h *FlinkJobHandler) List(project, service string) (*ListFlinkJobResponse, error) {
+	path := buildPath("project", project, "service", service, "flink", "job")
+	bts, err := h.client.doGetRequest(path, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	var r ListFlinkJobResponse
+	return &r, checkAPIResponse(bts, &r)
 }
 
 // Get gets a flink job
@@ -131,9 +151,7 @@ func (h *FlinkJobHandler) Get(project, service string, req GetFlinkJobRequest) (
 	}
 
 	var r GetFlinkJobResponse
-	errR := checkAPIResponse(bts, &r)
-
-	return &r, errR
+	return &r, checkAPIResponse(bts, &r)
 }
 
 // Patch patches a flink job
@@ -156,7 +174,5 @@ func (h *FlinkJobHandler) Validate(project, service string, req ValidateFlinkJob
 	}
 
 	var r ValidateFlinkJobResponse
-	errR := checkAPIResponse(bts, &r)
-
-	return &r, errR
+	return &r, checkAPIResponse(bts, &r)
 }

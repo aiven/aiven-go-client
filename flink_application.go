@@ -27,15 +27,26 @@ type (
 	DetailedFlinkApplicationResponse struct {
 		GenericFlinkApplicationResponse
 
-		ApplicationVersions []interface{} `json:"application_versions"`
-		CurrentDeployment   interface{}   `json:"current_deployment"`
+		ApplicationVersions []FlinkApplicationVersion  `json:"application_versions"`
+		CurrentDeployment   FlinkApplicationDeployment `json:"current_deployment"`
 	}
 
 	// CreateFlinkApplicationRequest is the request to create a Flink Application.
 	// POST /project/{project}/service/{service_name}/flink/application
 	CreateFlinkApplicationRequest struct {
-		Name               string      `json:"name,omitempty"`
-		ApplicationVersion interface{} `json:"application_version,omitempty"`
+		Name               string                  `json:"name,omitempty"`
+		ApplicationVersion FlinkApplicationVersion `json:"application_version,omitempty"`
+	}
+
+	FlinkApplicationVersionCreateInput struct {
+		CreateTable   string `json:"create_table"`
+		IntegrationID string `json:"integration_id"`
+	}
+
+	FlinkApplicationVersion struct {
+		Sinks     []FlinkApplicationVersionCreateInput `json:"sinks"`
+		Sources   []FlinkApplicationVersionCreateInput `json:"sources"`
+		Statement string                               `json:"statement"`
 	}
 
 	// UpdateFlinkApplicationRequest is the request to update a Flink Application.
@@ -68,9 +79,7 @@ func (h *FlinkApplicationHandler) Get(
 
 	var r DetailedFlinkApplicationResponse
 
-	err = checkAPIResponse(bts, &r)
-
-	return &r, err
+	return &r, checkAPIResponse(bts, &r)
 }
 
 // Create is the method to create a Flink Application.
@@ -87,10 +96,7 @@ func (h *FlinkApplicationHandler) Create(
 	}
 
 	var r DetailedFlinkApplicationResponse
-
-	err = checkAPIResponse(bts, &r)
-
-	return &r, err
+	return &r, checkAPIResponse(bts, &r)
 }
 
 // Update is the method to update a Flink Application.
@@ -108,10 +114,7 @@ func (h *FlinkApplicationHandler) Update(
 	}
 
 	var r DetailedFlinkApplicationResponse
-
-	err = checkAPIResponse(bts, &r)
-
-	return &r, err
+	return &r, checkAPIResponse(bts, &r)
 }
 
 // Delete is the method to delete a Flink Application.
@@ -128,10 +131,7 @@ func (h *FlinkApplicationHandler) Delete(
 	}
 
 	var r DetailedFlinkApplicationResponse
-
-	err = checkAPIResponse(bts, &r)
-
-	return &r, err
+	return &r, checkAPIResponse(bts, &r)
 }
 
 // List is the method to list Flink Applications.
@@ -147,8 +147,5 @@ func (h *FlinkApplicationHandler) List(
 	}
 
 	var r FlinkApplicationListResponse
-
-	err = checkAPIResponse(bts, &r)
-
-	return &r, err
+	return &r, checkAPIResponse(bts, &r)
 }

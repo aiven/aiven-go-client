@@ -22,9 +22,37 @@ type (
 		Meta []ClickhouseQueryColumnMeta
 		Data []interface{}
 	}
+
+	ClickhouseCurrentQuery struct {
+		ClientName string  `json:"client_name"`
+		Database   string  `json:"database"`
+		Elapsed    float64 `json:"elapsed"`
+		Query      string  `json:"query"`
+		User       string  `json:"user"`
+	}
+
+	// ClickhouseCurrentQueriesResponse aiven go-client clickhouse current queries response
+	ClickhouseCurrentQueriesResponse struct {
+		APIResponse
+		Queries []ClickhouseCurrentQuery
+	}
 )
 
-// Create creates a ClickHouse job
+// CurrentQueries list current queries
+func (h *ClickhouseQueryHandler) CurrentQueries(project, service string) (*ClickhouseCurrentQueriesResponse, error) {
+	path := buildPath("project", project, "service", service, "clickhouse", "query")
+	bts, err := h.client.doGetRequest(path, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	var r ClickhouseCurrentQueriesResponse
+	errR := checkAPIResponse(bts, &r)
+
+	return &r, errR
+}
+
+// Query creates a ClickHouse job
 func (h *ClickhouseQueryHandler) Query(project, service, database, query string) (*ClickhouseQueryResponse, error) {
 	path := buildPath("project", project, "service", service, "clickhouse", "query")
 	bts, err := h.client.doPostRequest(path, ClickhouseQueryRequest{

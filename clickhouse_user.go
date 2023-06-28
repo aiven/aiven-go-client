@@ -128,7 +128,7 @@ func (h *ClickhouseUserHandler) ResetPassword(project, service, uuid, password s
 
 	type PassResponse struct {
 		APIResponse
-		Password string `json:"name"`
+		Password string `json:"password"`
 	}
 
 	var r PassResponse

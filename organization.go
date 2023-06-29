@@ -2,8 +2,8 @@
 package aiven
 
 type (
-	// OrganizationsHandler is the client which interacts with the Organizations API on Aiven.
-	OrganizationsHandler struct {
+	// OrganizationHandler is the client which interacts with the Organizations API on Aiven.
+	OrganizationHandler struct {
 		// client is the API client to use.
 		client *Client
 	}
@@ -26,7 +26,7 @@ type (
 )
 
 // Get returns information about the specified organization.
-func (h *OrganizationsHandler) Get(id string) (*OrganizationInfo, error) {
+func (h *OrganizationHandler) Get(id string) (*OrganizationInfo, error) {
 	path := buildPath("organization", id)
 
 	bts, err := h.client.doGetRequest(path, nil)
@@ -36,9 +36,5 @@ func (h *OrganizationsHandler) Get(id string) (*OrganizationInfo, error) {
 
 	var r OrganizationInfo
 
-	if err = checkAPIResponse(bts, &r); err != nil {
-		return nil, err
-	}
-
-	return &r, nil
+	return &r, checkAPIResponse(bts, &r)
 }

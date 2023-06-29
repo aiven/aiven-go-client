@@ -65,6 +65,7 @@ type Client struct {
 	KafkaMirrorMakerReplicationFlow *MirrorMakerReplicationFlowHandler
 	ElasticsearchACLs               *ElasticSearchACLsHandler
 	KafkaTopics                     *KafkaTopicsHandler
+	KafkaQuotas                     *KafkaQuotasHandler
 	VPCs                            *VPCsHandler
 	VPCPeeringConnections           *VPCPeeringConnectionsHandler
 	Accounts                        *AccountsHandler

@@ -60,3 +60,15 @@ func (h *OrganizationUserInvitationsHandler) Invite(id string, req OrganizationU
 
 	return checkAPIResponse(bts, nil)
 }
+
+// Delete deletes an organization user invitation.
+func (h *OrganizationUserInvitationsHandler) Delete(id, userEmail string) error {
+	path := buildPath("organization", id, "invitation", userEmail)
+
+	bts, err := h.client.doDeleteRequest(path, nil)
+	if err != nil {
+		return err
+	}
+
+	return checkAPIResponse(bts, nil)
+}

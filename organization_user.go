@@ -25,7 +25,7 @@ type (
 		// JoinTime is the time when the user joined the organization.
 		JoinTime string `json:"join_time"`
 		// UserInfo is the information of the user.
-		UserInfo []OrganizationUserInfo `json:"user_info"`
+		UserInfo OrganizationUserInfo `json:"user_info"`
 	}
 
 	// OrganizationUserInfo is a struct that represents a user in an organization.

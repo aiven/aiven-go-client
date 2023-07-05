@@ -18,20 +18,6 @@ func setupServiceTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 	)
 
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path == "/userauth" {
-			w.Header().Set("Content-Type", "application/json")
-			w.WriteHeader(http.StatusOK)
-			err := json.NewEncoder(w).Encode(authResponse{
-				Token: AccessToken,
-				State: "active",
-			})
-
-			if err != nil {
-				t.Error(err)
-			}
-			return
-		}
-
 		service := ServiceResponse{
 			Service: &Service{
 				CloudName: "google-europe-west1",
@@ -50,7 +36,19 @@ func setupServiceTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 			},
 		}
 
-		if r.URL.Path == "/project/test-pr/service" {
+		if r.URL.Path == "/userauth" {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			err := json.NewEncoder(w).Encode(authResponse{
+				Token: AccessToken,
+				State: "active",
+			})
+
+			if err != nil {
+				t.Error(err)
+			}
+			return
+		} else if r.URL.Path == "/project/test-pr/service" {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
 
@@ -60,9 +58,7 @@ func setupServiceTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 				t.Error(err)
 			}
 			return
-		}
-
-		if r.URL.Path == "/project/test-pr/service/test-sr" {
+		} else if r.URL.Path == "/project/test-pr/service/test-sr" {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
 
@@ -72,9 +68,7 @@ func setupServiceTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 				t.Error(err)
 			}
 			return
-		}
-
-		if r.URL.Path == "/project/test-pr-list/service" {
+		} else if r.URL.Path == "/project/test-pr-list/service" {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
 			err := json.NewEncoder(w).Encode(ServiceListResponse{
@@ -86,6 +80,8 @@ func setupServiceTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 				t.Error(err)
 			}
 			return
+		} else {
+			w.WriteHeader(http.StatusBadRequest)
 		}
 	}))
 

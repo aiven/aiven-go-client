@@ -31,7 +31,7 @@ type (
 	// OrganizationUserInfo is a struct that represents a user in an organization.
 	OrganizationUserInfo struct {
 		// UserEmail is the email of the user.
-		UserEmail string `json:"user"`
+		UserEmail string `json:"user_email"`
 		// RealName is the real name of the user.
 		RealName string `json:"real_name"`
 		// State is the state of the user.

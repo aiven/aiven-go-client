@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
+	"time"
 )
 
 const (
@@ -21,7 +22,7 @@ type (
 		Type                        string        `json:"type"`
 		AccessCert                  string        `json:"access_cert"`
 		AccessKey                   string        `json:"access_key"`
-		AccessCertNotValidAfterTime string        `json:"access_cert_not_valid_after_time"`
+		AccessCertNotValidAfterTime *time.Time    `json:"access_cert_not_valid_after_time"`
 		AccessControl               AccessControl `json:"access_control,omitempty"`
 	}
 

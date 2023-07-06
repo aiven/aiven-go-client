@@ -1,7 +1,10 @@
 // Package aiven provides a client for using the Aiven API.
 package aiven
 
-import "context"
+import (
+	"context"
+	"time"
+)
 
 type (
 	// OrganizationUserHandler is the client which interacts with the Organization Users API on Aiven.
@@ -25,7 +28,7 @@ type (
 		// UserID is the unique identifier of the user.
 		UserID string `json:"user_id"`
 		// JoinTime is the time when the user joined the organization.
-		JoinTime string `json:"join_time"`
+		JoinTime *time.Time `json:"join_time"`
 		// UserInfo is the information of the user.
 		UserInfo OrganizationUserInfo `json:"user_info"`
 	}

@@ -1,6 +1,9 @@
 package aiven
 
-import "context"
+import (
+	"context"
+	"time"
+)
 
 type (
 	// Service represents the Service model on Aiven.
@@ -10,8 +13,8 @@ type (
 		Backups               []*Backup                 `json:"backups"`
 		CloudName             string                    `json:"cloud_name"`
 		ConnectionPools       []*ConnectionPool         `json:"connection_pools"`
-		CreateTime            string                    `json:"create_time"`
-		UpdateTime            string                    `json:"update_time"`
+		CreateTime            *time.Time                `json:"create_time"`
+		UpdateTime            *time.Time                `json:"update_time"`
 		GroupList             []string                  `json:"group_list"`
 		NodeCount             int                       `json:"node_count"`
 		Plan                  string                    `json:"plan"`
@@ -88,7 +91,7 @@ type (
 
 	// Backup represents an individual backup of service data on Aiven
 	Backup struct {
-		BackupTime        string                    `json:"backup_time"`
+		BackupTime        *time.Time                `json:"backup_time"`
 		BackupName        string                    `json:"backup_name"`
 		DataSize          int                       `json:"data_size"`
 		StorageLocation   string                    `json:"storage_location"`

@@ -1,7 +1,10 @@
 // Package aiven provides a client for using the Aiven API.
 package aiven
 
-import "context"
+import (
+	"context"
+	"time"
+)
 
 type (
 	// OrganizationUserInvitationsHandler is the client which interacts with the Organization Invitations API on Aiven.
@@ -25,9 +28,9 @@ type (
 		// InvitedBy is the email of the user that invited the user to the organization.
 		InvitedBy *string `json:"invited_by,omitempty"`
 		// CreateTime is the time when the invitation was created.
-		CreateTime string `json:"create_time"`
+		CreateTime *time.Time `json:"create_time"`
 		// ExpiryTime is the time when the invitation expires.
-		ExpiryTime string `json:"expiry_time"`
+		ExpiryTime *time.Time `json:"expiry_time"`
 	}
 
 	// OrganizationUserInvitationAddRequest are the parameters to add an organization user invitation.

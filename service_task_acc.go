@@ -1,6 +1,9 @@
 package aiven
 
-import "context"
+import (
+	"context"
+	"time"
+)
 
 type (
 	// ServiceTaskHandler Aiven go-client handler for Service tesks
@@ -16,13 +19,13 @@ type (
 
 	// ServiceTask represents a service task
 	ServiceTask struct {
-		CreateTime      string `json:"create_time"`
-		Result          string `json:"result"`
-		TaskType        string `json:"task_type"`
-		Success         *bool  `json:"success"`
-		SourcePgVersion string `json:"source_pg_version,omitempty"`
-		TargetPgVersion string `json:"target_pg_version,omitempty"`
-		Id              string `json:"task_id,omitempty"`
+		CreateTime      *time.Time `json:"create_time"`
+		Result          string     `json:"result"`
+		TaskType        string     `json:"task_type"`
+		Success         *bool      `json:"success"`
+		SourcePgVersion string     `json:"source_pg_version,omitempty"`
+		TargetPgVersion string     `json:"target_pg_version,omitempty"`
+		Id              string     `json:"task_id,omitempty"`
 	}
 
 	// ServiceTaskRequest represents service task request

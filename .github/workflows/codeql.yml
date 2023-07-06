@@ -3,7 +3,7 @@ name: CodeQL
 on:
   pull_request:
     branches:
-      - master
+      - main
     types:
       - opened
       - synchronize
@@ -12,7 +12,7 @@ on:
       - unlabeled
   push:
     branches:
-      - master
+      - main
 
 permissions:
   actions: read

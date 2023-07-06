@@ -3,11 +3,12 @@ name: Releaser
 on:
   push:
     branches:
-      - master
+      - main
     paths:
-      - '**.go'
-      - '**/go.mod'
-      - '**/go.sum'
+      - "**.go"
+      - "**/go.mod"
+      - "**/go.sum"
+  workflow_dispatch: {}
 
 jobs:
   releaser:

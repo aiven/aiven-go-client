@@ -31,6 +31,10 @@ func (r APIResponse) GetError() error {
 }
 
 func checkAPIResponse(bts []byte, r Response) error {
+	if len(bts) == 0 {
+		return nil
+	}
+
 	if r == nil {
 		r = new(APIResponse)
 	}

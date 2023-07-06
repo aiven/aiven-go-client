@@ -30,9 +30,7 @@ func setupAccountsTeamsTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 				t.Error(err)
 			}
 			return
-		}
-
-		if r.URL.Path == "/account/a28707e316df/teams" {
+		} else if r.URL.Path == "/account/a28707e316df/teams" {
 			// get a list of account teams
 			if r.Method == "GET" {
 				w.Header().Set("Content-Type", "application/json")
@@ -76,9 +74,7 @@ func setupAccountsTeamsTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 				}
 				return
 			}
-		}
-
-		if r.URL.Path == "/account/a28707e316df/team/at28707ea77e2" {
+		} else if r.URL.Path == "/account/a28707e316df/team/at28707ea77e2" {
 			//update account team
 			if r.Method == "PUT" {
 				w.Header().Set("Content-Type", "application/json")
@@ -117,6 +113,8 @@ func setupAccountsTeamsTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 				t.Error(err)
 			}
 			return
+		} else {
+			w.WriteHeader(http.StatusBadRequest)
 		}
 
 	}))

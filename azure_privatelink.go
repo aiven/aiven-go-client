@@ -128,32 +128,37 @@ func (h *AzurePrivatelinkHandler) ConnectionsList(project, serviceName string) (
 	return &rsp, nil
 }
 
-// ConnectionGet retrieves an Azure Privatelink connection
-// This is a convenience function as API does not support GET /v1/project/{project}/service/{service}/privatelink/azure/connetions/{connection-id}
-// (returns 405). Fetch all, filter by ID and fake a 404 if nothing is found.
-func (h *AzurePrivatelinkHandler) ConnectionGet(project, serviceName string, privatelinkConnectionID *string) (*AzurePrivatelinkConnectionResponse, error) {
-	plConnections, err := h.ConnectionsList(project, serviceName)
+// ConnectionGet retrieves a Azure Privatelink connection.
+// This is a convenience function that fetches all connections and filters by ID because the API does not
+// support fetching by ID. It fetches all connections and filters by ID and returns a fake 404 if nothing is found.
+func (h *AzurePrivatelinkHandler) ConnectionGet(project, serviceName string, connID *string) (*AzurePrivatelinkConnectionResponse, error) {
+	conns, err := h.ConnectionsList(project, serviceName)
 	if err != nil {
 		return nil, err
 	}
 
-	pID := PointerToString(privatelinkConnectionID)
+	var conn AzurePrivatelinkConnectionResponse
 
-	var privatelinkConnection AzurePrivatelinkConnectionResponse
-	for _, plConnection := range plConnections.Connections {
-		if pID == "" || plConnection.PrivatelinkConnectionID == pID {
-			privatelinkConnection = plConnection
-			break
+	assertedConnID := PointerToString(connID)
+	if assertedConnID == "" {
+		assertedConnID = "0"
+	} else {
+		for _, it := range conns.Connections {
+			if it.PrivatelinkConnectionID == assertedConnID {
+				conn = it
+				break
+			}
 		}
 	}
 
-	if privatelinkConnection.PrivatelinkConnectionID == "" {
+	if conn.PrivatelinkConnectionID == "" {
 		return nil, Error{
-			Message: fmt.Sprintf("azure privatelink connection not found by id::%s", pID),
+			Message: fmt.Sprintf("Azure Privatelink connection with the ID %s does not exists", assertedConnID),
 			Status:  404,
 		}
 	}
-	return &privatelinkConnection, nil
+
+	return &conn, nil
 }
 
 // ConnectionApprove approves an Azure Privatelink connection

@@ -76,12 +76,13 @@ type Client struct {
 	TransitGatewayVPCAttachment     *TransitGatewayVPCAttachmentHandler
 	BillingGroup                    *BillingGroupHandler
 	AWSPrivatelink                  *AWSPrivatelinkHandler
+	AzurePrivatelink                *AzurePrivatelinkHandler
+	GCPPrivateLink                  *GCPPrivatelinkHandler
 	FlinkJobs                       *FlinkJobHandler
 	FlinkApplications               *FlinkApplicationHandler
 	FlinkApplicationDeployments     *FlinkApplicationDeploymentHandler
 	FlinkApplicationVersions        *FlinkApplicationVersionHandler
 	FlinkApplicationQueries         *FlinkApplicationQueryHandler
-	AzurePrivatelink                *AzurePrivatelinkHandler
 	StaticIPs                       *StaticIPsHandler
 	ClickhouseDatabase              *ClickhouseDatabaseHandler
 	ClickhouseUser                  *ClickhouseUserHandler
@@ -234,12 +235,13 @@ func (c *Client) Init() {
 	c.TransitGatewayVPCAttachment = &TransitGatewayVPCAttachmentHandler{c}
 	c.BillingGroup = &BillingGroupHandler{c}
 	c.AWSPrivatelink = &AWSPrivatelinkHandler{c}
+	c.AzurePrivatelink = &AzurePrivatelinkHandler{c}
+	c.GCPPrivateLink = &GCPPrivatelinkHandler{c}
 	c.FlinkJobs = &FlinkJobHandler{c}
 	c.FlinkApplications = &FlinkApplicationHandler{c}
 	c.FlinkApplicationDeployments = &FlinkApplicationDeploymentHandler{c}
 	c.FlinkApplicationQueries = &FlinkApplicationQueryHandler{c}
 	c.FlinkApplicationVersions = &FlinkApplicationVersionHandler{c}
-	c.AzurePrivatelink = &AzurePrivatelinkHandler{c}
 	c.StaticIPs = &StaticIPsHandler{c}
 	c.ClickhouseDatabase = &ClickhouseDatabaseHandler{c}
 	c.ClickhouseUser = &ClickhouseUserHandler{c}

@@ -77,7 +77,7 @@ type Client struct {
 	BillingGroup                    *BillingGroupHandler
 	AWSPrivatelink                  *AWSPrivatelinkHandler
 	AzurePrivatelink                *AzurePrivatelinkHandler
-	GCPPrivateLink                  *GCPPrivatelinkHandler
+	GCPPrivatelink                  *GCPPrivatelinkHandler
 	FlinkJobs                       *FlinkJobHandler
 	FlinkApplications               *FlinkApplicationHandler
 	FlinkApplicationDeployments     *FlinkApplicationDeploymentHandler
@@ -236,7 +236,7 @@ func (c *Client) Init() {
 	c.BillingGroup = &BillingGroupHandler{c}
 	c.AWSPrivatelink = &AWSPrivatelinkHandler{c}
 	c.AzurePrivatelink = &AzurePrivatelinkHandler{c}
-	c.GCPPrivateLink = &GCPPrivatelinkHandler{c}
+	c.GCPPrivatelink = &GCPPrivatelinkHandler{c}
 	c.FlinkJobs = &FlinkJobHandler{c}
 	c.FlinkApplications = &FlinkApplicationHandler{c}
 	c.FlinkApplicationDeployments = &FlinkApplicationDeploymentHandler{c}

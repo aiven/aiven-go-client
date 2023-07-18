@@ -91,6 +91,7 @@ type Client struct {
 	Organization                    *OrganizationHandler
 	OrganizationUser                *OrganizationUserHandler
 	OrganizationUserInvitations     *OrganizationUserInvitationsHandler
+	OrganizationUserGroups          *OrganizationUserGroupHandler
 }
 
 // GetUserAgentOrDefault configures a default userAgent value, if one has not been provided.
@@ -250,6 +251,7 @@ func (c *Client) Init() {
 	c.Organization = &OrganizationHandler{c}
 	c.OrganizationUser = &OrganizationUserHandler{c}
 	c.OrganizationUserInvitations = &OrganizationUserInvitationsHandler{c}
+	c.OrganizationUserGroups = &OrganizationUserGroupHandler{c}
 }
 
 // WithContext create a copy of Client where all request would be using the provided context

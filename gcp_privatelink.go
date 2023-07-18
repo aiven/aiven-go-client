@@ -29,6 +29,11 @@ type (
 		UserIPAddress           string `json:"user_ip_address"`
 		PSCConnectionID         string `json:"psc_connection_id"`
 	}
+
+	// GCPPrivatelinkConnectionUpdateRequest holds the parameters to update a GCP Privatelink connection.
+	GCPPrivatelinkConnectionUpdateRequest struct {
+		UserIPAddress string `json:"user_ip_address"`
+	}
 )
 
 // Create creates a GCP Privatelink.
@@ -148,13 +153,18 @@ func (h *GCPPrivatelinkHandler) ConnectionGet(
 }
 
 // ConnectionApprove approves a GCP Privatelink connection.
-func (h *GCPPrivatelinkHandler) ConnectionApprove(project, serviceName, privatelinkConnectionId string) error {
+func (h *GCPPrivatelinkHandler) ConnectionApprove(
+	project,
+	serviceName,
+	connID string,
+	req GCPPrivatelinkConnectionUpdateRequest,
+) error {
 	path := buildPath(
 		"project", project, "service", serviceName, "privatelink",
-		"google", "connections", privatelinkConnectionId, "approve",
+		"google", "connections", connID, "approve",
 	)
 
-	rsp, err := h.client.doPostRequest(path, nil)
+	rsp, err := h.client.doPostRequest(path, req)
 	if err != nil {
 		return err
 	}

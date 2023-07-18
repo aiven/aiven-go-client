@@ -40,7 +40,12 @@ type (
 func (h *GCPPrivatelinkHandler) Create(project, serviceName string) (*GCPPrivatelinkResponse, error) {
 	path := buildPath("project", project, "service", serviceName, "privatelink", "google")
 
-	bts, err := h.client.doPostRequest(path, nil)
+	// TODO: Remove struct{}{} when API is fixed, and use nil instead. See below for more details.
+	//
+	// Currently this endpoint requires a body, even though it's not used to process the request.
+	// We can't use nil because it's not a valid JSON, and the API returns a 400, so we use an empty struct.
+	// When the API is fixed, we can remove this workaround and use nil.
+	bts, err := h.client.doPostRequest(path, struct{}{})
 	if err != nil {
 		return nil, err
 	}

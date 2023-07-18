@@ -33,7 +33,7 @@ type (
 
 // Create creates a GCP Privatelink.
 func (h *GCPPrivatelinkHandler) Create(project, serviceName string) (*GCPPrivatelinkResponse, error) {
-	path := buildPath("project", project, "service", serviceName, "privatelink", "gcp")
+	path := buildPath("project", project, "service", serviceName, "privatelink", "google")
 
 	bts, err := h.client.doPostRequest(path, nil)
 	if err != nil {
@@ -46,7 +46,7 @@ func (h *GCPPrivatelinkHandler) Create(project, serviceName string) (*GCPPrivate
 
 // Update updates a GCP Privatelink.
 func (h *GCPPrivatelinkHandler) Update(project, serviceName string) (*GCPPrivatelinkResponse, error) {
-	path := buildPath("project", project, "service", serviceName, "privatelink", "gcp")
+	path := buildPath("project", project, "service", serviceName, "privatelink", "google")
 
 	bts, err := h.client.doPutRequest(path, nil)
 	if err != nil {
@@ -59,7 +59,7 @@ func (h *GCPPrivatelinkHandler) Update(project, serviceName string) (*GCPPrivate
 
 // Get retrieves a GCP Privatelink.
 func (h *GCPPrivatelinkHandler) Get(project, serviceName string) (*GCPPrivatelinkResponse, error) {
-	path := buildPath("project", project, "service", serviceName, "privatelink", "gcp")
+	path := buildPath("project", project, "service", serviceName, "privatelink", "google")
 
 	bts, err := h.client.doGetRequest(path, nil)
 	if err != nil {
@@ -72,7 +72,7 @@ func (h *GCPPrivatelinkHandler) Get(project, serviceName string) (*GCPPrivatelin
 
 // Delete deletes a GCP Privatelink.
 func (h *GCPPrivatelinkHandler) Delete(project, serviceName string) error {
-	path := buildPath("project", project, "service", serviceName, "privatelink", "gcp")
+	path := buildPath("project", project, "service", serviceName, "privatelink", "google")
 
 	rsp, err := h.client.doDeleteRequest(path, nil)
 	if err != nil {
@@ -84,7 +84,7 @@ func (h *GCPPrivatelinkHandler) Delete(project, serviceName string) error {
 
 // Refresh refreshes a GCP Privatelink.
 func (h *GCPPrivatelinkHandler) Refresh(project, serviceName string) error {
-	path := buildPath("project", project, "service", serviceName, "privatelink", "gcp", "refresh")
+	path := buildPath("project", project, "service", serviceName, "privatelink", "google", "refresh")
 
 	rsp, err := h.client.doPostRequest(path, nil)
 	if err != nil {
@@ -99,7 +99,7 @@ func (h *GCPPrivatelinkHandler) ConnectionsList(
 	project,
 	serviceName string,
 ) (*GCPPrivatelinkConnectionsResponse, error) {
-	path := buildPath("project", project, "service", serviceName, "privatelink", "gcp", "connections")
+	path := buildPath("project", project, "service", serviceName, "privatelink", "google", "connections")
 
 	bts, err := h.client.doGetRequest(path, nil)
 	if err != nil {
@@ -151,7 +151,7 @@ func (h *GCPPrivatelinkHandler) ConnectionGet(
 func (h *GCPPrivatelinkHandler) ConnectionApprove(project, serviceName, privatelinkConnectionId string) error {
 	path := buildPath(
 		"project", project, "service", serviceName, "privatelink",
-		"gcp", "connections", privatelinkConnectionId, "approve",
+		"google", "connections", privatelinkConnectionId, "approve",
 	)
 
 	rsp, err := h.client.doPostRequest(path, nil)

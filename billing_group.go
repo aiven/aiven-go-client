@@ -54,6 +54,92 @@ type (
 		EstimatedBalance string `json:"estimated_balance"`
 		ProjectName      string `json:"project_name"`
 	}
+
+	// BillingGroupInvoice is the structure of the billing group invoice.
+	BillingGroupInvoice struct {
+		// BillingGroupId is the billing group ID.
+		BillingGroupId string `json:"billing_group_id"`
+		// BillingGroupName is the billing group name.
+		BillingGroupName string `json:"billing_group_name"`
+		// BillingGroupState is the billing group state.
+		BillingGroupState string `json:"billing_group_state"`
+		// Currency is the currency of the invoice.
+		Currency string `json:"currency"`
+		// DownloadCookie is the authentication cookie for downloading the invoice.
+		DownloadCookie string `json:"download_cookie"`
+		// GeneratedAt is the time when the invoice was generated.
+		GeneratedAt *string `json:"generated_at,omitempty"`
+		// InvoiceNumber is the invoice number.
+		InvoiceNumber string `json:"invoice_number"`
+		// PeriodBegin is the start of the billing period.
+		PeriodBegin string `json:"period_begin"`
+		// PeriodEnd is the end of the billing period.
+		PeriodEnd string `json:"period_end"`
+		// State is the state of the invoice.
+		State string `json:"state"`
+		// TotalIncVAT is the total amount including VAT.
+		TotalIncVAT string `json:"total_inc_vat"`
+		// TotalVAT is the total amount excluding VAT.
+		TotalVATZero string `json:"total_vat_zero"`
+	}
+
+	// BillingGroupListInvoicesResponse is the response from Aiven for the billing group invoices.
+	BillingGroupListInvoicesResponse struct {
+		APIResponse
+
+		// Invoices is the list of invoices.
+		Invoices []BillingGroupInvoice `json:"invoices"`
+	}
+
+	// BillingGroupInvoiceResponse is the response from Aiven for the billing group invoice.
+	BillingGroupInvoiceResponse struct {
+		APIResponse
+
+		// Invoice is the invoice.
+		Invoice BillingGroupInvoice `json:"invoice"`
+	}
+
+	// BillingGroupInvoiceLine is the structure of the billing group invoice line.
+	BillingGroupInvoiceLine struct {
+		// CloudName is the name of the cloud.
+		CloudName *string `json:"cloud_name,omitempty"`
+		// CommitmentName is the name of the commitment.
+		CommitmentName *string `json:"commitment_name,omitempty"`
+		// Description is the human-readable description of the line.
+		Description string `json:"description"`
+		// LinePreDiscountLocal is the line amount before discount in local currency.
+		LinePreDiscountLocal *string `json:"line_pre_discount_local,omitempty"`
+		// LineTotalLocal is the line total in local currency.
+		LineTotalLocal *string `json:"line_total_local,omitempty"`
+		// LineTotalUSD is the line total in USD.
+		LineTotalUSD string `json:"line_total_usd"`
+		// LineType is the type of the line.
+		LineType string `json:"line_type"`
+		// LocalCurrency is the local currency.
+		LocalCurrency *string `json:"local_currency,omitempty"`
+		// ProjectName is the name of the project.
+		ProjectName *string `json:"project_name,omitempty"`
+		// ServiceName is the name of the service.
+		ServiceName *string `json:"service_name,omitempty"`
+		// ServicePlan is the name of the service plan.
+		ServicePlan *string `json:"service_plan,omitempty"`
+		// ServiceType is the type of the service.
+		ServiceType *string `json:"service_type,omitempty"`
+		// Tags is the list of tags.
+		Tags *string `json:"tags,omitempty"`
+		// TimestampBegin is the start of the line.
+		TimestampBegin *string `json:"timestamp_begin,omitempty"`
+		// TimestampEnd is the end of the line.
+		TimestampEnd *string `json:"timestamp_end,omitempty"`
+	}
+
+	// BillingGroupListInvoiceLinesResponse is the response from Aiven for the billing group invoice lines.
+	BillingGroupListInvoiceLinesResponse struct {
+		APIResponse
+
+		// Lines is the list of invoice lines.
+		Lines []BillingGroupInvoiceLine `json:"lines"`
+	}
 )
 
 // ListAll retrieves a list of all billing groups
@@ -154,4 +240,40 @@ func (h *BillingGroupHandler) GetProjects(id string) ([]string, error) {
 	}
 
 	return projects, nil
+}
+
+// ListInvoices lists invoices for the billing group.
+func (h *BillingGroupHandler) ListInvoices(id string) (*BillingGroupListInvoicesResponse, error) {
+	bts, err := h.client.doGetRequest(buildPath("billing-group", id, "invoice"), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	var r BillingGroupListInvoicesResponse
+
+	return &r, checkAPIResponse(bts, &r)
+}
+
+// GetInvoice gets the specified invoice for the billing group.
+func (h *BillingGroupHandler) GetInvoice(id, invoiceNumber string) (*BillingGroupInvoiceResponse, error) {
+	bts, err := h.client.doGetRequest(buildPath("billing-group", id, "invoice", invoiceNumber), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	var r BillingGroupInvoiceResponse
+
+	return &r, checkAPIResponse(bts, &r)
+}
+
+// ListLines lists invoice lines for the billing group's invoice.
+func (h *BillingGroupHandler) ListLines(id, invoiceNumber string) (*BillingGroupListInvoiceLinesResponse, error) {
+	bts, err := h.client.doGetRequest(buildPath("billing-group", id, "invoice", invoiceNumber, "lines"), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	var r BillingGroupListInvoiceLinesResponse
+
+	return &r, checkAPIResponse(bts, &r)
 }

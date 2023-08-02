@@ -1,6 +1,9 @@
 package aiven
 
-import "fmt"
+import (
+	"context"
+	"fmt"
+)
 
 type (
 	// GCPPrivatelinkHandler is the client that interacts with the Aiven GCP Privatelink API.
@@ -37,7 +40,7 @@ type (
 )
 
 // Create creates a GCP Privatelink.
-func (h *GCPPrivatelinkHandler) Create(project, serviceName string) (*GCPPrivatelinkResponse, error) {
+func (h *GCPPrivatelinkHandler) Create(ctx context.Context, project, serviceName string) (*GCPPrivatelinkResponse, error) {
 	path := buildPath("project", project, "service", serviceName, "privatelink", "google")
 
 	// TODO: Remove struct{}{} when API is fixed, and use nil instead. See below for more details.
@@ -45,7 +48,7 @@ func (h *GCPPrivatelinkHandler) Create(project, serviceName string) (*GCPPrivate
 	// Currently this endpoint requires a body, even though it's not used to process the request.
 	// We can't use nil because it's not a valid JSON, and the API returns a 400, so we use an empty struct.
 	// When the API is fixed, we can remove this workaround and use nil.
-	bts, err := h.client.doPostRequest(path, struct{}{})
+	bts, err := h.client.doPostRequest(ctx, path, struct{}{})
 	if err != nil {
 		return nil, err
 	}
@@ -55,10 +58,10 @@ func (h *GCPPrivatelinkHandler) Create(project, serviceName string) (*GCPPrivate
 }
 
 // Update updates a GCP Privatelink.
-func (h *GCPPrivatelinkHandler) Update(project, serviceName string) (*GCPPrivatelinkResponse, error) {
+func (h *GCPPrivatelinkHandler) Update(ctx context.Context, project, serviceName string) (*GCPPrivatelinkResponse, error) {
 	path := buildPath("project", project, "service", serviceName, "privatelink", "google")
 
-	bts, err := h.client.doPutRequest(path, nil)
+	bts, err := h.client.doPutRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -68,10 +71,10 @@ func (h *GCPPrivatelinkHandler) Update(project, serviceName string) (*GCPPrivate
 }
 
 // Get retrieves a GCP Privatelink.
-func (h *GCPPrivatelinkHandler) Get(project, serviceName string) (*GCPPrivatelinkResponse, error) {
+func (h *GCPPrivatelinkHandler) Get(ctx context.Context, project, serviceName string) (*GCPPrivatelinkResponse, error) {
 	path := buildPath("project", project, "service", serviceName, "privatelink", "google")
 
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -81,10 +84,10 @@ func (h *GCPPrivatelinkHandler) Get(project, serviceName string) (*GCPPrivatelin
 }
 
 // Delete deletes a GCP Privatelink.
-func (h *GCPPrivatelinkHandler) Delete(project, serviceName string) error {
+func (h *GCPPrivatelinkHandler) Delete(ctx context.Context, project, serviceName string) error {
 	path := buildPath("project", project, "service", serviceName, "privatelink", "google")
 
-	rsp, err := h.client.doDeleteRequest(path, nil)
+	rsp, err := h.client.doDeleteRequest(ctx, path, nil)
 	if err != nil {
 		return err
 	}
@@ -93,10 +96,10 @@ func (h *GCPPrivatelinkHandler) Delete(project, serviceName string) error {
 }
 
 // Refresh refreshes a GCP Privatelink.
-func (h *GCPPrivatelinkHandler) Refresh(project, serviceName string) error {
+func (h *GCPPrivatelinkHandler) Refresh(ctx context.Context, project, serviceName string) error {
 	path := buildPath("project", project, "service", serviceName, "privatelink", "google", "refresh")
 
-	rsp, err := h.client.doPostRequest(path, nil)
+	rsp, err := h.client.doPostRequest(ctx, path, nil)
 	if err != nil {
 		return err
 	}
@@ -106,12 +109,13 @@ func (h *GCPPrivatelinkHandler) Refresh(project, serviceName string) error {
 
 // ConnectionApprove approves a GCP Privatelink connection.
 func (h *GCPPrivatelinkHandler) ConnectionsList(
+	ctx context.Context,
 	project,
 	serviceName string,
 ) (*GCPPrivatelinkConnectionsResponse, error) {
 	path := buildPath("project", project, "service", serviceName, "privatelink", "google", "connections")
 
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -124,11 +128,12 @@ func (h *GCPPrivatelinkHandler) ConnectionsList(
 // This is a convenience function that fetches all connections and filters by ID because the API does not
 // support fetching by ID. It fetches all connections and filters by ID and returns a fake 404 if nothing is found.
 func (h *GCPPrivatelinkHandler) ConnectionGet(
+	ctx context.Context,
 	project,
 	serviceName string,
 	connID *string,
 ) (*GCPPrivatelinkConnectionResponse, error) {
-	conns, err := h.ConnectionsList(project, serviceName)
+	conns, err := h.ConnectionsList(ctx, project, serviceName)
 	if err != nil {
 		return nil, err
 	}
@@ -159,6 +164,7 @@ func (h *GCPPrivatelinkHandler) ConnectionGet(
 
 // ConnectionApprove approves a GCP Privatelink connection.
 func (h *GCPPrivatelinkHandler) ConnectionApprove(
+	ctx context.Context,
 	project,
 	serviceName,
 	connID string,
@@ -169,7 +175,7 @@ func (h *GCPPrivatelinkHandler) ConnectionApprove(
 		"google", "connections", connID, "approve",
 	)
 
-	rsp, err := h.client.doPostRequest(path, req)
+	rsp, err := h.client.doPostRequest(ctx, path, req)
 	if err != nil {
 		return err
 	}

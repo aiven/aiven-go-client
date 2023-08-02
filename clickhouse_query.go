@@ -1,5 +1,7 @@
 package aiven
 
+import "context"
+
 type (
 	// ClickhouseQueryHandler aiven go-client handler for Clickhouse Queries
 	ClickhouseQueryHandler struct {
@@ -39,9 +41,9 @@ type (
 )
 
 // CurrentQueries list current queries
-func (h *ClickhouseQueryHandler) CurrentQueries(project, service string) (*ClickhouseCurrentQueriesResponse, error) {
+func (h *ClickhouseQueryHandler) CurrentQueries(ctx context.Context, project, service string) (*ClickhouseCurrentQueriesResponse, error) {
 	path := buildPath("project", project, "service", service, "clickhouse", "query")
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -53,9 +55,9 @@ func (h *ClickhouseQueryHandler) CurrentQueries(project, service string) (*Click
 }
 
 // Query creates a ClickHouse job
-func (h *ClickhouseQueryHandler) Query(project, service, database, query string) (*ClickhouseQueryResponse, error) {
+func (h *ClickhouseQueryHandler) Query(ctx context.Context, project, service, database, query string) (*ClickhouseQueryResponse, error) {
 	path := buildPath("project", project, "service", service, "clickhouse", "query")
-	bts, err := h.client.doPostRequest(path, ClickhouseQueryRequest{
+	bts, err := h.client.doPostRequest(ctx, path, ClickhouseQueryRequest{
 		Database: database,
 		Query:    query,
 	})

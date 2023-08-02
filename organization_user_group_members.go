@@ -1,6 +1,8 @@
 // Package aiven provides a client for using the Aiven API.
 package aiven
 
+import "context"
+
 type (
 	// OrganizationUserGroupMembersHandler is the client which interacts with the Organization Users Group Members API on Aiven.
 	OrganizationUserGroupMembersHandler struct {
@@ -45,9 +47,9 @@ type (
 )
 
 // Modify modify's a user group's members.
-func (h *OrganizationUserGroupMembersHandler) Modify(orgID, userGroupID string, req OrganizationUserGroupMemberRequest) error {
+func (h *OrganizationUserGroupMembersHandler) Modify(ctx context.Context, orgID, userGroupID string, req OrganizationUserGroupMemberRequest) error {
 	path := buildPath("organization", orgID, "user-groups", userGroupID, "members")
-	bts, err := h.client.doPatchRequest(path, req)
+	bts, err := h.client.doPatchRequest(ctx, path, req)
 	if err != nil {
 		return err
 	}
@@ -56,9 +58,9 @@ func (h *OrganizationUserGroupMembersHandler) Modify(orgID, userGroupID string, 
 }
 
 // List retrieves a list of Organization User Groups.
-func (h *OrganizationUserGroupMembersHandler) List(orgID, userGroupID string) (*OrganizationUserGroupMembersListResponse, error) {
+func (h *OrganizationUserGroupMembersHandler) List(ctx context.Context, orgID, userGroupID string) (*OrganizationUserGroupMembersListResponse, error) {
 	path := buildPath("organization", orgID, "user-groups", userGroupID, "members")
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}

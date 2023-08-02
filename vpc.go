@@ -1,6 +1,7 @@
 package aiven
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 )
@@ -53,12 +54,12 @@ type (
 )
 
 // Create the given VPC on Aiven.
-func (h *VPCsHandler) Create(project string, req CreateVPCRequest) (*VPC, error) {
+func (h *VPCsHandler) Create(ctx context.Context, project string, req CreateVPCRequest) (*VPC, error) {
 	path := buildPath("project", project, "vpcs")
 	if req.PeeringConnections == nil {
 		req.PeeringConnections = []*VPCPeeringConnection{}
 	}
-	rsp, err := h.client.doPostRequest(path, req)
+	rsp, err := h.client.doPostRequest(ctx, path, req)
 	if err != nil {
 		return nil, err
 	}
@@ -67,9 +68,9 @@ func (h *VPCsHandler) Create(project string, req CreateVPCRequest) (*VPC, error)
 }
 
 // Get a specific VPC from Aiven.
-func (h *VPCsHandler) Get(project, vpcID string) (*VPC, error) {
+func (h *VPCsHandler) Get(ctx context.Context, project, vpcID string) (*VPC, error) {
 	path := buildPath("project", project, "vpcs", vpcID)
-	rsp, err := h.client.doGetRequest(path, nil)
+	rsp, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -78,9 +79,9 @@ func (h *VPCsHandler) Get(project, vpcID string) (*VPC, error) {
 }
 
 // Delete the given VPC from Aiven.
-func (h *VPCsHandler) Delete(project, vpcID string) error {
+func (h *VPCsHandler) Delete(ctx context.Context, project, vpcID string) error {
 	path := buildPath("project", project, "vpcs", vpcID)
-	bts, err := h.client.doDeleteRequest(path, nil)
+	bts, err := h.client.doDeleteRequest(ctx, path, nil)
 	if err != nil {
 		return err
 	}
@@ -89,9 +90,9 @@ func (h *VPCsHandler) Delete(project, vpcID string) error {
 }
 
 // List all VPCs for a given project.
-func (h *VPCsHandler) List(project string) ([]*VPC, error) {
+func (h *VPCsHandler) List(ctx context.Context, project string) ([]*VPC, error) {
 	path := buildPath("project", project, "vpcs")
-	rsp, err := h.client.doGetRequest(path, nil)
+	rsp, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}

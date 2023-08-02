@@ -1,6 +1,7 @@
 package aiven
 
 import (
+	"context"
 	"errors"
 	"time"
 )
@@ -30,13 +31,13 @@ type (
 )
 
 // List returns a list of all available account invitations
-func (h AccountTeamInvitesHandler) List(accountId, teamId string) (*AccountTeamInvitesResponse, error) {
+func (h AccountTeamInvitesHandler) List(ctx context.Context, accountId, teamId string) (*AccountTeamInvitesResponse, error) {
 	if accountId == "" || teamId == "" {
 		return nil, errors.New("cannot get a list of account team invites when account id or team id is empty")
 	}
 
 	path := buildPath("account", accountId, "team", teamId, "invites")
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -50,13 +51,13 @@ func (h AccountTeamInvitesHandler) List(accountId, teamId string) (*AccountTeamI
 }
 
 // Delete deletes a list of all available account invitations
-func (h AccountTeamInvitesHandler) Delete(accountId, teamId, userEmail string) error {
+func (h AccountTeamInvitesHandler) Delete(ctx context.Context, accountId, teamId, userEmail string) error {
 	if accountId == "" || teamId == "" || userEmail == "" {
 		return errors.New("cannot delete an account team invite when account id or team id or user email is empty")
 	}
 
 	path := buildPath("account", accountId, "team", teamId, "invites", userEmail)
-	bts, err := h.client.doDeleteRequest(path, nil)
+	bts, err := h.client.doDeleteRequest(ctx, path, nil)
 	if err != nil {
 		return err
 	}

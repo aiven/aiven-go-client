@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"os"
 
@@ -8,6 +9,8 @@ import (
 )
 
 func main() {
+	ctx := context.Background()
+
 	// Create new user client
 	c, err := client.NewUserClient(
 		os.Getenv("AIVEN_USERNAME"),
@@ -17,7 +20,7 @@ func main() {
 	}
 
 	// Create new project
-	project, err := c.Projects.Create(client.CreateProjectRequest{
+	project, err := c.Projects.Create(ctx, client.CreateProjectRequest{
 		CardID:  client.ToStringPointer(os.Getenv("AIVEN_CARD_ID")),
 		Cloud:   client.ToStringPointer("google-europe-west1"),
 		Project: "testproject1",
@@ -29,7 +32,7 @@ func main() {
 	// Create new Elasticsearch service inside the project
 	userConfig := make(map[string]interface{})
 	userConfig["elasticsearch_version"] = "7"
-	service, err := c.Services.Create(project.Name, client.CreateServiceRequest{
+	service, err := c.Services.Create(ctx, project.Name, client.CreateServiceRequest{
 		Cloud:                 "google-europe-west1",
 		GroupName:             "default",
 		MaintenanceWindow:     nil,
@@ -46,13 +49,13 @@ func main() {
 	}
 
 	// Create new Elasticsearch user
-	user, err := c.ServiceUsers.Create(project.Name, service.Name, client.CreateServiceUserRequest{Username: "es_test_user1"})
+	user, err := c.ServiceUsers.Create(ctx, project.Name, service.Name, client.CreateServiceUserRequest{Username: "es_test_user1"})
 	if err != nil {
 		log.Fatalf("cannot create new Elasticsearch user, error: %s", err)
 	}
 
 	// List Elasticsearch ACLs
-	esACLs, err := c.ElasticsearchACLs.Get(project.Name, service.Name)
+	esACLs, err := c.ElasticsearchACLs.Get(ctx, project.Name, service.Name)
 	if err != nil {
 		log.Fatalf("cannot get an Elasticsearch ACLs list, error: %s", err)
 	}
@@ -71,7 +74,7 @@ func main() {
 		Username: user.Username,
 	})
 
-	_, err = c.ElasticsearchACLs.Update(project.Name, service.Name, client.ElasticsearchACLRequest{
+	_, err = c.ElasticsearchACLs.Update(ctx, project.Name, service.Name, client.ElasticsearchACLRequest{
 		ElasticSearchACLConfig: esACLs.ElasticSearchACLConfig})
 	if err != nil {
 		log.Fatalf("cannot update Elasticsearch ACLs, error: %s", err)

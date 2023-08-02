@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"os"
 	"time"
@@ -9,6 +10,8 @@ import (
 )
 
 func main() {
+	ctx := context.Background()
+
 	// Create new user client
 	c, err := client.NewUserClient(
 		os.Getenv("AIVEN_USERNAME"),
@@ -18,7 +21,7 @@ func main() {
 	}
 
 	// Create new project
-	project, err := c.Projects.Create(client.CreateProjectRequest{
+	project, err := c.Projects.Create(ctx, client.CreateProjectRequest{
 		CardID:  client.ToStringPointer(os.Getenv("AIVEN_CARD_ID")),
 		Cloud:   client.ToStringPointer("google-europe-west1"),
 		Project: "kafka-schema1",
@@ -32,7 +35,7 @@ func main() {
 	userConfig["kafka_version"] = "2.4"
 	userConfig["schema_registry"] = true
 
-	service, err := c.Services.Create(project.Name, client.CreateServiceRequest{
+	service, err := c.Services.Create(ctx, project.Name, client.CreateServiceRequest{
 		Cloud:                 "google-europe-west1",
 		GroupName:             "default",
 		MaintenanceWindow:     nil,
@@ -49,7 +52,7 @@ func main() {
 	}
 
 	for {
-		schema, err := c.KafkaSubjectSchemas.Add(project.Name, service.Name, "test1", client.KafkaSchemaSubject{Schema: `
+		schema, err := c.KafkaSubjectSchemas.Add(ctx, project.Name, service.Name, "test1", client.KafkaSchemaSubject{Schema: `
 			{
 				"doc": "example",
 				"fields": [{
@@ -82,7 +85,7 @@ func main() {
 		break
 	}
 
-	_, err = c.KafkaGlobalSchemaConfig.Update(project.Name, service.Name, client.KafkaSchemaConfig{CompatibilityLevel: "FULL"})
+	_, err = c.KafkaGlobalSchemaConfig.Update(ctx, project.Name, service.Name, client.KafkaSchemaConfig{CompatibilityLevel: "FULL"})
 	if err != nil {
 		log.Fatalf("cannot update Kafka Schema Configuration, error: %s", err)
 	}

@@ -1,6 +1,7 @@
 package aiven
 
 import (
+	"context"
 	"errors"
 	"time"
 )
@@ -94,13 +95,13 @@ type (
 )
 
 // List returns a list of all available account authentication methods
-func (h AccountAuthenticationsHandler) List(accountId string) (*AccountAuthenticationListResponse, error) {
+func (h AccountAuthenticationsHandler) List(ctx context.Context, accountId string) (*AccountAuthenticationListResponse, error) {
 	if accountId == "" {
 		return nil, errors.New("cannot get a list of account authentication methods when account id is empty")
 	}
 
 	path := buildPath("account", accountId, "authentication")
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -114,13 +115,13 @@ func (h AccountAuthenticationsHandler) List(accountId string) (*AccountAuthentic
 }
 
 // Get returns a list of all available account authentication methods
-func (h AccountAuthenticationsHandler) Get(accountId, authId string) (*AccountAuthenticationResponse, error) {
+func (h AccountAuthenticationsHandler) Get(ctx context.Context, accountId, authId string) (*AccountAuthenticationResponse, error) {
 	if accountId == "" || authId == "" {
 		return nil, errors.New("cannot get an account authentication method when account id or auth id is empty")
 	}
 
 	path := buildPath("account", accountId, "authentication", authId)
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -134,13 +135,13 @@ func (h AccountAuthenticationsHandler) Get(accountId, authId string) (*AccountAu
 }
 
 // Create creates an account authentication method
-func (h AccountAuthenticationsHandler) Create(accountId string, a AccountAuthenticationMethodCreate) (*AccountAuthenticationResponse, error) {
+func (h AccountAuthenticationsHandler) Create(ctx context.Context, accountId string, a AccountAuthenticationMethodCreate) (*AccountAuthenticationResponse, error) {
 	if accountId == "" {
 		return nil, errors.New("cannot create an account authentication method when account id is empty")
 	}
 
 	path := buildPath("account", accountId, "authentication")
-	bts, err := h.client.doPostRequest(path, a)
+	bts, err := h.client.doPostRequest(ctx, path, a)
 	if err != nil {
 		return nil, err
 	}
@@ -154,13 +155,13 @@ func (h AccountAuthenticationsHandler) Create(accountId string, a AccountAuthent
 }
 
 // Update updates an account authentication method empty fields are omitted, acts like PATCH
-func (h AccountAuthenticationsHandler) Update(accountId, accountAuthMethID string, a AccountAuthenticationMethodUpdate) (*AccountAuthenticationResponse, error) {
+func (h AccountAuthenticationsHandler) Update(ctx context.Context, accountId, accountAuthMethID string, a AccountAuthenticationMethodUpdate) (*AccountAuthenticationResponse, error) {
 	if accountId == "" || accountAuthMethID == "" {
 		return nil, errors.New("cannot update an account authentication method when account id or auth id is empty")
 	}
 
 	path := buildPath("account", accountId, "authentication", accountAuthMethID)
-	bts, err := h.client.doPutRequest(path, a)
+	bts, err := h.client.doPutRequest(ctx, path, a)
 	if err != nil {
 		return nil, err
 	}
@@ -174,13 +175,13 @@ func (h AccountAuthenticationsHandler) Update(accountId, accountAuthMethID strin
 }
 
 // Delete deletes an account authentication method
-func (h AccountAuthenticationsHandler) Delete(accountId, authId string) error {
+func (h AccountAuthenticationsHandler) Delete(ctx context.Context, accountId, authId string) error {
 	if accountId == "" || authId == "" {
 		return errors.New("cannot delete an account authentication method when account id or auth id is empty")
 	}
 
 	path := buildPath("account", accountId, "authentication", authId)
-	bts, err := h.client.doDeleteRequest(path, nil)
+	bts, err := h.client.doDeleteRequest(ctx, path, nil)
 	if err != nil {
 		return err
 	}

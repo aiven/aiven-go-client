@@ -1,6 +1,9 @@
 package aiven
 
-import "fmt"
+import (
+	"context"
+	"fmt"
+)
 
 type (
 	// ClickhouseUserHandler aiven go-client handler for Clickhouse Users
@@ -53,9 +56,9 @@ type (
 )
 
 // Create creates a ClickHouse job
-func (h *ClickhouseUserHandler) Create(project, service, name string) (*ClickhouseUserResponse, error) {
+func (h *ClickhouseUserHandler) Create(ctx context.Context, project, service, name string) (*ClickhouseUserResponse, error) {
 	path := buildPath("project", project, "service", service, "clickhouse", "user")
-	bts, err := h.client.doPostRequest(path, ClickhouseUserRequest{
+	bts, err := h.client.doPostRequest(ctx, path, ClickhouseUserRequest{
 		Name: name,
 	})
 	if err != nil {
@@ -69,9 +72,9 @@ func (h *ClickhouseUserHandler) Create(project, service, name string) (*Clickhou
 }
 
 // List gets a list of ClickHouse user for a service
-func (h *ClickhouseUserHandler) List(project, service string) (*ListClickhouseUserResponse, error) {
+func (h *ClickhouseUserHandler) List(ctx context.Context, project, service string) (*ListClickhouseUserResponse, error) {
 	path := buildPath("project", project, "service", service, "clickhouse", "user")
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -83,8 +86,8 @@ func (h *ClickhouseUserHandler) List(project, service string) (*ListClickhouseUs
 }
 
 // Get gets a ClickHouse user
-func (h *ClickhouseUserHandler) Get(project, service, uuid string) (*ClickhouseUser, error) {
-	l, err := h.List(project, service)
+func (h *ClickhouseUserHandler) Get(ctx context.Context, project, service, uuid string) (*ClickhouseUser, error) {
+	l, err := h.List(ctx, project, service)
 	if err != nil {
 		return nil, err
 	}
@@ -102,9 +105,9 @@ func (h *ClickhouseUserHandler) Get(project, service, uuid string) (*ClickhouseU
 }
 
 // Delete deletes a ClickHouse user
-func (h *ClickhouseUserHandler) Delete(project, service, uuid string) error {
+func (h *ClickhouseUserHandler) Delete(ctx context.Context, project, service, uuid string) error {
 	path := buildPath("project", project, "service", service, "clickhouse", "user", uuid)
-	bts, err := h.client.doDeleteRequest(path, nil)
+	bts, err := h.client.doDeleteRequest(ctx, path, nil)
 	if err != nil {
 		return err
 	}
@@ -112,14 +115,14 @@ func (h *ClickhouseUserHandler) Delete(project, service, uuid string) error {
 	return checkAPIResponse(bts, nil)
 }
 
-func (h *ClickhouseUserHandler) ResetPassword(project, service, uuid, password string) (string, error) {
+func (h *ClickhouseUserHandler) ResetPassword(ctx context.Context, project, service, uuid, password string) (string, error) {
 	path := buildPath("project", project, "service", service, "clickhouse", "user", uuid, "password")
 
 	type PassRequest struct {
 		Password string `json:"password"`
 	}
 
-	bts, err := h.client.doPutRequest(path, PassRequest{
+	bts, err := h.client.doPutRequest(ctx, path, PassRequest{
 		Password: password,
 	})
 	if err != nil {

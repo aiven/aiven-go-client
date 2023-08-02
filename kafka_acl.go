@@ -1,6 +1,7 @@
 package aiven
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -27,9 +28,9 @@ type (
 )
 
 // Create creates new Kafka ACL entry.
-func (h *KafkaACLHandler) Create(project, service string, req CreateKafkaACLRequest) (*KafkaACL, error) {
+func (h *KafkaACLHandler) Create(ctx context.Context, project, service string, req CreateKafkaACLRequest) (*KafkaACL, error) {
 	path := buildPath("project", project, "service", service, "acl")
-	bts, err := h.client.doPostRequest(path, req)
+	bts, err := h.client.doPostRequest(ctx, path, req)
 	if err != nil {
 		return nil, err
 	}
@@ -57,9 +58,9 @@ func (h *KafkaACLHandler) Create(project, service string, req CreateKafkaACLRequ
 }
 
 // Get gets a specific Kafka ACL.
-func (h *KafkaACLHandler) Get(project, serviceName, aclID string) (*KafkaACL, error) {
+func (h *KafkaACLHandler) Get(ctx context.Context, project, serviceName, aclID string) (*KafkaACL, error) {
 	// There's no API for getting individual ACL entry. List instead and filter from there
-	acls, err := h.List(project, serviceName)
+	acls, err := h.List(ctx, project, serviceName)
 	if err != nil {
 		return nil, err
 	}
@@ -75,10 +76,10 @@ func (h *KafkaACLHandler) Get(project, serviceName, aclID string) (*KafkaACL, er
 }
 
 // List lists all the Kafka ACL entries.
-func (h *KafkaACLHandler) List(project, serviceName string) ([]*KafkaACL, error) {
+func (h *KafkaACLHandler) List(ctx context.Context, project, serviceName string) ([]*KafkaACL, error) {
 	// There's no API for listing Kafka ACL entries. Need to get them from
 	// service info instead
-	service, err := h.client.Services.Get(project, serviceName)
+	service, err := h.client.Services.Get(ctx, project, serviceName)
 	if err != nil {
 		return nil, err
 	}
@@ -87,9 +88,9 @@ func (h *KafkaACLHandler) List(project, serviceName string) ([]*KafkaACL, error)
 }
 
 // Delete deletes a specific Kafka ACL entry.
-func (h *KafkaACLHandler) Delete(project, serviceName, aclID string) error {
+func (h *KafkaACLHandler) Delete(ctx context.Context, project, serviceName, aclID string) error {
 	path := buildPath("project", project, "service", serviceName, "acl", aclID)
-	bts, err := h.client.doDeleteRequest(path, nil)
+	bts, err := h.client.doDeleteRequest(ctx, path, nil)
 	if err != nil {
 		return err
 	}

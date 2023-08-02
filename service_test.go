@@ -1,6 +1,7 @@
 package aiven
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -86,7 +87,6 @@ func setupServiceTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 	}))
 
 	apiUrl = ts.URL
-
 	c, err := NewUserClient(UserName, UserPassword, "aiven-go-client-test/"+Version())
 	if err != nil {
 		t.Fatalf("user authentication error: %s", err)
@@ -98,6 +98,7 @@ func setupServiceTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 }
 
 func TestServicesHandler_Create(t *testing.T) {
+	ctx := context.Background()
 	c, _ := setupServiceTestCase(t)
 
 	type fields struct {
@@ -166,7 +167,7 @@ func TestServicesHandler_Create(t *testing.T) {
 			h := &ServicesHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.Create(tt.args.project, tt.args.req)
+			got, err := h.Create(ctx, tt.args.project, tt.args.req)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Create() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -179,6 +180,7 @@ func TestServicesHandler_Create(t *testing.T) {
 }
 
 func TestServicesHandler_Get(t *testing.T) {
+	ctx := context.Background()
 	c, _ := setupServiceTestCase(t)
 
 	type fields struct {
@@ -222,7 +224,7 @@ func TestServicesHandler_Get(t *testing.T) {
 			h := &ServicesHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.Get(tt.args.project, tt.args.service)
+			got, err := h.Get(ctx, tt.args.project, tt.args.service)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Get() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -235,6 +237,7 @@ func TestServicesHandler_Get(t *testing.T) {
 }
 
 func TestServicesHandler_Update(t *testing.T) {
+	ctx := context.Background()
 	c, _ := setupServiceTestCase(t)
 
 	type fields struct {
@@ -267,7 +270,7 @@ func TestServicesHandler_Update(t *testing.T) {
 				Name:      "test-service",
 				Type:      "kafka",
 				NodeStates: []*NodeState{
-					&NodeState{
+					{
 						Name:            "test-service-1",
 						Role:            "master",
 						State:           "running",
@@ -283,7 +286,7 @@ func TestServicesHandler_Update(t *testing.T) {
 			h := &ServicesHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.Update(tt.args.project, tt.args.service, tt.args.req)
+			got, err := h.Update(ctx, tt.args.project, tt.args.service, tt.args.req)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Update() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -296,6 +299,7 @@ func TestServicesHandler_Update(t *testing.T) {
 }
 
 func TestServicesHandler_Delete(t *testing.T) {
+	ctx := context.Background()
 	c, _ := setupServiceTestCase(t)
 
 	type fields struct {
@@ -326,7 +330,7 @@ func TestServicesHandler_Delete(t *testing.T) {
 			h := &ServicesHandler{
 				client: tt.fields.client,
 			}
-			if err := h.Delete(tt.args.project, tt.args.service); (err != nil) != tt.wantErr {
+			if err := h.Delete(ctx, tt.args.project, tt.args.service); (err != nil) != tt.wantErr {
 				t.Errorf("Delete() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
@@ -334,6 +338,7 @@ func TestServicesHandler_Delete(t *testing.T) {
 }
 
 func TestServicesHandler_List(t *testing.T) {
+	ctx := context.Background()
 	c, _ := setupServiceTestCase(t)
 
 	type fields struct {
@@ -362,7 +367,7 @@ func TestServicesHandler_List(t *testing.T) {
 			h := &ServicesHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.List(tt.args.project)
+			got, err := h.List(ctx, tt.args.project)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("List() error = %v, wantErr %v", err, tt.wantErr)
 				return

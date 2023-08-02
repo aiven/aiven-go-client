@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"os"
 	"time"
@@ -9,6 +10,8 @@ import (
 )
 
 func main() {
+	ctx := context.Background()
+
 	// Create new user client
 	c, err := client.NewUserClient(
 		os.Getenv("AIVEN_USERNAME"),
@@ -18,7 +21,7 @@ func main() {
 	}
 
 	// Create new project
-	project, err := c.Projects.Create(client.CreateProjectRequest{
+	project, err := c.Projects.Create(ctx, client.CreateProjectRequest{
 		CardID:  client.ToStringPointer(os.Getenv("AIVEN_CARD_ID")),
 		Cloud:   client.ToStringPointer("google-europe-west1"),
 		Project: "test-kafka-con1",
@@ -32,7 +35,7 @@ func main() {
 	userConfig["kafka_version"] = "2.4"
 	userConfig["kafka_connect"] = true
 
-	kService, err := c.Services.Create(project.Name, client.CreateServiceRequest{
+	kService, err := c.Services.Create(ctx, project.Name, client.CreateServiceRequest{
 		Cloud:                 "google-europe-west1",
 		GroupName:             "default",
 		MaintenanceWindow:     nil,
@@ -52,7 +55,7 @@ func main() {
 	userConfig = make(map[string]interface{})
 	userConfig["elasticsearch_version"] = "7"
 
-	esService, err := c.Services.Create(project.Name, client.CreateServiceRequest{
+	esService, err := c.Services.Create(ctx, project.Name, client.CreateServiceRequest{
 		Cloud:                 "google-europe-west1",
 		GroupName:             "default",
 		MaintenanceWindow:     nil,
@@ -69,7 +72,7 @@ func main() {
 	}
 
 	for {
-		err = c.KafkaConnectors.Create(project.Name, kService.Name, client.KafkaConnectorConfig{
+		err = c.KafkaConnectors.Create(ctx, project.Name, kService.Name, client.KafkaConnectorConfig{
 			"topics":              "TestT1",
 			"connection.username": esService.URIParams["user"],
 			"name":                "es-connector",
@@ -104,7 +107,7 @@ func main() {
 		break
 	}
 
-	listCon, err := c.KafkaConnectors.List(project.Name, kService.Name)
+	listCon, err := c.KafkaConnectors.List(ctx, project.Name, kService.Name)
 	if err != nil {
 		log.Fatalf("cannot get a Kafka Connectors list, error: %s", err)
 	}

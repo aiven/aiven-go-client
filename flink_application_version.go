@@ -1,5 +1,7 @@
 package aiven
 
+import "context"
+
 type (
 	// FlinkApplicationVersionHandler is the client which interacts with the Flink Application Version.
 	FlinkApplicationVersionHandler struct {
@@ -57,6 +59,7 @@ type (
 
 // Get is the method to get a Flink Application Version.
 func (h *FlinkApplicationVersionHandler) Get(
+	ctx context.Context,
 	project string,
 	service string,
 	applicationID string,
@@ -74,7 +77,7 @@ func (h *FlinkApplicationVersionHandler) Get(
 		applicationVersionID,
 	)
 
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -85,6 +88,7 @@ func (h *FlinkApplicationVersionHandler) Get(
 
 // Create is the method to create a Flink Application Version.
 func (h *FlinkApplicationVersionHandler) Create(
+	ctx context.Context,
 	project string,
 	service string,
 	applicationID string,
@@ -92,7 +96,7 @@ func (h *FlinkApplicationVersionHandler) Create(
 ) (*DetailedFlinkApplicationVersionResponse, error) {
 	path := buildPath("project", project, "service", service, "flink", "application", applicationID, "version")
 
-	bts, err := h.client.doPostRequest(path, req)
+	bts, err := h.client.doPostRequest(ctx, path, req)
 	if err != nil {
 		return nil, err
 	}
@@ -103,6 +107,7 @@ func (h *FlinkApplicationVersionHandler) Create(
 
 // Delete is the method to delete a Flink Application Version.
 func (h *FlinkApplicationVersionHandler) Delete(
+	ctx context.Context,
 	project string,
 	service string,
 	applicationID string,
@@ -120,7 +125,7 @@ func (h *FlinkApplicationVersionHandler) Delete(
 		applicationVersionID,
 	)
 
-	bts, err := h.client.doDeleteRequest(path, nil)
+	bts, err := h.client.doDeleteRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -131,6 +136,7 @@ func (h *FlinkApplicationVersionHandler) Delete(
 
 // Validate is the method to validate a Flink Application Version.
 func (h *FlinkApplicationVersionHandler) Validate(
+	ctx context.Context,
 	project string,
 	service string,
 	applicationID string,
@@ -148,7 +154,7 @@ func (h *FlinkApplicationVersionHandler) Validate(
 		"validate",
 	)
 
-	bts, err := h.client.doPostRequest(path, req)
+	bts, err := h.client.doPostRequest(ctx, path, req)
 	if err != nil {
 		return nil, err
 	}

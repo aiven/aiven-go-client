@@ -1,5 +1,7 @@
 package aiven
 
+import "context"
+
 type (
 	// FlinkApplicationHandler is the client which interacts with the Flink Application.
 	FlinkApplicationHandler struct {
@@ -66,13 +68,14 @@ type (
 
 // Get is the method to get a Flink Application.
 func (h *FlinkApplicationHandler) Get(
+	ctx context.Context,
 	project string,
 	service string,
 	applicationID string,
 ) (*DetailedFlinkApplicationResponse, error) {
 	path := buildPath("project", project, "service", service, "flink", "application", applicationID)
 
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -84,13 +87,14 @@ func (h *FlinkApplicationHandler) Get(
 
 // Create is the method to create a Flink Application.
 func (h *FlinkApplicationHandler) Create(
+	ctx context.Context,
 	project string,
 	service string,
 	req CreateFlinkApplicationRequest,
 ) (*DetailedFlinkApplicationResponse, error) {
 	path := buildPath("project", project, "service", service, "flink", "application")
 
-	bts, err := h.client.doPostRequest(path, req)
+	bts, err := h.client.doPostRequest(ctx, path, req)
 	if err != nil {
 		return nil, err
 	}
@@ -101,6 +105,7 @@ func (h *FlinkApplicationHandler) Create(
 
 // Update is the method to update a Flink Application.
 func (h *FlinkApplicationHandler) Update(
+	ctx context.Context,
 	project string,
 	service string,
 	applicationID string,
@@ -108,7 +113,7 @@ func (h *FlinkApplicationHandler) Update(
 ) (*DetailedFlinkApplicationResponse, error) {
 	path := buildPath("project", project, "service", service, "flink", "application", applicationID)
 
-	bts, err := h.client.doPutRequest(path, req)
+	bts, err := h.client.doPutRequest(ctx, path, req)
 	if err != nil {
 		return nil, err
 	}
@@ -119,13 +124,14 @@ func (h *FlinkApplicationHandler) Update(
 
 // Delete is the method to delete a Flink Application.
 func (h *FlinkApplicationHandler) Delete(
+	ctx context.Context,
 	project string,
 	service string,
 	applicationID string,
 ) (*DetailedFlinkApplicationResponse, error) {
 	path := buildPath("project", project, "service", service, "flink", "application", applicationID)
 
-	bts, err := h.client.doDeleteRequest(path, nil)
+	bts, err := h.client.doDeleteRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -136,12 +142,13 @@ func (h *FlinkApplicationHandler) Delete(
 
 // List is the method to list Flink Applications.
 func (h *FlinkApplicationHandler) List(
+	ctx context.Context,
 	project string,
 	service string,
 ) (*FlinkApplicationListResponse, error) {
 	path := buildPath("project", project, "service", service, "flink", "application")
 
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}

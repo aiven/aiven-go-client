@@ -1,6 +1,7 @@
 package aiven
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -85,9 +86,9 @@ func (ac AccessControl) MarshalJSON() ([]byte, error) {
 }
 
 // Create creates the given User on Aiven.
-func (h *ServiceUsersHandler) Create(project, service string, req CreateServiceUserRequest) (*ServiceUser, error) {
+func (h *ServiceUsersHandler) Create(ctx context.Context, project, service string, req CreateServiceUserRequest) (*ServiceUser, error) {
 	path := buildPath("project", project, "service", service, "user")
-	bts, err := h.client.doPostRequest(path, req)
+	bts, err := h.client.doPostRequest(ctx, path, req)
 	if err != nil {
 		return nil, err
 	}
@@ -99,9 +100,9 @@ func (h *ServiceUsersHandler) Create(project, service string, req CreateServiceU
 }
 
 // List Service Users for given service in Aiven.
-func (h *ServiceUsersHandler) List(project, serviceName string) ([]*ServiceUser, error) {
+func (h *ServiceUsersHandler) List(ctx context.Context, project, serviceName string) ([]*ServiceUser, error) {
 	// Aiven API does not provide list operation for service users, need to get them via service info instead
-	service, err := h.client.Services.Get(project, serviceName)
+	service, err := h.client.Services.Get(ctx, project, serviceName)
 	if err != nil {
 		return nil, err
 	}
@@ -110,9 +111,9 @@ func (h *ServiceUsersHandler) List(project, serviceName string) ([]*ServiceUser,
 }
 
 // Get specific Service User in Aiven.
-func (h *ServiceUsersHandler) Get(project, serviceName, username string) (*ServiceUser, error) {
+func (h *ServiceUsersHandler) Get(ctx context.Context, project, serviceName, username string) (*ServiceUser, error) {
 	// Aiven API does not provide get operation for service users, need to get them via list instead
-	users, err := h.List(project, serviceName)
+	users, err := h.List(ctx, project, serviceName)
 	if err != nil {
 		return nil, err
 	}
@@ -127,7 +128,7 @@ func (h *ServiceUsersHandler) Get(project, serviceName, username string) (*Servi
 }
 
 // Update modifies the given Service User in Aiven.
-func (h *ServiceUsersHandler) Update(project, service, username string, update ModifyServiceUserRequest) (*ServiceUser, error) {
+func (h *ServiceUsersHandler) Update(ctx context.Context, project, service, username string, update ModifyServiceUserRequest) (*ServiceUser, error) {
 	var DefaultOperation = UpdateOperationResetCredentials
 	if update.Operation == nil {
 		update.Operation = &DefaultOperation
@@ -141,7 +142,7 @@ func (h *ServiceUsersHandler) Update(project, service, username string, update M
 		return nil, errors.New("wrong operation for updating credentials")
 	}
 	path := buildPath("project", project, "service", service, "user", username)
-	svc, err := h.client.doPutRequest(path, update)
+	svc, err := h.client.doPutRequest(ctx, path, update)
 	if err != nil {
 		return nil, err
 	}
@@ -161,9 +162,9 @@ func (h *ServiceUsersHandler) Update(project, service, username string, update M
 }
 
 // Delete deletes the given Service User in Aiven.
-func (h *ServiceUsersHandler) Delete(project, service, user string) error {
+func (h *ServiceUsersHandler) Delete(ctx context.Context, project, service, user string) error {
 	path := buildPath("project", project, "service", service, "user", user)
-	bts, err := h.client.doDeleteRequest(path, nil)
+	bts, err := h.client.doDeleteRequest(ctx, path, nil)
 	if err != nil {
 		return err
 	}

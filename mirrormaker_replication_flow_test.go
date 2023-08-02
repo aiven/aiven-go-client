@@ -1,6 +1,7 @@
 package aiven
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -91,7 +92,6 @@ func setupMirrormakerReplicationFlowTestCase(t *testing.T) (*Client, func(t *tes
 	}))
 
 	apiUrl = ts.URL
-
 	c, err := NewUserClient(UserName, UserPassword, "aiven-go-client-test/"+Version())
 	if err != nil {
 		t.Fatalf("user authentication error: %s", err)
@@ -106,6 +106,8 @@ func setupMirrormakerReplicationFlowTestCase(t *testing.T) (*Client, func(t *tes
 func TestMirrorMakerReplicationFlowHandler_Create(t *testing.T) {
 	c, tearDown := setupMirrormakerReplicationFlowTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -151,7 +153,7 @@ func TestMirrorMakerReplicationFlowHandler_Create(t *testing.T) {
 			h := &MirrorMakerReplicationFlowHandler{
 				client: tt.fields.client,
 			}
-			err := h.Create(tt.args.project, tt.args.service, tt.args.req)
+			err := h.Create(ctx, tt.args.project, tt.args.service, tt.args.req)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Create() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -163,6 +165,8 @@ func TestMirrorMakerReplicationFlowHandler_Create(t *testing.T) {
 func TestMirrorMakerReplicationFlowHandler_Update(t *testing.T) {
 	c, tearDown := setupMirrormakerReplicationFlowTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -231,7 +235,7 @@ func TestMirrorMakerReplicationFlowHandler_Update(t *testing.T) {
 			h := &MirrorMakerReplicationFlowHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.Update(tt.args.project, tt.args.service, tt.args.sourceCluster, tt.args.targetCluster, tt.args.req)
+			got, err := h.Update(ctx, tt.args.project, tt.args.service, tt.args.sourceCluster, tt.args.targetCluster, tt.args.req)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Update() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -246,6 +250,8 @@ func TestMirrorMakerReplicationFlowHandler_Update(t *testing.T) {
 func TestMirrorMakerReplicationFlowHandler_List(t *testing.T) {
 	c, tearDown := setupMirrormakerReplicationFlowTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -300,7 +306,7 @@ func TestMirrorMakerReplicationFlowHandler_List(t *testing.T) {
 			h := &MirrorMakerReplicationFlowHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.List(tt.args.project, tt.args.service)
+			got, err := h.List(ctx, tt.args.project, tt.args.service)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("List() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -315,6 +321,8 @@ func TestMirrorMakerReplicationFlowHandler_List(t *testing.T) {
 func TestMirrorMakerReplicationFlowHandler_Delete(t *testing.T) {
 	c, tearDown := setupMirrormakerReplicationFlowTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -350,7 +358,7 @@ func TestMirrorMakerReplicationFlowHandler_Delete(t *testing.T) {
 			h := &MirrorMakerReplicationFlowHandler{
 				client: tt.fields.client,
 			}
-			if err := h.Delete(tt.args.project, tt.args.service, tt.args.sourceCluster, tt.args.targetCluster); (err != nil) != tt.wantErr {
+			if err := h.Delete(ctx, tt.args.project, tt.args.service, tt.args.sourceCluster, tt.args.targetCluster); (err != nil) != tt.wantErr {
 				t.Errorf("Delete() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
@@ -360,6 +368,8 @@ func TestMirrorMakerReplicationFlowHandler_Delete(t *testing.T) {
 func TestMirrorMakerReplicationFlowHandler_Get(t *testing.T) {
 	c, tearDown := setupMirrormakerReplicationFlowTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -410,7 +420,7 @@ func TestMirrorMakerReplicationFlowHandler_Get(t *testing.T) {
 			h := &MirrorMakerReplicationFlowHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.Get(tt.args.project, tt.args.service, tt.args.sourceCluster, tt.args.targetCluster)
+			got, err := h.Get(ctx, tt.args.project, tt.args.service, tt.args.sourceCluster, tt.args.targetCluster)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Get() error = %v, wantErr %v", err, tt.wantErr)
 				return

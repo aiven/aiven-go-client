@@ -1,6 +1,7 @@
 package aiven
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -87,7 +88,6 @@ func setupAccountsTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 	}))
 
 	apiUrl = ts.URL
-
 	c, err := NewUserClient(UserName, UserPassword, "aiven-go-client-test/"+Version())
 	if err != nil {
 		t.Fatalf("user authentication error: %s", err)
@@ -112,6 +112,8 @@ func getTime(t *testing.T) *time.Time {
 func TestAccountsHandler_List(t *testing.T) {
 	c, tearDown := setupAccountsTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -147,7 +149,7 @@ func TestAccountsHandler_List(t *testing.T) {
 			h := AccountsHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.List()
+			got, err := h.List(ctx)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("List() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -162,6 +164,8 @@ func TestAccountsHandler_List(t *testing.T) {
 func TestAccountsHandler_Get(t *testing.T) {
 	c, tearDown := setupAccountsTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -196,7 +200,7 @@ func TestAccountsHandler_Get(t *testing.T) {
 			h := AccountsHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.Get(tt.args.id)
+			got, err := h.Get(ctx, tt.args.id)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Get() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -226,6 +230,8 @@ func TestAccountsHandler_Create(t *testing.T) {
 	c, tearDown := setupAccountsTestCase(t)
 	defer tearDown(t)
 
+	ctx := context.Background()
+
 	type fields struct {
 		client *Client
 	}
@@ -254,7 +260,7 @@ func TestAccountsHandler_Create(t *testing.T) {
 			h := AccountsHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.Create(tt.args.account)
+			got, err := h.Create(ctx, tt.args.account)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Create() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -269,6 +275,8 @@ func TestAccountsHandler_Create(t *testing.T) {
 func TestAccountsHandler_Update(t *testing.T) {
 	c, tearDown := setupAccountsTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -314,7 +322,7 @@ func TestAccountsHandler_Update(t *testing.T) {
 			h := AccountsHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.Update(tt.args.id, tt.args.account)
+			got, err := h.Update(ctx, tt.args.id, tt.args.account)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Update() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -329,6 +337,8 @@ func TestAccountsHandler_Update(t *testing.T) {
 func TestAccountsHandler_Delete(t *testing.T) {
 	c, tearDown := setupAccountsTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -360,7 +370,7 @@ func TestAccountsHandler_Delete(t *testing.T) {
 			h := AccountsHandler{
 				client: tt.fields.client,
 			}
-			if err := h.Delete(tt.args.id); (err != nil) != tt.wantErr {
+			if err := h.Delete(ctx, tt.args.id); (err != nil) != tt.wantErr {
 				t.Errorf("Delete() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})

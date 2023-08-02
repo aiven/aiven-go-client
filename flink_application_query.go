@@ -1,5 +1,7 @@
 package aiven
 
+import "context"
+
 type (
 	// FlinkApplicationQueryHandler aiven go-client handler for Flink Application Queries
 	FlinkApplicationQueryHandler struct {
@@ -96,9 +98,9 @@ type (
 )
 
 // Create creates a Flink query
-func (h *FlinkApplicationQueryHandler) Create(project, service, applicationId string, req CreateFlinkApplicationQueryRequest) (*CreateFlinkApplicationQueryResponse, error) {
+func (h *FlinkApplicationQueryHandler) Create(ctx context.Context, project, service, applicationId string, req CreateFlinkApplicationQueryRequest) (*CreateFlinkApplicationQueryResponse, error) {
 	path := buildPath("project", project, "service", service, "flink", "application", applicationId, "query")
-	bts, err := h.client.doPostRequest(path, req)
+	bts, err := h.client.doPostRequest(ctx, path, req)
 	if err != nil {
 		return nil, err
 	}
@@ -108,9 +110,9 @@ func (h *FlinkApplicationQueryHandler) Create(project, service, applicationId st
 }
 
 // Get gets a Flink query
-func (h *FlinkApplicationQueryHandler) Get(project, service, applicationId, queryId string) (*GetFlinkApplicationQueryResponse, error) {
+func (h *FlinkApplicationQueryHandler) Get(ctx context.Context, project, service, applicationId, queryId string) (*GetFlinkApplicationQueryResponse, error) {
 	path := buildPath("project", project, "service", service, "flink", "application", applicationId, "query", queryId)
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -120,9 +122,9 @@ func (h *FlinkApplicationQueryHandler) Get(project, service, applicationId, quer
 }
 
 // Delete deletes a Flink query
-func (h *FlinkApplicationQueryHandler) Delete(project, service, applicationId, queryId string) error {
+func (h *FlinkApplicationQueryHandler) Delete(ctx context.Context, project, service, applicationId, queryId string) error {
 	path := buildPath("project", project, "service", service, "flink", "application", applicationId, "query", queryId)
-	bts, err := h.client.doDeleteRequest(path, nil)
+	bts, err := h.client.doDeleteRequest(ctx, path, nil)
 	if err != nil {
 		return err
 	}
@@ -131,9 +133,9 @@ func (h *FlinkApplicationQueryHandler) Delete(project, service, applicationId, q
 }
 
 // List lists all Flink queries
-func (h *FlinkApplicationQueryHandler) List(project, service, applicationId string) (*ListFlinkApplicationQueryResponse, error) {
+func (h *FlinkApplicationQueryHandler) List(ctx context.Context, project, service, applicationId string) (*ListFlinkApplicationQueryResponse, error) {
 	path := buildPath("project", project, "service", service, "flink", "application", applicationId, "query")
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -143,9 +145,9 @@ func (h *FlinkApplicationQueryHandler) List(project, service, applicationId stri
 }
 
 // CancelJob cancel the Flink job of a Flink query
-func (h *FlinkApplicationQueryHandler) CancelJob(project, service, applicationId, queryId string) (*CancelJobFlinkApplicationQueryResponse, error) {
+func (h *FlinkApplicationQueryHandler) CancelJob(ctx context.Context, project, service, applicationId, queryId string) (*CancelJobFlinkApplicationQueryResponse, error) {
 	path := buildPath("project", project, "service", service, "flink", "application", applicationId, "query", queryId, "cancel_job")
-	bts, err := h.client.doPatchRequest(path, nil)
+	bts, err := h.client.doPatchRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}

@@ -1,5 +1,7 @@
 package aiven
 
+import "context"
+
 type (
 	// BillingGroup represents an billing group
 	BillingGroup struct {
@@ -143,8 +145,8 @@ type (
 )
 
 // ListAll retrieves a list of all billing groups
-func (h *BillingGroupHandler) ListAll() ([]BillingGroup, error) {
-	bts, err := h.client.doGetRequest(buildPath("billing-group"), nil)
+func (h *BillingGroupHandler) ListAll(ctx context.Context) ([]BillingGroup, error) {
+	bts, err := h.client.doGetRequest(ctx, buildPath("billing-group"), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -156,8 +158,8 @@ func (h *BillingGroupHandler) ListAll() ([]BillingGroup, error) {
 }
 
 // Create creates a new project.
-func (h *BillingGroupHandler) Create(req BillingGroupRequest) (*BillingGroup, error) {
-	bts, err := h.client.doPostRequest(buildPath("billing-group"), req)
+func (h *BillingGroupHandler) Create(ctx context.Context, req BillingGroupRequest) (*BillingGroup, error) {
+	bts, err := h.client.doPostRequest(ctx, buildPath("billing-group"), req)
 	if err != nil {
 		return nil, err
 	}
@@ -169,8 +171,8 @@ func (h *BillingGroupHandler) Create(req BillingGroupRequest) (*BillingGroup, er
 }
 
 // Get returns gets the specified billing group.
-func (h *BillingGroupHandler) Get(id string) (*BillingGroup, error) {
-	bts, err := h.client.doGetRequest(buildPath("billing-group", id), nil)
+func (h *BillingGroupHandler) Get(ctx context.Context, id string) (*BillingGroup, error) {
+	bts, err := h.client.doGetRequest(ctx, buildPath("billing-group", id), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -182,8 +184,8 @@ func (h *BillingGroupHandler) Get(id string) (*BillingGroup, error) {
 }
 
 // Update modifies the specified billing group with the given parameters.
-func (h *BillingGroupHandler) Update(id string, req BillingGroupRequest) (*BillingGroup, error) {
-	bts, err := h.client.doPutRequest(buildPath("billing-group", id), req)
+func (h *BillingGroupHandler) Update(ctx context.Context, id string, req BillingGroupRequest) (*BillingGroup, error) {
+	bts, err := h.client.doPutRequest(ctx, buildPath("billing-group", id), req)
 	if err != nil {
 		return nil, err
 	}
@@ -195,8 +197,8 @@ func (h *BillingGroupHandler) Update(id string, req BillingGroupRequest) (*Billi
 }
 
 // Delete removes the given billing group.
-func (h *BillingGroupHandler) Delete(id string) error {
-	bts, err := h.client.doDeleteRequest(buildPath("billing-group", id), nil)
+func (h *BillingGroupHandler) Delete(ctx context.Context, id string) error {
+	bts, err := h.client.doDeleteRequest(ctx, buildPath("billing-group", id), nil)
 	if err != nil {
 		return err
 	}
@@ -205,14 +207,14 @@ func (h *BillingGroupHandler) Delete(id string) error {
 }
 
 // AssignProjects assigns projects to the billing group
-func (h *BillingGroupHandler) AssignProjects(id string, projects []string) error {
+func (h *BillingGroupHandler) AssignProjects(ctx context.Context, id string, projects []string) error {
 	req := struct {
 		ProjectsNames []string `json:"projects_names"`
 	}{
 		ProjectsNames: projects,
 	}
 
-	bts, err := h.client.doPostRequest(buildPath("billing-group", id, "projects-assign"), req)
+	bts, err := h.client.doPostRequest(ctx, buildPath("billing-group", id, "projects-assign"), req)
 	if err != nil {
 		return err
 	}
@@ -221,10 +223,10 @@ func (h *BillingGroupHandler) AssignProjects(id string, projects []string) error
 }
 
 // GetProjects retrieves a list of assigned projects
-func (h *BillingGroupHandler) GetProjects(id string) ([]string, error) {
+func (h *BillingGroupHandler) GetProjects(ctx context.Context, id string) ([]string, error) {
 	r := new(BillingGroupProjectsResponse)
 
-	bts, err := h.client.doGetRequest(buildPath("billing-group", id, "projects"), nil)
+	bts, err := h.client.doGetRequest(ctx, buildPath("billing-group", id, "projects"), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -243,8 +245,8 @@ func (h *BillingGroupHandler) GetProjects(id string) ([]string, error) {
 }
 
 // ListInvoices lists invoices for the billing group.
-func (h *BillingGroupHandler) ListInvoices(id string) (*BillingGroupListInvoicesResponse, error) {
-	bts, err := h.client.doGetRequest(buildPath("billing-group", id, "invoice"), nil)
+func (h *BillingGroupHandler) ListInvoices(ctx context.Context, id string) (*BillingGroupListInvoicesResponse, error) {
+	bts, err := h.client.doGetRequest(ctx, buildPath("billing-group", id, "invoice"), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -255,8 +257,8 @@ func (h *BillingGroupHandler) ListInvoices(id string) (*BillingGroupListInvoices
 }
 
 // GetInvoice gets the specified invoice for the billing group.
-func (h *BillingGroupHandler) GetInvoice(id, invoiceNumber string) (*BillingGroupInvoiceResponse, error) {
-	bts, err := h.client.doGetRequest(buildPath("billing-group", id, "invoice", invoiceNumber), nil)
+func (h *BillingGroupHandler) GetInvoice(ctx context.Context, id, invoiceNumber string) (*BillingGroupInvoiceResponse, error) {
+	bts, err := h.client.doGetRequest(ctx, buildPath("billing-group", id, "invoice", invoiceNumber), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -267,8 +269,8 @@ func (h *BillingGroupHandler) GetInvoice(id, invoiceNumber string) (*BillingGrou
 }
 
 // ListLines lists invoice lines for the billing group's invoice.
-func (h *BillingGroupHandler) ListLines(id, invoiceNumber string) (*BillingGroupListInvoiceLinesResponse, error) {
-	bts, err := h.client.doGetRequest(buildPath("billing-group", id, "invoice", invoiceNumber, "lines"), nil)
+func (h *BillingGroupHandler) ListLines(ctx context.Context, id, invoiceNumber string) (*BillingGroupListInvoiceLinesResponse, error) {
+	bts, err := h.client.doGetRequest(ctx, buildPath("billing-group", id, "invoice", invoiceNumber, "lines"), nil)
 	if err != nil {
 		return nil, err
 	}

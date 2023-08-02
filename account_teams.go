@@ -1,6 +1,7 @@
 package aiven
 
 import (
+	"context"
 	"errors"
 	"time"
 )
@@ -34,13 +35,13 @@ type (
 )
 
 // List returns a list of all existing account teams
-func (h AccountTeamsHandler) List(accountId string) (*AccountTeamsResponse, error) {
+func (h AccountTeamsHandler) List(ctx context.Context, accountId string) (*AccountTeamsResponse, error) {
 	if accountId == "" {
 		return nil, errors.New("cannot get a list of teams for an account when account id is empty")
 	}
 
 	path := buildPath("account", accountId, "teams")
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -54,13 +55,13 @@ func (h AccountTeamsHandler) List(accountId string) (*AccountTeamsResponse, erro
 }
 
 // Get retrieves an existing account team by account and team id`s
-func (h AccountTeamsHandler) Get(accountId, teamId string) (*AccountTeamResponse, error) {
+func (h AccountTeamsHandler) Get(ctx context.Context, accountId, teamId string) (*AccountTeamResponse, error) {
 	if accountId == "" || teamId == "" {
 		return nil, errors.New("cannot get account team where account id or team id is empty")
 	}
 
 	path := buildPath("account", accountId, "team", teamId)
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -74,13 +75,13 @@ func (h AccountTeamsHandler) Get(accountId, teamId string) (*AccountTeamResponse
 }
 
 // Create creates an account team
-func (h AccountTeamsHandler) Create(accountId string, team AccountTeam) (*AccountTeamResponse, error) {
+func (h AccountTeamsHandler) Create(ctx context.Context, accountId string, team AccountTeam) (*AccountTeamResponse, error) {
 	if accountId == "" {
 		return nil, errors.New("cannot get create a team where account id is empty")
 	}
 
 	path := buildPath("account", accountId, "teams")
-	bts, err := h.client.doPostRequest(path, team)
+	bts, err := h.client.doPostRequest(ctx, path, team)
 	if err != nil {
 		return nil, err
 	}
@@ -94,13 +95,13 @@ func (h AccountTeamsHandler) Create(accountId string, team AccountTeam) (*Accoun
 }
 
 // Update updates an account team
-func (h AccountTeamsHandler) Update(accountId, teamId string, team AccountTeam) (*AccountTeamResponse, error) {
+func (h AccountTeamsHandler) Update(ctx context.Context, accountId, teamId string, team AccountTeam) (*AccountTeamResponse, error) {
 	if accountId == "" {
 		return nil, errors.New("cannot get create a team where account id is empty")
 	}
 
 	path := buildPath("account", accountId, "team", teamId)
-	bts, err := h.client.doPutRequest(path, team)
+	bts, err := h.client.doPutRequest(ctx, path, team)
 	if err != nil {
 		return nil, err
 	}
@@ -114,13 +115,13 @@ func (h AccountTeamsHandler) Update(accountId, teamId string, team AccountTeam) 
 }
 
 // Delete deletes an account team
-func (h AccountTeamsHandler) Delete(accountId, teamId string) error {
+func (h AccountTeamsHandler) Delete(ctx context.Context, accountId, teamId string) error {
 	if accountId == "" || teamId == "" {
 		return errors.New("cannot get delete an accounts team where account id or team id is empty")
 	}
 
 	path := buildPath("account", accountId, "team", teamId)
-	bts, err := h.client.doDeleteRequest(path, nil)
+	bts, err := h.client.doDeleteRequest(ctx, path, nil)
 	if err != nil {
 		return err
 	}

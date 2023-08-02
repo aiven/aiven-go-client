@@ -1,6 +1,7 @@
 package aiven
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -34,9 +35,9 @@ type (
 )
 
 // Create creates a database with the given parameters.
-func (h *DatabasesHandler) Create(project, service string, req CreateDatabaseRequest) (*Database, error) {
+func (h *DatabasesHandler) Create(ctx context.Context, project, service string, req CreateDatabaseRequest) (*Database, error) {
 	path := buildPath("project", project, "service", service, "db")
-	bts, err := h.client.doPostRequest(path, req)
+	bts, err := h.client.doPostRequest(ctx, path, req)
 	if err != nil {
 		return nil, err
 	}
@@ -51,10 +52,10 @@ func (h *DatabasesHandler) Create(project, service string, req CreateDatabaseReq
 }
 
 // Get returns a specific database from Aiven.
-func (h *DatabasesHandler) Get(projectName, serviceName, databaseName string) (*Database, error) {
+func (h *DatabasesHandler) Get(ctx context.Context, projectName, serviceName, databaseName string) (*Database, error) {
 	// There's no API for getting database by name. List all databases and pick the correct one
 	// instead. (There typically aren't that many databases, 100 is already very large number)
-	databases, err := h.List(projectName, serviceName)
+	databases, err := h.List(ctx, projectName, serviceName)
 	if err != nil {
 		return nil, err
 	}
@@ -70,9 +71,9 @@ func (h *DatabasesHandler) Get(projectName, serviceName, databaseName string) (*
 }
 
 // Delete removes the specified database.
-func (h *DatabasesHandler) Delete(project, service, database string) error {
+func (h *DatabasesHandler) Delete(ctx context.Context, project, service, database string) error {
 	path := buildPath("project", project, "service", service, "db", database)
-	bts, err := h.client.doDeleteRequest(path, nil)
+	bts, err := h.client.doDeleteRequest(ctx, path, nil)
 	if err != nil {
 		return err
 	}
@@ -81,9 +82,9 @@ func (h *DatabasesHandler) Delete(project, service, database string) error {
 }
 
 // List will return all the databases for a given service.
-func (h *DatabasesHandler) List(project, service string) ([]*Database, error) {
+func (h *DatabasesHandler) List(ctx context.Context, project, service string) ([]*Database, error) {
 	path := buildPath("project", project, "service", service, "db")
-	rsp, err := h.client.doGetRequest(path, nil)
+	rsp, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}

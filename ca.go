@@ -1,5 +1,7 @@
 package aiven
 
+import "context"
+
 type (
 	// CAHandler is the client which interacts with the Projects CA endpoint
 	// on Aiven.
@@ -15,8 +17,8 @@ type (
 )
 
 // Get retrieves the specified Project CA Certificate.
-func (h *CAHandler) Get(project string) (string, error) {
-	bts, err := h.client.doGetRequest(buildPath("project", project, "kms", "ca"), nil)
+func (h *CAHandler) Get(ctx context.Context, project string) (string, error) {
+	bts, err := h.client.doGetRequest(ctx, buildPath("project", project, "kms", "ca"), nil)
 	if err != nil {
 		return "", err
 	}

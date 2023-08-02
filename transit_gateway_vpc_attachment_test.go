@@ -1,6 +1,7 @@
 package aiven
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -84,7 +85,6 @@ func setupTransitGatewayVPCAttachmentTestCase(t *testing.T) (*Client, func(t *te
 	}))
 
 	apiUrl = ts.URL
-
 	c, err := NewUserClient(UserName, UserPassword, "aiven-go-client-test/"+Version())
 	if err != nil {
 		t.Fatalf("user authentication error: %s", err)
@@ -107,6 +107,7 @@ func errorResponse(t *testing.T, w http.ResponseWriter, statusCode int, msg stri
 }
 
 func TestTransitGatewayVPCAttachmentHandler_Update(t *testing.T) {
+	ctx := context.Background()
 	c, _ := setupTransitGatewayVPCAttachmentTestCase(t)
 
 	type fields struct {
@@ -220,7 +221,7 @@ func TestTransitGatewayVPCAttachmentHandler_Update(t *testing.T) {
 			h := &TransitGatewayVPCAttachmentHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.Update(tt.args.project, tt.args.projectVPCId, tt.args.req)
+			got, err := h.Update(ctx, tt.args.project, tt.args.projectVPCId, tt.args.req)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Update() error = %v, wantErr %v", err, tt.wantErr)
 				return

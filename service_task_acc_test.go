@@ -1,6 +1,7 @@
 package aiven
 
 import (
+	"context"
 	"math/rand"
 	"os"
 	"strconv"
@@ -15,10 +16,12 @@ var _ = Describe("Service Task", func() {
 		projectName string
 	)
 
+	ctx := context.Background()
+
 	Context("PG Service Task", func() {
 		It("should not error", func() {
 			projectName = os.Getenv("AIVEN_PROJECT_NAME")
-			_, err := client.Projects.Get(projectName)
+			_, err := client.Projects.Get(ctx, projectName)
 
 			Expect(err).NotTo(HaveOccurred())
 		})
@@ -32,7 +35,7 @@ var _ = Describe("Service Task", func() {
 
 		It("creating service", func() {
 			serviceName = "test-acc-pg-sr-" + strconv.Itoa(rand.Int())
-			service, errS = client.Services.Create(projectName, CreateServiceRequest{
+			service, errS = client.Services.Create(ctx, projectName, CreateServiceRequest{
 				Cloud:        "google-europe-west1",
 				Plan:         "business-4",
 				ProjectVPCID: nil,
@@ -57,7 +60,7 @@ var _ = Describe("Service Task", func() {
 				Expect(service.Type).Should(Equal("pg"))
 
 				Eventually(func() string {
-					service, _ = client.Services.Get(projectName, serviceName)
+					service, _ = client.Services.Get(ctx, projectName, serviceName)
 					return service.State
 				}, 25*time.Minute, 1*time.Minute).Should(Equal("RUNNING"))
 			}
@@ -65,7 +68,7 @@ var _ = Describe("Service Task", func() {
 
 		// service task
 		It("create pg service task", func() {
-			t, errT := client.ServiceTask.Create(projectName, serviceName, ServiceTaskRequest{
+			t, errT := client.ServiceTask.Create(ctx, projectName, serviceName, ServiceTaskRequest{
 				TargetVersion: "12",
 				TaskType:      "upgrade_check",
 			})
@@ -79,17 +82,17 @@ var _ = Describe("Service Task", func() {
 			Expect(t.Task.TaskType).NotTo(BeEmpty())
 
 			Eventually(func() *bool {
-				t, errT = client.ServiceTask.Get(projectName, serviceName, t.Task.Id)
+				t, errT = client.ServiceTask.Get(ctx, projectName, serviceName, t.Task.Id)
 				return t.Task.Success
 			}, 5*time.Minute, 15*time.Second).Should(Not(BeNil()))
 
-			t, errT = client.ServiceTask.Get(projectName, serviceName, t.Task.Id)
+			t, errT = client.ServiceTask.Get(ctx, projectName, serviceName, t.Task.Id)
 			Expect(errT).NotTo(HaveOccurred())
 			Expect(*t.Task.Success).To(BeTrue())
 		})
 
 		It("delete PG service", func() {
-			if errD := client.Services.Delete(projectName, serviceName); errD != nil {
+			if errD := client.Services.Delete(ctx, projectName, serviceName); errD != nil {
 				Fail("cannot delete service:" + errD.Error())
 			}
 		})

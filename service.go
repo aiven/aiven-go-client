@@ -1,5 +1,7 @@
 package aiven
 
+import "context"
+
 type (
 	// Service represents the Service model on Aiven.
 	Service struct {
@@ -269,9 +271,9 @@ func (s *Service) Port() (string, error) {
 }
 
 // Create creates the given Service on Aiven.
-func (h *ServicesHandler) Create(project string, req CreateServiceRequest) (*Service, error) {
+func (h *ServicesHandler) Create(ctx context.Context, project string, req CreateServiceRequest) (*Service, error) {
 	path := buildPath("project", project, "service")
-	bts, err := h.client.doPostRequest(path, req)
+	bts, err := h.client.doPostRequest(ctx, path, req)
 	if err != nil {
 		return nil, err
 	}
@@ -283,9 +285,9 @@ func (h *ServicesHandler) Create(project string, req CreateServiceRequest) (*Ser
 }
 
 // Get gets a specific service from Aiven.
-func (h *ServicesHandler) Get(project, service string) (*Service, error) {
+func (h *ServicesHandler) Get(ctx context.Context, project, service string) (*Service, error) {
 	path := buildPath("project", project, "service", service)
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -297,9 +299,9 @@ func (h *ServicesHandler) Get(project, service string) (*Service, error) {
 }
 
 // Update will update the given service with the given parameters.
-func (h *ServicesHandler) Update(project, service string, req UpdateServiceRequest) (*Service, error) {
+func (h *ServicesHandler) Update(ctx context.Context, project, service string, req UpdateServiceRequest) (*Service, error) {
 	path := buildPath("project", project, "service", service)
-	bts, err := h.client.doPutRequest(path, req)
+	bts, err := h.client.doPutRequest(ctx, path, req)
 	if err != nil {
 		return nil, err
 	}
@@ -311,9 +313,9 @@ func (h *ServicesHandler) Update(project, service string, req UpdateServiceReque
 }
 
 // Delete will delete the given service from Aiven.
-func (h *ServicesHandler) Delete(project, service string) error {
+func (h *ServicesHandler) Delete(ctx context.Context, project, service string) error {
 	path := buildPath("project", project, "service", service)
-	bts, err := h.client.doDeleteRequest(path, nil)
+	bts, err := h.client.doDeleteRequest(ctx, path, nil)
 	if err != nil {
 		return err
 	}
@@ -322,9 +324,9 @@ func (h *ServicesHandler) Delete(project, service string) error {
 }
 
 // List will fetch all services for a given project.
-func (h *ServicesHandler) List(project string) ([]*Service, error) {
+func (h *ServicesHandler) List(ctx context.Context, project string) ([]*Service, error) {
 	path := buildPath("project", project, "service")
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}

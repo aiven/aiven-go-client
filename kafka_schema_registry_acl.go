@@ -1,6 +1,7 @@
 package aiven
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -27,9 +28,9 @@ type (
 )
 
 // Create creates new Kafka Schema Registry ACL entry.
-func (h *KafkaSchemaRegistryACLHandler) Create(project, service string, req CreateKafkaSchemaRegistryACLRequest) (*KafkaSchemaRegistryACL, error) {
+func (h *KafkaSchemaRegistryACLHandler) Create(ctx context.Context, project, service string, req CreateKafkaSchemaRegistryACLRequest) (*KafkaSchemaRegistryACL, error) {
 	path := buildPath("project", project, "service", service, "kafka", "schema-registry", "acl")
-	bts, err := h.client.doPostRequest(path, req)
+	bts, err := h.client.doPostRequest(ctx, path, req)
 	if err != nil {
 		return nil, err
 	}
@@ -57,9 +58,9 @@ func (h *KafkaSchemaRegistryACLHandler) Create(project, service string, req Crea
 }
 
 // Get gets a specific Kafka Schema Registry ACL.
-func (h *KafkaSchemaRegistryACLHandler) Get(project, serviceName, aclID string) (*KafkaSchemaRegistryACL, error) {
+func (h *KafkaSchemaRegistryACLHandler) Get(ctx context.Context, project, serviceName, aclID string) (*KafkaSchemaRegistryACL, error) {
 	// There's no API for getting individual ACL entry. List instead and filter from there
-	acls, err := h.List(project, serviceName)
+	acls, err := h.List(ctx, project, serviceName)
 	if err != nil {
 		return nil, err
 	}
@@ -75,9 +76,9 @@ func (h *KafkaSchemaRegistryACLHandler) Get(project, serviceName, aclID string) 
 }
 
 // List lists all the Kafka Schema Registry ACL entries.
-func (h *KafkaSchemaRegistryACLHandler) List(project, serviceName string) ([]*KafkaSchemaRegistryACL, error) {
+func (h *KafkaSchemaRegistryACLHandler) List(ctx context.Context, project, serviceName string) ([]*KafkaSchemaRegistryACL, error) {
 	// Get Kafka Schema Registry ACL entries from service info, as in Kafka ACLs.
-	service, err := h.client.Services.Get(project, serviceName)
+	service, err := h.client.Services.Get(ctx, project, serviceName)
 	if err != nil {
 		return nil, err
 	}
@@ -86,9 +87,9 @@ func (h *KafkaSchemaRegistryACLHandler) List(project, serviceName string) ([]*Ka
 }
 
 // Delete deletes a specific Kafka Schema Registry ACL entry.
-func (h *KafkaSchemaRegistryACLHandler) Delete(project, serviceName, aclID string) error {
+func (h *KafkaSchemaRegistryACLHandler) Delete(ctx context.Context, project, serviceName, aclID string) error {
 	path := buildPath("project", project, "service", serviceName, "kafka", "schema-registry", "acl", aclID)
-	bts, err := h.client.doDeleteRequest(path, nil)
+	bts, err := h.client.doDeleteRequest(ctx, path, nil)
 	if err != nil {
 		return err
 	}

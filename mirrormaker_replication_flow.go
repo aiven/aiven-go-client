@@ -1,5 +1,7 @@
 package aiven
 
+import "context"
+
 type (
 	// MirrorMakerReplicationFlowHandler is the client which interacts with the
 	// Kafka MirrorMaker 2 ReplicationFlows endpoints on Aiven.
@@ -43,9 +45,9 @@ type (
 )
 
 // Create creates new Kafka MirrorMaker 2 Replication Flows entry.
-func (h *MirrorMakerReplicationFlowHandler) Create(project, service string, req MirrorMakerReplicationFlowRequest) error {
+func (h *MirrorMakerReplicationFlowHandler) Create(ctx context.Context, project, service string, req MirrorMakerReplicationFlowRequest) error {
 	path := buildPath("project", project, "service", service, "mirrormaker", "replication-flows")
-	bts, err := h.client.doPostRequest(path, req)
+	bts, err := h.client.doPostRequest(ctx, path, req)
 	if err != nil {
 		return err
 	}
@@ -54,14 +56,14 @@ func (h *MirrorMakerReplicationFlowHandler) Create(project, service string, req 
 }
 
 // Update updates new Kafka MirrorMaker 2 Replication Flows entry.
-func (h *MirrorMakerReplicationFlowHandler) Update(project, service, sourceCluster, targetCluster string, req MirrorMakerReplicationFlowRequest) (*MirrorMakerReplicationFlowResponse, error) {
+func (h *MirrorMakerReplicationFlowHandler) Update(ctx context.Context, project, service, sourceCluster, targetCluster string, req MirrorMakerReplicationFlowRequest) (*MirrorMakerReplicationFlowResponse, error) {
 	path := buildPath("project", project, "service", service, "mirrormaker", "replication-flows", sourceCluster, targetCluster)
 
 	// unset source and destination clusters fields
 	req.SourceCluster = ""
 	req.TargetCluster = ""
 
-	bts, err := h.client.doPutRequest(path, req)
+	bts, err := h.client.doPutRequest(ctx, path, req)
 	if err != nil {
 		return nil, err
 	}
@@ -75,9 +77,9 @@ func (h *MirrorMakerReplicationFlowHandler) Update(project, service, sourceClust
 }
 
 // List gets a Kafka MirrorMaker 2 Replication Flows.
-func (h *MirrorMakerReplicationFlowHandler) List(project, service string) (*MirrorMakerReplicationFlowsResponse, error) {
+func (h *MirrorMakerReplicationFlowHandler) List(ctx context.Context, project, service string) (*MirrorMakerReplicationFlowsResponse, error) {
 	path := buildPath("project", project, "service", service, "mirrormaker", "replication-flows")
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -91,9 +93,9 @@ func (h *MirrorMakerReplicationFlowHandler) List(project, service string) (*Mirr
 }
 
 // Get gets a Kafka MirrorMaker 2 Replication Flows.
-func (h *MirrorMakerReplicationFlowHandler) Get(project, service, sourceCluster, targetCluster string) (*MirrorMakerReplicationFlowResponse, error) {
+func (h *MirrorMakerReplicationFlowHandler) Get(ctx context.Context, project, service, sourceCluster, targetCluster string) (*MirrorMakerReplicationFlowResponse, error) {
 	path := buildPath("project", project, "service", service, "mirrormaker", "replication-flows", sourceCluster, targetCluster)
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -107,9 +109,9 @@ func (h *MirrorMakerReplicationFlowHandler) Get(project, service, sourceCluster,
 }
 
 // Delete deletes a Kafka MirrorMaker 2 Replication Flows entry.
-func (h *MirrorMakerReplicationFlowHandler) Delete(project, service, sourceCluster, targetCluster string) error {
+func (h *MirrorMakerReplicationFlowHandler) Delete(ctx context.Context, project, service, sourceCluster, targetCluster string) error {
 	path := buildPath("project", project, "service", service, "mirrormaker", "replication-flows", sourceCluster, targetCluster)
-	bts, err := h.client.doDeleteRequest(path, nil)
+	bts, err := h.client.doDeleteRequest(ctx, path, nil)
 	if err != nil {
 		return err
 	}

@@ -1,6 +1,7 @@
 package aiven
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -108,7 +109,6 @@ func setupKafkaConnectorsTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 	}))
 
 	apiUrl = ts.URL
-
 	c, err := NewUserClient(UserName, UserPassword, "aiven-go-client-test/"+Version())
 	if err != nil {
 		t.Fatalf("user authentication error: %s", err)
@@ -123,6 +123,8 @@ func setupKafkaConnectorsTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 func TestKafkaConnectorsHandler_Create(t *testing.T) {
 	c, tearDown := setupKafkaConnectorsTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -162,7 +164,7 @@ func TestKafkaConnectorsHandler_Create(t *testing.T) {
 			h := &KafkaConnectorsHandler{
 				client: tt.fields.client,
 			}
-			if err := h.Create(tt.args.project, tt.args.service, tt.args.c); (err != nil) != tt.wantErr {
+			if err := h.Create(ctx, tt.args.project, tt.args.service, tt.args.c); (err != nil) != tt.wantErr {
 				t.Errorf("Create() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
@@ -172,6 +174,8 @@ func TestKafkaConnectorsHandler_Create(t *testing.T) {
 func TestKafkaConnectorsHandler_Delete(t *testing.T) {
 	c, tearDown := setupKafkaConnectorsTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -203,7 +207,7 @@ func TestKafkaConnectorsHandler_Delete(t *testing.T) {
 			h := &KafkaConnectorsHandler{
 				client: tt.fields.client,
 			}
-			if err := h.Delete(tt.args.project, tt.args.service, tt.args.name); (err != nil) != tt.wantErr {
+			if err := h.Delete(ctx, tt.args.project, tt.args.service, tt.args.name); (err != nil) != tt.wantErr {
 				t.Errorf("Delete() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
@@ -213,6 +217,8 @@ func TestKafkaConnectorsHandler_Delete(t *testing.T) {
 func TestKafkaConnectorsHandler_List(t *testing.T) {
 	c, tearDown := setupKafkaConnectorsTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -261,7 +267,7 @@ func TestKafkaConnectorsHandler_List(t *testing.T) {
 			h := &KafkaConnectorsHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.List(tt.args.project, tt.args.service)
+			got, err := h.List(ctx, tt.args.project, tt.args.service)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("List() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -276,6 +282,8 @@ func TestKafkaConnectorsHandler_List(t *testing.T) {
 func TestKafkaConnectorsHandler_GetByName(t *testing.T) {
 	c, tearDown := setupKafkaConnectorsTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -333,7 +341,7 @@ func TestKafkaConnectorsHandler_GetByName(t *testing.T) {
 			h := &KafkaConnectorsHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.GetByName(tt.args.project, tt.args.service, tt.args.name)
+			got, err := h.GetByName(ctx, tt.args.project, tt.args.service, tt.args.name)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GetByName() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -348,6 +356,8 @@ func TestKafkaConnectorsHandler_GetByName(t *testing.T) {
 func TestKafkaConnectorsHandler_Status(t *testing.T) {
 	c, tearDown := setupKafkaConnectorsTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -387,7 +397,7 @@ func TestKafkaConnectorsHandler_Status(t *testing.T) {
 			h := &KafkaConnectorsHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.Status(tt.args.project, tt.args.service, tt.args.name)
+			got, err := h.Status(ctx, tt.args.project, tt.args.service, tt.args.name)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Status() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -402,6 +412,8 @@ func TestKafkaConnectorsHandler_Status(t *testing.T) {
 func TestKafkaConnectorsHandler_Update(t *testing.T) {
 	c, tearDown := setupKafkaConnectorsTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -461,7 +473,7 @@ func TestKafkaConnectorsHandler_Update(t *testing.T) {
 			h := &KafkaConnectorsHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.Update(tt.args.project, tt.args.service, tt.args.name, tt.args.c)
+			got, err := h.Update(ctx, tt.args.project, tt.args.service, tt.args.name, tt.args.c)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Update() error = %v, wantErr %v", err, tt.wantErr)
 				return

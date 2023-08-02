@@ -1,6 +1,7 @@
 package aiven
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -71,7 +72,6 @@ func setupAccountTeamInvitesTestCase(t *testing.T) (*Client, func(t *testing.T))
 	}))
 
 	apiUrl = ts.URL
-
 	c, err := NewUserClient(UserName, UserPassword, "aiven-go-client-test/"+Version())
 	if err != nil {
 		t.Fatalf("user authentication error: %s", err)
@@ -145,12 +145,13 @@ func TestAccountTeamInvitesHandler_List(t *testing.T) {
 			true,
 		},
 	}
+	ctx := context.Background()
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			h := AccountTeamInvitesHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.List(tt.args.accountId, tt.args.teamId)
+			got, err := h.List(ctx, tt.args.accountId, tt.args.teamId)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("List() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -221,12 +222,13 @@ func TestAccountTeamInvitesHandler_Delete(t *testing.T) {
 			true,
 		},
 	}
+	ctx := context.Background()
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			h := AccountTeamInvitesHandler{
 				client: tt.fields.client,
 			}
-			if err := h.Delete(tt.args.accountId, tt.args.teamId, tt.args.userEmail); (err != nil) != tt.wantErr {
+			if err := h.Delete(ctx, tt.args.accountId, tt.args.teamId, tt.args.userEmail); (err != nil) != tt.wantErr {
 				t.Errorf("Delete() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})

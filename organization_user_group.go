@@ -1,6 +1,8 @@
 // Package aiven provides a client for using the Aiven API.
 package aiven
 
+import "context"
+
 type (
 	// OrganizationUserGroupHandler is the client which interacts with the Organization Users Groups API on Aiven.
 	OrganizationUserGroupHandler struct {
@@ -41,9 +43,9 @@ type (
 )
 
 // Get returns data about the specified Organization User Group.
-func (h *OrganizationUserGroupHandler) Get(orgID, userGroupID string) (*OrganizationUserGroupResponse, error) {
+func (h *OrganizationUserGroupHandler) Get(ctx context.Context, orgID, userGroupID string) (*OrganizationUserGroupResponse, error) {
 	path := buildPath("organization", orgID, "user-groups", userGroupID)
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -54,9 +56,9 @@ func (h *OrganizationUserGroupHandler) Get(orgID, userGroupID string) (*Organiza
 }
 
 // Create creates Organization User Group.
-func (h *OrganizationUserGroupHandler) Create(orgID string, req OrganizationUserGroupRequest) (*OrganizationUserGroupResponse, error) {
+func (h *OrganizationUserGroupHandler) Create(ctx context.Context, orgID string, req OrganizationUserGroupRequest) (*OrganizationUserGroupResponse, error) {
 	path := buildPath("organization", orgID, "user-groups")
-	bts, err := h.client.doPostRequest(path, req)
+	bts, err := h.client.doPostRequest(ctx, path, req)
 	if err != nil {
 		return nil, err
 	}
@@ -67,9 +69,9 @@ func (h *OrganizationUserGroupHandler) Create(orgID string, req OrganizationUser
 }
 
 // Delete deletes Organization User Group.
-func (h *OrganizationUserGroupHandler) Delete(orgID, userGroupID string) error {
+func (h *OrganizationUserGroupHandler) Delete(ctx context.Context, orgID, userGroupID string) error {
 	path := buildPath("organization", orgID, "user-groups", userGroupID)
-	bts, err := h.client.doDeleteRequest(path, nil)
+	bts, err := h.client.doDeleteRequest(ctx, path, nil)
 	if err != nil {
 		return err
 	}
@@ -78,9 +80,9 @@ func (h *OrganizationUserGroupHandler) Delete(orgID, userGroupID string) error {
 }
 
 // List retrieves a list of Organization User Groups.
-func (h *OrganizationUserGroupHandler) List(orgID string) (*OrganizationUserGroupListResponse, error) {
+func (h *OrganizationUserGroupHandler) List(ctx context.Context, orgID string) (*OrganizationUserGroupListResponse, error) {
 	path := buildPath("organization", orgID, "user-groups")
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -91,9 +93,9 @@ func (h *OrganizationUserGroupHandler) List(orgID string) (*OrganizationUserGrou
 }
 
 // Update updates Organization User Group.
-func (h *OrganizationUserGroupHandler) Update(orgID, userGroupID string, req OrganizationUserGroupRequest) (*OrganizationUserGroupResponse, error) {
+func (h *OrganizationUserGroupHandler) Update(ctx context.Context, orgID, userGroupID string, req OrganizationUserGroupRequest) (*OrganizationUserGroupResponse, error) {
 	path := buildPath("organization", orgID, "user-groups", userGroupID)
-	bts, err := h.client.doPatchRequest(path, req)
+	bts, err := h.client.doPatchRequest(ctx, path, req)
 	if err != nil {
 		return nil, err
 	}

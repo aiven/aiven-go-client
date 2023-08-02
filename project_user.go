@@ -1,6 +1,7 @@
 package aiven
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -53,17 +54,17 @@ type (
 )
 
 // Invite user to join a project on Aiven.
-func (h *ProjectUsersHandler) Invite(project string, req CreateProjectInvitationRequest) error {
+func (h *ProjectUsersHandler) Invite(ctx context.Context, project string, req CreateProjectInvitationRequest) error {
 	path := buildPath("project", project, "invite")
-	_, err := h.client.doPostRequest(path, req)
+	_, err := h.client.doPostRequest(ctx, path, req)
 	return err
 }
 
 // Get a specific project user or project invitation.
-func (h *ProjectUsersHandler) Get(project, email string) (*ProjectUser, *ProjectInvitation, error) {
+func (h *ProjectUsersHandler) Get(ctx context.Context, project, email string) (*ProjectUser, *ProjectInvitation, error) {
 	// There's no API for getting integration endpoint by ID. List all endpoints
 	// and pick the correct one instead. (There shouldn't ever be many endpoints.)
-	users, invitations, err := h.List(project)
+	users, invitations, err := h.List(ctx, project)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -86,52 +87,55 @@ func (h *ProjectUsersHandler) Get(project, email string) (*ProjectUser, *Project
 
 // UpdateUser updates the given project user with the given parameters.
 func (h *ProjectUsersHandler) UpdateUser(
+	ctx context.Context,
 	project string,
 	email string,
 	req UpdateProjectUserOrInvitationRequest,
 ) error {
 	path := buildPath("project", project, "user", email)
-	_, err := h.client.doPutRequest(path, req)
+	_, err := h.client.doPutRequest(ctx, path, req)
 	return err
 }
 
 // UpdateInvitation updates the given project member with the given parameters.
 // NB: The server does not support updating invitations so this is implemented as delete + create
 func (h *ProjectUsersHandler) UpdateInvitation(
+	ctx context.Context,
 	project string,
 	email string,
 	req UpdateProjectUserOrInvitationRequest,
 ) error {
-	err := h.DeleteInvitation(project, email)
+	err := h.DeleteInvitation(ctx, project, email)
 	if err != nil {
 		return err
 	}
-	return h.Invite(project, CreateProjectInvitationRequest{UserEmail: email, MemberType: req.MemberType})
+	return h.Invite(ctx, project, CreateProjectInvitationRequest{UserEmail: email, MemberType: req.MemberType})
 }
 
 // UpdateUserOrInvitation updates either a user if the given email address is associated with a
 // project member or project invitation if it isn't
 func (h *ProjectUsersHandler) UpdateUserOrInvitation(
+	ctx context.Context,
 	project string,
 	email string,
 	req UpdateProjectUserOrInvitationRequest,
 ) error {
-	err := h.UpdateUser(project, email, req)
+	err := h.UpdateUser(ctx, project, email, req)
 	if err == nil {
 		return nil
 	}
 
 	if IsNotFound(err) {
-		return h.UpdateInvitation(project, email, req)
+		return h.UpdateInvitation(ctx, project, email, req)
 	}
 
 	return err
 }
 
 // DeleteInvitation deletes the given project invitation from Aiven.
-func (h *ProjectUsersHandler) DeleteInvitation(project, email string) error {
+func (h *ProjectUsersHandler) DeleteInvitation(ctx context.Context, project, email string) error {
 	path := buildPath("project", project, "invite", email)
-	bts, err := h.client.doDeleteRequest(path, nil)
+	bts, err := h.client.doDeleteRequest(ctx, path, nil)
 	if err != nil {
 		return err
 	}
@@ -140,9 +144,9 @@ func (h *ProjectUsersHandler) DeleteInvitation(project, email string) error {
 }
 
 // DeleteUser deletes the given project user from Aiven.
-func (h *ProjectUsersHandler) DeleteUser(project, email string) error {
+func (h *ProjectUsersHandler) DeleteUser(ctx context.Context, project, email string) error {
 	path := buildPath("project", project, "user", email)
-	bts, err := h.client.doDeleteRequest(path, nil)
+	bts, err := h.client.doDeleteRequest(ctx, path, nil)
 	if err != nil {
 		return err
 	}
@@ -152,23 +156,23 @@ func (h *ProjectUsersHandler) DeleteUser(project, email string) error {
 
 // DeleteUserOrInvitation deletes a user or a project invitation, whichever the email
 // address is associated with
-func (h *ProjectUsersHandler) DeleteUserOrInvitation(project, email string) error {
-	err := h.DeleteUser(project, email)
+func (h *ProjectUsersHandler) DeleteUserOrInvitation(ctx context.Context, project, email string) error {
+	err := h.DeleteUser(ctx, project, email)
 	if err == nil {
 		return nil
 	}
 
 	if IsNotFound(err) {
-		return h.DeleteInvitation(project, email)
+		return h.DeleteInvitation(ctx, project, email)
 	}
 
 	return err
 }
 
 // List all users and invitations for a given project.
-func (h *ProjectUsersHandler) List(project string) ([]*ProjectUser, []*ProjectInvitation, error) {
+func (h *ProjectUsersHandler) List(ctx context.Context, project string) ([]*ProjectUser, []*ProjectInvitation, error) {
 	path := buildPath("project", project, "users")
-	rsp, err := h.client.doGetRequest(path, nil)
+	rsp, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, nil, err
 	}

@@ -12,6 +12,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"regexp"
+	"time"
 
 	"github.com/hashicorp/go-cleanhttp"
 	"github.com/hashicorp/go-retryablehttp"
@@ -165,9 +167,10 @@ func SetupEnvClient(userAgent string) (*Client, error) {
 // buildHttpClient it builds http.Client, if environment variable AIVEN_CA_CERT
 // contains a path to a valid CA certificate HTTPS client will be configured to use it
 func buildHttpClient() *http.Client {
+	retryClient := newRetryableClient()
 	caFilename := os.Getenv("AIVEN_CA_CERT")
 	if caFilename == "" {
-		return &http.Client{}
+		return retryClient.StandardClient()
 	}
 
 	// Load CA cert
@@ -191,17 +194,28 @@ func buildHttpClient() *http.Client {
 	transport.TLSClientConfig = &tls.Config{
 		RootCAs: caCertPool,
 	}
-
-	// Setups retryable http client
-	// retryablehttp performs automatic retries under certain conditions.
-	// Mainly, if an error is returned by the client (connection errors, etc.),
-	// or if a 500-range response code is received (except 501), then a retry is invoked after a wait period.
-	// Otherwise, the response is returned and left to the caller to interpret.
-	retryClient := retryablehttp.NewClient()
-	retryClient.Logger = nil
-	retryClient.RetryMax = 5
 	retryClient.HTTPClient.Transport = transport
 	return retryClient.StandardClient()
+}
+
+// newRetryableClient
+// Setups retryable http client
+// retryablehttp performs automatic retries under certain conditions.
+// Mainly, if an error is returned by the client (connection errors, etc.),
+// or if a 500-range response code is received (except 501), then a retry is invoked after a wait period.
+// Otherwise, the response is returned and left to the caller to interpret.
+func newRetryableClient() *retryablehttp.Client {
+	retryClient := retryablehttp.NewClient()
+	retryClient.Logger = nil
+	retryClient.CheckRetry = checkRetry
+
+	// With given RetryMax, RetryWaitMin, RetryWaitMax:
+	// Default backoff is wait max of: RetryWaitMin, 2^attemptNum * RetryWaitMin,
+	// That makes 1, 4, 8, 16, 30, 30, ...
+	retryClient.RetryMax = 10
+	retryClient.RetryWaitMin = 1 * time.Second
+	retryClient.RetryWaitMax = 30 * time.Second
+	return retryClient
 }
 
 // Init initializes the client and sets up all the handlers.
@@ -322,50 +336,43 @@ func (c *Client) doRequest(method, uri string, body interface{}, apiVersion int)
 		return nil, fmt.Errorf("aiven API apiVersion `%d` is not supported", apiVersion)
 	}
 
-	retryCount := 2
-	for {
-		ctx := c.ctx
-		if ctx == nil {
-			ctx = context.Background()
-		}
-		req, err := http.NewRequestWithContext(ctx, method, url, bytes.NewBuffer(bts))
-		if err != nil {
-			return nil, err
-		}
-
-		req.Header.Set("Content-Type", "application/json")
-		req.Header.Set("User-Agent", c.UserAgent)
-		req.Header.Set("Authorization", "aivenv1 "+c.APIKey)
-
-		// TODO: BAD hack to get around pagination in most cases
-		// we should implement this properly at some point but for now
-		// that should be its own issue
-		query := req.URL.Query()
-		query.Add("limit", "999")
-		req.URL.RawQuery = query.Encode()
-
-		rsp, err := c.Client.Do(req)
-		if err != nil {
-			return nil, err
-		}
-		defer func() {
-			err := rsp.Body.Close()
-			if err != nil {
-				log.Printf("[WARNING] cannot close response body: %s \n", err)
-			}
-		}()
-
-		responseBody, err := io.ReadAll(rsp.Body)
-		// Retry a few times in case of request timeout or server error for GET requests
-		if (rsp.StatusCode == 408 || rsp.StatusCode >= 500) && retryCount > 0 && method == "GET" {
-			retryCount--
-			continue
-		} else if rsp.StatusCode < 200 || rsp.StatusCode >= 300 {
-			return nil, Error{Message: string(responseBody), Status: rsp.StatusCode}
-		}
-
-		return responseBody, err
+	ctx := c.ctx
+	if ctx == nil {
+		ctx = context.Background()
 	}
+	req, err := http.NewRequestWithContext(ctx, method, url, bytes.NewBuffer(bts))
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("User-Agent", c.UserAgent)
+	req.Header.Set("Authorization", "aivenv1 "+c.APIKey)
+
+	// TODO: BAD hack to get around pagination in most cases
+	// we should implement this properly at some point but for now
+	// that should be its own issue
+	query := req.URL.Query()
+	query.Add("limit", "999")
+	req.URL.RawQuery = query.Encode()
+
+	rsp, err := c.Client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	defer func() {
+		err := rsp.Body.Close()
+		if err != nil {
+			log.Printf("[WARNING] cannot close response body: %s \n", err)
+		}
+	}()
+
+	responseBody, err := io.ReadAll(rsp.Body)
+	if err != nil || rsp.StatusCode < 200 || rsp.StatusCode >= 300 {
+		return nil, Error{Message: string(responseBody), Status: rsp.StatusCode}
+	}
+	return responseBody, nil
 }
 
 func endpoint(uri string) string {
@@ -386,4 +393,75 @@ func PointerToString(s *string) string {
 		return ""
 	}
 	return *s
+}
+
+// checkRetry does basic retries (>=500 && != 501, timeouts, connection errors)
+// Plus custom retries, see isRetryable
+// If ErrorPropagatedRetryPolicy returns error it is either >=500
+// or things you can't retry like an invalid protocol scheme
+// Suspends errors, cause that's what retryablehttp.DefaultRetryPolicy does
+func checkRetry(ctx context.Context, rsp *http.Response, err error) (bool, error) {
+	shouldRetry, err := retryablehttp.ErrorPropagatedRetryPolicy(ctx, rsp, err)
+	return shouldRetry || err == nil && isRetryable(rsp), nil
+}
+
+// isRetryable
+// 501 — some resources like kafka topic and kafka connector may return 501. Which means retry later
+// 417 — has dependent resource pending: Application deletion forbidden because it has 1 deployment(s).
+// 408 — dependent server time out
+// 404 — see retryableChecks
+func isRetryable(rsp *http.Response) bool {
+	// This might happen in tests only
+	if rsp.Request == nil {
+		return false
+	}
+
+	switch rsp.StatusCode {
+	case http.StatusRequestTimeout, http.StatusNotImplemented:
+		return true
+	case http.StatusExpectationFailed:
+		return rsp.Request.Method == "DELETE"
+	case http.StatusNotFound:
+		// We need to restore the body
+		body := rsp.Body
+		defer body.Close()
+
+		// Shouldn't be there much of data, ReadAll is ok
+		b, err := io.ReadAll(body)
+		if err != nil {
+			return false
+		}
+
+		// Restores the body
+		rsp.Body = io.NopCloser(bytes.NewReader(b))
+
+		// Error checks
+		s := string(b)
+		for _, c := range retryableChecks {
+			if c(rsp.Request.Method, s) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+var retryableChecks = []func(meth, body string) bool{
+	isServiceLagError,
+	isUserError,
+}
+
+var (
+	reServiceNotFound = regexp.MustCompile(`Service \S+ does not exist`)
+	reUserNotFound    = regexp.MustCompile(`User (avnadmin|root) with component main not found`)
+)
+
+// isServiceLagError service is might be ready, but there is a lag that need to wait for ending
+func isServiceLagError(meth, body string) bool {
+	return meth == "POST" && reServiceNotFound.MatchString(body)
+}
+
+// isUserError an internal unknown error
+func isUserError(_, body string) bool {
+	return reUserNotFound.MatchString(body)
 }

@@ -1,7 +1,10 @@
 // Package aiven provides a client for using the Aiven API.
 package aiven
 
-import "context"
+import (
+	"context"
+	"time"
+)
 
 type (
 	// OrganizationUserGroupHandler is the client which interacts with the Organization Users Groups API on Aiven.
@@ -29,9 +32,9 @@ type (
 		// Description of the user group
 		Description string `json:"description"`
 		// Time when the user group was created
-		CreateTime string `json:"create_time"`
+		CreateTime *time.Time `json:"create_time"`
 		// Time when the user group was last updated
-		UpdateTime string `json:"update_time"`
+		UpdateTime *time.Time `json:"update_time"`
 	}
 
 	// OrganizationUserGroupListResponse is response structure for the Organization Users Groups Members List API on Aiven.

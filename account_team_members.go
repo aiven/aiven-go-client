@@ -1,6 +1,7 @@
 package aiven
 
 import (
+	"context"
 	"errors"
 	"time"
 )
@@ -36,13 +37,13 @@ type (
 )
 
 // List returns a list of all existing account team members
-func (h AccountTeamMembersHandler) List(accountId, teamId string) (*AccountTeamMembersResponse, error) {
+func (h AccountTeamMembersHandler) List(ctx context.Context, accountId, teamId string) (*AccountTeamMembersResponse, error) {
 	if accountId == "" || teamId == "" {
 		return nil, errors.New("cannot get a list of team members when account id or team id is empty")
 	}
 
 	path := buildPath("account", accountId, "team", teamId, "members")
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +56,7 @@ func (h AccountTeamMembersHandler) List(accountId, teamId string) (*AccountTeamM
 }
 
 // Invite invites a team member
-func (h AccountTeamMembersHandler) Invite(accountId, teamId, email string) error {
+func (h AccountTeamMembersHandler) Invite(ctx context.Context, accountId, teamId, email string) error {
 	if accountId == "" || teamId == "" {
 		return errors.New("cannot invite a team members when account id or team id is empty")
 	}
@@ -65,7 +66,7 @@ func (h AccountTeamMembersHandler) Invite(accountId, teamId, email string) error
 	}
 
 	path := buildPath("account", accountId, "team", teamId, "members")
-	bts, err := h.client.doPostRequest(path, struct {
+	bts, err := h.client.doPostRequest(ctx, path, struct {
 		Email string `json:"email"`
 	}{Email: email})
 	if err != nil {
@@ -76,13 +77,13 @@ func (h AccountTeamMembersHandler) Invite(accountId, teamId, email string) error
 }
 
 // Delete deletes an existing account team member
-func (h AccountTeamMembersHandler) Delete(accountId, teamId, userId string) error {
+func (h AccountTeamMembersHandler) Delete(ctx context.Context, accountId, teamId, userId string) error {
 	if accountId == "" || teamId == "" || userId == "" {
 		return errors.New("cannot delete a team member when account id or team id or user id is empty")
 	}
 
 	path := buildPath("account", accountId, "team", teamId, "member", userId)
-	bts, err := h.client.doDeleteRequest(path, nil)
+	bts, err := h.client.doDeleteRequest(ctx, path, nil)
 	if err != nil {
 		return err
 	}

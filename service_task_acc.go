@@ -1,5 +1,7 @@
 package aiven
 
+import "context"
+
 type (
 	// ServiceTaskHandler Aiven go-client handler for Service tesks
 	ServiceTaskHandler struct {
@@ -31,9 +33,9 @@ type (
 )
 
 // Create creates a bew service task
-func (h ServiceTaskHandler) Create(project, service string, r ServiceTaskRequest) (*ServiceTaskResponse, error) {
+func (h ServiceTaskHandler) Create(ctx context.Context, project, service string, r ServiceTaskRequest) (*ServiceTaskResponse, error) {
 	path := buildPath("project", project, "service", service, "task")
-	bts, err := h.client.doPostRequest(path, r)
+	bts, err := h.client.doPostRequest(ctx, path, r)
 	if err != nil {
 		return nil, err
 	}
@@ -47,9 +49,9 @@ func (h ServiceTaskHandler) Create(project, service string, r ServiceTaskRequest
 }
 
 // Get retrieves a new service task
-func (h ServiceTaskHandler) Get(project, service, id string) (*ServiceTaskResponse, error) {
+func (h ServiceTaskHandler) Get(ctx context.Context, project, service, id string) (*ServiceTaskResponse, error) {
 	path := buildPath("project", project, "service", service, "task", id)
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}

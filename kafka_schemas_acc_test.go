@@ -1,6 +1,7 @@
 package aiven
 
 import (
+	"context"
 	"math/rand"
 	"os"
 	"strconv"
@@ -17,10 +18,12 @@ var _ = Describe("Kafka", func() {
 		err         error
 	)
 
+	ctx := context.Background()
+
 	Context("Kafka Schemas CRUD", func() {
 		It("should not error", func() {
 			projectName = os.Getenv("AIVEN_PROJECT_NAME")
-			project, err = client.Projects.Get(projectName)
+			project, err = client.Projects.Get(ctx, projectName)
 
 			Expect(err).NotTo(HaveOccurred())
 		})
@@ -42,7 +45,7 @@ var _ = Describe("Kafka", func() {
 
 		It("creating service", func() {
 			serviceName = "test-acc-kafka-sc-" + strconv.Itoa(rand.Int())
-			service, errS = client.Services.Create(projectName, CreateServiceRequest{
+			service, errS = client.Services.Create(ctx, projectName, CreateServiceRequest{
 				Cloud:        "google-europe-west1",
 				Plan:         "business-4",
 				ProjectVPCID: nil,
@@ -67,7 +70,7 @@ var _ = Describe("Kafka", func() {
 				Expect(service.Type).Should(Equal("kafka"))
 
 				Eventually(func() string {
-					service, _ = client.Services.Get(projectName, serviceName)
+					service, _ = client.Services.Get(ctx, projectName, serviceName)
 					return service.State
 				}, 25*time.Minute, 1*time.Minute).Should(Equal("RUNNING"))
 			}
@@ -82,13 +85,13 @@ var _ = Describe("Kafka", func() {
 
 		It("create kafka schema subject", func() {
 			time.Sleep(25 * time.Second)
-			_, errC = client.KafkaGlobalSchemaConfig.Update(projectName, serviceName, KafkaSchemaConfig{
+			_, errC = client.KafkaGlobalSchemaConfig.Update(ctx, projectName, serviceName, KafkaSchemaConfig{
 				CompatibilityLevel: "BACKWARD",
 			})
 
 			time.Sleep(25 * time.Second)
 			subjectName = "test-subj"
-			_, errR = client.KafkaSubjectSchemas.Add(projectName, serviceName, subjectName, KafkaSchemaSubject{
+			_, errR = client.KafkaSubjectSchemas.Add(ctx, projectName, serviceName, subjectName, KafkaSchemaSubject{
 				Schema: `{
 					"doc": "example",
 					"fields": [{
@@ -113,7 +116,7 @@ var _ = Describe("Kafka", func() {
 		})
 
 		It("should populate fields properly", func() {
-			s, errG := client.KafkaSubjectSchemas.Get(projectName, serviceName, subjectName, 1)
+			s, errG := client.KafkaSubjectSchemas.Get(ctx, projectName, serviceName, subjectName, 1)
 			Expect(errG).NotTo(HaveOccurred())
 			Expect(s).NotTo(BeNil())
 
@@ -125,11 +128,11 @@ var _ = Describe("Kafka", func() {
 		})
 
 		It("should update configuration", func() {
-			_, err := client.KafkaSubjectSchemas.GetConfiguration(projectName, serviceName, subjectName)
+			_, err := client.KafkaSubjectSchemas.GetConfiguration(ctx, projectName, serviceName, subjectName)
 			Expect(err).To(HaveOccurred())
 			Expect(IsNotFound(err)).To(Equal(true))
 
-			s, errU := client.KafkaSubjectSchemas.UpdateConfiguration(projectName, serviceName, subjectName, "FORWARD")
+			s, errU := client.KafkaSubjectSchemas.UpdateConfiguration(ctx, projectName, serviceName, subjectName, "FORWARD")
 			Expect(errU).NotTo(HaveOccurred())
 			Expect(s).NotTo(BeNil())
 
@@ -137,7 +140,7 @@ var _ = Describe("Kafka", func() {
 				Expect(s.CompatibilityLevel).Should(Equal("FORWARD"))
 			}
 
-			s2, errG := client.KafkaSubjectSchemas.GetConfiguration(projectName, serviceName, subjectName)
+			s2, errG := client.KafkaSubjectSchemas.GetConfiguration(ctx, projectName, serviceName, subjectName)
 			Expect(errG).NotTo(HaveOccurred())
 			Expect(s2).NotTo(BeNil())
 
@@ -147,11 +150,11 @@ var _ = Describe("Kafka", func() {
 		})
 
 		It("delete Kafka Schema subject and Kafka service", func() {
-			if errD := client.KafkaSubjectSchemas.Delete(projectName, serviceName, subjectName); errD != nil {
+			if errD := client.KafkaSubjectSchemas.Delete(ctx, projectName, serviceName, subjectName); errD != nil {
 				Fail("cannot delete kafka schema subject:" + errD.Error())
 			}
 
-			if errD := client.Services.Delete(projectName, serviceName); errD != nil {
+			if errD := client.Services.Delete(ctx, projectName, serviceName); errD != nil {
 				Fail("cannot delete service:" + errD.Error())
 			}
 		})

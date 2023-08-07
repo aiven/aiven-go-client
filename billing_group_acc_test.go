@@ -1,6 +1,7 @@
 package aiven
 
 import (
+	"context"
 	"math/rand"
 	"strconv"
 
@@ -16,9 +17,11 @@ var _ = Describe("BillingGroup", func() {
 		err          error
 	)
 
+	ctx := context.Background()
+
 	BeforeEach(func() {
 		billingGName = "test-acc-bg-" + strconv.Itoa(rand.Int())
-		billingG, err = client.BillingGroup.Create(BillingGroupRequest{
+		billingG, err = client.BillingGroup.Create(ctx, BillingGroupRequest{
 			BillingGroupName: billingGName,
 			Company:          ToStringPointer("testC1"),
 			AddressLines:     []string{"NYC Some Street 123 A"},
@@ -49,12 +52,12 @@ var _ = Describe("BillingGroup", func() {
 		})
 
 		It("update and get checks", func() {
-			_, err = client.BillingGroup.Update(billingG.Id, BillingGroupRequest{
+			_, err = client.BillingGroup.Update(ctx, billingG.Id, BillingGroupRequest{
 				BillingExtraText: ToStringPointer("some text ..."),
 			})
 			Expect(err).NotTo(HaveOccurred())
 
-			billingG, err = client.BillingGroup.Get(billingG.Id)
+			billingG, err = client.BillingGroup.Get(ctx, billingG.Id)
 			Expect(err).NotTo(HaveOccurred())
 
 			if billingG != nil {
@@ -70,40 +73,40 @@ var _ = Describe("BillingGroup", func() {
 		})
 
 		It("check empty assigned projects list", func() {
-			projects, err := client.BillingGroup.GetProjects(billingG.Id)
+			projects, err := client.BillingGroup.GetProjects(ctx, billingG.Id)
 			Expect(err).NotTo(HaveOccurred())
 			Expect(projects).To(BeEmpty())
 		})
 
 		It("assign a project", func() {
 			projectName := "test-acc-pr-" + strconv.Itoa(rand.Int())
-			_, err = client.Projects.Create(CreateProjectRequest{
+			_, err = client.Projects.Create(ctx, CreateProjectRequest{
 				Project: projectName,
 				VatID:   ToStringPointer(""),
 				Tags:    map[string]string{},
 			})
 			Expect(err).NotTo(HaveOccurred())
 
-			err = client.BillingGroup.AssignProjects(billingG.Id, []string{projectName})
+			err = client.BillingGroup.AssignProjects(ctx, billingG.Id, []string{projectName})
 			Expect(err).NotTo(HaveOccurred())
 
-			projects, errG := client.BillingGroup.GetProjects(billingG.Id)
+			projects, errG := client.BillingGroup.GetProjects(ctx, billingG.Id)
 			Expect(errG).NotTo(HaveOccurred())
 			Expect(projects).NotTo(BeEmpty())
 
-			err = client.Projects.Delete(projectName)
+			err = client.Projects.Delete(ctx, projectName)
 			Expect(err).NotTo(HaveOccurred())
 		})
 
 		It("list all billing groups", func() {
-			list, err := client.BillingGroup.ListAll()
+			list, err := client.BillingGroup.ListAll(ctx)
 			Expect(err).NotTo(HaveOccurred())
 			Expect(list).NotTo(BeEmpty())
 		})
 
 		It("create billing group by copy from an existing one", func() {
 			billingGName = "copy-from-" + billingG.BillingGroupName
-			copiedBG, err = client.BillingGroup.Create(BillingGroupRequest{
+			copiedBG, err = client.BillingGroup.Create(ctx, BillingGroupRequest{
 				BillingGroupName:     billingGName,
 				CopyFromBillingGroup: ToStringPointer(billingG.Id),
 			})
@@ -120,7 +123,7 @@ var _ = Describe("BillingGroup", func() {
 	})
 
 	AfterEach(func() {
-		err = client.BillingGroup.Delete(billingG.Id)
+		err = client.BillingGroup.Delete(ctx, billingG.Id)
 		if err != nil {
 			Fail("cannot delete billing group : " + err.Error())
 		}

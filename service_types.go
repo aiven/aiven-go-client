@@ -1,5 +1,7 @@
 package aiven
 
+import "context"
+
 type (
 	// GetServicePlanResponse Aiven API request
 	// GET https://api.aiven.io/v1/project/<project>/service-types/<service_type>/plans/<service_plan>
@@ -27,9 +29,9 @@ type (
 )
 
 // Get fetches the service plan from Aiven
-func (h *ServiceTypesHandler) GetPlan(project, serviceType, servicePlan string) (*GetServicePlanResponse, error) {
+func (h *ServiceTypesHandler) GetPlan(ctx context.Context, project, serviceType, servicePlan string) (*GetServicePlanResponse, error) {
 	path := buildPath("project", project, "service-types", serviceType, "plans", servicePlan)
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -41,9 +43,9 @@ func (h *ServiceTypesHandler) GetPlan(project, serviceType, servicePlan string) 
 }
 
 // Get fetches the pricing for the service plan from Aiven
-func (h *ServiceTypesHandler) GetPlanPricing(project, serviceType, servicePlan, cloudName string) (*GetServicePlanPricingResponse, error) {
+func (h *ServiceTypesHandler) GetPlanPricing(ctx context.Context, project, serviceType, servicePlan, cloudName string) (*GetServicePlanPricingResponse, error) {
 	path := buildPath("project", project, "pricing", "service-types", serviceType, "plans", servicePlan, "clouds", cloudName)
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}

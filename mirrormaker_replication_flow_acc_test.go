@@ -1,6 +1,7 @@
 package aiven
 
 import (
+	"context"
 	"math/rand"
 	"os"
 	"strconv"
@@ -16,9 +17,11 @@ var _ = Describe("MirrorMaker 2 Replication flow", func() {
 		err         error
 	)
 
+	ctx := context.Background()
+
 	BeforeEach(func() {
 		projectName = os.Getenv("AIVEN_PROJECT_NAME")
-		project, err = client.Projects.Get(projectName)
+		project, err = client.Projects.Get(ctx, projectName)
 	})
 
 	Context("Get a project", func() {
@@ -43,7 +46,7 @@ var _ = Describe("MirrorMaker 2 Replication flow", func() {
 
 		JustBeforeEach(func() {
 			serviceName = "test-acc-sr-mm-" + strconv.Itoa(rand.Int())
-			service, errS = client.Services.Create(projectName, CreateServiceRequest{
+			service, errS = client.Services.Create(ctx, projectName, CreateServiceRequest{
 				Cloud:        "google-europe-west1",
 				Plan:         "startup-4",
 				ProjectVPCID: nil,
@@ -66,7 +69,7 @@ var _ = Describe("MirrorMaker 2 Replication flow", func() {
 					Expect(service.Type).Should(Equal("kafka_mirrormaker"))
 
 					Eventually(func() string {
-						service, _ = client.Services.Get(projectName, serviceName)
+						service, _ = client.Services.Get(ctx, projectName, serviceName)
 						return service.State
 					}).ShouldNot(Equal("RUNNING"))
 				}
@@ -78,7 +81,7 @@ var _ = Describe("MirrorMaker 2 Replication flow", func() {
 			)
 
 			JustBeforeEach(func() {
-				errR = client.KafkaMirrorMakerReplicationFlow.Create(projectName, serviceName, MirrorMakerReplicationFlowRequest{
+				errR = client.KafkaMirrorMakerReplicationFlow.Create(ctx, projectName, serviceName, MirrorMakerReplicationFlowRequest{
 					ReplicationFlow{
 						Enabled:                         false,
 						OffsetSyncsTopicLocation:        "source",
@@ -98,7 +101,7 @@ var _ = Describe("MirrorMaker 2 Replication flow", func() {
 				})
 
 				It("should populate fields properly", func() {
-					r, errG := client.KafkaMirrorMakerReplicationFlow.Get(projectName, serviceName, "source", "target")
+					r, errG := client.KafkaMirrorMakerReplicationFlow.Get(ctx, projectName, serviceName, "source", "target")
 					Expect(errG).NotTo(HaveOccurred())
 					Expect(r).NotTo(BeNil())
 
@@ -109,7 +112,7 @@ var _ = Describe("MirrorMaker 2 Replication flow", func() {
 				})
 
 				It("should update", func() {
-					r, errU := client.KafkaMirrorMakerReplicationFlow.Update(projectName, serviceName, "source", "target", MirrorMakerReplicationFlowRequest{
+					r, errU := client.KafkaMirrorMakerReplicationFlow.Update(ctx, projectName, serviceName, "source", "target", MirrorMakerReplicationFlowRequest{
 						ReplicationFlow: ReplicationFlow{
 							Enabled:                         false,
 							Topics:                          []string{".*"},
@@ -129,7 +132,7 @@ var _ = Describe("MirrorMaker 2 Replication flow", func() {
 				})
 
 				AfterEach(func() {
-					if errD := client.KafkaMirrorMakerReplicationFlow.Delete(projectName, serviceName, "source", "target"); errD != nil {
+					if errD := client.KafkaMirrorMakerReplicationFlow.Delete(ctx, projectName, serviceName, "source", "target"); errD != nil {
 						Fail("cannot delete mirror maker replication flow:" + errD.Error())
 					}
 				})
@@ -137,7 +140,7 @@ var _ = Describe("MirrorMaker 2 Replication flow", func() {
 		})
 
 		AfterEach(func() {
-			if errD := client.Services.Delete(projectName, serviceName); errD != nil {
+			if errD := client.Services.Delete(ctx, projectName, serviceName); errD != nil {
 				Fail("cannot delete service:" + errD.Error())
 			}
 		})

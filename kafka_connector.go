@@ -1,6 +1,7 @@
 package aiven
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 )
@@ -71,9 +72,9 @@ type (
 )
 
 // Create creates Kafka Connector attached to Kafka or Kafka Connector service based on configuration
-func (h *KafkaConnectorsHandler) Create(project, service string, c KafkaConnectorConfig) error {
+func (h *KafkaConnectorsHandler) Create(ctx context.Context, project, service string, c KafkaConnectorConfig) error {
 	path := buildPath("project", project, "service", service, "connectors")
-	bts, err := h.client.doPostRequest(path, c)
+	bts, err := h.client.doPostRequest(ctx, path, c)
 	if err != nil {
 		return err
 	}
@@ -82,9 +83,9 @@ func (h *KafkaConnectorsHandler) Create(project, service string, c KafkaConnecto
 }
 
 // Delete deletes Kafka Connector by name
-func (h *KafkaConnectorsHandler) Delete(project, service, name string) error {
+func (h *KafkaConnectorsHandler) Delete(ctx context.Context, project, service, name string) error {
 	path := buildPath("project", project, "service", service, "connectors", name)
-	bts, err := h.client.doDeleteRequest(path, nil)
+	bts, err := h.client.doDeleteRequest(ctx, path, nil)
 	if err != nil {
 		return err
 	}
@@ -93,9 +94,9 @@ func (h *KafkaConnectorsHandler) Delete(project, service, name string) error {
 }
 
 // List lists all available Kafka Connectors for a service
-func (h *KafkaConnectorsHandler) List(project, service string) (*KafkaConnectorsResponse, error) {
+func (h *KafkaConnectorsHandler) List(ctx context.Context, project, service string) (*KafkaConnectorsResponse, error) {
 	path := buildPath("project", project, "service", service, "connectors")
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -109,9 +110,9 @@ func (h *KafkaConnectorsHandler) List(project, service string) (*KafkaConnectors
 }
 
 // GetByName gets a KafkaConnector by name
-func (h *KafkaConnectorsHandler) GetByName(project, service, name string) (*KafkaConnector, error) {
+func (h *KafkaConnectorsHandler) GetByName(ctx context.Context, project, service, name string) (*KafkaConnector, error) {
 	path := buildPath("project", project, "service", service, "connectors")
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -138,9 +139,9 @@ func (h *KafkaConnectorsHandler) GetByName(project, service, name string) (*Kafk
 }
 
 // Get the status of a single Kafka Connector by name
-func (h *KafkaConnectorsHandler) Status(project, service, name string) (*KafkaConnectorStatusResponse, error) {
+func (h *KafkaConnectorsHandler) Status(ctx context.Context, project, service, name string) (*KafkaConnectorStatusResponse, error) {
 	path := buildPath("project", project, "service", service, "connectors", name, "status")
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -153,9 +154,9 @@ func (h *KafkaConnectorsHandler) Status(project, service, name string) (*KafkaCo
 }
 
 // Update updates a Kafka Connector configuration by Connector AuthenticationMethodName
-func (h *KafkaConnectorsHandler) Update(project, service, name string, c KafkaConnectorConfig) (*KafkaConnectorResponse, error) {
+func (h *KafkaConnectorsHandler) Update(ctx context.Context, project, service, name string, c KafkaConnectorConfig) (*KafkaConnectorResponse, error) {
 	path := buildPath("project", project, "service", service, "connectors", name)
-	bts, err := h.client.doPutRequest(path, c)
+	bts, err := h.client.doPutRequest(ctx, path, c)
 	if err != nil {
 		return nil, err
 	}

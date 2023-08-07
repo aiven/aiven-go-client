@@ -1,6 +1,7 @@
 package aiven
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -210,7 +211,6 @@ func setupKafkaSchemasTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 	}))
 
 	apiUrl = ts.URL
-
 	c, err := NewUserClient(UserName, UserPassword, "aiven-go-client-test/"+Version())
 	if err != nil {
 		t.Fatalf("user authentication error: %s", err)
@@ -225,6 +225,8 @@ func setupKafkaSchemasTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 func TestKafkaGlobalSchemaConfigHandler_Update(t *testing.T) {
 	c, tearDown := setupKafkaSchemasTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -265,7 +267,7 @@ func TestKafkaGlobalSchemaConfigHandler_Update(t *testing.T) {
 			h := &KafkaGlobalSchemaConfigHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.Update(tt.args.project, tt.args.service, tt.args.c)
+			got, err := h.Update(ctx, tt.args.project, tt.args.service, tt.args.c)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("UpdateConfig() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -280,6 +282,8 @@ func TestKafkaGlobalSchemaConfigHandler_Update(t *testing.T) {
 func TestKafkaSchemaHandler_Add(t *testing.T) {
 	c, tearDown := setupKafkaSchemasTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	schema := `
 		{
@@ -346,7 +350,7 @@ func TestKafkaSchemaHandler_Add(t *testing.T) {
 			h := &KafkaSubjectSchemasHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.Add(tt.args.project, tt.args.service, tt.args.name, tt.args.subject)
+			got, err := h.Add(ctx, tt.args.project, tt.args.service, tt.args.name, tt.args.subject)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Add() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -361,6 +365,8 @@ func TestKafkaSchemaHandler_Add(t *testing.T) {
 func TestKafkaSchemaHandler_Delete(t *testing.T) {
 	c, tearDown := setupKafkaSchemasTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -394,7 +400,7 @@ func TestKafkaSchemaHandler_Delete(t *testing.T) {
 			h := &KafkaSubjectSchemasHandler{
 				client: tt.fields.client,
 			}
-			if err := h.Delete(tt.args.project, tt.args.service, tt.args.name, tt.args.version); (err != nil) != tt.wantErr {
+			if err := h.Delete(ctx, tt.args.project, tt.args.service, tt.args.name, tt.args.version); (err != nil) != tt.wantErr {
 				t.Errorf("Delete() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
@@ -404,6 +410,8 @@ func TestKafkaSchemaHandler_Delete(t *testing.T) {
 func TestKafkaGlobalSchemaConfigHandler_Get(t *testing.T) {
 	c, tearDown := setupKafkaSchemasTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -438,7 +446,7 @@ func TestKafkaGlobalSchemaConfigHandler_Get(t *testing.T) {
 			h := &KafkaGlobalSchemaConfigHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.Get(tt.args.project, tt.args.service)
+			got, err := h.Get(ctx, tt.args.project, tt.args.service)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GetConfig() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -453,6 +461,8 @@ func TestKafkaGlobalSchemaConfigHandler_Get(t *testing.T) {
 func TestKafkaSchemaHandler_Get(t *testing.T) {
 	c, tearDown := setupKafkaSchemasTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -496,7 +506,7 @@ func TestKafkaSchemaHandler_Get(t *testing.T) {
 			h := &KafkaSubjectSchemasHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.Get(tt.args.project, tt.args.service, tt.args.name, tt.args.version)
+			got, err := h.Get(ctx, tt.args.project, tt.args.service, tt.args.name, tt.args.version)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Get() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -511,6 +521,8 @@ func TestKafkaSchemaHandler_Get(t *testing.T) {
 func TestKafkaSchemaHandler_GetVersions(t *testing.T) {
 	c, tearDown := setupKafkaSchemasTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -549,7 +561,7 @@ func TestKafkaSchemaHandler_GetVersions(t *testing.T) {
 			h := &KafkaSubjectSchemasHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.GetVersions(tt.args.project, tt.args.service, tt.args.name)
+			got, err := h.GetVersions(ctx, tt.args.project, tt.args.service, tt.args.name)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GetVersions() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -564,6 +576,8 @@ func TestKafkaSchemaHandler_GetVersions(t *testing.T) {
 func TestKafkaSchemaHandler_List(t *testing.T) {
 	c, tearDown := setupKafkaSchemasTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -600,7 +614,7 @@ func TestKafkaSchemaHandler_List(t *testing.T) {
 			h := &KafkaSubjectSchemasHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.List(tt.args.project, tt.args.service)
+			got, err := h.List(ctx, tt.args.project, tt.args.service)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("List() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -615,6 +629,8 @@ func TestKafkaSchemaHandler_List(t *testing.T) {
 func TestKafkaSchemaHandler_Validate(t *testing.T) {
 	c, tearDown := setupKafkaSchemasTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -665,7 +681,7 @@ func TestKafkaSchemaHandler_Validate(t *testing.T) {
 			h := &KafkaSubjectSchemasHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.Validate(tt.args.project, tt.args.service, tt.args.name, tt.args.version, tt.args.subject)
+			got, err := h.Validate(ctx, tt.args.project, tt.args.service, tt.args.name, tt.args.version, tt.args.subject)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Validate() error = %v, wantErr %v", err, tt.wantErr)
 				return

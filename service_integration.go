@@ -1,5 +1,7 @@
 package aiven
 
+import "context"
+
 type (
 	// NewServiceIntegration defines partial set of service integration fields used
 	// when passing integration as part of service creation call
@@ -74,11 +76,12 @@ type (
 
 // Create the given Service Integration on Aiven.
 func (h *ServiceIntegrationsHandler) Create(
+	ctx context.Context,
 	project string,
 	req CreateServiceIntegrationRequest,
 ) (*ServiceIntegration, error) {
 	path := buildPath("project", project, "integration")
-	bts, err := h.client.doPostRequest(path, req)
+	bts, err := h.client.doPostRequest(ctx, path, req)
 	if err != nil {
 		return nil, err
 	}
@@ -90,9 +93,9 @@ func (h *ServiceIntegrationsHandler) Create(
 }
 
 // Get a specific service integration endpoint from Aiven.
-func (h *ServiceIntegrationsHandler) Get(project, integrationID string) (*ServiceIntegration, error) {
+func (h *ServiceIntegrationsHandler) Get(ctx context.Context, project, integrationID string) (*ServiceIntegration, error) {
 	path := buildPath("project", project, "integration", integrationID)
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -105,12 +108,13 @@ func (h *ServiceIntegrationsHandler) Get(project, integrationID string) (*Servic
 
 // Update the given service integration with the given parameters.
 func (h *ServiceIntegrationsHandler) Update(
+	ctx context.Context,
 	project string,
 	integrationID string,
 	req UpdateServiceIntegrationRequest,
 ) (*ServiceIntegration, error) {
 	path := buildPath("project", project, "integration", integrationID)
-	bts, err := h.client.doPutRequest(path, req)
+	bts, err := h.client.doPutRequest(ctx, path, req)
 	if err != nil {
 		return nil, err
 	}
@@ -122,9 +126,9 @@ func (h *ServiceIntegrationsHandler) Update(
 }
 
 // Delete the given service integration from Aiven.
-func (h *ServiceIntegrationsHandler) Delete(project, integrationID string) error {
+func (h *ServiceIntegrationsHandler) Delete(ctx context.Context, project, integrationID string) error {
 	path := buildPath("project", project, "integration", integrationID)
-	bts, err := h.client.doDeleteRequest(path, nil)
+	bts, err := h.client.doDeleteRequest(ctx, path, nil)
 	if err != nil {
 		return err
 	}
@@ -133,9 +137,9 @@ func (h *ServiceIntegrationsHandler) Delete(project, integrationID string) error
 }
 
 // List all service integration for a given project and service.
-func (h *ServiceIntegrationsHandler) List(project, service string) ([]*ServiceIntegration, error) {
+func (h *ServiceIntegrationsHandler) List(ctx context.Context, project, service string) ([]*ServiceIntegration, error) {
 	path := buildPath("project", project, "service", service, "integration")
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}

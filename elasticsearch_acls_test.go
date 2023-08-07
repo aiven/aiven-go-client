@@ -1,6 +1,7 @@
 package aiven
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -59,7 +60,6 @@ func setupElasticsearchACLsTestCase(t *testing.T) (*Client, func(t *testing.T)) 
 	}))
 
 	apiUrl = ts.URL
-
 	c, err := NewUserClient(UserName, UserPassword, "aiven-go-client-test/"+Version())
 	if err != nil {
 		t.Fatalf("user authentication error: %s", err)
@@ -74,6 +74,8 @@ func setupElasticsearchACLsTestCase(t *testing.T) (*Client, func(t *testing.T)) 
 func TestElasticSearchACLsHandler_Update(t *testing.T) {
 	c, tearDown := setupElasticsearchACLsTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -135,7 +137,7 @@ func TestElasticSearchACLsHandler_Update(t *testing.T) {
 			h := &ElasticSearchACLsHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.Update(tt.args.project, tt.args.service, tt.args.req)
+			got, err := h.Update(ctx, tt.args.project, tt.args.service, tt.args.req)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Update() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -150,6 +152,8 @@ func TestElasticSearchACLsHandler_Update(t *testing.T) {
 func TestElasticSearchACLsHandler_Get(t *testing.T) {
 	c, tearDown := setupElasticsearchACLsTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -196,7 +200,7 @@ func TestElasticSearchACLsHandler_Get(t *testing.T) {
 			h := &ElasticSearchACLsHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.Get(tt.args.project, tt.args.service)
+			got, err := h.Get(ctx, tt.args.project, tt.args.service)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("List() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -303,6 +307,7 @@ func TestElasticSearchACLConfig_Add(t *testing.T) {
 }
 
 func TestElasticSearchACLConfig_Delete(t *testing.T) {
+	ctx := context.Background()
 	type fields struct {
 		ACLs        []ElasticSearchACL
 		Enabled     bool
@@ -392,7 +397,7 @@ func TestElasticSearchACLConfig_Delete(t *testing.T) {
 				Enabled:     tt.fields.Enabled,
 				ExtendedAcl: tt.fields.ExtendedAcl,
 			}
-			if got := conf.Delete(tt.args.acl); !reflect.DeepEqual(got, tt.want) {
+			if got := conf.Delete(ctx, tt.args.acl); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("Delete() = %v, want %v", got, tt.want)
 			}
 		})

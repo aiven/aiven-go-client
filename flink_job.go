@@ -1,5 +1,7 @@
 package aiven
 
+import "context"
+
 type (
 	// FlinkJobHandler aiven go-client handler for Flink Jobs
 	FlinkJobHandler struct {
@@ -119,9 +121,9 @@ type (
 )
 
 // Create creates a flink job
-func (h *FlinkJobHandler) Create(project, service string, req CreateFlinkJobRequest) (*CreateFlinkJobResponse, error) {
+func (h *FlinkJobHandler) Create(ctx context.Context, project, service string, req CreateFlinkJobRequest) (*CreateFlinkJobResponse, error) {
 	path := buildPath("project", project, "service", service, "flink", "job")
-	bts, err := h.client.doPostRequest(path, req)
+	bts, err := h.client.doPostRequest(ctx, path, req)
 	if err != nil {
 		return nil, err
 	}
@@ -131,9 +133,9 @@ func (h *FlinkJobHandler) Create(project, service string, req CreateFlinkJobRequ
 }
 
 // List lists a flink job
-func (h *FlinkJobHandler) List(project, service string) (*ListFlinkJobResponse, error) {
+func (h *FlinkJobHandler) List(ctx context.Context, project, service string) (*ListFlinkJobResponse, error) {
 	path := buildPath("project", project, "service", service, "flink", "job")
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -143,9 +145,9 @@ func (h *FlinkJobHandler) List(project, service string) (*ListFlinkJobResponse, 
 }
 
 // Get gets a flink job
-func (h *FlinkJobHandler) Get(project, service string, req GetFlinkJobRequest) (*GetFlinkJobResponse, error) {
+func (h *FlinkJobHandler) Get(ctx context.Context, project, service string, req GetFlinkJobRequest) (*GetFlinkJobResponse, error) {
 	path := buildPath("project", project, "service", service, "flink", "proxy", "v1", "jobs", req.JobId)
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -155,9 +157,9 @@ func (h *FlinkJobHandler) Get(project, service string, req GetFlinkJobRequest) (
 }
 
 // Patch patches a flink job
-func (h *FlinkJobHandler) Patch(project, service string, req PatchFlinkJobRequest) error {
+func (h *FlinkJobHandler) Patch(ctx context.Context, project, service string, req PatchFlinkJobRequest) error {
 	path := buildPath("project", project, "service", service, "flink", "proxy", "v1", "jobs", req.JobId)
-	bts, err := h.client.doPatchRequest(path, nil)
+	bts, err := h.client.doPatchRequest(ctx, path, nil)
 	if err != nil {
 		return err
 	}
@@ -166,9 +168,9 @@ func (h *FlinkJobHandler) Patch(project, service string, req PatchFlinkJobReques
 }
 
 // Validate validates a flink job
-func (h *FlinkJobHandler) Validate(project, service string, req ValidateFlinkJobRequest) (*ValidateFlinkJobResponse, error) {
+func (h *FlinkJobHandler) Validate(ctx context.Context, project, service string, req ValidateFlinkJobRequest) (*ValidateFlinkJobResponse, error) {
 	path := buildPath("project", project, "service", service, "flink", "job", "validate")
-	bts, err := h.client.doPostRequest(path, req)
+	bts, err := h.client.doPostRequest(ctx, path, req)
 	if err != nil {
 		return nil, err
 	}

@@ -1,5 +1,7 @@
 package aiven
 
+import "context"
+
 type (
 	// AWSPrivatelinkHandler is the client that interacts with the AWS Privatelink API on Aiven.
 	AWSPrivatelinkHandler struct {
@@ -24,9 +26,9 @@ type (
 )
 
 // Create creates an AWS Privatelink
-func (h *AWSPrivatelinkHandler) Create(project, serviceName string, principals []string) (*AWSPrivatelinkResponse, error) {
+func (h *AWSPrivatelinkHandler) Create(ctx context.Context, project, serviceName string, principals []string) (*AWSPrivatelinkResponse, error) {
 	path := buildPath("project", project, "service", serviceName, "privatelink", "aws")
-	bts, err := h.client.doPostRequest(path, AWSPrivatelinkRequest{
+	bts, err := h.client.doPostRequest(ctx, path, AWSPrivatelinkRequest{
 		Principals: principals,
 	})
 	if err != nil {
@@ -42,9 +44,9 @@ func (h *AWSPrivatelinkHandler) Create(project, serviceName string, principals [
 }
 
 // Update updates an AWS Privatelink
-func (h *AWSPrivatelinkHandler) Update(project, serviceName string, principals []string) (*AWSPrivatelinkResponse, error) {
+func (h *AWSPrivatelinkHandler) Update(ctx context.Context, project, serviceName string, principals []string) (*AWSPrivatelinkResponse, error) {
 	path := buildPath("project", project, "service", serviceName, "privatelink", "aws")
-	bts, err := h.client.doPutRequest(path, AWSPrivatelinkRequest{
+	bts, err := h.client.doPutRequest(ctx, path, AWSPrivatelinkRequest{
 		Principals: principals,
 	})
 	if err != nil {
@@ -60,9 +62,9 @@ func (h *AWSPrivatelinkHandler) Update(project, serviceName string, principals [
 }
 
 // Get retrieves an AWS Privatelink
-func (h *AWSPrivatelinkHandler) Get(project, serviceName string) (*AWSPrivatelinkResponse, error) {
+func (h *AWSPrivatelinkHandler) Get(ctx context.Context, project, serviceName string) (*AWSPrivatelinkResponse, error) {
 	path := buildPath("project", project, "service", serviceName, "privatelink", "aws")
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -76,9 +78,9 @@ func (h *AWSPrivatelinkHandler) Get(project, serviceName string) (*AWSPrivatelin
 }
 
 // Delete deletes an AWS Privatelink
-func (h *AWSPrivatelinkHandler) Delete(project, serviceName string) error {
+func (h *AWSPrivatelinkHandler) Delete(ctx context.Context, project, serviceName string) error {
 	path := buildPath("project", project, "service", serviceName, "privatelink", "aws")
-	rsp, err := h.client.doDeleteRequest(path, nil)
+	rsp, err := h.client.doDeleteRequest(ctx, path, nil)
 	if err != nil {
 		return err
 	}

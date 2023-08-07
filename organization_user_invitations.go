@@ -1,6 +1,8 @@
 // Package aiven provides a client for using the Aiven API.
 package aiven
 
+import "context"
+
 type (
 	// OrganizationUserInvitationsHandler is the client which interacts with the Organization Invitations API on Aiven.
 	OrganizationUserInvitationsHandler struct {
@@ -36,10 +38,10 @@ type (
 )
 
 // List returns a list of all organization user invitations.
-func (h *OrganizationUserInvitationsHandler) List(id string) (*OrganizationUserInvitationsList, error) {
+func (h *OrganizationUserInvitationsHandler) List(ctx context.Context, id string) (*OrganizationUserInvitationsList, error) {
 	path := buildPath("organization", id, "invitation")
 
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -50,10 +52,10 @@ func (h *OrganizationUserInvitationsHandler) List(id string) (*OrganizationUserI
 }
 
 // Invite invites a user to the organization.
-func (h *OrganizationUserInvitationsHandler) Invite(id string, req OrganizationUserInvitationAddRequest) error {
+func (h *OrganizationUserInvitationsHandler) Invite(ctx context.Context, id string, req OrganizationUserInvitationAddRequest) error {
 	path := buildPath("organization", id, "invitation")
 
-	bts, err := h.client.doPostRequest(path, req)
+	bts, err := h.client.doPostRequest(ctx, path, req)
 	if err != nil {
 		return err
 	}
@@ -62,10 +64,10 @@ func (h *OrganizationUserInvitationsHandler) Invite(id string, req OrganizationU
 }
 
 // Delete deletes an organization user invitation.
-func (h *OrganizationUserInvitationsHandler) Delete(id, userEmail string) error {
+func (h *OrganizationUserInvitationsHandler) Delete(ctx context.Context, id, userEmail string) error {
 	path := buildPath("organization", id, "invitation", userEmail)
 
-	bts, err := h.client.doDeleteRequest(path, nil)
+	bts, err := h.client.doDeleteRequest(ctx, path, nil)
 	if err != nil {
 		return err
 	}

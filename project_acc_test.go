@@ -1,6 +1,8 @@
 package aiven
 
 import (
+	"context"
+
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -14,9 +16,11 @@ var _ = Describe("Projects", func() {
 		err          error
 	)
 
+	ctx := context.Background()
+
 	BeforeEach(func() {
 		billingGName = "test-acc-bg-" + generateRandomID()
-		billingG, err = client.BillingGroup.Create(BillingGroupRequest{
+		billingG, err = client.BillingGroup.Create(ctx, BillingGroupRequest{
 			BillingGroupName: billingGName,
 			Company:          ToStringPointer("testC1"),
 			AddressLines:     []string{"NYC Some Street 123 A"},
@@ -27,7 +31,7 @@ var _ = Describe("Projects", func() {
 		})
 
 		projectName = "test-acc-pr" + generateRandomID()
-		project, err = client.Projects.Create(CreateProjectRequest{
+		project, err = client.Projects.Create(ctx, CreateProjectRequest{
 			Project:                      projectName,
 			BillingCurrency:              "EUR",
 			TechnicalEmails:              ContactEmailFromStringSlice([]string{"test@example.com"}),
@@ -45,7 +49,7 @@ var _ = Describe("Projects", func() {
 		})
 
 		It("should populate fields properly", func() {
-			project, err = client.Projects.Get(projectName)
+			project, err = client.Projects.Get(ctx, projectName)
 			Expect(err).NotTo(HaveOccurred())
 			Expect(project).NotTo(BeNil())
 
@@ -60,7 +64,7 @@ var _ = Describe("Projects", func() {
 		})
 
 		It("update project name", func() {
-			project, err = client.Projects.Update(projectName, UpdateProjectRequest{
+			project, err = client.Projects.Update(ctx, projectName, UpdateProjectRequest{
 				Name: projectName + "-new",
 				Tags: map[string]string{},
 			})
@@ -76,7 +80,7 @@ var _ = Describe("Projects", func() {
 
 	Context("Get project event logs", func() {
 		It("should be event logs", func() {
-			events, logErr := client.Projects.GetEventLog(projectName)
+			events, logErr := client.Projects.GetEventLog(ctx, projectName)
 			Expect(logErr).To(BeNil())
 			Expect(events).ToNot(BeNil())
 			Expect(events).Should(Not(BeEmpty()))
@@ -88,7 +92,7 @@ var _ = Describe("Projects", func() {
 
 	Context("Get service types", func() {
 		It("check returned service types", func() {
-			serviceTypes, err := client.Projects.ServiceTypes(projectName)
+			serviceTypes, err := client.Projects.ServiceTypes(ctx, projectName)
 			Expect(err).To(BeNil())
 			Expect(serviceTypes).ToNot(BeNil())
 			Expect(serviceTypes).Should(Not(BeEmpty()))
@@ -100,7 +104,7 @@ var _ = Describe("Projects", func() {
 
 	Context("Get integration types", func() {
 		It("check returned integration types", func() {
-			integrationTypes, err := client.Projects.IntegrationTypes(projectName)
+			integrationTypes, err := client.Projects.IntegrationTypes(ctx, projectName)
 			Expect(err).To(BeNil())
 			Expect(integrationTypes).ToNot(BeNil())
 			Expect(integrationTypes).Should(Not(BeEmpty()))
@@ -112,7 +116,7 @@ var _ = Describe("Projects", func() {
 
 	Context("Get integration endpoint types", func() {
 		It("check returned integration endpoint types", func() {
-			endpointTypes, err := client.Projects.IntegrationEndpointTypes(projectName)
+			endpointTypes, err := client.Projects.IntegrationEndpointTypes(ctx, projectName)
 			Expect(err).To(BeNil())
 			Expect(endpointTypes).ToNot(BeNil())
 			Expect(endpointTypes).Should(Not(BeEmpty()))
@@ -123,12 +127,12 @@ var _ = Describe("Projects", func() {
 	})
 
 	AfterEach(func() {
-		err = client.Projects.Delete(projectName)
+		err = client.Projects.Delete(ctx, projectName)
 		if err != nil {
 			Fail("cannot delete project : " + err.Error())
 		}
 
-		err = client.BillingGroup.Delete(billingG.Id)
+		err = client.BillingGroup.Delete(ctx, billingG.Id)
 		if err != nil {
 			Fail("cannot delete billing group : " + err.Error())
 		}

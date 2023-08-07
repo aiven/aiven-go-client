@@ -1,6 +1,7 @@
 package aiven
 
 import (
+	"context"
 	"math/rand"
 	"strconv"
 
@@ -9,6 +10,7 @@ import (
 )
 
 var _ = Describe("Accounts", func() {
+	ctx := context.Background()
 	Context("Check all possible accounts interactions", func() {
 		// Account
 		var (
@@ -19,7 +21,7 @@ var _ = Describe("Accounts", func() {
 
 		It("Account creation should not error", func() {
 			accountName = "test-acc-account-" + strconv.Itoa(rand.Int())
-			account, err = client.Accounts.Create(Account{Name: accountName})
+			account, err = client.Accounts.Create(ctx, Account{Name: accountName})
 			Expect(err).NotTo(HaveOccurred())
 		})
 
@@ -46,7 +48,7 @@ var _ = Describe("Accounts", func() {
 				Fail("account is nil")
 			}
 			teamName = "test-acc-team" + strconv.Itoa(rand.Int())
-			team, errT = client.AccountTeams.Create(account.Account.Id, AccountTeam{
+			team, errT = client.AccountTeams.Create(ctx, account.Account.Id, AccountTeam{
 				Name: teamName,
 			})
 
@@ -68,14 +70,14 @@ var _ = Describe("Accounts", func() {
 
 		It("should not error", func() {
 			memberEmail = "ivan.savciuc+" + strconv.Itoa(rand.Int()) + "@aiven.io"
-			errM = client.AccountTeamMembers.Invite(account.Account.Id, team.Team.Id, memberEmail)
+			errM = client.AccountTeamMembers.Invite(ctx, account.Account.Id, team.Team.Id, memberEmail)
 
 			Expect(memberEmail).NotTo(BeEmpty())
 			Expect(errM).NotTo(HaveOccurred())
 		})
 
 		It("should send invite", func() {
-			invites, errI := client.AccountTeamInvites.List(account.Account.Id, team.Team.Id)
+			invites, errI := client.AccountTeamInvites.List(ctx, account.Account.Id, team.Team.Id)
 			Expect(errI).NotTo(HaveOccurred())
 
 			var found bool
@@ -87,7 +89,7 @@ var _ = Describe("Accounts", func() {
 
 			Expect(found).To(Equal(true), "cannot find invitation for newly created member")
 
-			if errD := client.AccountTeamInvites.Delete(account.Account.Id, team.Team.Id, memberEmail); errD != nil {
+			if errD := client.AccountTeamInvites.Delete(ctx, account.Account.Id, team.Team.Id, memberEmail); errD != nil {
 				Fail("cannot delete an invitation :" + errD.Error())
 			}
 		})
@@ -102,7 +104,7 @@ var _ = Describe("Accounts", func() {
 			projectName = "test-acc-pr" + strconv.Itoa(rand.Int())
 
 			By("Create project")
-			if _, errP := client.Projects.Create(CreateProjectRequest{
+			if _, errP := client.Projects.Create(ctx, CreateProjectRequest{
 				Project:   projectName,
 				AccountId: ToStringPointer(account.Account.Id),
 				Tags:      map[string]string{},
@@ -112,6 +114,7 @@ var _ = Describe("Accounts", func() {
 
 			By("Create account team project association")
 			if errTP := client.AccountTeamProjects.Create(
+				ctx,
 				account.Account.Id,
 				team.Team.Id,
 				AccountTeamProject{ProjectName: projectName, TeamType: "developer"}); errTP != nil {
@@ -120,6 +123,7 @@ var _ = Describe("Accounts", func() {
 
 			By("Update account team project")
 			if errTPu := client.AccountTeamProjects.Update(
+				ctx,
 				account.Account.Id,
 				team.Team.Id,
 				AccountTeamProject{ProjectName: projectName, TeamType: projectType}); errTPu != nil {
@@ -128,7 +132,7 @@ var _ = Describe("Accounts", func() {
 		})
 
 		It("Account team project association should be in the list", func() {
-			projects, errL := client.AccountTeamProjects.List(account.Account.Id, team.Team.Id)
+			projects, errL := client.AccountTeamProjects.List(ctx, account.Account.Id, team.Team.Id)
 			Expect(errL).NotTo(HaveOccurred())
 
 			if projects != nil {
@@ -145,13 +149,13 @@ var _ = Describe("Accounts", func() {
 		})
 
 		It("AccountAuthentications check authentication methods", func() {
-			list, errL := client.AccountAuthentications.List(account.Account.Id)
+			list, errL := client.AccountAuthentications.List(ctx, account.Account.Id)
 			Expect(errL).NotTo(HaveOccurred())
 			Expect(list.AuthenticationMethods).NotTo(BeEmpty(), "default auth methods should be created automatically")
 		})
 
 		It("AccountAuthentications  add new one", func() {
-			resp, errL := client.AccountAuthentications.Create(account.Account.Id, AccountAuthenticationMethodCreate{
+			resp, errL := client.AccountAuthentications.Create(ctx, account.Account.Id, AccountAuthenticationMethodCreate{
 				AuthenticationMethodName: "test-auth",
 				AuthenticationMethodType: "saml",
 			})
@@ -165,28 +169,28 @@ var _ = Describe("Accounts", func() {
 		})
 
 		It("remove all the stuff", func() {
-			if errD := client.AccountTeamProjects.Delete(account.Account.Id, team.Team.Id, projectName); errD != nil {
+			if errD := client.AccountTeamProjects.Delete(ctx, account.Account.Id, team.Team.Id, projectName); errD != nil {
 				Fail("cannot delete account team project association :" + errD.Error())
 			}
 
-			if errD := client.Projects.Delete(projectName); errD != nil {
+			if errD := client.Projects.Delete(ctx, projectName); errD != nil {
 				Fail("cannot delete project :" + errD.Error())
 			}
 
-			if list, errL := client.AccountTeamMembers.List(account.Account.Id, team.Team.Id); errL != nil {
+			if list, errL := client.AccountTeamMembers.List(ctx, account.Account.Id, team.Team.Id); errL != nil {
 				Fail("cannot get a list of account team members:" + errL.Error())
 			} else {
 				for _, m := range list.Members {
-					if errD := client.AccountTeamMembers.Delete(account.Account.Id, team.Team.Id, m.UserEmail); errD != nil {
+					if errD := client.AccountTeamMembers.Delete(ctx, account.Account.Id, team.Team.Id, m.UserEmail); errD != nil {
 						Fail("cannot delete account team member:" + errD.Error())
 					}
 				}
 			}
-			if errD := client.AccountTeams.Delete(account.Account.Id, team.Team.Id); errD != nil {
+			if errD := client.AccountTeams.Delete(ctx, account.Account.Id, team.Team.Id); errD != nil {
 				Fail("cannot delete account team :" + errD.Error())
 			}
 
-			if errD := client.Accounts.Delete(account.Account.Id); errD != nil {
+			if errD := client.Accounts.Delete(ctx, account.Account.Id); errD != nil {
 				Fail("cannot delete account :" + errD.Error())
 			}
 		})

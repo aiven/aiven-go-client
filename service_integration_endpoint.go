@@ -1,6 +1,7 @@
 package aiven
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -52,11 +53,12 @@ type (
 
 // Create the given Service Integration Endpoint on Aiven.
 func (h *ServiceIntegrationEndpointsHandler) Create(
+	ctx context.Context,
 	project string,
 	req CreateServiceIntegrationEndpointRequest,
 ) (*ServiceIntegrationEndpoint, error) {
 	path := buildPath("project", project, "integration_endpoint")
-	bts, err := h.client.doPostRequest(path, req)
+	bts, err := h.client.doPostRequest(ctx, path, req)
 	if err != nil {
 		return nil, err
 	}
@@ -68,10 +70,10 @@ func (h *ServiceIntegrationEndpointsHandler) Create(
 }
 
 // Get a specific service integration endpoint from Aiven.
-func (h *ServiceIntegrationEndpointsHandler) Get(project, endpointID string) (*ServiceIntegrationEndpoint, error) {
+func (h *ServiceIntegrationEndpointsHandler) Get(ctx context.Context, project, endpointID string) (*ServiceIntegrationEndpoint, error) {
 	// There's no API for getting integration endpoint by ID. List all endpoints
 	// and pick the correct one instead. (There shouldn't ever be many endpoints.)
-	endpoints, err := h.List(project)
+	endpoints, err := h.List(ctx, project)
 	if err != nil {
 		return nil, err
 	}
@@ -88,12 +90,13 @@ func (h *ServiceIntegrationEndpointsHandler) Get(project, endpointID string) (*S
 
 // Update the given service integration endpoint with the given parameters.
 func (h *ServiceIntegrationEndpointsHandler) Update(
+	ctx context.Context,
 	project string,
 	endpointID string,
 	req UpdateServiceIntegrationEndpointRequest,
 ) (*ServiceIntegrationEndpoint, error) {
 	path := buildPath("project", project, "integration_endpoint", endpointID)
-	bts, err := h.client.doPutRequest(path, req)
+	bts, err := h.client.doPutRequest(ctx, path, req)
 	if err != nil {
 		return nil, err
 	}
@@ -105,9 +108,9 @@ func (h *ServiceIntegrationEndpointsHandler) Update(
 }
 
 // Delete the given service integration endpoint from Aiven.
-func (h *ServiceIntegrationEndpointsHandler) Delete(project, endpointID string) error {
+func (h *ServiceIntegrationEndpointsHandler) Delete(ctx context.Context, project, endpointID string) error {
 	path := buildPath("project", project, "integration_endpoint", endpointID)
-	bts, err := h.client.doDeleteRequest(path, nil)
+	bts, err := h.client.doDeleteRequest(ctx, path, nil)
 	if err != nil {
 		return err
 	}
@@ -116,9 +119,9 @@ func (h *ServiceIntegrationEndpointsHandler) Delete(project, endpointID string) 
 }
 
 // List all service integration endpoints for a given project.
-func (h *ServiceIntegrationEndpointsHandler) List(project string) ([]*ServiceIntegrationEndpoint, error) {
+func (h *ServiceIntegrationEndpointsHandler) List(ctx context.Context, project string) ([]*ServiceIntegrationEndpoint, error) {
 	path := buildPath("project", project, "integration_endpoint")
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}

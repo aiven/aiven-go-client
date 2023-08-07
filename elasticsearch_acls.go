@@ -1,5 +1,7 @@
 package aiven
 
+import "context"
+
 type (
 	// ElasticSearchACLsHandler Aiven go-client handler for Elastisearch ACLs
 	ElasticSearchACLsHandler struct {
@@ -40,9 +42,9 @@ type (
 )
 
 // Update updates Elasticsearch ACL config
-func (h *ElasticSearchACLsHandler) Update(project, service string, req ElasticsearchACLRequest) (*ElasticSearchACLResponse, error) {
+func (h *ElasticSearchACLsHandler) Update(ctx context.Context, project, service string, req ElasticsearchACLRequest) (*ElasticSearchACLResponse, error) {
 	path := buildPath("project", project, "service", service, "elasticsearch", "acl")
-	bts, err := h.client.doPutRequest(path, req)
+	bts, err := h.client.doPutRequest(ctx, path, req)
 	if err != nil {
 		return nil, err
 	}
@@ -54,9 +56,9 @@ func (h *ElasticSearchACLsHandler) Update(project, service string, req Elasticse
 }
 
 // Get gets all existing Elasticsearch ACLs config
-func (h *ElasticSearchACLsHandler) Get(project, service string) (*ElasticSearchACLResponse, error) {
+func (h *ElasticSearchACLsHandler) Get(ctx context.Context, project, service string) (*ElasticSearchACLResponse, error) {
 	path := buildPath("project", project, "service", service, "elasticsearch", "acl")
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +70,7 @@ func (h *ElasticSearchACLsHandler) Get(project, service string) (*ElasticSearchA
 }
 
 // Delete subtracts ACL from already existing Elasticsearch ACLs config
-func (conf *ElasticSearchACLConfig) Delete(acl ElasticSearchACL) *ElasticSearchACLConfig {
+func (conf *ElasticSearchACLConfig) Delete(ctx context.Context, acl ElasticSearchACL) *ElasticSearchACLConfig {
 	for p, existingAcl := range conf.ACLs { // subtract ALC from existing ACLs config entry that supposed to be deleted
 		if acl.Username == existingAcl.Username {
 			for i := range existingAcl.Rules {

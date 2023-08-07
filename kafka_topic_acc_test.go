@@ -1,6 +1,7 @@
 package aiven
 
 import (
+	"context"
 	"math/rand"
 	"os"
 	"strconv"
@@ -17,10 +18,12 @@ var _ = Describe("Kafka Topic", func() {
 		err         error
 	)
 
+	ctx := context.Background()
+
 	Context("Kafka Topic CRUD", func() {
 		It("should not error", func() {
 			projectName = os.Getenv("AIVEN_PROJECT_NAME")
-			project, err = client.Projects.Get(projectName)
+			project, err = client.Projects.Get(ctx, projectName)
 
 			Expect(err).NotTo(HaveOccurred())
 		})
@@ -42,7 +45,7 @@ var _ = Describe("Kafka Topic", func() {
 
 		It("creating service", func() {
 			serviceName = "test-acc-kafka-topic-sr-" + strconv.Itoa(rand.Int())
-			service, errS = client.Services.Create(projectName, CreateServiceRequest{
+			service, errS = client.Services.Create(ctx, projectName, CreateServiceRequest{
 				Cloud:        "google-europe-west1",
 				Plan:         "business-4",
 				ProjectVPCID: nil,
@@ -64,7 +67,7 @@ var _ = Describe("Kafka Topic", func() {
 				Expect(service.Type).Should(Equal("kafka"))
 
 				Eventually(func() string {
-					service, _ = client.Services.Get(projectName, serviceName)
+					service, _ = client.Services.Get(ctx, projectName, serviceName)
 					return service.State
 				}, 25*time.Minute, 1*time.Minute).Should(Equal("RUNNING"))
 			}
@@ -81,7 +84,7 @@ var _ = Describe("Kafka Topic", func() {
 
 		It("create kafka topic", func() {
 			time.Sleep(10 * time.Second)
-			errC = client.KafkaTopics.Create(projectName, serviceName, CreateKafkaTopicRequest{
+			errC = client.KafkaTopics.Create(ctx, projectName, serviceName, CreateKafkaTopicRequest{
 				TopicName: topicName,
 				Config: KafkaTopicConfig{
 					CleanupPolicy:   "compact",
@@ -96,7 +99,7 @@ var _ = Describe("Kafka Topic", func() {
 			})
 
 			Eventually(func() string {
-				topic, _ := client.KafkaTopics.Get(projectName, serviceName, topicName)
+				topic, _ := client.KafkaTopics.Get(ctx, projectName, serviceName, topicName)
 
 				if topic != nil {
 					return topic.State
@@ -111,7 +114,7 @@ var _ = Describe("Kafka Topic", func() {
 		})
 
 		It("should populate fields properly", func() {
-			t, errT := client.KafkaTopics.Get(projectName, serviceName, topicName)
+			t, errT := client.KafkaTopics.Get(ctx, projectName, serviceName, topicName)
 			Expect(errT).NotTo(HaveOccurred())
 
 			if t != nil {
@@ -126,7 +129,7 @@ var _ = Describe("Kafka Topic", func() {
 		It("should update topic config", func() {
 			var uncleanLeaderElectionEnable = true
 
-			errU := client.KafkaTopics.Update(projectName, serviceName, topicName, UpdateKafkaTopicRequest{
+			errU := client.KafkaTopics.Update(ctx, projectName, serviceName, topicName, UpdateKafkaTopicRequest{
 				Config: KafkaTopicConfig{
 					UncleanLeaderElectionEnable: &uncleanLeaderElectionEnable,
 				},
@@ -143,7 +146,7 @@ var _ = Describe("Kafka Topic", func() {
 			})
 			Expect(errU).NotTo(HaveOccurred())
 
-			t2, errG := client.KafkaTopics.Get(projectName, serviceName, topicName)
+			t2, errG := client.KafkaTopics.Get(ctx, projectName, serviceName, topicName)
 			Expect(errG).NotTo(HaveOccurred())
 			Expect(t2).NotTo(BeNil())
 
@@ -155,7 +158,7 @@ var _ = Describe("Kafka Topic", func() {
 		})
 
 		It("list v2", func() {
-			list, errV2 := client.KafkaTopics.V2List(projectName, serviceName, []string{topicName})
+			list, errV2 := client.KafkaTopics.V2List(ctx, projectName, serviceName, []string{topicName})
 			Expect(errV2).NotTo(HaveOccurred())
 
 			Expect(len(list)).Should(Equal(1))
@@ -166,11 +169,11 @@ var _ = Describe("Kafka Topic", func() {
 		})
 
 		It("delete Kafka Topic and Kafka service", func() {
-			if errD := client.KafkaTopics.Delete(projectName, serviceName, topicName); errD != nil {
+			if errD := client.KafkaTopics.Delete(ctx, projectName, serviceName, topicName); errD != nil {
 				Fail("cannot delete kafka topic:" + errD.Error())
 			}
 
-			if errD := client.Services.Delete(projectName, serviceName); errD != nil {
+			if errD := client.Services.Delete(ctx, projectName, serviceName); errD != nil {
 				Fail("cannot delete service:" + errD.Error())
 			}
 		})

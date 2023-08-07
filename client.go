@@ -42,7 +42,6 @@ func init() {
 
 // Client represents the instance that does all the calls to the Aiven API.
 type Client struct {
-	ctx       context.Context
 	APIKey    string
 	Client    *http.Client
 	UserAgent string
@@ -112,7 +111,8 @@ func NewMFAUserClient(email, otp, password string, userAgent string) (*Client, e
 		UserAgent: GetUserAgentOrDefault(userAgent),
 	}
 
-	bts, err := c.doPostRequest("/userauth", authRequest{email, otp, password})
+	ctx := context.Background()
+	bts, err := c.doPostRequest(ctx, "/userauth", authRequest{email, otp, password})
 	if err != nil {
 		return nil, err
 	}
@@ -270,53 +270,46 @@ func (c *Client) Init() {
 	c.OrganizationUserGroupMembers = &OrganizationUserGroupMembersHandler{c}
 }
 
-// WithContext create a copy of Client where all request would be using the provided context
-func (c *Client) WithContext(ctx context.Context) *Client {
-	o := &Client{ctx: ctx, APIKey: c.APIKey, UserAgent: c.UserAgent, Client: c.Client}
-	o.Init()
-	return o
+func (c *Client) doGetRequest(ctx context.Context, endpoint string, req interface{}) ([]byte, error) {
+	return c.doRequest(ctx, "GET", endpoint, req, 1)
 }
 
-func (c *Client) doGetRequest(endpoint string, req interface{}) ([]byte, error) {
-	return c.doRequest("GET", endpoint, req, 1)
+func (c *Client) doPutRequest(ctx context.Context, endpoint string, req interface{}) ([]byte, error) {
+	return c.doRequest(ctx, "PUT", endpoint, req, 1)
 }
 
-func (c *Client) doPutRequest(endpoint string, req interface{}) ([]byte, error) {
-	return c.doRequest("PUT", endpoint, req, 1)
+func (c *Client) doPostRequest(ctx context.Context, endpoint string, req interface{}) ([]byte, error) {
+	return c.doRequest(ctx, "POST", endpoint, req, 1)
 }
 
-func (c *Client) doPostRequest(endpoint string, req interface{}) ([]byte, error) {
-	return c.doRequest("POST", endpoint, req, 1)
+func (c *Client) doPatchRequest(ctx context.Context, endpoint string, req interface{}) ([]byte, error) {
+	return c.doRequest(ctx, "PATCH", endpoint, req, 1)
 }
 
-func (c *Client) doPatchRequest(endpoint string, req interface{}) ([]byte, error) {
-	return c.doRequest("PATCH", endpoint, req, 1)
-}
-
-func (c *Client) doDeleteRequest(endpoint string, req interface{}) ([]byte, error) {
-	return c.doRequest("DELETE", endpoint, req, 1)
+func (c *Client) doDeleteRequest(ctx context.Context, endpoint string, req interface{}) ([]byte, error) {
+	return c.doRequest(ctx, "DELETE", endpoint, req, 1)
 }
 
 //nolint:unused
-func (c *Client) doV2GetRequest(endpoint string, req interface{}) ([]byte, error) {
-	return c.doRequest("GET", endpoint, req, 2)
+func (c *Client) doV2GetRequest(ctx context.Context, endpoint string, req interface{}) ([]byte, error) {
+	return c.doRequest(ctx, "GET", endpoint, req, 2)
 }
 
 //nolint:unused
-func (c *Client) doV2PutRequest(endpoint string, req interface{}) ([]byte, error) {
-	return c.doRequest("PUT", endpoint, req, 2)
+func (c *Client) doV2PutRequest(ctx context.Context, endpoint string, req interface{}) ([]byte, error) {
+	return c.doRequest(ctx, "PUT", endpoint, req, 2)
 }
 
-func (c *Client) doV2PostRequest(endpoint string, req interface{}) ([]byte, error) {
-	return c.doRequest("POST", endpoint, req, 2)
+func (c *Client) doV2PostRequest(ctx context.Context, endpoint string, req interface{}) ([]byte, error) {
+	return c.doRequest(ctx, "POST", endpoint, req, 2)
 }
 
 //nolint:unused
-func (c *Client) doV2DeleteRequest(endpoint string, req interface{}) ([]byte, error) {
-	return c.doRequest("DELETE", endpoint, req, 2)
+func (c *Client) doV2DeleteRequest(ctx context.Context, endpoint string, req interface{}) ([]byte, error) {
+	return c.doRequest(ctx, "DELETE", endpoint, req, 2)
 }
 
-func (c *Client) doRequest(method, uri string, body interface{}, apiVersion int) ([]byte, error) {
+func (c *Client) doRequest(ctx context.Context, method, uri string, body interface{}, apiVersion int) ([]byte, error) {
 	var bts []byte
 	if body != nil {
 		var err error
@@ -336,10 +329,6 @@ func (c *Client) doRequest(method, uri string, body interface{}, apiVersion int)
 		return nil, fmt.Errorf("aiven API apiVersion `%d` is not supported", apiVersion)
 	}
 
-	ctx := c.ctx
-	if ctx == nil {
-		ctx = context.Background()
-	}
 	req, err := http.NewRequestWithContext(ctx, method, url, bytes.NewBuffer(bts))
 	if err != nil {
 		return nil, err

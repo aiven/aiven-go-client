@@ -1,6 +1,9 @@
 package aiven
 
-import "fmt"
+import (
+	"context"
+	"fmt"
+)
 
 type (
 	// StaticIPsHandler aiven go-client handler for static ips
@@ -53,9 +56,9 @@ type (
 )
 
 // Create creates a static ip
-func (h *StaticIPsHandler) Create(project string, req CreateStaticIPRequest) (*CreateStaticIPResponse, error) {
+func (h *StaticIPsHandler) Create(ctx context.Context, project string, req CreateStaticIPRequest) (*CreateStaticIPResponse, error) {
 	path := buildPath("project", project, "static-ips")
-	bts, err := h.client.doPostRequest(path, req)
+	bts, err := h.client.doPostRequest(ctx, path, req)
 	if err != nil {
 		return nil, err
 	}
@@ -67,9 +70,9 @@ func (h *StaticIPsHandler) Create(project string, req CreateStaticIPRequest) (*C
 }
 
 // Delete deletes a static ip
-func (h *StaticIPsHandler) Delete(project string, req DeleteStaticIPRequest) error {
+func (h *StaticIPsHandler) Delete(ctx context.Context, project string, req DeleteStaticIPRequest) error {
 	path := buildPath("project", project, "static-ips", req.StaticIPAddressID)
-	bts, err := h.client.doDeleteRequest(path, nil)
+	bts, err := h.client.doDeleteRequest(ctx, path, nil)
 	if err != nil {
 		return err
 	}
@@ -80,8 +83,8 @@ func (h *StaticIPsHandler) Delete(project string, req DeleteStaticIPRequest) err
 // Get retrieves a Static IP
 // NOTE: API does not support GET /v1/project/{project}/static-ips/{static-ip-id},
 // need to fetch all, filter by ID and fake a 404 if nothing is found
-func (h *StaticIPsHandler) Get(project, staticIPID string) (*StaticIP, error) {
-	staticIPs, err := h.List(project)
+func (h *StaticIPsHandler) Get(ctx context.Context, project, staticIPID string) (*StaticIP, error) {
+	staticIPs, err := h.List(ctx, project)
 	if err != nil {
 		return nil, err
 	}
@@ -104,9 +107,9 @@ func (h *StaticIPsHandler) Get(project, staticIPID string) (*StaticIP, error) {
 }
 
 // List lists all static ips
-func (h *StaticIPsHandler) List(project string) (*ListStaticIPResponse, error) {
+func (h *StaticIPsHandler) List(ctx context.Context, project string) (*ListStaticIPResponse, error) {
 	path := buildPath("project", project, "static-ips")
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -117,9 +120,9 @@ func (h *StaticIPsHandler) List(project string) (*ListStaticIPResponse, error) {
 	return &r, errR
 }
 
-func (h *StaticIPsHandler) Associate(project, staticIPID string, req AssociateStaticIPRequest) error {
+func (h *StaticIPsHandler) Associate(ctx context.Context, project, staticIPID string, req AssociateStaticIPRequest) error {
 	path := buildPath("project", project, "static-ips", staticIPID, "association")
-	rsp, err := h.client.doPostRequest(path, req)
+	rsp, err := h.client.doPostRequest(ctx, path, req)
 	if err != nil {
 		return err
 	}
@@ -127,9 +130,9 @@ func (h *StaticIPsHandler) Associate(project, staticIPID string, req AssociateSt
 	return checkAPIResponse(rsp, nil)
 }
 
-func (h *StaticIPsHandler) Dissociate(project, staticIPID string) error {
+func (h *StaticIPsHandler) Dissociate(ctx context.Context, project, staticIPID string) error {
 	path := buildPath("project", project, "static-ips", staticIPID, "association")
-	rsp, err := h.client.doDeleteRequest(path, nil)
+	rsp, err := h.client.doDeleteRequest(ctx, path, nil)
 	if err != nil {
 		return err
 	}

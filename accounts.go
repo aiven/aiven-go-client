@@ -1,6 +1,7 @@
 package aiven
 
 import (
+	"context"
 	"errors"
 	"time"
 )
@@ -40,9 +41,9 @@ type (
 )
 
 // List returns a list of all existing accounts
-func (h AccountsHandler) List() (*AccountsResponse, error) {
+func (h AccountsHandler) List(ctx context.Context) (*AccountsResponse, error) {
 	path := buildPath("account")
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -56,13 +57,13 @@ func (h AccountsHandler) List() (*AccountsResponse, error) {
 }
 
 // Get retrieves account by id
-func (h AccountsHandler) Get(id string) (*AccountResponse, error) {
+func (h AccountsHandler) Get(ctx context.Context, id string) (*AccountResponse, error) {
 	if id == "" {
 		return nil, errors.New("cannot get account by empty account id")
 	}
 
 	path := buildPath("account", id)
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -76,13 +77,13 @@ func (h AccountsHandler) Get(id string) (*AccountResponse, error) {
 }
 
 // Delete deletes an existing account by id
-func (h AccountsHandler) Delete(id string) error {
+func (h AccountsHandler) Delete(ctx context.Context, id string) error {
 	if id == "" {
 		return errors.New("cannot delete account by empty account id")
 	}
 
 	path := buildPath("account", id)
-	bts, err := h.client.doDeleteRequest(path, nil)
+	bts, err := h.client.doDeleteRequest(ctx, path, nil)
 	if err != nil {
 		return err
 	}
@@ -91,13 +92,13 @@ func (h AccountsHandler) Delete(id string) error {
 }
 
 // Update updates an existing account
-func (h AccountsHandler) Update(id string, account Account) (*AccountResponse, error) {
+func (h AccountsHandler) Update(ctx context.Context, id string, account Account) (*AccountResponse, error) {
 	if id == "" {
 		return nil, errors.New("cannot update account by empty account id")
 	}
 
 	path := buildPath("account", id)
-	bts, err := h.client.doPutRequest(path, account)
+	bts, err := h.client.doPutRequest(ctx, path, account)
 	if err != nil {
 		return nil, err
 	}
@@ -111,9 +112,9 @@ func (h AccountsHandler) Update(id string, account Account) (*AccountResponse, e
 }
 
 // Create creates new account
-func (h AccountsHandler) Create(account Account) (*AccountResponse, error) {
+func (h AccountsHandler) Create(ctx context.Context, account Account) (*AccountResponse, error) {
 	path := buildPath("account")
-	bts, err := h.client.doPostRequest(path, account)
+	bts, err := h.client.doPostRequest(ctx, path, account)
 	if err != nil {
 		return nil, err
 	}

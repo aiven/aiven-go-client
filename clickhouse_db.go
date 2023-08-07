@@ -1,6 +1,9 @@
 package aiven
 
-import "fmt"
+import (
+	"context"
+	"fmt"
+)
 
 type (
 	// ClickhouseDatabaseHandler aiven go-client handler for Clickhouse Databases
@@ -28,9 +31,9 @@ type (
 )
 
 // Create creates a ClickHouse job
-func (h *ClickhouseDatabaseHandler) Create(project, service, database string) error {
+func (h *ClickhouseDatabaseHandler) Create(ctx context.Context, project, service, database string) error {
 	path := buildPath("project", project, "service", service, "clickhouse", "db")
-	bts, err := h.client.doPostRequest(path, ClickhouseDatabaseRequest{
+	bts, err := h.client.doPostRequest(ctx, path, ClickhouseDatabaseRequest{
 		Database: database,
 	})
 	if err != nil {
@@ -41,9 +44,9 @@ func (h *ClickhouseDatabaseHandler) Create(project, service, database string) er
 }
 
 // List gets a list of ClickHouse database for a service
-func (h *ClickhouseDatabaseHandler) List(project, service string) (*ListClickhouseDatabaseResponse, error) {
+func (h *ClickhouseDatabaseHandler) List(ctx context.Context, project, service string) (*ListClickhouseDatabaseResponse, error) {
 	path := buildPath("project", project, "service", service, "clickhouse", "db")
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -55,8 +58,8 @@ func (h *ClickhouseDatabaseHandler) List(project, service string) (*ListClickhou
 }
 
 // Get gets a ClickHouse database
-func (h *ClickhouseDatabaseHandler) Get(project, service, database string) (*ClickhouseDatabase, error) {
-	l, err := h.List(project, service)
+func (h *ClickhouseDatabaseHandler) Get(ctx context.Context, project, service, database string) (*ClickhouseDatabase, error) {
+	l, err := h.List(ctx, project, service)
 	if err != nil {
 		return nil, err
 	}
@@ -74,9 +77,9 @@ func (h *ClickhouseDatabaseHandler) Get(project, service, database string) (*Cli
 }
 
 // Delete deletes a ClickHouse database
-func (h *ClickhouseDatabaseHandler) Delete(project, service, database string) error {
+func (h *ClickhouseDatabaseHandler) Delete(ctx context.Context, project, service, database string) error {
 	path := buildPath("project", project, "service", service, "clickhouse", "db", database)
-	bts, err := h.client.doDeleteRequest(path, nil)
+	bts, err := h.client.doDeleteRequest(ctx, path, nil)
 	if err != nil {
 		return err
 	}

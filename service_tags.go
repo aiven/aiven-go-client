@@ -1,5 +1,7 @@
 package aiven
 
+import "context"
+
 type (
 	// ServiceTagsHandler is the client which interacts with the Aiven service tags endpoints.
 	ServiceTagsHandler struct {
@@ -19,9 +21,9 @@ type (
 )
 
 // Set sets service tags with the given parameters.
-func (h *ServiceTagsHandler) Set(project, service string, req ServiceTagsRequest) (*ServiceTagsResponse, error) {
+func (h *ServiceTagsHandler) Set(ctx context.Context, project, service string, req ServiceTagsRequest) (*ServiceTagsResponse, error) {
 	path := buildPath("project", project, "service", service, "tags")
-	bts, err := h.client.doPutRequest(path, req)
+	bts, err := h.client.doPutRequest(ctx, path, req)
 	if err != nil {
 		return nil, err
 	}
@@ -35,9 +37,9 @@ func (h *ServiceTagsHandler) Set(project, service string, req ServiceTagsRequest
 }
 
 // Get returns a list of all service tags.
-func (h *ServiceTagsHandler) Get(project, service string) (*ServiceTagsResponse, error) {
+func (h *ServiceTagsHandler) Get(ctx context.Context, project, service string) (*ServiceTagsResponse, error) {
 	path := buildPath("project", project, "service", service, "tags")
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}

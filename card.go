@@ -1,6 +1,7 @@
 package aiven
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -32,8 +33,8 @@ type (
 )
 
 // List returns all the cards linked to the authenticated account.
-func (h *CardsHandler) List() ([]*Card, error) {
-	bts, err := h.client.doGetRequest("/card", nil)
+func (h *CardsHandler) List(ctx context.Context) ([]*Card, error) {
+	bts, err := h.client.doGetRequest(ctx, "/card", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -45,12 +46,12 @@ func (h *CardsHandler) List() ([]*Card, error) {
 }
 
 // Get card by card ID. The ID may be either last 4 digits of the card or the actual ID
-func (h *CardsHandler) Get(cardID string) (*Card, error) {
+func (h *CardsHandler) Get(ctx context.Context, cardID string) (*Card, error) {
 	if len(cardID) == 0 {
 		return nil, nil
 	}
 
-	cards, err := h.List()
+	cards, err := h.List(ctx)
 	if err != nil {
 		return nil, err
 	}

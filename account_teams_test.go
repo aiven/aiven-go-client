@@ -1,6 +1,7 @@
 package aiven
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -120,7 +121,6 @@ func setupAccountsTeamsTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 	}))
 
 	apiUrl = ts.URL
-
 	c, err := NewUserClient(UserName, UserPassword, "aiven-go-client-test/"+Version())
 	if err != nil {
 		t.Fatalf("user authentication error: %s", err)
@@ -135,6 +135,8 @@ func setupAccountsTeamsTestCase(t *testing.T) (*Client, func(t *testing.T)) {
 func TestAccountsTeamsHandler_List(t *testing.T) {
 	c, tearDown := setupAccountsTeamsTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -180,7 +182,7 @@ func TestAccountsTeamsHandler_List(t *testing.T) {
 			h := AccountTeamsHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.List(tt.args.accountId)
+			got, err := h.List(ctx, tt.args.accountId)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("List() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -195,6 +197,8 @@ func TestAccountsTeamsHandler_List(t *testing.T) {
 func TestAccountsTeamsHandler_Get(t *testing.T) {
 	c, tearDown := setupAccountsTeamsTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -255,7 +259,7 @@ func TestAccountsTeamsHandler_Get(t *testing.T) {
 			h := AccountTeamsHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.Get(tt.args.accountId, tt.args.teamId)
+			got, err := h.Get(ctx, tt.args.accountId, tt.args.teamId)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Get() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -270,6 +274,8 @@ func TestAccountsTeamsHandler_Get(t *testing.T) {
 func TestAccountsTeamsHandler_Create(t *testing.T) {
 	c, tearDown := setupAccountsTeamsTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -324,7 +330,7 @@ func TestAccountsTeamsHandler_Create(t *testing.T) {
 			h := AccountTeamsHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.Create(tt.args.accountId, tt.args.team)
+			got, err := h.Create(ctx, tt.args.accountId, tt.args.team)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Create() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -339,6 +345,8 @@ func TestAccountsTeamsHandler_Create(t *testing.T) {
 func TestAccountsTeamsHandler_Delete(t *testing.T) {
 	c, tearDown := setupAccountsTeamsTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -386,7 +394,7 @@ func TestAccountsTeamsHandler_Delete(t *testing.T) {
 			h := AccountTeamsHandler{
 				client: tt.fields.client,
 			}
-			if err := h.Delete(tt.args.accountId, tt.args.teamId); (err != nil) != tt.wantErr {
+			if err := h.Delete(ctx, tt.args.accountId, tt.args.teamId); (err != nil) != tt.wantErr {
 				t.Errorf("Delete() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
@@ -396,6 +404,8 @@ func TestAccountsTeamsHandler_Delete(t *testing.T) {
 func TestAccountTeamsHandler_Update(t *testing.T) {
 	c, tearDown := setupAccountsTeamsTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -466,7 +476,7 @@ func TestAccountTeamsHandler_Update(t *testing.T) {
 			h := AccountTeamsHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.Update(tt.args.accountId, tt.args.teamId, tt.args.team)
+			got, err := h.Update(ctx, tt.args.accountId, tt.args.teamId, tt.args.team)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Update() error = %v, wantErr %v", err, tt.wantErr)
 				return

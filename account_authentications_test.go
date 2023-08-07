@@ -1,6 +1,7 @@
 package aiven
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -122,7 +123,6 @@ func setupAccountAuthenticationsTestCase(t *testing.T) (*Client, func(t *testing
 	}))
 
 	apiUrl = ts.URL
-
 	c, err := NewUserClient(UserName, UserPassword, "aiven-go-client-test/"+Version())
 	if err != nil {
 		t.Fatalf("user authentication error: %s", err)
@@ -137,6 +137,8 @@ func setupAccountAuthenticationsTestCase(t *testing.T) (*Client, func(t *testing
 func TestAccountAuthenticationsHandler_List(t *testing.T) {
 	c, tearDown := setupAccountAuthenticationsTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -186,7 +188,7 @@ func TestAccountAuthenticationsHandler_List(t *testing.T) {
 			h := AccountAuthenticationsHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.List(tt.args.accountId)
+			got, err := h.List(ctx, tt.args.accountId)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("List() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -201,6 +203,8 @@ func TestAccountAuthenticationsHandler_List(t *testing.T) {
 func TestAccountAuthenticationsHandler_Create(t *testing.T) {
 	c, tearDown := setupAccountAuthenticationsTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -262,7 +266,7 @@ func TestAccountAuthenticationsHandler_Create(t *testing.T) {
 			h := AccountAuthenticationsHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.Create(tt.args.accountId, tt.args.a)
+			got, err := h.Create(ctx, tt.args.accountId, tt.args.a)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Create() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -277,6 +281,8 @@ func TestAccountAuthenticationsHandler_Create(t *testing.T) {
 func TestAccountAuthenticationsHandler_Update(t *testing.T) {
 	c, tearDown := setupAccountAuthenticationsTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -350,7 +356,7 @@ func TestAccountAuthenticationsHandler_Update(t *testing.T) {
 			h := AccountAuthenticationsHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.Update(tt.args.accountId, tt.args.accountAuthMethId, tt.args.a)
+			got, err := h.Update(ctx, tt.args.accountId, tt.args.accountAuthMethId, tt.args.a)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Update() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -365,6 +371,8 @@ func TestAccountAuthenticationsHandler_Update(t *testing.T) {
 func TestAccountAuthenticationsHandler_Delete(t *testing.T) {
 	c, tearDown := setupAccountAuthenticationsTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -411,7 +419,7 @@ func TestAccountAuthenticationsHandler_Delete(t *testing.T) {
 			h := AccountAuthenticationsHandler{
 				client: tt.fields.client,
 			}
-			if err := h.Delete(tt.args.accountId, tt.args.authId); (err != nil) != tt.wantErr {
+			if err := h.Delete(ctx, tt.args.accountId, tt.args.authId); (err != nil) != tt.wantErr {
 				t.Errorf("Delete() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
@@ -421,6 +429,8 @@ func TestAccountAuthenticationsHandler_Delete(t *testing.T) {
 func TestAccountAuthenticationsHandler_Get(t *testing.T) {
 	c, tearDown := setupAccountAuthenticationsTestCase(t)
 	defer tearDown(t)
+
+	ctx := context.Background()
 
 	type fields struct {
 		client *Client
@@ -483,7 +493,7 @@ func TestAccountAuthenticationsHandler_Get(t *testing.T) {
 			h := AccountAuthenticationsHandler{
 				client: tt.fields.client,
 			}
-			got, err := h.Get(tt.args.accountId, tt.args.authId)
+			got, err := h.Get(ctx, tt.args.accountId, tt.args.authId)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Get() error = %v, wantErr %v", err, tt.wantErr)
 				return

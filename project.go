@@ -1,5 +1,7 @@
 package aiven
 
+import "context"
+
 type (
 	// Project represents the Project model on Aiven.
 	Project struct {
@@ -222,8 +224,8 @@ func (p Project) GetTechnicalEmailsAsStringSlice() []string {
 }
 
 // Create creates a new project.
-func (h *ProjectsHandler) Create(req CreateProjectRequest) (*Project, error) {
-	bts, err := h.client.doPostRequest(buildPath("project"), req)
+func (h *ProjectsHandler) Create(ctx context.Context, req CreateProjectRequest) (*Project, error) {
+	bts, err := h.client.doPostRequest(ctx, buildPath("project"), req)
 	if err != nil {
 		return nil, err
 	}
@@ -235,8 +237,8 @@ func (h *ProjectsHandler) Create(req CreateProjectRequest) (*Project, error) {
 }
 
 // Get returns gets the specified project.
-func (h *ProjectsHandler) Get(project string) (*Project, error) {
-	bts, err := h.client.doGetRequest(buildPath("project", project), nil)
+func (h *ProjectsHandler) Get(ctx context.Context, project string) (*Project, error) {
+	bts, err := h.client.doGetRequest(ctx, buildPath("project", project), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -248,8 +250,8 @@ func (h *ProjectsHandler) Get(project string) (*Project, error) {
 }
 
 // Update modifies the specified project with the given parameters.
-func (h *ProjectsHandler) Update(project string, req UpdateProjectRequest) (*Project, error) {
-	bts, err := h.client.doPutRequest(buildPath("project", project), req)
+func (h *ProjectsHandler) Update(ctx context.Context, project string, req UpdateProjectRequest) (*Project, error) {
+	bts, err := h.client.doPutRequest(ctx, buildPath("project", project), req)
 	if err != nil {
 		return nil, err
 	}
@@ -261,8 +263,8 @@ func (h *ProjectsHandler) Update(project string, req UpdateProjectRequest) (*Pro
 }
 
 // Delete removes the given project.
-func (h *ProjectsHandler) Delete(project string) error {
-	bts, err := h.client.doDeleteRequest(buildPath("project", project), nil)
+func (h *ProjectsHandler) Delete(ctx context.Context, project string) error {
+	bts, err := h.client.doDeleteRequest(ctx, buildPath("project", project), nil)
 	if err != nil {
 		return err
 	}
@@ -271,8 +273,8 @@ func (h *ProjectsHandler) Delete(project string) error {
 }
 
 // List returns all the available projects linked to the account.
-func (h *ProjectsHandler) List() ([]*Project, error) {
-	bts, err := h.client.doGetRequest(buildPath("project"), nil)
+func (h *ProjectsHandler) List(ctx context.Context) ([]*Project, error) {
+	bts, err := h.client.doGetRequest(ctx, buildPath("project"), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -284,8 +286,8 @@ func (h *ProjectsHandler) List() ([]*Project, error) {
 }
 
 // GetEventLog returns project event log entries
-func (h *ProjectsHandler) GetEventLog(project string) ([]*ProjectEvent, error) {
-	bts, err := h.client.doGetRequest(buildPath("project", project, "events"), nil)
+func (h *ProjectsHandler) GetEventLog(ctx context.Context, project string) ([]*ProjectEvent, error) {
+	bts, err := h.client.doGetRequest(ctx, buildPath("project", project, "events"), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -297,8 +299,8 @@ func (h *ProjectsHandler) GetEventLog(project string) ([]*ProjectEvent, error) {
 }
 
 // ServiceTypes returns all the available service types.
-func (h *ProjectsHandler) ServiceTypes(project string) (map[string]ServiceType, error) {
-	bts, err := h.client.doGetRequest(buildPath("project", project, "service_types"), nil)
+func (h *ProjectsHandler) ServiceTypes(ctx context.Context, project string) (map[string]ServiceType, error) {
+	bts, err := h.client.doGetRequest(ctx, buildPath("project", project, "service_types"), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -310,8 +312,8 @@ func (h *ProjectsHandler) ServiceTypes(project string) (map[string]ServiceType, 
 }
 
 // IntegrationTypes returns all the available integration types.
-func (h *ProjectsHandler) IntegrationTypes(project string) ([]IntegrationType, error) {
-	bts, err := h.client.doGetRequest(buildPath("project", project, "integration_types"), nil)
+func (h *ProjectsHandler) IntegrationTypes(ctx context.Context, project string) ([]IntegrationType, error) {
+	bts, err := h.client.doGetRequest(ctx, buildPath("project", project, "integration_types"), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -323,8 +325,8 @@ func (h *ProjectsHandler) IntegrationTypes(project string) ([]IntegrationType, e
 }
 
 // IntegrationEndpointTypes returns all the available integration endpoint types.
-func (h *ProjectsHandler) IntegrationEndpointTypes(project string) ([]IntegrationEndpointType, error) {
-	bts, err := h.client.doGetRequest(buildPath("project", project, "integration_endpoint_types"), nil)
+func (h *ProjectsHandler) IntegrationEndpointTypes(ctx context.Context, project string) ([]IntegrationEndpointType, error) {
+	bts, err := h.client.doGetRequest(ctx, buildPath("project", project, "integration_endpoint_types"), nil)
 	if err != nil {
 		return nil, err
 	}

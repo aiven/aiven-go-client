@@ -1,6 +1,9 @@
 package aiven
 
-import "errors"
+import (
+	"context"
+	"errors"
+)
 
 type (
 	// AccountTeamProjectsHandler Aiven go-client handler for Account Team Projects
@@ -23,13 +26,13 @@ type (
 )
 
 // List returns a list of all existing account team projects
-func (h AccountTeamProjectsHandler) List(accountId, teamId string) (*AccountTeamProjectsResponse, error) {
+func (h AccountTeamProjectsHandler) List(ctx context.Context, accountId, teamId string) (*AccountTeamProjectsResponse, error) {
 	if accountId == "" || teamId == "" {
 		return nil, errors.New("cannot get a list of team projects when account id or team id is empty")
 	}
 
 	path := buildPath("account", accountId, "team", teamId, "projects")
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -42,7 +45,7 @@ func (h AccountTeamProjectsHandler) List(accountId, teamId string) (*AccountTeam
 }
 
 // Create creates account team project association
-func (h AccountTeamProjectsHandler) Create(accountId, teamId string, p AccountTeamProject) error {
+func (h AccountTeamProjectsHandler) Create(ctx context.Context, accountId, teamId string, p AccountTeamProject) error {
 	if accountId == "" || teamId == "" {
 		return errors.New("cannot create team projects association when account id or team id is empty")
 	}
@@ -52,7 +55,7 @@ func (h AccountTeamProjectsHandler) Create(accountId, teamId string, p AccountTe
 	}
 
 	path := buildPath("account", accountId, "team", teamId, "project", p.ProjectName)
-	bts, err := h.client.doPostRequest(path, AccountTeamProject{TeamType: p.TeamType})
+	bts, err := h.client.doPostRequest(ctx, path, AccountTeamProject{TeamType: p.TeamType})
 	if err != nil {
 		return err
 	}
@@ -61,7 +64,7 @@ func (h AccountTeamProjectsHandler) Create(accountId, teamId string, p AccountTe
 }
 
 // Update updates account team project association
-func (h AccountTeamProjectsHandler) Update(accountId, teamId string, p AccountTeamProject) error {
+func (h AccountTeamProjectsHandler) Update(ctx context.Context, accountId, teamId string, p AccountTeamProject) error {
 	if accountId == "" || teamId == "" {
 		return errors.New("cannot update team projects association when account id or team id is empty")
 	}
@@ -71,7 +74,7 @@ func (h AccountTeamProjectsHandler) Update(accountId, teamId string, p AccountTe
 	}
 
 	path := buildPath("account", accountId, "team", teamId, "project", p.ProjectName)
-	bts, err := h.client.doPutRequest(path, AccountTeamProject{TeamType: p.TeamType})
+	bts, err := h.client.doPutRequest(ctx, path, AccountTeamProject{TeamType: p.TeamType})
 	if err != nil {
 		return err
 	}
@@ -80,7 +83,7 @@ func (h AccountTeamProjectsHandler) Update(accountId, teamId string, p AccountTe
 }
 
 // Delete deletes account team project association
-func (h AccountTeamProjectsHandler) Delete(accountId, teamId, projectName string) error {
+func (h AccountTeamProjectsHandler) Delete(ctx context.Context, accountId, teamId, projectName string) error {
 	if accountId == "" || teamId == "" {
 		return errors.New("cannot update team projects association when account id or team id is empty")
 	}
@@ -90,7 +93,7 @@ func (h AccountTeamProjectsHandler) Delete(accountId, teamId, projectName string
 	}
 
 	path := buildPath("account", accountId, "team", teamId, "project", projectName)
-	bts, err := h.client.doDeleteRequest(path, nil)
+	bts, err := h.client.doDeleteRequest(ctx, path, nil)
 	if err != nil {
 		return err
 	}

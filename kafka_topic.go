@@ -1,5 +1,7 @@
 package aiven
 
+import "context"
+
 type (
 	// KafkaTopicConfig represents a Kafka Topic Config on Aiven.
 	KafkaTopicConfig struct {
@@ -195,9 +197,9 @@ type (
 )
 
 // Create creats a specific kafka topic.
-func (h *KafkaTopicsHandler) Create(project, service string, req CreateKafkaTopicRequest) error {
+func (h *KafkaTopicsHandler) Create(ctx context.Context, project, service string, req CreateKafkaTopicRequest) error {
 	path := buildPath("project", project, "service", service, "topic")
-	bts, err := h.client.doPostRequest(path, req)
+	bts, err := h.client.doPostRequest(ctx, path, req)
 	if err != nil {
 		return err
 	}
@@ -206,9 +208,9 @@ func (h *KafkaTopicsHandler) Create(project, service string, req CreateKafkaTopi
 }
 
 // Get gets a specific kafka topic.
-func (h *KafkaTopicsHandler) Get(project, service, topic string) (*KafkaTopic, error) {
+func (h *KafkaTopicsHandler) Get(ctx context.Context, project, service, topic string) (*KafkaTopic, error) {
 	path := buildPath("project", project, "service", service, "topic", topic)
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -220,9 +222,9 @@ func (h *KafkaTopicsHandler) Get(project, service, topic string) (*KafkaTopic, e
 }
 
 // List lists all the kafka topics.
-func (h *KafkaTopicsHandler) List(project, service string) ([]*KafkaListTopic, error) {
+func (h *KafkaTopicsHandler) List(ctx context.Context, project, service string) ([]*KafkaListTopic, error) {
 	path := buildPath("project", project, "service", service, "topic")
-	bts, err := h.client.doGetRequest(path, nil)
+	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -234,9 +236,9 @@ func (h *KafkaTopicsHandler) List(project, service string) ([]*KafkaListTopic, e
 }
 
 // Update updates a specific topic with the given parameters.
-func (h *KafkaTopicsHandler) Update(project, service, topic string, req UpdateKafkaTopicRequest) error {
+func (h *KafkaTopicsHandler) Update(ctx context.Context, project, service, topic string, req UpdateKafkaTopicRequest) error {
 	path := buildPath("project", project, "service", service, "topic", topic)
-	bts, err := h.client.doPutRequest(path, req)
+	bts, err := h.client.doPutRequest(ctx, path, req)
 	if err != nil {
 		return err
 	}
@@ -245,9 +247,9 @@ func (h *KafkaTopicsHandler) Update(project, service, topic string, req UpdateKa
 }
 
 // Delete deletes a specific kafka topic.
-func (h *KafkaTopicsHandler) Delete(project, service, topic string) error {
+func (h *KafkaTopicsHandler) Delete(ctx context.Context, project, service, topic string) error {
 	path := buildPath("project", project, "service", service, "topic", topic)
-	bts, err := h.client.doDeleteRequest(path, nil)
+	bts, err := h.client.doDeleteRequest(ctx, path, nil)
 	if err != nil {
 		return err
 	}
@@ -256,7 +258,7 @@ func (h *KafkaTopicsHandler) Delete(project, service, topic string) error {
 }
 
 // V2List lists selected kafka topics using v2 API endpoint.
-func (h *KafkaTopicsHandler) V2List(project, service string, topics []string) ([]*KafkaTopic, error) {
+func (h *KafkaTopicsHandler) V2List(ctx context.Context, project, service string, topics []string) ([]*KafkaTopic, error) {
 	type v2ListRequest struct {
 		TopicNames []string `json:"topic_names"`
 	}
@@ -264,7 +266,7 @@ func (h *KafkaTopicsHandler) V2List(project, service string, topics []string) ([
 	req := v2ListRequest{TopicNames: topics}
 
 	path := buildPath("project", project, "service", service, "topic")
-	bts, err := h.client.doV2PostRequest(path, req)
+	bts, err := h.client.doV2PostRequest(ctx, path, req)
 	if err != nil {
 		return nil, err
 	}

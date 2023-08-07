@@ -1,5 +1,7 @@
 package aiven
 
+import "context"
+
 type (
 	// TransitGatewayVPCAttachmentHandler is the client that interacts with the
 	// Transit Gateway VPC Attachment API on Aiven.
@@ -25,11 +27,12 @@ type (
 
 // Update updates user-defined peer network CIDRs for a project VPC
 func (h *TransitGatewayVPCAttachmentHandler) Update(
+	ctx context.Context,
 	project, projectVPCId string,
 	req TransitGatewayVPCAttachmentRequest,
 ) (*VPC, error) {
 	path := buildPath("project", project, "vpcs", projectVPCId, "user-peer-network-cidrs")
-	rsp, err := h.client.doPutRequest(path, req)
+	rsp, err := h.client.doPutRequest(ctx, path, req)
 	if err != nil {
 		return nil, err
 	}

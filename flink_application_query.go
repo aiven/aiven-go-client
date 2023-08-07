@@ -1,6 +1,9 @@
 package aiven
 
-import "context"
+import (
+	"context"
+	"time"
+)
 
 type (
 	// FlinkApplicationQueryHandler aiven go-client handler for Flink Application Queries
@@ -66,11 +69,11 @@ type (
 			Nullable  bool   `json:"nullable"`
 			Watermark string `json:"watermark"`
 		} `json:"columns"`
-		CreateTime    string `json:"create_time"`
-		JobExpireTime string `json:"job_expire_time"`
-		JobID         string `json:"job_id"`
-		JobName       string `json:"job_name"`
-		QueryID       string `json:"query_id"`
+		CreateTime    *time.Time `json:"create_time"`
+		JobExpireTime *time.Time `json:"job_expire_time"`
+		JobID         string     `json:"job_id"`
+		JobName       string     `json:"job_name"`
+		QueryID       string     `json:"query_id"`
 		QueryParams   struct {
 			JobTTL  int `json:"job_ttl"`
 			MaxRows int `json:"max_rows"`

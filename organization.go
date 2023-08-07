@@ -1,7 +1,10 @@
 // Package aiven provides a client for using the Aiven API.
 package aiven
 
-import "context"
+import (
+	"context"
+	"time"
+)
 
 type (
 	// OrganizationHandler is the client which interacts with the Organizations API on Aiven.
@@ -21,9 +24,9 @@ type (
 		// AccountID is the unique identifier of the account.
 		AccountID string `json:"account_id"`
 		// CreateTime is the time when the organization was created.
-		CreateTime string `json:"create_time"`
+		CreateTime *time.Time `json:"create_time"`
 		// UpdateTime is the time when the organization was last updated.
-		UpdateTime string `json:"update_time"`
+		UpdateTime *time.Time `json:"update_time"`
 	}
 )
 

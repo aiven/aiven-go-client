@@ -3,28 +3,29 @@ package aiven
 import (
 	"context"
 	"fmt"
+	"time"
 )
 
 type (
 	// ProjectUser represents a user who has accepted membership in a project
 	ProjectUser struct {
-		Email          string   `json:"user_email"`
-		RealName       string   `json:"real_name"`
-		MemberType     string   `json:"member_type"`
-		TeamId         string   `json:"team_id"`
-		TeamName       string   `json:"team_name"`
-		BillingContact bool     `json:"billing_contact"`
-		AuthMethods    []string `json:"auth"`
-		CreateTime     string   `json:"create_time"`
+		Email          string     `json:"user_email"`
+		RealName       string     `json:"real_name"`
+		MemberType     string     `json:"member_type"`
+		TeamId         string     `json:"team_id"`
+		TeamName       string     `json:"team_name"`
+		BillingContact bool       `json:"billing_contact"`
+		AuthMethods    []string   `json:"auth"`
+		CreateTime     *time.Time `json:"create_time"`
 	}
 
 	// ProjectInvitation represents a user who has been invited to join a project but has
 	// not yet accepted the invitation
 	ProjectInvitation struct {
-		UserEmail         string `json:"invited_user_email"`
-		InvitingUserEmail string `json:"inviting_user_email"`
-		MemberType        string `json:"member_type"`
-		InviteTime        string `json:"invite_time"`
+		UserEmail         string     `json:"invited_user_email"`
+		InvitingUserEmail string     `json:"inviting_user_email"`
+		MemberType        string     `json:"member_type"`
+		InviteTime        *time.Time `json:"invite_time"`
 	}
 
 	// ProjectUsersHandler is the client that interacts with project User and

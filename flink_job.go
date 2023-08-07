@@ -1,6 +1,9 @@
 package aiven
 
-import "context"
+import (
+	"context"
+	"time"
+)
 
 type (
 	// FlinkJobHandler aiven go-client handler for Flink Jobs
@@ -52,15 +55,15 @@ type (
 	GetFlinkJobResponse struct {
 		APIResponse
 
-		Name           string `json:"name"`
-		JID            string `json:"jid"`
-		IsStoppable    bool   `json:"isStoppable"`
-		Duration       int    `json:"duration"`
-		Now            int    `json:"now"`
-		EndTime        int    `json:"end-time"`
-		StartTime      int    `json:"start-time"`
-		MaxParallelism int    `json:"maxParallelism"`
-		State          string `json:"state"`
+		Name           string     `json:"name"`
+		JID            string     `json:"jid"`
+		IsStoppable    bool       `json:"isStoppable"`
+		Duration       int        `json:"duration"`
+		Now            int        `json:"now"`
+		EndTime        *time.Time `json:"end-time"`
+		StartTime      *time.Time `json:"start-time"`
+		MaxParallelism int        `json:"maxParallelism"`
+		State          string     `json:"state"`
 		Plan           struct {
 			JID   string `json:"jid"`
 			Name  string `json:"name"`

@@ -4,17 +4,18 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"time"
 )
 
 type (
 	// VPCPeeringConnection holds parameters associated with a VPC peering connection
 	VPCPeeringConnection struct {
-		CreateTime               *string                 `json:"create_time"`
+		CreateTime               *time.Time              `json:"create_time"`
 		PeerCloudAccount         string                  `json:"peer_cloud_account"`
 		PeerVPC                  string                  `json:"peer_vpc"`
 		PeerRegion               *string                 `json:"peer_region"`
 		State                    string                  `json:"state"`
-		UpdateTime               string                  `json:"update_time"`
+		UpdateTime               *time.Time              `json:"update_time"`
 		StateInfo                *map[string]interface{} `json:"state_info"`
 		PeerAzureAppId           string                  `json:"peer_azure_app_id,omitempty"`
 		PeerAzureTenantId        string                  `json:"peer_azure_tenant_id,omitempty"`
@@ -26,11 +27,11 @@ type (
 	// VPC holds parameters associated with a Virtual Private Cloud
 	VPC struct {
 		CloudName          string                  `json:"cloud_name"`
-		CreateTime         *string                 `json:"create_time"`
+		CreateTime         *time.Time              `json:"create_time"`
 		NetworkCIDR        string                  `json:"network_cidr"`
 		ProjectVPCID       string                  `json:"project_vpc_id"`
 		State              string                  `json:"state"`
-		UpdateTime         string                  `json:"update_time"`
+		UpdateTime         *time.Time              `json:"update_time"`
 		PeeringConnections []*VPCPeeringConnection `json:"peering_connections"`
 	}
 

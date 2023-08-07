@@ -1,6 +1,9 @@
 package aiven
 
-import "context"
+import (
+	"context"
+	"time"
+)
 
 type (
 	// Project represents the Project model on Aiven.
@@ -94,11 +97,11 @@ type (
 
 	// ProjectEvent represents a project event log entry
 	ProjectEvent struct {
-		Actor       string `json:"actor"`
-		EventDesc   string `json:"event_desc"`
-		EventType   string `json:"event_type"`
-		ServiceName string `json:"service_name"`
-		Time        string `json:"time"`
+		Actor       string     `json:"actor"`
+		EventDesc   string     `json:"event_desc"`
+		EventType   string     `json:"event_type"`
+		ServiceName string     `json:"service_name"`
+		Time        *time.Time `json:"time"`
 	}
 
 	// ProjectServiceTypesResponse is the response from Aiven for listing project service types.

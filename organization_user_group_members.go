@@ -1,7 +1,10 @@
 // Package aiven provides a client for using the Aiven API.
 package aiven
 
-import "context"
+import (
+	"context"
+	"time"
+)
 
 type (
 	// OrganizationUserGroupMembersHandler is the client which interacts with the Organization Users Group Members API on Aiven.
@@ -22,20 +25,20 @@ type (
 	// OrganizationUserGroupMember is response element for the Organization Users Group Member List API on Aiven.
 	OrganizationUserGroupMember struct {
 		UserID           string                              `json:"user_id"`
-		LastActivityTime string                              `json:"last_activity_time"`
+		LastActivityTime *time.Time                          `json:"last_activity_time"`
 		UserInfo         OrganizationUserGroupMemberUserInfo `json:"user_info"`
 	}
 
 	// OrganizationUserGroupMemberUserInfo is
 	OrganizationUserGroupMemberUserInfo struct {
-		UserEmail  string `json:"user_email"`
-		RealName   string `json:"real_name"`
-		State      string `json:"state"`
-		JobTitle   string `json:"job_title"`
-		Country    string `json:"country"`
-		City       string `json:"city"`
-		Department string `json:"department"`
-		CreateTime string `json:"create_time"`
+		UserEmail  string     `json:"user_email"`
+		RealName   string     `json:"real_name"`
+		State      string     `json:"state"`
+		JobTitle   string     `json:"job_title"`
+		Country    string     `json:"country"`
+		City       string     `json:"city"`
+		Department string     `json:"department"`
+		CreateTime *time.Time `json:"create_time"`
 	}
 
 	// OrganizationUserGroupListResponse is response structure for the Organization Users Groups Members List API on Aiven.

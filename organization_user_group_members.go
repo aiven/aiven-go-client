@@ -6,6 +6,11 @@ import (
 	"time"
 )
 
+const (
+	OrganizationGroupMemberAdd    = "add_members"
+	OrganizationGroupMemberRemove = "remove_members"
+)
+
 type (
 	// OrganizationUserGroupMembersHandler is the client which interacts with the Organization Users Group Members API on Aiven.
 	OrganizationUserGroupMembersHandler struct {

@@ -95,6 +95,7 @@ type Client struct {
 	OrganizationUserInvitations     *OrganizationUserInvitationsHandler
 	OrganizationUserGroups          *OrganizationUserGroupHandler
 	OrganizationUserGroupMembers    *OrganizationUserGroupMembersHandler
+	OpenSearchSecurityPluginHandler *OpenSearchSecurityPluginHandler
 }
 
 // GetUserAgentOrDefault configures a default userAgent value, if one has not been provided.
@@ -268,6 +269,7 @@ func (c *Client) Init() {
 	c.OrganizationUserInvitations = &OrganizationUserInvitationsHandler{c}
 	c.OrganizationUserGroups = &OrganizationUserGroupHandler{c}
 	c.OrganizationUserGroupMembers = &OrganizationUserGroupMembersHandler{c}
+	c.OpenSearchSecurityPluginHandler = &OpenSearchSecurityPluginHandler{c}
 }
 
 // WithContext create a copy of Client where all request would be using the provided context

@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	client "github.com/aiven/aiven-go-client"
+	client "github.com/aiven/aiven-go-client/v2"
 )
 
 func main() {

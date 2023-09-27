@@ -128,7 +128,7 @@ type (
 		// ServiceType is the type of the service.
 		ServiceType *string `json:"service_type,omitempty"`
 		// Tags is the list of tags.
-		Tags *string `json:"tags,omitempty"`
+		Tags map[string]string `json:"tags"`
 		// TimestampBegin is the start of the line.
 		TimestampBegin *string `json:"timestamp_begin,omitempty"`
 		// TimestampEnd is the end of the line.

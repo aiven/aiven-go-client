@@ -3,83 +3,77 @@ package aiven
 import "context"
 
 type (
-	// ElasticSearchACLsHandler Aiven go-client handler for Elastisearch ACLs
-	ElasticSearchACLsHandler struct {
+	// OpenSearchACLsHandler Aiven go-client handler for OpenSearch ACLs
+	OpenSearchACLsHandler struct {
 		client *Client
 	}
 
-	// ElasticsearchACLRequest Aiven API request
-	// https://api.aiven.io/v1/project/<project>/service/<service_name>/elasticsearch/acl
-	ElasticsearchACLRequest struct {
-		ElasticSearchACLConfig ElasticSearchACLConfig `json:"elasticsearch_acl_config"`
+	// OpenSearchACLRequest Aiven API request
+	// https://api.aiven.io/v1/project/<project>/service/<service_name>/opensearch/acl
+	OpenSearchACLRequest struct {
+		OpenSearchACLConfig OpenSearchACLConfig `json:"opensearch_acl_config"`
 	}
 
-	// ElasticSearchACLResponse Aiven API response
-	// https://api.aiven.io/v1/project/<project>/service/<service_name>/elasticsearch/acl
-	ElasticSearchACLResponse struct {
+	// OpenSearchACLResponse Aiven API response
+	// https://api.aiven.io/v1/project/<project>/service/<service_name>/opensearch/acl
+	OpenSearchACLResponse struct {
 		APIResponse
-		ElasticSearchACLConfig ElasticSearchACLConfig `json:"elasticsearch_acl_config"`
+		OpenSearchACLConfig OpenSearchACLConfig `json:"opensearch_acl_config"`
 	}
 
-	// ElasticSearchACLConfig represents a configuration for Elasticsearch ACLs
-	ElasticSearchACLConfig struct {
-		ACLs        []ElasticSearchACL `json:"acls"`
-		Enabled     bool               `json:"enabled"`
-		ExtendedAcl bool               `json:"extendedAcl"`
+	// OpenSearchACLConfig represents a configuration for OpenSearch ACLs
+	OpenSearchACLConfig struct {
+		ACLs        []OpenSearchACL `json:"acls"`
+		Enabled     bool            `json:"enabled"`
+		ExtendedAcl bool            `json:"extendedAcl"`
 	}
 
-	// ElasticSearchACL represents a ElasticSearch ACLs entry
-	ElasticSearchACL struct {
-		Rules    []ElasticsearchACLRule `json:"rules"`
-		Username string                 `json:"username"`
+	// OpenSearchACL represents a OpenSearch ACLs entry
+	OpenSearchACL struct {
+		Rules    []OpenSearchACLRule `json:"rules"`
+		Username string              `json:"username"`
 	}
 
-	// ElasticsearchACLRule represents a ElasticSearch ACLs Rule entry
-	ElasticsearchACLRule struct {
+	// OpenSearchACLRule represents a OpenSearch ACLs Rule entry
+	OpenSearchACLRule struct {
 		Index      string `json:"index"`
 		Permission string `json:"permission"`
 	}
 )
 
-// Update updates Elasticsearch ACL config
-//
-// Deprecated: Use OpenSearchACLsHandler.Update instead.
-func (h *ElasticSearchACLsHandler) Update(ctx context.Context, project, service string, req ElasticsearchACLRequest) (*ElasticSearchACLResponse, error) {
-	path := buildPath("project", project, "service", service, "elasticsearch", "acl")
+// Update updates OpenSearch ACL config
+func (h *OpenSearchACLsHandler) Update(ctx context.Context, project, service string, req OpenSearchACLRequest) (*OpenSearchACLResponse, error) {
+	path := buildPath("project", project, "service", service, "opensearch", "acl")
 	bts, err := h.client.doPutRequest(ctx, path, req)
 	if err != nil {
 		return nil, err
 	}
 
-	var r ElasticSearchACLResponse
+	var r OpenSearchACLResponse
 	return &r, checkAPIResponse(bts, &r)
 }
 
-// Get gets all existing Elasticsearch ACLs config
-//
-// Deprecated: Use OpenSearchACLsHandler.Get instead.
-func (h *ElasticSearchACLsHandler) Get(ctx context.Context, project, service string) (*ElasticSearchACLResponse, error) {
-	path := buildPath("project", project, "service", service, "elasticsearch", "acl")
+// Get gets all existing OpenSearch ACLs config
+func (h *OpenSearchACLsHandler) Get(ctx context.Context, project, service string) (*OpenSearchACLResponse, error) {
+	path := buildPath("project", project, "service", service, "opensearch", "acl")
 	bts, err := h.client.doGetRequest(ctx, path, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	var r ElasticSearchACLResponse
+	var r OpenSearchACLResponse
 	return &r, checkAPIResponse(bts, &r)
 }
 
-// Delete removes the specified ACL from the existing ElasticSearch ACLs config.
-//
-// Deprecated: Use OpenSearchACLConfig.Delete instead.
-func (conf *ElasticSearchACLConfig) Delete(ctx context.Context, acl ElasticSearchACL) *ElasticSearchACLConfig {
-	newACLs := []ElasticSearchACL{} // Create a new slice to hold the updated list of ACLs.
+// Delete removes the specified ACL from the existing OpenSearch ACLs config.
+func (conf *OpenSearchACLConfig) Delete(ctx context.Context, acl OpenSearchACL) *OpenSearchACLConfig {
+	newACLs := []OpenSearchACL{} // Create a new slice to hold the updated list of ACLs.
 
 	// Iterate over each existing ACL entry.
 	for _, existingAcl := range conf.ACLs {
 		// If the ACL usernames match, we'll potentially modify the rules.
 		if acl.Username == existingAcl.Username {
-			newRules := []ElasticsearchACLRule{} // Create a new slice to hold the updated list of rules.
+			newRules := []OpenSearchACLRule{} // Create a new slice to hold the updated list of rules.
 
 			// Check each existing rule against the rules in the ACL to be deleted.
 			for _, existingRule := range existingAcl.Rules {
@@ -112,10 +106,8 @@ func (conf *ElasticSearchACLConfig) Delete(ctx context.Context, acl ElasticSearc
 	return conf
 }
 
-// Add appends new ACL to the existing ElasticSearch ACLs config.
-//
-// Deprecated: Use OpenSearchACLConfig.Add instead.
-func (conf *ElasticSearchACLConfig) Add(acl ElasticSearchACL) *ElasticSearchACLConfig {
+// Add appends new ACL to the existing OpenSearch ACLs config.
+func (conf *OpenSearchACLConfig) Add(acl OpenSearchACL) *OpenSearchACLConfig {
 	var userIndex int
 	userExists := false
 
@@ -126,7 +118,7 @@ func (conf *ElasticSearchACLConfig) Add(acl ElasticSearchACL) *ElasticSearchACLC
 			userIndex = p
 
 			// Filter out any rules in the ACL to add that already exist for the user.
-			remainingRules := []ElasticsearchACLRule{}
+			remainingRules := []OpenSearchACLRule{}
 			for _, rule := range acl.Rules {
 				exists := false
 				for _, existingRule := range existingAcl.Rules {

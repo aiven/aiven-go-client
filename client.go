@@ -95,6 +95,7 @@ type Client struct {
 	OrganizationUserGroups          *OrganizationUserGroupHandler
 	OrganizationUserGroupMembers    *OrganizationUserGroupMembersHandler
 	OpenSearchSecurityPluginHandler *OpenSearchSecurityPluginHandler
+	OpenSearchACLs                  *OpenSearchACLsHandler
 }
 
 // GetUserAgentOrDefault configures a default userAgent value, if one has not been provided.
@@ -270,6 +271,7 @@ func (c *Client) Init() {
 	c.OrganizationUserGroups = &OrganizationUserGroupHandler{c}
 	c.OrganizationUserGroupMembers = &OrganizationUserGroupMembersHandler{c}
 	c.OpenSearchSecurityPluginHandler = &OpenSearchSecurityPluginHandler{c}
+	c.OpenSearchACLs = &OpenSearchACLsHandler{c}
 }
 
 func (c *Client) doGetRequest(ctx context.Context, endpoint string, req interface{}) ([]byte, error) {

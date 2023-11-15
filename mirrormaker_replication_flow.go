@@ -15,13 +15,13 @@ type (
 		OffsetSyncsTopicLocation        string   `json:"offset_syncs_topic_location,omitempty"`
 		SourceCluster                   string   `json:"source_cluster,omitempty"`
 		TargetCluster                   string   `json:"target_cluster,omitempty"`
-		ReplicationPolicyClass          string   `json:"replication_policy_class"`
-		SyncGroupOffsetsEnabled         bool     `json:"sync_group_offsets_enabled"`
-		SyncGroupOffsetsIntervalSeconds int      `json:"sync_group_offsets_interval_seconds"`
-		EmitHeartbeatsEnabled           bool     `json:"emit_heartbeats_enabled"`
-		EmitBackwardHeartbeatsEnabled   bool     `json:"emit_backward_heartbeats_enabled"`
-		Topics                          []string `json:"topics"`
-		TopicsBlacklist                 []string `json:"topics.blacklist"`
+		ReplicationPolicyClass          string   `json:"replication_policy_class,omitempty"`
+		SyncGroupOffsetsEnabled         bool     `json:"sync_group_offsets_enabled,omitempty"`
+		SyncGroupOffsetsIntervalSeconds int      `json:"sync_group_offsets_interval_seconds,omitempty"`
+		EmitHeartbeatsEnabled           bool     `json:"emit_heartbeats_enabled,omitempty"`
+		EmitBackwardHeartbeatsEnabled   bool     `json:"emit_backward_heartbeats_enabled,omitempty"`
+		Topics                          []string `json:"topics,omitempty"`
+		TopicsBlacklist                 []string `json:"topics.blacklist,omitempty"`
 	}
 
 	// MirrorMakerReplicationFlowRequest request used to create a Kafka MirrorMaker 2

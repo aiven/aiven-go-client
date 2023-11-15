@@ -19,6 +19,7 @@ type (
 		SyncGroupOffsetsEnabled         bool     `json:"sync_group_offsets_enabled"`
 		SyncGroupOffsetsIntervalSeconds int      `json:"sync_group_offsets_interval_seconds"`
 		EmitHeartbeatsEnabled           bool     `json:"emit_heartbeats_enabled"`
+		EmitBackwardHeartbeatsEnabled   bool     `json:"emit_backward_heartbeats_enabled"`
 		Topics                          []string `json:"topics"`
 		TopicsBlacklist                 []string `json:"topics.blacklist"`
 	}

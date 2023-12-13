@@ -36,6 +36,7 @@ type (
 		NodeStates            []*NodeState              `json:"node_states"`
 		DiskSpaceMB           int                       `json:"disk_space_mb"`
 		Features              ServiceFeatures           `json:"features"`
+		TechnicalEmails       []ContactEmail            `json:"tech_emails"`
 	}
 
 	ServiceFeatures struct {
@@ -230,6 +231,7 @@ type (
 		ServiceIntegrations   []NewServiceIntegration `json:"service_integrations"`
 		DiskSpaceMB           int                     `json:"disk_space_mb,omitempty"`
 		StaticIPs             []string                `json:"static_ips,omitempty"`
+		TechnicalEmails       *[]ContactEmail         `json:"tech_emails,omitempty"`
 	}
 
 	// UpdateServiceRequest are the parameters to update a Service.
@@ -244,6 +246,7 @@ type (
 		UserConfig            map[string]interface{} `json:"user_config,omitempty"`
 		DiskSpaceMB           int                    `json:"disk_space_mb,omitempty"`
 		Karapace              *bool                  `json:"karapace,omitempty"`
+		TechnicalEmails       *[]ContactEmail        `json:"tech_emails,omitempty"`
 	}
 
 	// ServiceResponse represents the response from Aiven after interacting with

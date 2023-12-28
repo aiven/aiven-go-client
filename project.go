@@ -27,6 +27,7 @@ type (
 		BillingGroupId   string            `json:"billing_group_id"`
 		BillingGroupName string            `json:"billing_group_name"`
 		Tags             map[string]string `json:"tags"`
+		OrganizationId   string            `json:"organization_id"`
 	}
 
 	// ProjectsHandler is the client which interacts with the Projects endpoints

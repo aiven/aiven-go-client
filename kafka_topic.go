@@ -29,6 +29,9 @@ type (
 		SegmentJitterMs                 *int64   `json:"segment_jitter_ms,omitempty"`
 		SegmentMs                       *int64   `json:"segment_ms,omitempty"`
 		UncleanLeaderElectionEnable     *bool    `json:"unclean_leader_election_enable,omitempty"`
+		RemoteStorageEnable             *bool    `json:"remote_storage_enable,omitempty"`
+		LocalRetentionBytes             *int64   `json:"local_retention_bytes,omitempty"`
+		LocalRetentionMs                *int64   `json:"local_retention_ms,omitempty"`
 	}
 
 	// KafkaTopicConfigResponse represents a Kafka Topic Config on Aiven.
@@ -57,6 +60,9 @@ type (
 		SegmentJitterMs                 KafkaTopicConfigResponseInt    `json:"segment_jitter_ms,omitempty"`
 		SegmentMs                       KafkaTopicConfigResponseInt    `json:"segment_ms,omitempty"`
 		UncleanLeaderElectionEnable     KafkaTopicConfigResponseBool   `json:"unclean_leader_election_enable,omitempty"`
+		RemoteStorageEnable             KafkaTopicConfigResponseBool   `json:"remote_storage_enable,omitempty"`
+		LocalRetentionBytes             KafkaTopicConfigResponseInt    `json:"local_retention_bytes,omitempty"`
+		LocalRetentionMs                KafkaTopicConfigResponseInt    `json:"local_retention_ms,omitempty"`
 		Tags                            []KafkaTopicTag                `json:"tags,omitempty"`
 	}
 

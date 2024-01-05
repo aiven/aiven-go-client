@@ -72,42 +72,42 @@ type (
 	}
 
 	KafkaTopicConfigResponseString struct {
-		Source   string `json:"source"`
-		Value    string `json:"value"`
+		Source   string  `json:"source"`
+		Value    *string `json:"value"`
 		Synonyms []struct {
-			Source string `json:"source"`
-			Value  string `json:"value"`
-			Name   string `json:"name"`
+			Source string  `json:"source"`
+			Value  *string `json:"value"`
+			Name   string  `json:"name"`
 		} `json:"synonyms"`
 	}
 
 	KafkaTopicConfigResponseInt struct {
 		Source   string `json:"source"`
-		Value    int64  `json:"value"`
+		Value    *int64 `json:"value"`
 		Synonyms []struct {
 			Source string `json:"source"`
-			Value  int64  `json:"value"`
+			Value  *int64 `json:"value"`
 			Name   string `json:"name"`
 		} `json:"synonyms"`
 	}
 
 	KafkaTopicConfigResponseBool struct {
 		Source   string `json:"source"`
-		Value    bool   `json:"value"`
+		Value    *bool  `json:"value"`
 		Synonyms []struct {
 			Source string `json:"source"`
-			Value  bool   `json:"value"`
+			Value  *bool  `json:"value"`
 			Name   string `json:"name"`
 		} `json:"synonyms"`
 	}
 
 	KafkaTopicConfigResponseFloat struct {
-		Source   string  `json:"source"`
-		Value    float64 `json:"value"`
+		Source   string   `json:"source"`
+		Value    *float64 `json:"value"`
 		Synonyms []struct {
-			Source string  `json:"source"`
-			Value  float64 `json:"value"`
-			Name   string  `json:"name"`
+			Source string   `json:"source"`
+			Value  *float64 `json:"value"`
+			Name   string   `json:"name"`
 		} `json:"synonyms"`
 	}
 

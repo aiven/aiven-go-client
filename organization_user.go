@@ -48,7 +48,42 @@ type (
 		// Department is the department of the user.
 		Department string `json:"department"`
 	}
+
+	// OrganizationUserUpdateRequest are the parameters to update an organization user.
+	OrganizationUserUpdateRequest struct {
+		// IsSuperAdmin alters super admin state of the organization user.
+		IsSuperAdmin *bool `json:"is_super_admin,omitempty"`
+		// RealName is the real name of the user.
+		RealName *string `json:"real_name,omitempty"`
+		// JobTitle is the job title of the user.
+		JobTitle *string `json:"job_title,omitempty"`
+		// Department is the department of the user.
+		Department *string `json:"department,omitempty"`
+		// Country is the country of the user.
+		Country *string `json:"country,omitempty"`
+		// City is the city of the user.
+		City *string `json:"city,omitempty"`
+	}
 )
+
+// Update updates an organization user.
+func (h *OrganizationUserHandler) Update(
+	ctx context.Context,
+	id string,
+	userID string,
+	req OrganizationUserUpdateRequest,
+) (*OrganizationMemberInfo, error) {
+	path := buildPath("organization", id, "user", userID)
+
+	bts, err := h.client.doPatchRequest(ctx, path, req)
+	if err != nil {
+		return nil, err
+	}
+
+	var r OrganizationMemberInfo
+
+	return &r, checkAPIResponse(bts, &r)
+}
 
 // List returns a list of all organization user invitations.
 func (h *OrganizationUserHandler) List(ctx context.Context, id string) (*OrganizationUserList, error) {

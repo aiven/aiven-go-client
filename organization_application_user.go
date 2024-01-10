@@ -34,28 +34,28 @@ type (
 		// via login.
 		CreatedManually bool `json:"created_manually"`
 		// Description is the description of the token.
-		Description string `json:"description"`
+		Description *string `json:"description,omitempty"`
 		// ExpiryTime is the timestamp when the access token will expire unless extended, if ever.
-		ExpiryTime *time.Time `json:"expiry_time"`
+		ExpiryTime *time.Time `json:"expiry_time,omitempty"`
 		// ExtendWhenUsed is true to extend token expiration time when token is used. Only applicable if
 		// max_age_seconds is specified.
-		ExtendWhenUsed bool `json:"extend_when_used"`
+		ExtendWhenUsed *bool `json:"extend_when_used,omitempty"`
 		// LastIP is the IP address of the last request made with this token.
 		LastIP string `json:"last_ip"`
 		// LastUsedTime is the timestamp when the access token was last used, if ever.
-		LastUsedTime *time.Time `json:"last_used_time"`
+		LastUsedTime *time.Time `json:"last_used_time,omitempty"`
 		// LastUserAgent is the user agent of the last request made with this token.
-		LastUserAgent string `json:"last_user_agent"`
+		LastUserAgent *string `json:"last_user_agent,omitempty"`
 		// LastUserAgentHumanReadable is the user agent of the last request made with this token in
 		// human-readable format.
-		LastUserAgentHumanReadable string `json:"last_user_agent_human_readable"`
+		LastUserAgentHumanReadable *string `json:"last_user_agent_human_readable,omitempty"`
 		// MaxAgeSeconds is the time the token remains valid since creation (or since last use if extend_when_used
 		// is true).
 		MaxAgeSeconds int `json:"max_age_seconds"`
 		// TokenPrefix is the prefix of the token.
 		TokenPrefix string `json:"token_prefix"`
 		// Scopes is the scopes this token is restricted to if specified.
-		Scopes []string `json:"scopes"`
+		Scopes *[]string `json:"scopes,omitempty"`
 	}
 
 	// ApplicationUserTokenList is a struct that represents a list of user's tokens in an application.
@@ -95,15 +95,15 @@ type (
 	// ApplicationUserTokenCreateRequest is a request to create a token for a user in an application.
 	ApplicationUserTokenCreateRequest struct {
 		// Description is the description of the token.
-		Description string `json:"description"`
+		Description *string `json:"description,omitempty"`
 		// MaxAgeSeconds is the time the token remains valid since creation (or since last use if extend_when_used
 		// is true).
-		MaxAgeSeconds int `json:"max_age_seconds"`
+		MaxAgeSeconds *int `json:"max_age_seconds,omitempty"`
 		// ExtendWhenUsed is true to extend token expiration time when token is used. Only applicable if
 		// max_age_seconds is specified.
-		ExtendWhenUsed bool `json:"extend_when_used"`
+		ExtendWhenUsed *bool `json:"extend_when_used,omitempty"`
 		// Scopes is the scopes this token is restricted to if specified.
-		Scopes []string `json:"scopes"`
+		Scopes *[]string `json:"scopes,omitempty"`
 	}
 
 	// ApplicationUserTokenCreateResponse is a response from Aiven for a token creation request.

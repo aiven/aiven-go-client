@@ -30,40 +30,39 @@ type (
 		SegmentMs                       *int64   `json:"segment_ms,omitempty"`
 		UncleanLeaderElectionEnable     *bool    `json:"unclean_leader_election_enable,omitempty"`
 		RemoteStorageEnable             *bool    `json:"remote_storage_enable,omitempty"`
-		//LocalRetentionBytes             *int64   `json:"local_retention_bytes,omitempty"`
-		//LocalRetentionMs                *int64   `json:"local_retention_ms,omitempty"`
+		LocalRetentionBytes             *int64   `json:"local_retention_bytes,omitempty"`
+		LocalRetentionMs                *int64   `json:"local_retention_ms,omitempty"`
 	}
 
 	// KafkaTopicConfigResponse represents a Kafka Topic Config on Aiven.
 	KafkaTopicConfigResponse struct {
-		CleanupPolicy                   KafkaTopicConfigResponseString `json:"cleanup_policy,omitempty"`
-		CompressionType                 KafkaTopicConfigResponseString `json:"compression_type,omitempty"`
-		DeleteRetentionMs               KafkaTopicConfigResponseInt    `json:"delete_retention_ms,omitempty"`
-		FileDeleteDelayMs               KafkaTopicConfigResponseInt    `json:"file_delete_delay_ms,omitempty"`
-		FlushMessages                   KafkaTopicConfigResponseInt    `json:"flush_messages,omitempty"`
-		FlushMs                         KafkaTopicConfigResponseInt    `json:"flush_ms,omitempty"`
-		IndexIntervalBytes              KafkaTopicConfigResponseInt    `json:"index_interval_bytes,omitempty"`
-		MaxCompactionLagMs              KafkaTopicConfigResponseInt    `json:"max_compaction_lag_ms,omitempty"`
-		MaxMessageBytes                 KafkaTopicConfigResponseInt    `json:"max_message_bytes,omitempty"`
-		MessageDownconversionEnable     KafkaTopicConfigResponseBool   `json:"message_downconversion_enable,omitempty"`
-		MessageFormatVersion            KafkaTopicConfigResponseString `json:"message_format_version,omitempty"`
-		MessageTimestampDifferenceMaxMs KafkaTopicConfigResponseInt    `json:"message_timestamp_difference_max_ms,omitempty"`
-		MessageTimestampType            KafkaTopicConfigResponseString `json:"message_timestamp_type,omitempty"`
-		MinCleanableDirtyRatio          KafkaTopicConfigResponseFloat  `json:"min_cleanable_dirty_ratio,omitempty"`
-		MinCompactionLagMs              KafkaTopicConfigResponseInt    `json:"min_compaction_lag_ms,omitempty"`
-		MinInsyncReplicas               KafkaTopicConfigResponseInt    `json:"min_insync_replicas,omitempty"`
-		Preallocate                     KafkaTopicConfigResponseBool   `json:"preallocate,omitempty"`
-		RetentionBytes                  KafkaTopicConfigResponseInt    `json:"retention_bytes,omitempty"`
-		RetentionMs                     KafkaTopicConfigResponseInt    `json:"retention_ms,omitempty"`
-		SegmentBytes                    KafkaTopicConfigResponseInt    `json:"segment_bytes,omitempty"`
-		SegmentIndexBytes               KafkaTopicConfigResponseInt    `json:"segment_index_bytes,omitempty"`
-		SegmentJitterMs                 KafkaTopicConfigResponseInt    `json:"segment_jitter_ms,omitempty"`
-		SegmentMs                       KafkaTopicConfigResponseInt    `json:"segment_ms,omitempty"`
-		UncleanLeaderElectionEnable     KafkaTopicConfigResponseBool   `json:"unclean_leader_election_enable,omitempty"`
-		RemoteStorageEnable             KafkaTopicConfigResponseBool   `json:"remote_storage_enable,omitempty"`
-		//LocalRetentionBytes             KafkaTopicConfigResponseInt    `json:"local_retention_bytes,omitempty"`
-		//LocalRetentionMs                KafkaTopicConfigResponseInt    `json:"local_retention_ms,omitempty"`
-		Tags []KafkaTopicTag `json:"tags,omitempty"`
+		CleanupPolicy                   *KafkaTopicConfigResponseString `json:"cleanup_policy,omitempty"`
+		CompressionType                 *KafkaTopicConfigResponseString `json:"compression_type,omitempty"`
+		DeleteRetentionMs               *KafkaTopicConfigResponseInt    `json:"delete_retention_ms,omitempty"`
+		FileDeleteDelayMs               *KafkaTopicConfigResponseInt    `json:"file_delete_delay_ms,omitempty"`
+		FlushMessages                   *KafkaTopicConfigResponseInt    `json:"flush_messages,omitempty"`
+		FlushMs                         *KafkaTopicConfigResponseInt    `json:"flush_ms,omitempty"`
+		IndexIntervalBytes              *KafkaTopicConfigResponseInt    `json:"index_interval_bytes,omitempty"`
+		MaxCompactionLagMs              *KafkaTopicConfigResponseInt    `json:"max_compaction_lag_ms,omitempty"`
+		MaxMessageBytes                 *KafkaTopicConfigResponseInt    `json:"max_message_bytes,omitempty"`
+		MessageDownconversionEnable     *KafkaTopicConfigResponseBool   `json:"message_downconversion_enable,omitempty"`
+		MessageFormatVersion            *KafkaTopicConfigResponseString `json:"message_format_version,omitempty"`
+		MessageTimestampDifferenceMaxMs *KafkaTopicConfigResponseInt    `json:"message_timestamp_difference_max_ms,omitempty"`
+		MessageTimestampType            *KafkaTopicConfigResponseString `json:"message_timestamp_type,omitempty"`
+		MinCleanableDirtyRatio          *KafkaTopicConfigResponseFloat  `json:"min_cleanable_dirty_ratio,omitempty"`
+		MinCompactionLagMs              *KafkaTopicConfigResponseInt    `json:"min_compaction_lag_ms,omitempty"`
+		MinInsyncReplicas               *KafkaTopicConfigResponseInt    `json:"min_insync_replicas,omitempty"`
+		Preallocate                     *KafkaTopicConfigResponseBool   `json:"preallocate,omitempty"`
+		RetentionBytes                  *KafkaTopicConfigResponseInt    `json:"retention_bytes,omitempty"`
+		RetentionMs                     *KafkaTopicConfigResponseInt    `json:"retention_ms,omitempty"`
+		SegmentBytes                    *KafkaTopicConfigResponseInt    `json:"segment_bytes,omitempty"`
+		SegmentIndexBytes               *KafkaTopicConfigResponseInt    `json:"segment_index_bytes,omitempty"`
+		SegmentJitterMs                 *KafkaTopicConfigResponseInt    `json:"segment_jitter_ms,omitempty"`
+		SegmentMs                       *KafkaTopicConfigResponseInt    `json:"segment_ms,omitempty"`
+		UncleanLeaderElectionEnable     *KafkaTopicConfigResponseBool   `json:"unclean_leader_election_enable,omitempty"`
+		RemoteStorageEnable             *KafkaTopicConfigResponseBool   `json:"remote_storage_enable,omitempty"`
+		LocalRetentionBytes             *KafkaTopicConfigResponseInt    `json:"local_retention_bytes,omitempty"`
+		LocalRetentionMs                *KafkaTopicConfigResponseInt    `json:"local_retention_ms,omitempty"`
 	}
 
 	KafkaTopicTag struct {

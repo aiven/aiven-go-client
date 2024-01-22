@@ -101,6 +101,7 @@ type (
 		Actor       string     `json:"actor"`
 		EventDesc   string     `json:"event_desc"`
 		EventType   string     `json:"event_type"`
+		ID          string     `json:"id"`
 		ServiceName string     `json:"service_name"`
 		Time        *time.Time `json:"time"`
 	}

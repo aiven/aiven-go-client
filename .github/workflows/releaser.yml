@@ -14,12 +14,34 @@ jobs:
   releaser:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - id: sha
-        run: echo "sha=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
       - id: version
+        uses: anothrNick/github-tag-action@1.61.0
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          WITH_V: true
+          DRY_RUN: true
+      - run: |
+          tee version.go << END
+          package aiven
+
+          // Version returns aiven-go-client version string
+          func Version() string {
+                  return "${{ steps.version.outputs.new_tag }}"
+          }
+          END
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "chore(version.go): update aiven-go-client version"
+          git push
+      - id: sha
+        run: |
+          GIT_SHA=$(git rev-parse HEAD)
+          echo "sha=${GIT_SHA::7}" >> $GITHUB_OUTPUT
+      - id: tag
         uses: anothrNick/github-tag-action@1.61.0
         env:
           GITHUB_TOKEN: ${{ github.token }}

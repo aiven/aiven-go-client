@@ -89,7 +89,7 @@ var _ = Describe("MirrorMaker 2 Replication flow", func() {
 						TargetCluster:                   "target",
 						Topics:                          []string{".*"},
 						TopicsBlacklist:                 []string{},
-						SyncGroupOffsetsIntervalSeconds: 2,
+						SyncGroupOffsetsIntervalSeconds: ref(2),
 						ReplicationPolicyClass:          "org.apache.kafka.connect.mirror.DefaultReplicationPolicy",
 					},
 				})
@@ -117,7 +117,7 @@ var _ = Describe("MirrorMaker 2 Replication flow", func() {
 							Enabled:                         false,
 							Topics:                          []string{".*"},
 							TopicsBlacklist:                 []string{"test"},
-							SyncGroupOffsetsIntervalSeconds: 2,
+							SyncGroupOffsetsIntervalSeconds: ref(2),
 							ReplicationPolicyClass:          "org.apache.kafka.connect.mirror.DefaultReplicationPolicy",
 						},
 					})

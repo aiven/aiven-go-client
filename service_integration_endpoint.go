@@ -27,13 +27,13 @@ type (
 	CreateServiceIntegrationEndpointRequest struct {
 		EndpointName string                 `json:"endpoint_name"`
 		EndpointType string                 `json:"endpoint_type"`
-		UserConfig   map[string]interface{} `json:"user_config,omitempty"`
+		UserConfig   map[string]interface{} `json:"user_config"`
 	}
 
 	// UpdateServiceIntegrationEndpointRequest are the parameters to update
 	// a Service Integration Endpoint.
 	UpdateServiceIntegrationEndpointRequest struct {
-		UserConfig map[string]interface{} `json:"user_config,omitempty"`
+		UserConfig map[string]interface{} `json:"user_config"`
 	}
 
 	// ServiceIntegrationEndpointResponse represents the response from Aiven

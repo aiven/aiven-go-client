@@ -16,10 +16,10 @@ type (
 		SourceCluster                   string   `json:"source_cluster,omitempty"`
 		TargetCluster                   string   `json:"target_cluster,omitempty"`
 		ReplicationPolicyClass          string   `json:"replication_policy_class,omitempty"`
-		SyncGroupOffsetsEnabled         bool     `json:"sync_group_offsets_enabled,omitempty"`
-		SyncGroupOffsetsIntervalSeconds int      `json:"sync_group_offsets_interval_seconds,omitempty"`
-		EmitHeartbeatsEnabled           bool     `json:"emit_heartbeats_enabled,omitempty"`
-		EmitBackwardHeartbeatsEnabled   bool     `json:"emit_backward_heartbeats_enabled,omitempty"`
+		SyncGroupOffsetsEnabled         *bool    `json:"sync_group_offsets_enabled,omitempty"`
+		SyncGroupOffsetsIntervalSeconds *int     `json:"sync_group_offsets_interval_seconds,omitempty"`
+		EmitHeartbeatsEnabled           *bool    `json:"emit_heartbeats_enabled,omitempty"`
+		EmitBackwardHeartbeatsEnabled   *bool    `json:"emit_backward_heartbeats_enabled,omitempty"`
 		Topics                          []string `json:"topics,omitempty"`
 		TopicsBlacklist                 []string `json:"topics.blacklist,omitempty"`
 	}

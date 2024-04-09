@@ -13,6 +13,7 @@ import (
 	"net/http"
 	"os"
 	"regexp"
+	"strings"
 	"time"
 
 	"github.com/hashicorp/go-cleanhttp"
@@ -100,19 +101,11 @@ type Client struct {
 	ProjectOrganization                *ProjectOrgHandler
 }
 
-// GetUserAgentOrDefault configures a default userAgent value, if one has not been provided.
-func GetUserAgentOrDefault(userAgent string) string {
-	if userAgent != "" {
-		return userAgent
-	}
-	return "aiven-go-client/" + Version()
-}
-
 // NewMFAUserClient creates a new client based on email, one-time password and password.
 func NewMFAUserClient(email, otp, password string, userAgent string) (*Client, error) {
 	c := &Client{
 		Client:    buildHttpClient(),
-		UserAgent: GetUserAgentOrDefault(userAgent),
+		UserAgent: userAgent,
 	}
 
 	ctx := context.Background()
@@ -139,7 +132,7 @@ func NewTokenClient(key string, userAgent string) (*Client, error) {
 	c := &Client{
 		APIKey:    key,
 		Client:    buildHttpClient(),
-		UserAgent: GetUserAgentOrDefault(userAgent),
+		UserAgent: userAgent,
 	}
 	c.Init()
 
@@ -343,7 +336,14 @@ func (c *Client) doRequest(ctx context.Context, method, uri string, body interfa
 	}
 
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("User-Agent", c.UserAgent)
+	req.Header.Set(
+		"User-Agent",
+		strings.TrimSpace(fmt.Sprintf(
+			"go-client/%s %s",
+			strings.TrimLeft(Version(), "v"),
+			c.UserAgent,
+		)),
+	)
 	req.Header.Set("Authorization", "aivenv1 "+c.APIKey)
 
 	// TODO: BAD hack to get around pagination in most cases

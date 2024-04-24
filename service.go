@@ -148,6 +148,13 @@ type (
 		MySQLParams      []MySQLParams `json:"mysql_params"`
 		MySQLReplicaURI  string        `json:"mysql_replica_uri"`
 		MySQLStandbyURIs []string      `json:"mysql_standby"`
+
+		// Thanos
+		QueryFrontendURI                string `json:"query_frontend_uri"`
+		QueryURI                        string `json:"query_uri"`
+		ReceiverIngestingRemoteWriteURI string `json:"receiver_ingesting_remote_write_uri"`
+		ReceiverRemoteWriteURI          string `json:"receiver_remote_write_uri"`
+		StoreURI                        string `json:"store_uri"`
 	}
 
 	// PostgresParams represents individual parameters for a PostgreSQL ConnectionInfo

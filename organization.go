@@ -53,6 +53,18 @@ type (
 		// PrimaryBillingGroupID is the primary billing group ID.
 		PrimaryBillingGroupID *string `json:"primary_billing_group_id,omitempty"`
 	}
+
+	// OrganizationUpdateRequest are the parameters to update an organization.
+	OrganizationUpdateRequest struct {
+		// Name is the name of the organization.
+		Name *string `json:"name,omitempty"`
+		// Tier is the tier of the organization.
+		Tier *OrganizationTier `json:"tier,omitempty"`
+		// KafkaGovernanceEnabled is the Kafka governance enabled flag.
+		KafkaGovernanceEnabled *bool `json:"kafka_governance_enabled,omitempty"`
+		// DefaultGovernanceUserGroupID is the default governance user group ID.
+		DefaultGovernanceUserGroupID *string `json:"default_governance_user_group_id,omitempty"`
+	}
 )
 
 // Create creates a new organization.
@@ -74,6 +86,24 @@ func (h *OrganizationHandler) Get(ctx context.Context, id string) (*Organization
 	path := buildPath("organization", id)
 
 	bts, err := h.client.doGetRequest(ctx, path, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	var r OrganizationInfo
+
+	return &r, checkAPIResponse(bts, &r)
+}
+
+// Update updates the specified organization.
+func (h *OrganizationHandler) Update(
+	ctx context.Context,
+	id string,
+	req OrganizationUpdateRequest,
+) (*OrganizationInfo, error) {
+	path := buildPath("organization", id)
+
+	bts, err := h.client.doPatchRequest(ctx, path, req)
 	if err != nil {
 		return nil, err
 	}

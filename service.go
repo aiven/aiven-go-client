@@ -107,54 +107,88 @@ type (
 
 	// ConnectionInfo represents the Service Connection information on Aiven.
 	ConnectionInfo struct {
-		CassandraHosts []string `json:"cassandra"`
+		// Common
+		Direct      []string `json:"direct"`
+		LetsEncrypt bool     `json:"letsencrypt"`
 
-		ElasticsearchURIs     []string `json:"elasticsearch"`
-		ElasticsearchUsername string   `json:"elasticsearch_username"`
-		ElasticsearchPassword string   `json:"elasticsearch_password"`
-		KibanaURI             string   `json:"kibana_uri"`
-
-		OpensearchURIs          []string `json:"opensearch"`
-		OpensearchDashboardsURI string   `json:"opensearch_dashboards_uri"`
-		OpensearchPassword      string   `json:"opensearch_password"`
-		OpensearchUsername      string   `json:"opensearch_username"`
-
-		GrafanaURIs []string `json:"grafana"`
-
-		InfluxDBURIs         []string `json:"influxdb"`
-		InfluxDBDatabaseName string   `json:"influxdb_dbname"`
-		InfluxDBUsername     string   `json:"influxdb_username"`
-		InfluxDBPassword     string   `json:"influxdb_password"`
-
-		KafkaHosts        []string `json:"kafka"`
+		// Kafka
+		KafkaHosts        []string `json:"kafka"` // TODO: Rename to KafkaURIs in the next major version.
 		KafkaAccessCert   string   `json:"kafka_access_cert"`
 		KafkaAccessKey    string   `json:"kafka_access_key"`
 		KafkaConnectURI   string   `json:"kafka_connect_uri"`
 		KafkaRestURI      string   `json:"kafka_rest_uri"`
 		SchemaRegistryURI string   `json:"schema_registry_uri"`
 
+		// PostgreSQL
+		PostgresURIs        []string         `json:"pg"`
+		PostgresBouncer     string           `json:"pg_bouncer"`
 		PostgresParams      []PostgresParams `json:"pg_params"`
 		PostgresReplicaURI  string           `json:"pg_replica_uri"`
 		PostgresStandbyURIs []string         `json:"pg_standby"`
-		PostgresURIs        []string         `json:"pg"`
+		PostgresSyncingURIs string           `json:"pg_syncing"`
 
-		RedisPassword  string   `json:"redis_password"`
-		RedisSlaveURIs []string `json:"redis_slave"`
-		RedisURIs      []string `json:"redis"`
+		// Thanos
+		ThanosURIs                      []string `json:"thanos"`
+		QueryFrontendURI                string   `json:"query_frontend_uri"`
+		QueryURI                        string   `json:"query_uri"`
+		ReceiverIngestingRemoteWriteURI string   `json:"receiver_ingesting_remote_write_uri"`
+		ReceiverRemoteWriteURI          string   `json:"receiver_remote_write_uri"`
+		StoreURI                        string   `json:"store_uri"`
 
-		FlinkHostPorts []string `json:"flink"`
-
+		// MySQL
 		MySQLURIs        []string      `json:"mysql"`
 		MySQLParams      []MySQLParams `json:"mysql_params"`
 		MySQLReplicaURI  string        `json:"mysql_replica_uri"`
 		MySQLStandbyURIs []string      `json:"mysql_standby"`
 
-		// Thanos
-		QueryFrontendURI                string `json:"query_frontend_uri"`
-		QueryURI                        string `json:"query_uri"`
-		ReceiverIngestingRemoteWriteURI string `json:"receiver_ingesting_remote_write_uri"`
-		ReceiverRemoteWriteURI          string `json:"receiver_remote_write_uri"`
-		StoreURI                        string `json:"store_uri"`
+		// ElasticSearch
+		ElasticsearchURIs     []string `json:"elasticsearch"`
+		ElasticsearchPassword string   `json:"elasticsearch_password"`
+		ElasticsearchUsername string   `json:"elasticsearch_username"`
+		KibanaURI             string   `json:"kibana_uri"` // This field is available in OpenSearch as well.
+
+		// OpenSearch
+		// TODO: Rename Opensearch to OpenSearch in the next major version.
+		OpensearchURIs          []string `json:"opensearch"`
+		OpensearchDashboardsURI string   `json:"opensearch_dashboards_uri"`
+		OpensearchUsername      string   `json:"opensearch_username"`
+		OpensearchPassword      string   `json:"opensearch_password"`
+
+		// Cassandra
+		CassandraHosts []string `json:"cassandra"` // TODO: Rename to CassandraURIs in the next major version.
+
+		// Redis and Dragonfly
+		RedisURIs       []string `json:"redis"`
+		RedisSlaveURIs  []string `json:"redis_slave"`
+		RedisReplicaURI string   `json:"redis_replica_uri"`
+		RedisPassword   string   `json:"redis_password"`
+
+		// InfluxDB
+		InfluxDBURIs         []string `json:"influxdb"`
+		InfluxDBUsername     string   `json:"influxdb_username"`
+		InfluxDBPassword     string   `json:"influxdb_password"`
+		InfluxDBDatabaseName string   `json:"influxdb_dbname"`
+
+		// Grafana
+		GrafanaURIs []string `json:"grafana"`
+
+		// M3DB
+		M3DBURIs                 []string `json:"m3db"`
+		HTTPClusterURI           string   `json:"http_cluster_uri"`
+		HTTPNodeURI              string   `json:"http_node_uri"`
+		InfluxDBURI              string   `json:"influxdb_uri"`
+		PrometheusRemoteReadURI  string   `json:"prometheus_remote_read_uri"`
+		PrometheusRemoteWriteURI string   `json:"prometheus_remote_write_uri"`
+
+		// M3 Aggregator
+		M3AggregatorURIs  []string `json:"m3aggregator"`
+		AggregatorHTTPURI string   `json:"aggregator_http_uri"`
+
+		// ClickHouse
+		ClickHouseURIs []string `json:"clickhouse"`
+
+		// Flink
+		FlinkHostPorts []string `json:"flink"` // TODO: Rename to FlinkURIs in the next major version.
 	}
 
 	// PostgresParams represents individual parameters for a PostgreSQL ConnectionInfo

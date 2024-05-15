@@ -125,7 +125,7 @@ type (
 		PostgresParams      []PostgresParams `json:"pg_params"`
 		PostgresReplicaURI  string           `json:"pg_replica_uri"`
 		PostgresStandbyURIs []string         `json:"pg_standby"`
-		PostgresSyncingURIs string           `json:"pg_syncing"`
+		PostgresSyncingURIs []string         `json:"pg_syncing"`
 
 		// Thanos
 		ThanosURIs                      []string `json:"thanos"`
@@ -193,22 +193,22 @@ type (
 
 	// PostgresParams represents individual parameters for a PostgreSQL ConnectionInfo
 	PostgresParams struct {
-		DatabaseName string `json:"dbname"`
 		Host         string `json:"host"`
-		Password     string `json:"password"`
 		Port         string `json:"port"`
 		SSLMode      string `json:"sslmode"`
 		User         string `json:"user"`
+		Password     string `json:"password"`
+		DatabaseName string `json:"dbname"`
 	}
 
 	// MySQLParams represents individual parameters for a MySQL ConnectionInfo
 	MySQLParams struct {
-		DatabaseName string `json:"dbname"`
 		Host         string `json:"host"`
-		Password     string `json:"password"`
 		Port         string `json:"port"`
 		SSLMode      string `json:"ssl-mode"`
 		User         string `json:"user"`
+		Password     string `json:"password"`
+		DatabaseName string `json:"dbname"`
 	}
 
 	// KafkaACL represents a Kafka ACL entry on Aiven.

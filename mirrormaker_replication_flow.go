@@ -22,6 +22,7 @@ type (
 		EmitBackwardHeartbeatsEnabled   *bool    `json:"emit_backward_heartbeats_enabled,omitempty"`
 		Topics                          []string `json:"topics,omitempty"`
 		TopicsBlacklist                 []string `json:"topics.blacklist,omitempty"`
+		ReplicationFactor               *int     `json:"replication_factor,omitempty"`
 	}
 
 	// MirrorMakerReplicationFlowRequest request used to create a Kafka MirrorMaker 2

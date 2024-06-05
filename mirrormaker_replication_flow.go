@@ -23,6 +23,7 @@ type (
 		Topics                          []string `json:"topics,omitempty"`
 		TopicsBlacklist                 []string `json:"topics.blacklist,omitempty"`
 		ReplicationFactor               *int     `json:"replication_factor,omitempty"`
+		ConfigPropertiesExclude         string   `json:"config_properties_exclude,omitempty"`
 	}
 
 	// MirrorMakerReplicationFlowRequest request used to create a Kafka MirrorMaker 2

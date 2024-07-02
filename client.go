@@ -47,6 +47,7 @@ type Client struct {
 	Client    *http.Client
 	UserAgent string
 
+	UserProfile                        *UserProfileHandler
 	Projects                           *ProjectsHandler
 	ProjectUsers                       *ProjectUsersHandler
 	CA                                 *CAHandler
@@ -217,6 +218,7 @@ func newRetryableClient() *retryablehttp.Client {
 
 // Init initializes the client and sets up all the handlers.
 func (c *Client) Init() {
+	c.UserProfile = &UserProfileHandler{c}
 	c.Projects = &ProjectsHandler{c}
 	c.ProjectUsers = &ProjectUsersHandler{c}
 	c.CA = &CAHandler{c}

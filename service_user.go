@@ -32,6 +32,10 @@ type (
 		RedisACLCommands         []string `json:"redis_acl_commands"`
 		RedisACLKeys             []string `json:"redis_acl_keys"`
 		RedisACLChannels         []string `json:"redis_acl_channels"`
+		ValkeyACLCategories      []string `json:"valkey_acl_categories"`
+		ValkeyACLCommands        []string `json:"valkey_acl_commands"`
+		ValkeyACLKeys            []string `json:"valkey_acl_keys"`
+		ValkeyACLChannels        []string `json:"valkey_acl_channels"`
 		PostgresAllowReplication *bool    `json:"pg_allow_replication"`
 	}
 

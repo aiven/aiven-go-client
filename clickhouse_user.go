@@ -115,11 +115,11 @@ func (h *ClickhouseUserHandler) Delete(ctx context.Context, project, service, uu
 	return checkAPIResponse(bts, nil)
 }
 
-func (h *ClickhouseUserHandler) ResetPassword(ctx context.Context, project, service, uuid, password string) (string, error) {
+func (h *ClickhouseUserHandler) ResetPassword(ctx context.Context, project, service, uuid string, password *string) (string, error) {
 	path := buildPath("project", project, "service", service, "clickhouse", "user", uuid, "password")
 
 	type PassRequest struct {
-		Password string `json:"password"`
+		Password *string `json:"password"`
 	}
 
 	bts, err := h.client.doPutRequest(ctx, path, PassRequest{

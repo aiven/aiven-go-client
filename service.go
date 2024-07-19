@@ -163,6 +163,12 @@ type (
 		RedisReplicaURI string   `json:"redis_replica_uri"`
 		RedisPassword   string   `json:"redis_password"`
 
+		// Valkey
+		ValkeyURIs       []string `json:"valkey"`
+		ValkeySlaveURIs  []string `json:"valkey_slave"`
+		ValkeyReplicaURI string   `json:"valkey_replica_uri"`
+		ValkeyPassword   string   `json:"valkey_password"`
+
 		// InfluxDB
 		InfluxDBURIs         []string `json:"influxdb"`
 		InfluxDBUsername     string   `json:"influxdb_username"`

@@ -19,35 +19,29 @@ type (
 	User struct {
 		Auth                   []string               `json:"auth,omitempty"`
 		City                   *string                `json:"city,omitempty"`
-		Country                string                 `json:"country,omitempty"`
-		CreateTime             string                 `json:"create_time,omitempty"`
+		Country                *string                `json:"country,omitempty"`
+		CreateTime             *string                `json:"create_time,omitempty"`
 		Department             *string                `json:"department,omitempty"`
-		Features               Features               `json:"features,omitempty"`
-		Intercom               Intercom               `json:"intercom,omitempty"`
-		Invitations            []interface{}          `json:"invitations,omitempty"`
+		Features               map[string]any         `json:"features,omitempty"`
+		Intercom               Intercom               `json:"intercom"`
+		Invitations            []interface{}          `json:"invitations"`
 		JobTitle               *string                `json:"job_title,omitempty"`
-		ManagedBySCIM          bool                   `json:"managed_by_scim,omitempty"`
+		ManagedBySCIM          *bool                  `json:"managed_by_scim,omitempty"`
 		ManagingOrganizationID *string                `json:"managing_organization_id,omitempty"`
 		ProjectMembership      map[string]interface{} `json:"project_membership,omitempty"`
 		ProjectMemberships     map[string]interface{} `json:"project_memberships,omitempty"`
-		Projects               []interface{}          `json:"projects,omitempty"`
-		RealName               string                 `json:"real_name,omitempty"`
-		State                  string                 `json:"state,omitempty"`
+		Projects               []string               `json:"projects"`
+		RealName               *string                `json:"real_name"`
+		State                  *string                `json:"state"`
 		TokenValidityBegin     *string                `json:"token_validity_begin,omitempty"`
-		User                   string                 `json:"user,omitempty"`
-		UserID                 string                 `json:"user_id,omitempty"`
+		User                   *string                `json:"user"`
+		UserID                 *string                `json:"user_id"`
 		ViewedIndicators       []string               `json:"viewed_indicators,omitempty"`
 	}
 
-	Features struct {
-		FreeTierEnabled       bool `json:"free_tier_enabled,omitempty"`
-		ReferralEnabled       bool `json:"referral_enabled,omitempty"`
-		ShowConfigDetailsStep bool `json:"show_config_details_step,omitempty"`
-	}
-
 	Intercom struct {
-		AppID string `json:"app_id,omitempty"`
-		HMAC  string `json:"hmac,omitempty"`
+		AppID string `json:"app_id"`
+		HMAC  string `json:"hmac"`
 	}
 )
 

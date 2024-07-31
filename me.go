@@ -2,6 +2,7 @@ package aiven
 
 import (
 	"context"
+	"time"
 )
 
 type (
@@ -17,31 +18,50 @@ type (
 	}
 
 	User struct {
-		Auth                   []string               `json:"auth,omitempty"`
+		Auth                   []string               `json:"auth"` // List of user's required authentication methods
 		City                   *string                `json:"city,omitempty"`
-		Country                *string                `json:"country,omitempty"`
-		CreateTime             *string                `json:"create_time,omitempty"`
-		Department             *string                `json:"department,omitempty"`
-		Features               map[string]any         `json:"features,omitempty"`
-		Intercom               Intercom               `json:"intercom"`
-		Invitations            []interface{}          `json:"invitations"`
-		JobTitle               *string                `json:"job_title,omitempty"`
-		ManagedBySCIM          *bool                  `json:"managed_by_scim,omitempty"`
-		ManagingOrganizationID *string                `json:"managing_organization_id,omitempty"`
-		ProjectMembership      map[string]interface{} `json:"project_membership,omitempty"`
-		ProjectMemberships     map[string]interface{} `json:"project_memberships,omitempty"`
-		Projects               []string               `json:"projects"`
-		RealName               *string                `json:"real_name"`
-		State                  *string                `json:"state"`
-		TokenValidityBegin     *string                `json:"token_validity_begin,omitempty"`
-		User                   *string                `json:"user"`
-		UserID                 *string                `json:"user_id"`
-		ViewedIndicators       []string               `json:"viewed_indicators,omitempty"`
+		Country                *string                `json:"country,omitempty"`                  // Country code ISO 3166-1 alpha-2
+		CreateTime             *time.Time             `json:"create_time,omitempty"`              // User registration time
+		Department             *string                `json:"department,omitempty"`               // Job department
+		Features               map[string]any         `json:"features,omitempty"`                 // Feature flags
+		Intercom               IntercomOut            `json:"intercom"`                           // Intercom settings
+		Invitations            []InvitationOut        `json:"invitations"`                        // List of pending invitations
+		JobTitle               *string                `json:"job_title,omitempty"`                // Job title
+		ManagedByScim          *bool                  `json:"managed_by_scim,omitempty"`          // User management status
+		ManagingOrganizationId *string                `json:"managing_organization_id,omitempty"` // Organization ID
+		ProjectMembership      ProjectMembershipOut   `json:"project_membership"`                 // Project membership and type of membership
+		ProjectMemberships     *ProjectMembershipsOut `json:"project_memberships,omitempty"`      // List of project membership and type of membership
+		Projects               []string               `json:"projects"`                           // List of projects the user is a member of
+		RealName               string                 `json:"real_name"`                          // User real name
+		State                  string                 `json:"state"`                              // User account state
+		TokenValidityBegin     *string                `json:"token_validity_begin,omitempty"`     // Earliest valid authentication token timestamp
+		User                   string                 `json:"user"`                               // User email address
+		UserId                 string                 `json:"user_id"`                            // User ID
 	}
 
-	Intercom struct {
-		AppID string `json:"app_id"`
-		HMAC  string `json:"hmac"`
+	// IntercomOut Intercom settings
+	IntercomOut struct {
+		AppId string `json:"app_id"` // Intercom application ID
+		Hmac  string `json:"hmac"`   // Intercom authentication HMAC
+	}
+
+	InvitationOut struct {
+		InviteCode        string    `json:"invite_code"`         // Code for accepting the invitation
+		InviteTime        time.Time `json:"invite_time"`         // Timestamp in ISO 8601 format, always in UTC
+		InvitingUserEmail string    `json:"inviting_user_email"` // User email address
+		ProjectName       string    `json:"project_name"`        // Project name
+	}
+
+	AnyType string
+
+	// ProjectMembershipOut Project membership and type of membership
+	ProjectMembershipOut struct {
+		Any AnyType `json:"ANY,omitempty"` // Project member type
+	}
+
+	// ProjectMembershipsOut List of project membership and type of membership
+	ProjectMembershipsOut struct {
+		Any []string `json:"ANY,omitempty"` // List of project member type
 	}
 )
 

@@ -193,6 +193,7 @@ type (
 		Pattern              string                      `json:"pattern"`
 		Example              interface{}                 `json:"example"`
 		UserError            string                      `json:"user_error"`
+		Secure               bool                        `json:"_secure"`
 	}
 )
 

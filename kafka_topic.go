@@ -122,18 +122,22 @@ type (
 		TopicName             string                   `json:"topic_name"`
 		Config                KafkaTopicConfigResponse `json:"config"`
 		Tags                  []KafkaTopicTag          `json:"tags,omitempty"`
+		TopicDescription	  *string				   `json:"topic_description,omitempty"`
+		OwnerUserGroupId	  *string				   `json:"owner_user_group_id,omitempty"`
 	}
 
 	// KafkaListTopic represents kafka list topic model on Aiven.
 	KafkaListTopic struct {
-		CleanupPolicy         string `json:"cleanup_policy"`
-		MinimumInSyncReplicas int    `json:"min_insync_replicas"`
-		Partitions            int    `json:"partitions"`
-		Replication           int    `json:"replication"`
-		RetentionBytes        int    `json:"retention_bytes"`
-		RetentionHours        *int64 `json:"retention_hours,omitempty"`
-		State                 string `json:"state"`
-		TopicName             string `json:"topic_name"`
+		CleanupPolicy         string  `json:"cleanup_policy"`
+		MinimumInSyncReplicas int     `json:"min_insync_replicas"`
+		Partitions            int     `json:"partitions"`
+		Replication           int     `json:"replication"`
+		RetentionBytes        int     `json:"retention_bytes"`
+		RetentionHours        *int64  `json:"retention_hours,omitempty"`
+		State                 string  `json:"state"`
+		TopicName             string  `json:"topic_name"`
+		TopicDescription	  *string `json:"topic_description,omitempty"`
+		OwnerUserGroupId	  *string `json:"owner_user_group_id,omitempty"`
 	}
 
 	// Partition represents a Kafka partition.
@@ -169,6 +173,8 @@ type (
 		TopicName             string           `json:"topic_name"`
 		Config                KafkaTopicConfig `json:"config"`
 		Tags                  []KafkaTopicTag  `json:"tags,omitempty"`
+		TopicDescription	  *string		   `json:"topic_description,omitempty"`
+		OwnerUserGroupId	  *string		   `json:"owner_user_group_id,omitempty"`
 	}
 
 	// UpdateKafkaTopicRequest are the parameters used to update a kafka topic.
@@ -180,6 +186,8 @@ type (
 		RetentionHours        *int             `json:"retention_hours,omitempty"`
 		Config                KafkaTopicConfig `json:"config"`
 		Tags                  []KafkaTopicTag  `json:"tags,omitempty"`
+		TopicDescription	  *string		   `json:"topic_description,omitempty"`
+		OwnerUserGroupId	  *string		   `json:"owner_user_group_id,omitempty"`
 	}
 
 	// KafkaTopicResponse is the response for Kafka Topic requests.

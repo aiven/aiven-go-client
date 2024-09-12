@@ -75,12 +75,14 @@ var _ = Describe("Kafka Topic", func() {
 
 		// kafka topic
 		var (
-			errC            error
-			topicName       string
-			segmentJitterMs int64
+			errC              error
+			topicName         string
+			segmentJitterMs   int64
 		)
 		segmentJitterMs = 10
 		topicName = "test1"
+		topicDescription := "test-description"
+		ownerUserGroupId := "org22ba494e096"
 
 		It("create kafka topic", func() {
 			time.Sleep(10 * time.Second)
@@ -96,6 +98,8 @@ var _ = Describe("Kafka Topic", func() {
 						Value: "tag1-value",
 					},
 				},
+				TopicDescription: &topicDescription,
+				OwnerUserGroupId: &ownerUserGroupId,
 			})
 
 			Eventually(func() string {
@@ -123,13 +127,19 @@ var _ = Describe("Kafka Topic", func() {
 				Expect(t.Tags).NotTo(BeEmpty())
 				Expect(t.Tags[0].Key).To(Equal("tag1-key"))
 				Expect(t.Tags[0].Value).To(Equal("tag1-value"))
+				Expect(t.TopicDescription).To(Equal(topicDescription))
+				Expect(t.OwnerUserGroupId).To(Equal(ownerUserGroupId))
 			}
 		})
 
 		It("should update topic config", func() {
 			var uncleanLeaderElectionEnable = true
+			newTopicDescription := "test-description-2"
+			newOwnerUserGroupId := "org22ba494e097"
 
 			errU := client.KafkaTopics.Update(ctx, projectName, serviceName, topicName, UpdateKafkaTopicRequest{
+				TopicDescription: &newTopicDescription,
+				OwnerUserGroupId: &newOwnerUserGroupId,
 				Config: KafkaTopicConfig{
 					UncleanLeaderElectionEnable: &uncleanLeaderElectionEnable,
 				},
@@ -154,6 +164,8 @@ var _ = Describe("Kafka Topic", func() {
 				Expect(t2.Config.UncleanLeaderElectionEnable.Value).Should(Equal(true))
 				Expect(t2.Tags).ShouldNot(BeEmpty())
 				Expect(len(t2.Tags)).To(Equal(2))
+				Expect(t2.TopicDescription).To(Equal(newTopicDescription))
+				Expect(t2.OwnerUserGroupId).To(Equal(newOwnerUserGroupId))
 			}
 		})
 
@@ -166,6 +178,9 @@ var _ = Describe("Kafka Topic", func() {
 			Expect(list[0].Config.SegmentJitterMs.Value).To(Equal(segmentJitterMs))
 			Expect(list[0].Tags).NotTo(BeEmpty())
 			Expect(len(list[0].Tags)).To(Equal(2))
+			Expect(list[0].TopicDescription).To(Equal(topicDescription))
+			Expect(list[0].OwnerUserGroupId).To(Equal(ownerUserGroupId))
+			
 		})
 
 		It("delete Kafka Topic and Kafka service", func() {

@@ -128,12 +128,10 @@ type (
 		PostgresSyncingURIs []string         `json:"pg_syncing"`
 
 		// Thanos
-		ThanosURIs                      []string `json:"thanos"`
-		QueryFrontendURI                string   `json:"query_frontend_uri"`
-		QueryURI                        string   `json:"query_uri"`
-		ReceiverIngestingRemoteWriteURI string   `json:"receiver_ingesting_remote_write_uri"`
-		ReceiverRemoteWriteURI          string   `json:"receiver_remote_write_uri"`
-		StoreURI                        string   `json:"store_uri"`
+		ThanosURIs             []string `json:"thanos"`
+		QueryFrontendURI       string   `json:"query_frontend_uri"`
+		QueryURI               string   `json:"query_uri"`
+		ReceiverRemoteWriteURI string   `json:"receiver_remote_write_uri"`
 
 		// MySQL
 		MySQLURIs        []string      `json:"mysql"`

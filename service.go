@@ -32,7 +32,6 @@ type (
 		MaintenanceWindow     MaintenanceWindow         `json:"maintenance"`
 		Integrations          []*ServiceIntegration     `json:"service_integrations"`
 		Components            []*ServiceComponents      `json:"components"`
-		Powered               bool                      `json:"powered"`
 		NodeStates            []*NodeState              `json:"node_states"`
 		DiskSpaceMB           int                       `json:"disk_space_mb"`
 		Features              ServiceFeatures           `json:"features"`

@@ -32,6 +32,7 @@ type (
 		RemoteStorageEnable             *bool    `json:"remote_storage_enable,omitempty"`
 		LocalRetentionBytes             *int64   `json:"local_retention_bytes,omitempty"`
 		LocalRetentionMs                *int64   `json:"local_retention_ms,omitempty"`
+		DisklessEnabled                 *bool    `json:"diskless_enable,omitempty"`
 	}
 
 	// KafkaTopicConfigResponse represents a Kafka Topic Config on Aiven.
@@ -39,6 +40,7 @@ type (
 		CleanupPolicy                   *KafkaTopicConfigResponseString `json:"cleanup_policy,omitempty"`
 		CompressionType                 *KafkaTopicConfigResponseString `json:"compression_type,omitempty"`
 		DeleteRetentionMs               *KafkaTopicConfigResponseInt    `json:"delete_retention_ms,omitempty"`
+		DisklessEnable                  *KafkaTopicConfigResponseBool   `json:"diskless_enable,omitempty"`
 		FileDeleteDelayMs               *KafkaTopicConfigResponseInt    `json:"file_delete_delay_ms,omitempty"`
 		FlushMessages                   *KafkaTopicConfigResponseInt    `json:"flush_messages,omitempty"`
 		FlushMs                         *KafkaTopicConfigResponseInt    `json:"flush_ms,omitempty"`
@@ -122,8 +124,8 @@ type (
 		TopicName             string                   `json:"topic_name"`
 		Config                KafkaTopicConfigResponse `json:"config"`
 		Tags                  []KafkaTopicTag          `json:"tags,omitempty"`
-		TopicDescription	  *string				   `json:"topic_description,omitempty"`
-		OwnerUserGroupId	  *string				   `json:"owner_user_group_id,omitempty"`
+		TopicDescription      *string                  `json:"topic_description,omitempty"`
+		OwnerUserGroupId      *string                  `json:"owner_user_group_id,omitempty"`
 	}
 
 	// KafkaListTopic represents kafka list topic model on Aiven.
@@ -136,8 +138,8 @@ type (
 		RetentionHours        *int64  `json:"retention_hours,omitempty"`
 		State                 string  `json:"state"`
 		TopicName             string  `json:"topic_name"`
-		TopicDescription	  *string `json:"topic_description,omitempty"`
-		OwnerUserGroupId	  *string `json:"owner_user_group_id,omitempty"`
+		TopicDescription      *string `json:"topic_description,omitempty"`
+		OwnerUserGroupId      *string `json:"owner_user_group_id,omitempty"`
 	}
 
 	// Partition represents a Kafka partition.
@@ -173,8 +175,8 @@ type (
 		TopicName             string           `json:"topic_name"`
 		Config                KafkaTopicConfig `json:"config"`
 		Tags                  []KafkaTopicTag  `json:"tags,omitempty"`
-		TopicDescription	  *string		   `json:"topic_description,omitempty"`
-		OwnerUserGroupId	  *string		   `json:"owner_user_group_id,omitempty"`
+		TopicDescription      *string          `json:"topic_description,omitempty"`
+		OwnerUserGroupId      *string          `json:"owner_user_group_id,omitempty"`
 	}
 
 	// UpdateKafkaTopicRequest are the parameters used to update a kafka topic.
@@ -186,8 +188,8 @@ type (
 		RetentionHours        *int             `json:"retention_hours,omitempty"`
 		Config                KafkaTopicConfig `json:"config"`
 		Tags                  []KafkaTopicTag  `json:"tags,omitempty"`
-		TopicDescription	  *string		   `json:"topic_description,omitempty"`
-		OwnerUserGroupId	  *string		   `json:"owner_user_group_id,omitempty"`
+		TopicDescription      *string          `json:"topic_description,omitempty"`
+		OwnerUserGroupId      *string          `json:"owner_user_group_id,omitempty"`
 	}
 
 	// KafkaTopicResponse is the response for Kafka Topic requests.

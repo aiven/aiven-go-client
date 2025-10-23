@@ -14,11 +14,11 @@ jobs:
   releaser:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - id: version
-        uses: anothrNick/github-tag-action@1.71.0
+        uses: anothrNick/github-tag-action@1.75.0
         env:
           GITHUB_TOKEN: ${{ github.token }}
           WITH_V: true
@@ -42,7 +42,7 @@ jobs:
           GIT_SHA=$(git rev-parse HEAD)
           echo "sha=${GIT_SHA::7}" >> $GITHUB_OUTPUT
       - id: tag
-        uses: anothrNick/github-tag-action@1.71.0
+        uses: anothrNick/github-tag-action@1.75.0
         env:
           GITHUB_TOKEN: ${{ github.token }}
           WITH_V: true

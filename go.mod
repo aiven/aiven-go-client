@@ -1,8 +1,6 @@
 module github.com/aiven/aiven-go-client/v2
 
-go 1.23.0
-
-toolchain go1.23.2
+go 1.25.0
 
 require (
 	github.com/hashicorp/go-cleanhttp v0.5.2

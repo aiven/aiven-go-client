@@ -49,6 +49,8 @@ type (
 		MaxMessageBytes                 *KafkaTopicConfigResponseInt    `json:"max_message_bytes,omitempty"`
 		MessageDownconversionEnable     *KafkaTopicConfigResponseBool   `json:"message_downconversion_enable,omitempty"`
 		MessageFormatVersion            *KafkaTopicConfigResponseString `json:"message_format_version,omitempty"`
+		MessageTimestampAfterMaxMs      *KafkaTopicConfigResponseInt    `json:"message_timestamp_after_max_ms,omitempty"`
+		MessageTimestampBeforeMaxMs     *KafkaTopicConfigResponseInt    `json:"message_timestamp_before_max_ms,omitempty"`
 		MessageTimestampDifferenceMaxMs *KafkaTopicConfigResponseInt    `json:"message_timestamp_difference_max_ms,omitempty"`
 		MessageTimestampType            *KafkaTopicConfigResponseString `json:"message_timestamp_type,omitempty"`
 		MinCleanableDirtyRatio          *KafkaTopicConfigResponseFloat  `json:"min_cleanable_dirty_ratio,omitempty"`

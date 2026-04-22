@@ -16,6 +16,8 @@ type (
 		MaxMessageBytes                 *int64   `json:"max_message_bytes,omitempty"`
 		MessageDownconversionEnable     *bool    `json:"message_downconversion_enable,omitempty"`
 		MessageFormatVersion            string   `json:"message_format_version,omitempty"`
+		MessageTimestampAfterMaxMs      *int64   `json:"message_timestamp_after_max_ms,omitempty"`
+		MessageTimestampBeforeMaxMs     *int64   `json:"message_timestamp_before_max_ms,omitempty"`
 		MessageTimestampDifferenceMaxMs *int64   `json:"message_timestamp_difference_max_ms,omitempty"`
 		MessageTimestampType            string   `json:"message_timestamp_type,omitempty"`
 		MinCleanableDirtyRatio          *float64 `json:"min_cleanable_dirty_ratio,omitempty"`

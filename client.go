@@ -312,6 +312,14 @@ func (c *Client) doV2DeleteRequest(ctx context.Context, endpoint string, req int
 	return c.doRequest(ctx, "DELETE", endpoint, req, 2)
 }
 
+// apiErrorResponse is the safe subset of an Aiven failed response.
+// Other fields are dropped because the body may contain credentials.
+// See https://api.aiven.io/doc/#section/Responses/Failed-responses
+// and https://github.com/aiven/aiven-go-client/issues/369
+type apiErrorResponse struct {
+	Message string `json:"message"`
+}
+
 func (c *Client) doRequest(ctx context.Context, method, uri string, body interface{}, apiVersion int) ([]byte, error) {
 	var bts []byte
 	if body != nil {
@@ -368,8 +376,25 @@ func (c *Client) doRequest(ctx context.Context, method, uri string, body interfa
 	}()
 
 	responseBody, err := io.ReadAll(rsp.Body)
-	if err != nil || rsp.StatusCode < 200 || rsp.StatusCode >= 300 {
-		return nil, Error{Message: string(responseBody), Status: rsp.StatusCode}
+	if err != nil {
+		return nil, Error{
+			Message: fmt.Sprintf("failed to read response body: %s", err),
+			Status:  rsp.StatusCode,
+		}
+	}
+	if rsp.StatusCode < 200 || rsp.StatusCode >= 300 {
+		// Only surface the "message" field; the body may contain credentials.
+		// The upstream API "message" must be returned verbatim because
+		// external callers rely on its exact value to classify errors.
+		var errBody apiErrorResponse
+		err := json.Unmarshal(responseBody, &errBody)
+		if err != nil {
+			return nil, Error{
+				Message: "failed to parse error response",
+				Status:  rsp.StatusCode,
+			}
+		}
+		return nil, Error{Message: errBody.Message, Status: rsp.StatusCode}
 	}
 	return responseBody, nil
 }

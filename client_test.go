@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/http/httptest"
 	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestClient_Init(t *testing.T) {
@@ -130,6 +132,81 @@ func TestIsServiceLagError(t *testing.T) {
 			assert.Equal(t, opt.expected, isServiceLagError(opt.method, opt.body))
 		})
 	}
+}
+
+// TestDoRequest_ReadErrorDoesNotLeakBody is a regression test for
+// https://github.com/aiven/aiven-go-client/issues/369: when io.ReadAll fails
+// while reading the response body, any bytes already read (which may include
+// service user credentials) must not be included in the returned error.
+func TestDoRequest_ReadErrorDoesNotLeakBody(t *testing.T) {
+	const secret = "SUPER-SECRET-CREDENTIAL"
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Advertise a body larger than we actually send, then forcibly close
+		// the underlying connection so io.ReadAll on the client returns an
+		// "unexpected EOF" error after partially reading the body.
+		w.Header().Set("Content-Length", "10000")
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte(secret))
+
+		hj, ok := w.(http.Hijacker)
+		require.True(t, ok, "expected http.Hijacker support")
+		conn, _, err := hj.Hijack()
+		require.NoError(t, err)
+		_ = conn.Close()
+	}))
+	defer server.Close()
+
+	// Override the package-level apiUrl to point at the test server.
+	origAPIURL := apiUrl
+	apiUrl = server.URL + "/v1"
+	defer func() { apiUrl = origAPIURL }()
+
+	// Use a plain http.Client so retryablehttp does not retry the read error.
+	c := &Client{Client: &http.Client{}}
+
+	_, err := c.doGetRequest(context.Background(), "/anything", nil)
+	require.Error(t, err)
+	assert.NotContains(t, err.Error(), secret,
+		"response body must not be included in read-error message")
+}
+
+// TestDoRequest_NonOKDoesNotLeakBody verifies that on a non-2xx response the
+// returned Error only contains the JSON "message" field, not the full body
+// (which may contain sensitive data such as service user credentials).
+// Regression test for https://github.com/aiven/aiven-go-client/issues/369.
+func TestDoRequest_NonOKDoesNotLeakBody(t *testing.T) {
+	const (
+		secret  = "SUPER-SECRET-CREDENTIAL"
+		message = "service does not exist"
+	)
+	body := fmt.Sprintf(
+		`{"message":%q,"services":[{"username":"u","password":%q}]}`,
+		message, secret,
+	)
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		_, _ = w.Write([]byte(body))
+	}))
+	defer server.Close()
+
+	origAPIURL := apiUrl
+	apiUrl = server.URL + "/v1"
+	defer func() { apiUrl = origAPIURL }()
+
+	c := &Client{Client: &http.Client{}}
+
+	_, err := c.doGetRequest(context.Background(), "/anything", nil)
+	require.Error(t, err)
+
+	aerr, ok := err.(Error)
+	require.True(t, ok, "expected aiven.Error, got %T", err)
+	assert.Equal(t, http.StatusBadRequest, aerr.Status)
+	assert.Equal(t, message, aerr.Message)
+	assert.NotContains(t, err.Error(), secret,
+		"response body must not be included in API error")
 }
 
 func TestIsUserError(t *testing.T) {

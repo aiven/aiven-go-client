@@ -11,6 +11,7 @@ type (
 		ACL                   []*KafkaACL               `json:"acl"`
 		SchemaRegistryACL     []*KafkaSchemaRegistryACL `json:"schema_registry_acl"`
 		Backups               []*Backup                 `json:"backups"`
+		CMKId                 *string                   `json:"cmk_id,omitempty"`
 		CloudName             string                    `json:"cloud_name"`
 		ConnectionPools       []*ConnectionPool         `json:"connection_pools"`
 		CreateTime            *time.Time                `json:"create_time"`
@@ -263,6 +264,7 @@ type (
 
 	// CreateServiceRequest are the parameters to create a Service.
 	CreateServiceRequest struct {
+		CMKId                 *string                 `json:"cmk_id,omitempty"`
 		Cloud                 string                  `json:"cloud,omitempty"`
 		GroupName             string                  `json:"group_name,omitempty"`
 		MaintenanceWindow     *MaintenanceWindow      `json:"maintenance,omitempty"`
@@ -280,6 +282,7 @@ type (
 
 	// UpdateServiceRequest are the parameters to update a Service.
 	UpdateServiceRequest struct {
+		CMKId                 *string                `json:"cmk_id,omitempty"`
 		Cloud                 string                 `json:"cloud,omitempty"`
 		GroupName             string                 `json:"group_name,omitempty"`
 		MaintenanceWindow     *MaintenanceWindow     `json:"maintenance,omitempty"`
